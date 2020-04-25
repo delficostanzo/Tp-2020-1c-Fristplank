@@ -18,17 +18,6 @@ int main(void) {
 	int conexionTeam;
 	int conexionGameCard;
 
-	//agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
-	char* IP_BROKER;
-	char* IP_TEAM;
-	char* IP_GAMECARD;
-	int* PUERTO_BROKER;
-	int* PUERTO_TEAM;
-	int* PUERTO_GAMECARD;
-
-	t_log* logger;
-	t_config* config;
-
 	// inicializo el log del Broker
 	logger = iniciar_logger();
 
@@ -53,17 +42,18 @@ int main(void) {
 	conexionTeam = crear_conexion(IP_TEAM, PUERTO_TEAM);
 	conexionGameCard = crear_conexion(IP_GAMECARD, PUERTO_GAMECARD);
 
-	//TODO: envio mensaje (el primer parametro esta vacio porque depende de cada estructura de mensaje, va un valor distinto). No lo completo porque vicky no commiteo al master
-	enviar_mensaje(, conexion);
+	// envio mensaje (el primer parametro esta vacio porque depende de cada estructura de mensaje, va un valor distinto). No lo completo porque vicky no commiteo al master
+		//enviar(pack,socket_cliente);
 
-	// recibir mensaje
-	char* mensaje = recibir_mensaje(conexion);
 
-	//loguear mensaje recibido
+		// recibir mensaje
+		//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
 
-	log_info(logger, "El mensaje recibido es: %s\n", mensaje);
+		//loguear mensaje recibido
 
-	terminar_programa(conexion, logger, config);
+		//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
+
+		//terminar_programa(conexion, logger, config);
 }
 
 t_log* iniciar_logger(void){
