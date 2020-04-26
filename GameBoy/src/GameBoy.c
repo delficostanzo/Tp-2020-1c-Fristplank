@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "GameBoy.h"
-#include "utils.h" // esto lo agrego igual aunque la biblio no este lista todavia
+//#include "utils.h" // esto lo agrego igual aunque la biblio no este lista todavia
 
 int main(void) {
 	int conexion;
@@ -38,22 +38,22 @@ int main(void) {
 
 	//crear conexion de cada proceso, un socket conectado
 
-	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
-	conexionTeam = crear_conexion(IP_TEAM, PUERTO_TEAM);
-	conexionGameCard = crear_conexion(IP_GAMECARD, PUERTO_GAMECARD);
+	//conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
+	//conexionTeam = crear_conexion(IP_TEAM, PUERTO_TEAM);
+	//conexionGameCard = crear_conexion(IP_GAMECARD, PUERTO_GAMECARD);
 
 	// envio mensaje (el primer parametro esta vacio porque depende de cada estructura de mensaje, va un valor distinto). No lo completo porque vicky no commiteo al master
-		//enviar(pack,socket_cliente);
+	//enviar(pack,socket_cliente);
 
 
-		// recibir mensaje
-		//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
+	// recibir mensaje
+	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
 
-		//loguear mensaje recibido
+	//loguear mensaje recibido
 
-		//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
+	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
 
-		//terminar_programa(conexion, logger, config);
+	//terminar_programa(conexion, logger, config);
 }
 
 t_log* iniciar_logger(void){
@@ -67,7 +67,7 @@ t_log* iniciar_logger(void){
 
 t_config* leer_config(void)
 {
-	t_config* config = config_create("./gameboy.config");
+	t_config* config = config_create("src/gameboy.config");
 
 	if(config == NULL){
 		printf("No pude leer la config \n");
@@ -87,7 +87,8 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 		config_destroy(config); //destruye la esctructura de config en memoria, no lo esta eliminando el archivo de config
 	}
 
-	liberar_conexion(conexion); // esta funcion esta en utils.c
+
+	//liberar_conexion(conexion); // esta funcion esta en utils.c
 
 }
 
