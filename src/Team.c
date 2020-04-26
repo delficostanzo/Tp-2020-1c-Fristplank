@@ -15,24 +15,7 @@
 
 
 int main(void) {
-int conexion;
-
-	//agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
-	// los primeros 3 no estoy segura se esta bien asi. Se supone que son una lista de listas. Son bienvenidos a revisar si eso esta bien :)
-	char** POSICONES_ENTRENADORES;
-	char** POKEMON_ENTRENADORES;
-	char** OBJETIVOS_ENTRENADORES;
-	int* TIEMPO_RECONEXION;
-	int* RETARDO_CICLO_CPU;
-	char* ALGORITMO_PLANIFICACION;
-	int* QUANTUM;
-	char* IP_BROKER;
-	int* ESTIMACION_INICIAL;
-	int* PUERTO_BROKER;
-	char* LOG_FILE;
-
-	t_log* logger;
-	t_config* config;
+	int conexion;
 
 	// inicializo el log del Broker
 	logger = iniciar_logger();
@@ -55,20 +38,18 @@ int conexion;
 	// faltaria loggear la info de todo el archivo de configuracion, ademas de ip y puerto
 	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
 
-	//crear conexion, un socket conectado
-	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
+	// envio mensaje (el primer parametro esta vacio porque depende de cada estructura de mensaje, va un valor distinto). No lo completo porque vicky no commiteo al master
+	//enviar(pack,socket_cliente);
 
-	//TODO: envio mensaje (el primer parametro esta vacio porque depende de cada estructura de mensaje, va un valor distinto). No lo completo porque vicky no commiteo al master
-	enviar_mensaje(, conexion);
 
 	// recibir mensaje
-	char* mensaje = recibir_mensaje(conexion);
+	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
 
 	//loguear mensaje recibido
 
-	log_info(logger, "El mensaje recibido es: %s\n", mensaje);
+	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
 
-	terminar_programa(conexion, logger, config);
+	//terminar_programa(conexion, logger, config);
 }
 
 t_log* iniciar_logger(void){
@@ -82,7 +63,7 @@ t_log* iniciar_logger(void){
 
 t_config* leer_config(void)
 {
-	t_config* config = config_create("./team.config");
+	t_config* config = config_create("src/team.config");
 
 	if(config == NULL){
 		printf("No pude leer la config \n");
@@ -102,7 +83,7 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 		config_destroy(config); //destruye la esctructura de config en memoria, no lo esta eliminando el archivo de config
 	}
 
-	liberar_conexion(conexion); // esta funcion esta en utils.c
+	//liberar_conexion(conexion); // esta funcion esta en utils.c
 
 }
 
