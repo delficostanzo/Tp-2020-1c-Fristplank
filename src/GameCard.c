@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : Broker.c
+ Name        : GameCard.c
  Author      : 
  Version     :
  Copyright   : Your copyright notice
