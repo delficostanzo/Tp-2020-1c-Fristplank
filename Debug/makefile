@@ -25,14 +25,11 @@ endif
 # All Target
 all: Team
 
-dependents:
-	-cd /home/utnso/tp-2020-1c-Fritsplank/Library/Debug && $(MAKE) all
-
 # Tool invocations
-Team: $(OBJS) $(USER_OBJS) /home/utnso/tp-2020-1c-Fritsplank/Library/Debug/libLibrary.so
+Team: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc -L"/home/utnso/tp-2020-1c-Fritsplank/Library/Debug" -o "Team" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc  -o "Team" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -42,6 +39,5 @@ clean:
 	-@echo ' '
 
 .PHONY: all clean dependents
-/home/utnso/tp-2020-1c-Fritsplank/Library/Debug/libLibrary.so:
 
 -include ../makefile.targets
