@@ -4,7 +4,7 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 {
 	int size_serializado = sizeof(op_code) + sizeof(int) + (paquete->buffer->size); //----
 
-	t_log* logger = iniciar_logger();
+	t_log* logger = iniciar_log();
 	log_info(logger, "Inicio de Serializacion");
 
 	void* streamFinal = malloc(size_serializado);
@@ -55,7 +55,7 @@ int crear_conexion(char *ip, char* puerto)
 
 void enviar(t_paquete* paquete, int socket_cliente)
 {
-	t_log* logger = iniciar_logger();
+	t_log* logger = iniciar_log();
 
 	int size_serializado;
 
@@ -115,7 +115,7 @@ void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket
 
 t_paquete* recibir_mensaje(int socket_cliente)
 {
-	t_log* logger = iniciar_logger();
+	t_log* logger = iniciar_log();
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
 	//primero recibimos el codigo de operacion
@@ -140,16 +140,16 @@ t_paquete* recibir_mensaje(int socket_cliente)
 
 void liberar_conexion(int socket_cliente)
 {
-	t_log* logger = iniciar_logger();
+	t_log* logger = iniciar_log();
 	if (close(socket_cliente) == -1) {
 		log_error(logger, "Error al cerrar la conexion");
 	}
 }
 
-t_log* iniciar_logger(void)
+t_log* iniciar_log(void)
 {
 	t_log* logger;
-	if((logger = log_create("tp0.log", "TRABAJO PRACTICO", 1, log_level_from_string("INFO"))) == NULL){
+	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}

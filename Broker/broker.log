@@ -1,0 +1,68 @@
+[INFO] 12:24:36:953 BROKER/(9160:9160): Logger Iniciado
+[INFO] 12:33:05:482 BROKER/(9479:9479): Logger Iniciado
+[INFO] 12:34:05:827 BROKER/(9568:9568): Logger Iniciado
+[INFO] 12:34:05:845 BROKER/(9568:9568): Archivo de configuracion seteado
+[INFO] 12:37:02:16 BROKER/(9688:9688): Logger Iniciado
+[INFO] 12:37:02:27 BROKER/(9688:9688): Archivo de configuracion seteado
+[INFO] 12:37:32:682 BROKER/(9726:9726): Logger Iniciado
+[INFO] 12:37:32:683 BROKER/(9726:9726): Archivo de configuracion seteado
+[INFO] 12:37:46:558 BROKER/(9762:9762): Logger Iniciado
+[INFO] 12:37:46:569 BROKER/(9762:9762): Archivo de configuracion seteado
+[INFO] 12:38:04:77 BROKER/(9796:9796): Logger Iniciado
+[INFO] 12:38:04:83 BROKER/(9796:9796): Archivo de configuracion seteado
+[INFO] 12:39:49:410 BROKER/(9867:9867): Logger Iniciado
+[INFO] 12:39:49:412 BROKER/(9867:9867): Archivo de configuracion seteado
+[INFO] 12:40:23:804 BROKER/(9912:9912): Logger Iniciado
+[INFO] 12:40:23:807 BROKER/(9912:9912): Archivo de configuracion seteado
+[INFO] 12:41:31:142 BROKER/(9987:9987): Logger Iniciado
+[INFO] 12:41:31:147 BROKER/(9987:9987): Archivo de configuracion seteado
+[INFO] 12:42:28:156 BROKER/(10032:10032): Logger Iniciado
+[INFO] 12:42:28:159 BROKER/(10032:10032): Archivo de configuracion seteado
+[INFO] 12:42:28:160 BROKER/(10032:10032): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 12:51:25:423 BROKER/(10370:10370): Logger Iniciado
+[INFO] 12:51:25:424 BROKER/(10370:10370): Archivo de configuracion seteado
+[INFO] 12:51:25:424 BROKER/(10370:10370): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 12:59:00:270 BROKER/(10769:10769): Logger Iniciado
+[INFO] 12:59:00:279 BROKER/(10769:10769): Archivo de configuracion seteado
+[INFO] 12:59:00:279 BROKER/(10769:10769): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 12:59:00:279 BROKER/(10769:10769): Creo un socket para conectarme a un servidor
+[INFO] 22:04:55:526 BROKER/(4349:4349): Logger Iniciado
+[INFO] 22:04:55:813 BROKER/(4349:4349): Logger Iniciado
+[INFO] 22:04:55:813 BROKER/(4349:4349): Archivo de configuracion seteado
+[INFO] 22:04:55:813 BROKER/(4349:4349): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 22:06:43:81 BROKER/(4402:4402): Logger Iniciado
+[INFO] 22:06:43:82 BROKER/(4402:4402): Logger Iniciado
+[INFO] 22:06:43:82 BROKER/(4402:4402): Archivo de configuracion seteado
+[INFO] 22:06:43:82 BROKER/(4402:4402): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 22:07:27:298 BROKER/(4453:4453): Logger Iniciado
+[INFO] 22:07:27:341 BROKER/(4453:4453): Logger Iniciado
+[INFO] 22:07:27:341 BROKER/(4453:4453): Archivo de configuracion seteado
+[INFO] 22:07:27:341 BROKER/(4453:4453): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 22:07:34:963 BROKER/(4500:4500): Logger Iniciado
+[INFO] 22:07:34:963 BROKER/(4500:4500): Logger Iniciado
+[INFO] 22:07:34:963 BROKER/(4500:4500): Archivo de configuracion seteado
+[INFO] 22:07:34:963 BROKER/(4500:4500): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 22:12:10:602 BROKER/(4714:4714): Logger Iniciado
+[INFO] 22:12:10:603 BROKER/(4714:4714): Logger Iniciado
+[INFO] 22:12:10:604 BROKER/(4714:4714): Archivo de configuracion seteado
+[INFO] 22:12:10:604 BROKER/(4714:4714): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 22:24:17:6 BROKER/(5436:5436): Logger Iniciado
+[INFO] 22:24:18:10 BROKER/(5436:5436): Logger Iniciado
+[INFO] 22:24:18:13 BROKER/(5436:5436): Archivo de configuracion seteado
+[INFO] 22:24:18:13 BROKER/(5436:5436): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 22:24:18:15 BROKER/(5436:5436): Inicio de Serializacion
+[INFO] 22:24:18:15 BROKER/(5436:5436): Asignacion de espacio al stream
+[INFO] 22:24:18:15 BROKER/(5436:5436): Codigo de operacion (protocolo) copiado al stream
+[INFO] 22:24:18:15 BROKER/(5436:5436): Tamaño del mensaje copiado al stream
+[INFO] 22:24:18:15 BROKER/(5436:5436): Mensaje copiado al stream
+[INFO] 22:24:18:15 BROKER/(5436:5436): Insercion del tamaño en bytes al int apuntado
+[INFO] 22:24:18:15 BROKER/(5436:5436): Serializacion del paquete
