@@ -10,6 +10,7 @@
 #include<string.h>
 #include<commons/log.h>
 #include<commons/collections/list.h>
+#include<pthread.h>
 
 typedef enum
 {
@@ -85,6 +86,6 @@ void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket
 t_paquete* recibir_mensaje(int socket_cliente);
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
-t_log* iniciar_logger(void);
+t_log* iniciar_log(void);
 
 #endif /* UTILS_H_ */
