@@ -8,8 +8,6 @@
  ============================================================================
  */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "GameCard.h"
 
 int main(void) {
@@ -33,42 +31,81 @@ int main(void) {
 //	while (1){
 //		// recibir mensaje
 //
-//		int codeOp;
-//		recv(socketBroker, &codeOp, sizeof(int), MSG_WAITALL);
-//		log_info(logger, "Op code procesado: %d.", codeOp);
-//
-//		switch(codeOp){
-//		case 1: //new_pokemon
-//			break;
-//		case 3: //catch_pokemon
-//			break;
-//		case 5: //get_pokemon
-//			break;
-//		}
+
+		int codeOp;
+		recv(socketBroker, &codeOp, sizeof(int), MSG_WAITALL);
+		log_info(logger, "Op code procesado: %d.", codeOp);
+
+		switch(codeOp){
+		case 1:;
+			t_new_pokemon_args *arguments = malloc(sizeof(t_new_pokemon_args));
+
+			//recv(socketBroker, arguments->ID, sizeof(int), MSG_WAITALL) TODAVIA NO ESTA EN LA LIBRERIA
+
+			recv(socketBroker, &arguments->size, sizeof(int), MSG_WAITALL);
+			arguments->pokemon = malloc(arguments->size - (2 * sizeof(int)));
+			recv(socketBroker, &arguments->pokemon, arguments->size - (2 * sizeof(int)), MSG_WAITALL);
+			recv(socketBroker, &arguments->posX, sizeof(int), MSG_WAITALL);
+			recv(socketBroker, &arguments->posY, sizeof(int), MSG_WAITALL);
+			recv(socketBroker, &arguments->cantidad, sizeof(int), MSG_WAITALL);
+
+			pthread_t nuevoHilo;
+			pthread_create(&nuevoHilo, NULL, procesarNewPokemon, &arguments);
+
+			break;
+		case 3: //catch_pokemon
+			break;
+		case 5: //get_pokemon
+			break;
+		}
 //	}
 
 	//terminar_programa(conexion, logger, config);
 }
 
-void procesarNewPokemon(void){
-//	Este mensaje cumplirá la función de agregar la aparición de un nuevo pokémon al mapa. Tendrá cuatro parámetros de entrada:
-//	ID del mensaje recibido.
-//	Pokemon a agregar.
-//	Posición del mapa.
-//	Cantidad de pokémon en dicha posición a agregar.
-//	Al recibir este mensaje se deberán realizar las siguientes operaciones:
-//	Verificar si el Pokémon existe dentro de nuestro Filesystem. Para esto se deberá buscar dentro del directorio Pokemon si existe el archivo con el nombre de nuestro pokémon. En caso de no existir se deberá crear.
-//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración.
-//	Verificar si las posiciones ya existen dentro del archivo. En caso de existir se deben agregar la cantidad pasada por parámetro a la actual. En caso de no existir se debe agregar al final del archivo una nueva línea indicando la cantidad de pokémon pasadas.
-//	Cerrar el archivo.
-//	Conectarse al Broker y enviar el mensaje a la Cola de Mensajes APPEARED_POKEMON con los los datos:
-//	ID del mensaje recibido.
-//	Pokemon.
-//	Posición del mapa.
-//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
+void* procesarNewPokemon(int ID, char* pokemon, int posX, int posY, int cantidad){
+
+	char* filePath = PUNTO_MONTAJE_TALLGRASS;
+	sprintf(filePath,"/Files/%s/Metadata.bin",pokemon);
+
+	//	Verificar si el Pokémon existe dentro de nuestro Filesystem. DONE
+	if(access(filePath, F_OK) != -1 ) {
+
+	    // El archivo existe. Se prosigue a verificar si está en uso.
+
+		int openFile = 1;
+
+		//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). DONE
+		//	En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración. DONE
+		while (openFile == 1){ //Veo si el file se encuentra disponible. Si otro proceso lo está usando espero para reintentar.
+
+			pthread_t checkOpenFile;
+			pthread_create(&checkOpenFile, NULL, checkOpenFile, &filePath);
+			pthread_join(&checkOpenFile, &openFile);
+
+			sleep(TIEMPO_DE_REINTENTO_OPERACION);
+		}
+
+		//	Verificar si las posiciones ya existen dentro del archivo.
+		//	En caso de existir se deben agregar la cantidad pasada por parámetro a la actual.
+		//	En caso de no existir se debe agregar al final del archivo una nueva línea indicando la cantidad de pokémon pasadas.
+		//	Cerrar el archivo.
+
+	} else { //	En caso de no existir se deberá crear.
+
+	}
+
+
+	//	Conectarse al Broker y enviar el mensaje a la Cola de Mensajes APPEARED_POKEMON con los los datos:
+	//	ID del mensaje recibido.
+	//	Pokemon.
+	//	Posición del mapa.
+	//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
+
+	return NULL;
 }
 
-void procesarCatchPokemon(void){
+void* procesarCatchPokemon(void){
 //	Este mensaje cumplirá la función de indicar si es posible capturar un Pokemon y capturarlo en tal caso. Para esto se recibirán los siguientes parámetros:
 //	ID del mensaje recibido.
 //	Pokemon a atrapar.
@@ -86,7 +123,7 @@ void procesarCatchPokemon(void){
 //	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
 }
 
-void procesarGetPokemon(void){
+void* procesarGetPokemon(void){
 //	Este mensaje cumplirá la función de obtener todas las posiciones y su cantidad de un Pokémon específico. Para esto recibirá:
 //	El identificador del mensaje recibido.
 //	Pokémon a devolver.
@@ -119,5 +156,25 @@ void leer_config(void){
 	log_info(logger, "Config file | Punto montaje de TallGrass: %s", PUNTO_MONTAJE_TALLGRASS);
 	log_info(logger, "Config file | Tiempo de reintento de conexión al broker: %d", TIEMPO_DE_REINTENTO_CONEXION);
 	log_info(logger, "Config file | Tiempo de reintento de operación: %d", TIEMPO_DE_REINTENTO_OPERACION);
+
+}
+
+void* checkOpenFile (char* filePath){
+
+	char* openFile;
+
+	t_config* configFile;
+	config_create (filePath);
+	IP_BROKER = config_get_string_value(config, "OPEN");
+	config_destroy(configFile);
+
+	if (strcmp("Y",openFile) == 0){
+		//ARCHIVO ABIERTO
+		return 0;
+	}
+	else{
+		//ARCHIVO CERRADO
+		return 1;
+	}
 
 }
