@@ -66,10 +66,10 @@ int main(void) {
 	//terminar_programa(conexion, logger, config);
 }
 
-void* procesarNewPokemon(int ID, char* pokemon, int posX, int posY, int cantidad){
+void* procesarNewPokemon(t_new_pokemon_args *arguments){
 
 	char* filePath = PUNTO_MONTAJE_TALLGRASS;
-	sprintf(filePath,"/Files/%s/Metadata.bin",pokemon);
+	sprintf(filePath,"/Files/%s/Metadata.bin", arguments->pokemon);
 
 	//	Verificar si el Pokémon existe dentro de nuestro Filesystem. DONE
 	if(access(filePath, F_OK) != -1 ) {
