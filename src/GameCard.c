@@ -1,23 +1,111 @@
+/*
+ ============================================================================
+ Name        : GameCard.c
+ Author      :
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "GameCard.h"
 
 int main(void) {
-	int conexion;
-	t_log* logger;
-	t_config* config;
 
-	//ejemplo
-	t_caught_pokemon* caughtStruct = malloc(sizeof(t_caught_pokemon));
-	caughtStruct->id_correlativo=1;
-	caughtStruct->ok=true;
+	logger = iniciar_log();
+	log_info(logger, "Logger iniciado.");
 
-	// inicializo el log del Broker
-	logger = iniciar_logger();
+	leer_config();
 
-	// creo y devuelvo un puntero a la estructura t_config
-	config = leer_config();
+	int socketBroker = crear_conexion(IP_BROKER, PUERTO_BROKER);
+
+	/* SUSCRIBIRSE A LAS COLAS NEW_POKEMON | CATCH_POKEMON | GET_POKEMON */
+
+	/* Al suscribirse a cada una de las colas deberá quedarse a la espera de recibir un mensaje del Broker. Al recibir un mensaje de cualquier hilo se deberá:
+		- Informar al Broker la recepción del mismo (ACK).
+		- Crear un hilo que atienda dicha solicitud.
+		- Volver a estar a la escucha de nuevos mensajes de la cola de mensajes en cuestión. */
+
+	//aca corro hilo con socket de escucha para el gameboy
+
+//	while (1){
+//		// recibir mensaje
+//
+//		int codeOp;
+//		recv(socketBroker, &codeOp, sizeof(int), MSG_WAITALL);
+//		log_info(logger, "Op code procesado: %d.", codeOp);
+//
+//		switch(codeOp){
+//		case 1: //new_pokemon
+//			break;
+//		case 3: //catch_pokemon
+//			break;
+//		case 5: //get_pokemon
+//			break;
+//		}
+//	}
+
+	//terminar_programa(conexion, logger, config);
+}
+
+void procesarNewPokemon(void){
+//	Este mensaje cumplirá la función de agregar la aparición de un nuevo pokémon al mapa. Tendrá cuatro parámetros de entrada:
+//	ID del mensaje recibido.
+//	Pokemon a agregar.
+//	Posición del mapa.
+//	Cantidad de pokémon en dicha posición a agregar.
+//	Al recibir este mensaje se deberán realizar las siguientes operaciones:
+//	Verificar si el Pokémon existe dentro de nuestro Filesystem. Para esto se deberá buscar dentro del directorio Pokemon si existe el archivo con el nombre de nuestro pokémon. En caso de no existir se deberá crear.
+//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración.
+//	Verificar si las posiciones ya existen dentro del archivo. En caso de existir se deben agregar la cantidad pasada por parámetro a la actual. En caso de no existir se debe agregar al final del archivo una nueva línea indicando la cantidad de pokémon pasadas.
+//	Cerrar el archivo.
+//	Conectarse al Broker y enviar el mensaje a la Cola de Mensajes APPEARED_POKEMON con los los datos:
+//	ID del mensaje recibido.
+//	Pokemon.
+//	Posición del mapa.
+//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
+}
+
+void procesarCatchPokemon(void){
+//	Este mensaje cumplirá la función de indicar si es posible capturar un Pokemon y capturarlo en tal caso. Para esto se recibirán los siguientes parámetros:
+//	ID del mensaje recibido.
+//	Pokemon a atrapar.
+//	Posición del mapa.
+//	Al recibir este mensaje se deberán realizar las siguientes operaciones:
+//	Verificar si el Pokémon existe dentro de nuestro Filesystem. Para esto se deberá buscar dentro del directorio Pokemon si existe el archivo con el nombre de nuestro pokémon. En caso de no existir se deberá informar un error.
+//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración.
+//	Verificar si las posiciones ya existen dentro del archivo. En caso de no existir se debe informar un error.
+//	En caso que la cantidad del Pokémon sea “1”, se debe eliminar la línea. En caso contrario se debe decrementar la cantidad en uno.
+//	Cerrar el archivo.
+//	Conectarse al Broker y enviar el mensaje indicando el resultado correcto.
+//	Todo resultado, sea correcto o no, deberá realizarse conectandose al Broker y enviando un mensaje a la Cola de Mensajes CAUGHT_POKEMON indicando:
+//	ID del mensaje recibido originalmente.
+//	Resultado.
+//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
+}
+
+void procesarGetPokemon(void){
+//	Este mensaje cumplirá la función de obtener todas las posiciones y su cantidad de un Pokémon específico. Para esto recibirá:
+//	El identificador del mensaje recibido.
+//	Pokémon a devolver.
+//	Al recibir este mensaje se deberán realizar las siguientes operaciones:
+//	Verificar si el Pokémon existe dentro de nuestro Filesystem. Para esto se deberá buscar dentro del directorio Pokemon si existe el archivo con el nombre de nuestro pokémon. En caso de no existir se deberá informar el mensaje sin posiciones ni cantidades.
+//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración.
+//	Obtener todas las posiciones y cantidades de Pokemon requerido.
+//	Cerrar el archivo.
+//	Conectarse al Broker y enviar el mensaje con todas las posiciones y su cantidad.
+//	En caso que se encuentre por lo menos una posición para el Pokémon solicitado se deberá enviar un mensaje al Broker a la Cola de Mensajes LOCALIZED_POKEMON indicando:
+//	ID del mensaje recibido originalmente.
+//	El Pokémon solicitado.
+//	La lista de posiciones y la cantidad de cada una de ellas en el mapa.
+//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
+}
+
+void leer_config(void){
+
+	config = config_create("./src/gamecard.config");
 
 	TIEMPO_DE_REINTENTO_CONEXION = config_get_int_value(config, "TIEMPO_DE_REINTENTO_CONEXION");
 	TIEMPO_DE_REINTENTO_OPERACION = config_get_int_value(config, "TIEMPO_DE_REINTENTO_OPERACION");
@@ -26,57 +114,10 @@ int main(void) {
 	PUERTO_BROKER = config_get_string_value(config, "PUERTO_BROKER");
 
 	// faltaria loggear la info de todo el archivo de configuracion, ademas de ip y puerto
-	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
-
-	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
-
-	enviar_caught_pokemon(caughtStruct,conexion);
-
-	// recibir mensaje
-	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
-
-	//loguear mensaje recibido
-	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
-
-	terminar_programa(conexion, logger, config);
-
-	free(caughtStruct);
-}
-
-t_log* iniciar_logger(void){
-	t_log * log = malloc(sizeof(t_log));
-	log = log_create("gamecard.log", "GAMECARD", 1,0);
-	if(log == NULL){
-		printf("No pude crear el logger \n");
-		exit(1);
-	}
-	log_info(log,"Logger Iniciado");
-	return log;
-}
-
-t_config* leer_config(void)
-{
-	t_config* config = config_create("src/gamecard.config");
-	t_log* logger = iniciar_logger();
-
-	if(config == NULL){
-		printf("No pude leer la config \n");
-		exit(2);
-	}
-	log_info(logger,"Archivo de configuracion seteado");
-	return config;
-}
-
-void terminar_programa(int conexion, t_log* logger, t_config* config)
-{
-	if(logger != NULL){
-		log_destroy(logger);
-	}
-	if(config != NULL){
-		config_destroy(config); //destruye la esctructura de config en memoria, no lo esta eliminando el archivo de config
-	}
-
-	liberar_conexion(conexion); // esta funcion esta en utils.c
+	log_info(logger, "Config file | IP del broker: %s", IP_BROKER);
+	log_info(logger, "Config file | Puerto del broker: %s",PUERTO_BROKER);
+	log_info(logger, "Config file | Punto montaje de TallGrass: %s", PUNTO_MONTAJE_TALLGRASS);
+	log_info(logger, "Config file | Tiempo de reintento de conexión al broker: %d", TIEMPO_DE_REINTENTO_CONEXION);
+	log_info(logger, "Config file | Tiempo de reintento de operación: %d", TIEMPO_DE_REINTENTO_OPERACION);
 
 }
-

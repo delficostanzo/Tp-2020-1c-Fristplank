@@ -1,4 +1,3 @@
-
 #ifndef GAMECARD_H_
 #define GAMECARD_H_
 
@@ -8,6 +7,15 @@
 #include<commons/string.h>
 #include<commons/config.h>
 #include<readline/readline.h>
+
+//>>>>
+#include<signal.h>
+#include<unistd.h>
+#include<sys/socket.h>
+#include<netdb.h>
+#include<commons/collections/list.h>
+
+//UTILS
 #include <utils.h>
 
 //agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
@@ -17,9 +25,9 @@ char* PUNTO_MONTAJE_TALLGRASS;
 char* IP_BROKER;
 char* PUERTO_BROKER;
 
+t_log* logger;
+t_config* config;
 
-t_log* iniciar_logger(void);
-t_config* leer_config(void);
-void terminar_programa(int, t_log*, t_config*);
+void leer_config(void);
 
 #endif /* GAMECARD_H_ */
