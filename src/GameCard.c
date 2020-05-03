@@ -4,7 +4,7 @@
  Author      :
  Version     :
  Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Description : FileSystem de nuestro sistema
  ============================================================================
  */
 
@@ -37,7 +37,8 @@ int main(void) {
 		log_info(logger, "Op code procesado: %d.", codeOp);
 
 		switch(codeOp){
-		case 1:;
+
+		case 1:; //new_pokemon
 			t_new_pokemon_args *arguments = malloc(sizeof(t_new_pokemon_args));
 
 			//recv(socketBroker, arguments->ID, sizeof(int), MSG_WAITALL) TODAVIA NO ESTA EN LA LIBRERIA
@@ -53,8 +54,10 @@ int main(void) {
 			pthread_create(&nuevoHilo, NULL, procesarNewPokemon, &arguments);
 
 			break;
+
 		case 3: //catch_pokemon
 			break;
+
 		case 5: //get_pokemon
 			break;
 		}
@@ -77,13 +80,15 @@ void* procesarNewPokemon(int ID, char* pokemon, int posX, int posY, int cantidad
 
 		//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). DONE
 		//	En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración. DONE
-		while (openFile == 1){ //Veo si el file se encuentra disponible. Si otro proceso lo está usando espero para reintentar.
+		while (openFile == 1){
 
 			pthread_t checkOpenFile;
 			pthread_create(&checkOpenFile, NULL, checkOpenFile, &filePath);
 			pthread_join(&checkOpenFile, &openFile);
 
-			sleep(TIEMPO_DE_REINTENTO_OPERACION);
+			if (openFile == 1){
+				sleep(TIEMPO_DE_REINTENTO_OPERACION);
+			}
 		}
 
 		//	Verificar si las posiciones ya existen dentro del archivo.
