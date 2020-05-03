@@ -40,8 +40,8 @@ t_config* config;
 
 void* procesarGetPokemon(void);
 void* procesarCatchPokemon(void);
-void* procesarNewPokemon(int ID, char* pokemon, int posX, int posY, int cantidad);
-void* checkOpenFile(char* filePath);
+void* procesarNewPokemon(void* args);
+void* checkingOpenFile(void* filePath);
 void leer_config(void);
 
 #endif /* GAMECARD_H_ */

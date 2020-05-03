@@ -51,7 +51,7 @@ int main(void) {
 			recv(socketBroker, &arguments->cantidad, sizeof(int), MSG_WAITALL);
 
 			pthread_t nuevoHilo;
-			pthread_create(&nuevoHilo, NULL, procesarNewPokemon, &arguments);
+			pthread_create(&nuevoHilo, NULL, procesarNewPokemon, (void*)arguments);
 
 			break;
 
@@ -66,7 +66,9 @@ int main(void) {
 	//terminar_programa(conexion, logger, config);
 }
 
-void* procesarNewPokemon(t_new_pokemon_args *arguments){
+void* procesarNewPokemon(void*args){
+
+	t_new_pokemon_args* arguments = (t_new_pokemon_args *) args;
 
 	char* filePath = PUNTO_MONTAJE_TALLGRASS;
 	sprintf(filePath,"/Files/%s/Metadata.bin", arguments->pokemon);
@@ -83,10 +85,10 @@ void* procesarNewPokemon(t_new_pokemon_args *arguments){
 		while (openFile == 1){
 
 			pthread_t checkOpenFile;
-			pthread_create(&checkOpenFile, NULL, checkOpenFile, &filePath);
-			pthread_join(&checkOpenFile, &openFile);
+			pthread_create(&checkOpenFile, NULL, checkingOpenFile, (void*)&filePath);
+			pthread_join(checkOpenFile, (void*)&openFile);
 
-			if (openFile == 1){
+			if ((int)openFile == 1){
 				sleep(TIEMPO_DE_REINTENTO_OPERACION);
 			}
 		}
@@ -126,6 +128,7 @@ void* procesarCatchPokemon(void){
 //	ID del mensaje recibido originalmente.
 //	Resultado.
 //	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
+	return NULL;
 }
 
 void* procesarGetPokemon(void){
@@ -143,6 +146,7 @@ void* procesarGetPokemon(void){
 //	El Pokémon solicitado.
 //	La lista de posiciones y la cantidad de cada una de ellas en el mapa.
 //	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
+	return NULL;
 }
 
 void leer_config(void){
@@ -164,22 +168,19 @@ void leer_config(void){
 
 }
 
-void* checkOpenFile (char* filePath){
+void* checkingOpenFile (void* filePath){
 
-	char* openFile;
-
-	t_config* configFile;
-	config_create (filePath);
-	IP_BROKER = config_get_string_value(config, "OPEN");
+	t_config* configFile = config_create ((char*)filePath);
+	char* openFile = config_get_string_value(config, "OPEN");
 	config_destroy(configFile);
 
 	if (strcmp("Y",openFile) == 0){
 		//ARCHIVO ABIERTO
-		return 0;
+		return (void*)0;
 	}
 	else{
 		//ARCHIVO CERRADO
-		return 1;
+		return (void*)1;
 	}
 
 }
