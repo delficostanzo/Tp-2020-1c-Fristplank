@@ -12,6 +12,8 @@
 
 typedef struct {
 	t_posicion* posicion;
-}t_trainer;
+}t_entrenador;
+
+t_entrenador* newTrainer();
 
 #endif /* SRC_MODEL_TRAINER_H_ */

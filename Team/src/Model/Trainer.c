@@ -7,3 +7,6 @@
 
 #include "Trainer.h"
 
+t_entrenador* newTrainer() {
+	return malloc(sizeof(t_entrenador));
+}
