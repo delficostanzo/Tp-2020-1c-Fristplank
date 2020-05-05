@@ -90,5 +90,6 @@ t_paquete* recibir_mensaje(int socket_cliente);
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
 t_log* iniciar_log(void);
+t_posicion* newPosicion();
 
 #endif /* UTILS_H_ */

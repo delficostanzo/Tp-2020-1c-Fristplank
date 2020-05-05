@@ -155,3 +155,7 @@ t_log* iniciar_log(void)
 	}
 	return logger;
 }
+
+t_posicion* newPosicion() {
+	return malloc(sizeof(t_posicion));
+}
