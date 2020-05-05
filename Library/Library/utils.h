@@ -25,24 +25,21 @@ typedef enum
 typedef struct
 {
 	char* pokemon;
-	int posicionX;
-	int posicionY;
+	t_posicion* posicion;
 	int cantidad;
 } t_new_pokemon;
 
 typedef struct
 {
 	char* pokemon;
-	int posicionX;
-	int posicionY;
+	t_posicion* posicion;
 	int id_correlativo; //id del mensaje al que esta respondiendo
 } t_appeared_pokemon;
 
 typedef struct
 {
 	char* pokemon;
-	int posicionX;
-	int posicionY;
+	t_posicion* posicion;
 } t_catch_pokemon;
 
 typedef struct
@@ -63,6 +60,10 @@ typedef struct
 	t_list* listaPosiciones;
 } t_localized_pokemon;
 
+typedef struct {
+	int x;
+	int y;
+} t_posicion;
 
 typedef struct
 {
