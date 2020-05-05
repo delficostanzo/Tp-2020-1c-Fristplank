@@ -12,6 +12,8 @@
 #include<commons/collections/list.h>
 #include<pthread.h>
 
+typedef char* String;
+
 typedef enum
 {
 	NEW_POKEMON = 1,
@@ -21,6 +23,11 @@ typedef enum
 	GET_POKEMON = 5,
 	LOCALIZED_POKEMON = 6,
 }op_code;
+
+typedef struct {
+	int x;
+	int y;
+} t_posicion;
 
 typedef struct
 {
@@ -59,11 +66,6 @@ typedef struct
 	char* pokemon;
 	t_list* listaPosiciones;
 } t_localized_pokemon;
-
-typedef struct {
-	int x;
-	int y;
-} t_posicion;
 
 typedef struct
 {
