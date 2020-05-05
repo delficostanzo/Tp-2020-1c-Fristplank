@@ -10,6 +10,7 @@
 #include<readline/readline.h>
 #include<utils.h>
 #include"Model/Trainer.h"
+#include "Parser/ConfigParser.h"
 
 //agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
 // los primeros 3 no estoy segura se esta bien asi. Se supone que son una lista de listas. Son bienvenidos a revisar si eso esta bien :)

@@ -5,6 +5,7 @@
 
 t_list* inicializarEntrenadoresHasta(int cantidad);
 t_list* getEntrenadoresDesde(String nombreDeArchivo);
+void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores);
 
 int main(int argc, char *argv[]) {
 	int conexion;
@@ -45,7 +46,9 @@ int main(int argc, char *argv[]) {
 
 	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
 
-	//terminar_programa(conexion, logger, config);
+//	terminar_programa(conexion, logger, config);
+
+	return 0;
 }
 
 t_log* iniciar_logger(void){
@@ -64,10 +67,10 @@ t_config* leerConfigDesde(char* nombreDeArchivo) {
 	t_log* logger = iniciar_logger();
 
 	if(config == NULL){
-		printf("No pude leer la config \n");
+		log_error(logger, "No se pudo abrir el archivo de configuracion '%s'", nombreDeArchivo);
 		exit(2);
 	}
-	log_info(logger,"Archivo de configuracion seteado");
+	log_info(logger,"Archivo de configuracion '%s' leido correctamente", nombreDeArchivo);
 	return config;
 }
 
@@ -86,21 +89,30 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 
 }
 
+//aca es donde delego el comportamiento para crear una lista de entrenadores, a partir del archivo de configuracion donde estan
 t_list* getEntrenadoresDesde(String nombreDeArchivo) {
 	t_config* configEntrenador = leerConfigDesde(nombreDeArchivo);
+	t_log* log = iniciar_logger();
 	t_list* entrenadores;
 
+	//esto lo agregamos al archivo de configuracion, ya que podiamos agregar lo que necesitabamos. Sirve para saber cuantos entrenadores hay
 	int cantidadEntrenadores = config_get_int_value(configEntrenador, "CANTIDAD_ENTRENADORES");
-	entrenadores = inicializarEntrenadoresHasta(cantidadEntrenadores);
+	log_info(log, "Cantidad de entrenadores: %d", cantidadEntrenadores);
+	entrenadores = inicializarEntrenadoresHasta(cantidadEntrenadores); //aca inicializamos tantos entrenadores como haya
 
-	String* posiciones = config_get_array_value(configEntrenador, "POSICIONES_ENTRENADORES");
+	//aca delego lo de setear posiciones dentro de los entrenadores
+	setPosicionesEnEntrenadoresDesde(configEntrenador, entrenadores);
+	log_info(log, "Cargadas las posiciones de los entrenadores");
+
 	String* pokemones = config_get_array_value(configEntrenador, "POKEMON_ENTRENADORES");
 	String* objetivos = config_get_array_value(configEntrenador, "OBJETIVOS_ENTRENADORES");
 
+	log_destroy(log);
 
 	return entrenadores;
 }
 
+//esto crea una lista con entrenadores vacios, hasta la cantidad que le indiques
 t_list* inicializarEntrenadoresHasta(int cantidad) {
 	t_list* entrenadores = list_create();
 
@@ -111,4 +123,19 @@ t_list* inicializarEntrenadoresHasta(int cantidad) {
 	}
 
 	return entrenadores;
+}
+
+void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores) {
+	String* stringPositions = config_get_array_value(config, "POSICIONES_ENTRENADORES");
+	//esto es un map clasico. Recibe una lista de tipo t_list*, y una funcion que transforma. Fijate que le paso la funcion con un & antes
+	//crearListaCon te devuelve una t_list* a partir del array de strings que sacas del archivo de configuracion
+	t_list* posiciones = list_map(crearListaCon(stringPositions, list_size(entrenadores)), posicionDesde);
+
+	//aca es simple, para cada entrenador, le seteo su correspondiente posicion
+	for(int index = 0; index < list_size(entrenadores); index++) {
+		t_entrenador* entrenador = list_get(entrenadores, index);
+		t_posicion* posicion = list_get(posiciones, index);
+
+		setPosicion(entrenador, posicion);
+	}
 }
