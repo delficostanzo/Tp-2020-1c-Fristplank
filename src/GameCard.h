@@ -38,10 +38,14 @@ char* PUERTO_BROKER;
 t_log* logger;
 t_config* config;
 
+pthread_mutex_t semaforoOpen;
+
 void* procesarGetPokemon(void);
 void* procesarCatchPokemon(void);
 void* procesarNewPokemon(void* args);
 void* checkingOpenFile(void* filePath);
 void leer_config(void);
+
+void
 
 #endif /* GAMECARD_H_ */

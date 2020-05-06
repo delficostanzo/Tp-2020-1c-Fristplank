@@ -74,33 +74,39 @@ void* procesarNewPokemon(void*args){
 	sprintf(filePath,"/Files/%s/Metadata.bin", arguments->pokemon);
 
 	//	Verificar si el Pokémon existe dentro de nuestro Filesystem. DONE
-	if(access(filePath, F_OK) != -1 ) {
-
-	    // El archivo existe. Se prosigue a verificar si está en uso.
-
-		int openFile = 1;
+	if(access(filePath, F_OK) != -1 ) { // El archivo existe. Se prosigue a verificar si está en uso. DONE
 
 		//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). DONE
 		//	En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración. DONE
+
+		int openFile = 1;
+
 		while (openFile == 1){
 
-			pthread_t checkOpenFile;
-			pthread_create(&checkOpenFile, NULL, checkingOpenFile, (void*)&filePath);
-			pthread_join(checkOpenFile, (void*)&openFile);
+			pthread_mutex_lock(&semaforoOpen); // Impido que dos hilos accedan. DONE
 
-			if ((int)openFile == 1){
+			int abierto = checkingOpenFile(filePath);
+
+			if (!abierto){ //lo abro y le cambio el OPEN = Y. DONE
+				cambiarAAbierto(filePath);
+			}
+
+			pthread_mutex_unlock(&semaforoOpen);
+
+			if (abierto){
 				sleep(TIEMPO_DE_REINTENTO_OPERACION);
 			}
 		}
+	}
 
-		//	Verificar si las posiciones ya existen dentro del archivo.
-		//	En caso de existir se deben agregar la cantidad pasada por parámetro a la actual.
-		//	En caso de no existir se debe agregar al final del archivo una nueva línea indicando la cantidad de pokémon pasadas.
-		//	Cerrar el archivo.
-
-	} else { //	En caso de no existir se deberá crear.
+	else { //	En caso de no existir se deberá crear.
 
 	}
+
+	//	Verificar si las posiciones ya existen dentro del archivo.
+	//	En caso de existir se deben agregar la cantidad pasada por parámetro a la actual.
+	//	En caso de no existir se debe agregar al final del archivo una nueva línea indicando la cantidad de pokémon pasadas.
+	//	Cerrar el archivo.
 
 
 	//	Conectarse al Broker y enviar el mensaje a la Cola de Mensajes APPEARED_POKEMON con los los datos:
@@ -168,7 +174,7 @@ void leer_config(void){
 
 }
 
-void* checkingOpenFile (void* filePath){
+int checkingOpenFile (char* filePath){
 
 	t_config* configFile = config_create ((char*)filePath);
 	char* openFile = config_get_string_value(config, "OPEN");
@@ -176,11 +182,20 @@ void* checkingOpenFile (void* filePath){
 
 	if (strcmp("Y",openFile) == 0){
 		//ARCHIVO ABIERTO
-		return (void*)0;
+		return 1;
 	}
 	else{
 		//ARCHIVO CERRADO
-		return (void*)1;
+		return 0;
 	}
+
+}
+
+void cambiarAAbierto (char* filePath){
+
+	t_config metadata = config_create(filePath);
+	config_set_value(metadata, "OPEN", "Y");
+	config_save(metadata);
+	config_destroy(metadata);
 
 }
