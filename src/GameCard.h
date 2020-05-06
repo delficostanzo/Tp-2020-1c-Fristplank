@@ -43,9 +43,10 @@ pthread_mutex_t semaforoOpen;
 void* procesarGetPokemon(void);
 void* procesarCatchPokemon(void);
 void* procesarNewPokemon(void* args);
-void* checkingOpenFile(void* filePath);
-void leer_config(void);
 
-void
+int checkingOpenFile(char* filePath);
+void cambiarAAbierto (char* filePath);
+
+void leer_config(void);
 
 #endif /* GAMECARD_H_ */

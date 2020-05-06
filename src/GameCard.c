@@ -79,9 +79,7 @@ void* procesarNewPokemon(void*args){
 		//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). DONE
 		//	En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración. DONE
 
-		int openFile = 1;
-
-		while (openFile == 1){
+		while (1){
 
 			pthread_mutex_lock(&semaforoOpen); // Impido que dos hilos accedan. DONE
 
@@ -193,7 +191,7 @@ int checkingOpenFile (char* filePath){
 
 void cambiarAAbierto (char* filePath){
 
-	t_config metadata = config_create(filePath);
+	t_config* metadata = config_create(filePath);
 	config_set_value(metadata, "OPEN", "Y");
 	config_save(metadata);
 	config_destroy(metadata);
