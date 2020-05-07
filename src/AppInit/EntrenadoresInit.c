@@ -31,11 +31,6 @@ t_list* getEntrenadoresDesde(String nombreDeArchivo) {
 
 	//aca delego lo de setear posiciones dentro de los entrenadores
 	setPosicionesEnEntrenadoresDesde(configEntrenador, entrenadores);
-
-	//TODO: hace lo mismo que arriba con estas dos, para terminar de setear a los entrenadores
-	String* pokemonesAtrapados = config_get_array_value(configEntrenador, "POKEMON_ENTRENADORES");
-	String* pokemonesObjetivos = config_get_array_value(configEntrenador, "OBJETIVOS_ENTRENADORES");
-
 	setPokemonesObjetivosDesde(configEntrenador, entrenadores);
 	setPokemonesAtrapadosDesde(configEntrenador, entrenadores);
 
@@ -77,34 +72,34 @@ void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores) {
 	quickLog("Cargadas las posiciones de los entrenadores");
 }
 
-void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
+void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores) {
 	typedef void*(*erasedType)(void*);
 
-	String* stringPokemonesAtrapados = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
+	String* stringPokemonesAtrapados = config_get_array_value(config, "POKEMON_ENTRENADORES");
 	t_list* atrapados = list_map(crearListaCon(stringPokemonesAtrapados, list_size(entrenadores)), (erasedType)pokemonDesde);
 
 	for(int index = 0; index < list_size(entrenadores); index++) {
 			t_entrenador* entrenador = list_get(entrenadores, index);
-			t_pokemon* atrapado = list_get(atrapados, index);
+			t_list* atrapados = list_get(atrapados, index);
 
-			setPosicion(entrenador, atrapado);
+			setPokemonesAtrapadosTo(entrenador, atrapados);
 		}
 
 	list_destroy(atrapados);
 	quickLog("Cargados los pokemones atrapados de los entrenadores");
 }
 
-void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores) {
+void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 	typedef void*(*erasedType)(void*);
 
-	String* stringPokemonesObjetivos = config_get_array_value(config, "POKEMON_ENTRENADORES");
+	String* stringPokemonesObjetivos = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
 	t_list* objetivos = list_map(crearListaCon(stringPokemonesObjetivos, list_size(entrenadores)), (erasedType)pokemonDesde);
 
 	for(int index = 0; index < list_size(entrenadores); index++) {
 			t_entrenador* entrenador = list_get(entrenadores, index);
-			t_pokemon* objetivo = list_get(objetivos, index);
+			t_list* objetivos = list_get(objetivos, index);
 
-			setPosicion(entrenador, objetivo);
+			setPokemonesObjetivosTo(entrenador, objetivos);
 		}
 
 	list_destroy(objetivos);

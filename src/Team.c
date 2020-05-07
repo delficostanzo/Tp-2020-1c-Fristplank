@@ -17,8 +17,6 @@ int main(int argc, char *argv[]) {
 	caughtStruct->id_correlativo=1;
 	caughtStruct->ok=true;
 
-//	char** POKEMON_ENTRENADORES = config_get_array_value(configConnection, "POKEMON_ENTRENADORES");
-	char** OBJETIVOS_ENTRENADORES = config_get_array_value(configConnection, "OBJETIVOS_ENTRENADORES");
 	int TIEMPO_RECONEXION = config_get_int_value(configConnection, "TIEMPO_RECONEXION");
 	int RETARDO_CICLO_CPU = config_get_int_value(configConnection, "RETARDO_CICLO_CPU");
 	char* ALGORITMO_PLANIFICACION = config_get_string_value(configConnection, "ALGORITMO_PLANIFICACION");
