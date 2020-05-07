@@ -27,6 +27,7 @@ int main(void) {
 		- Volver a estar a la escucha de nuevos mensajes de la cola de mensajes en cuestión. */
 
 	//aca corro hilo con socket de escucha para el gameboy
+	//iniciar_server_escucha();
 
 //	while (1){
 //		// recibir mensaje
@@ -79,21 +80,22 @@ void* procesarNewPokemon(void*args){
 		//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). DONE
 		//	En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración. DONE
 
-		while (1){
+		int abierto = 1;
+
+		while (abierto){
 
 			pthread_mutex_lock(&semaforoOpen); // Impido que dos hilos accedan. DONE
 
-			int abierto = checkingOpenFile(filePath);
+			abierto = checkingOpenFile(filePath);
 
-			if (abierto){ //Si está abierto que el hilo duerma. DONE
-				pthread_mutex_unlock(&semaforoOpen);
-				sleep(TIEMPO_DE_REINTENTO_OPERACION);
+			if (!abierto){ // Está cerrado -> abro y le cambio el OPEN = Y. DONE
+				cambiarAAbierto(filePath);
 			}
 
-			else { // Está cerrado -> abro y le cambio el OPEN = Y. DONE
-				cambiarAAbierto(filePath);
-				pthread_mutex_unlock(&semaforoOpen);
-				break;
+			pthread_mutex_unlock(&semaforoOpen);
+
+			if (abierto){ //Si está abierto que el hilo duerma. DONE
+				sleep(TIEMPO_DE_REINTENTO_OPERACION);
 			}
 		}
 	}
@@ -106,8 +108,9 @@ void* procesarNewPokemon(void*args){
 	//	Verificar si las posiciones ya existen dentro del archivo.
 	//	En caso de existir se deben agregar la cantidad pasada por parámetro a la actual.
 	//	En caso de no existir se debe agregar al final del archivo una nueva línea indicando la cantidad de pokémon pasadas.
-	//	Cerrar el archivo.
 
+	//	Cerrar el archivo -> OPEN=N. DONE
+	cambiarACerrado(filePath);
 
 	//	Conectarse al Broker y enviar el mensaje a la Cola de Mensajes APPEARED_POKEMON con los los datos:
 	//	ID del mensaje recibido.
@@ -172,6 +175,8 @@ void leer_config(void){
 	log_info(logger, "Config file | Tiempo de reintento de conexión al broker: %d", TIEMPO_DE_REINTENTO_CONEXION);
 	log_info(logger, "Config file | Tiempo de reintento de operación: %d", TIEMPO_DE_REINTENTO_OPERACION);
 
+	config_destroy(config);
+
 }
 
 int checkingOpenFile(char* filePath){
@@ -182,13 +187,14 @@ int checkingOpenFile(char* filePath){
 
 	if (strcmp("Y",openFile) == 0){
 		//ARCHIVO ABIERTO
+		free(openFile);
 		return 1;
 	}
 	else{
 		//ARCHIVO CERRADO
+		free(openFile);
 		return 0;
 	}
-
 }
 
 void cambiarAAbierto(char* filePath){
@@ -200,11 +206,58 @@ void cambiarAAbierto(char* filePath){
 
 }
 
+void cambiarACerrado(char* filePath){
+	t_config* metadata = config_create(filePath);
+	config_set_value(metadata, "OPEN", "N");
+	config_save(metadata);
+	config_destroy(metadata);
+}
+
 void crearArchivo(char* filePath){
 
 	FILE* metadata = fopen (filePath, "wb");
-	char* open = "OPEN=Y";
-	fwrite (&open, sizeof (open), 1, metadata);
-	fclose(metadata);
 
+	char* directory = "DIRECTORY=N";
+	char* open = "OPEN=Y";
+
+	fwrite (&directory, sizeof (directory), 1, metadata);
+	fwrite (&open, sizeof (open), 1, metadata);
+
+	free(directory);
+	free(open);
+	fclose(metadata);
 }
+
+
+/* void iniciar_server_escucha(void)
+{
+	int socket_servidor;
+
+    struct addrinfo hints, *servinfo, *p;
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_PASSIVE;
+
+    getaddrinfo(IP, PUERTO, &hints, &servinfo);
+
+    for (p=servinfo; p != NULL; p = p->ai_next)
+    {
+        if ((socket_servidor = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
+            continue;
+
+        if (bind(socket_servidor, p->ai_addr, p->ai_addrlen) == -1) {
+            close(socket_servidor);
+            continue;
+        }
+        break;
+    }
+
+	listen(socket_servidor, SOMAXCONN);
+
+    freeaddrinfo(servinfo);
+
+    while(1)
+    	esperar_cliente(socket_servidor);
+}*/
