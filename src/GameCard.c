@@ -71,7 +71,7 @@ void* procesarNewPokemon(void*args){
 	t_new_pokemon_args* arguments = (t_new_pokemon_args *) args;
 
 	char* filePath = PUNTO_MONTAJE_TALLGRASS;
-	sprintf(filePath,"/Files/%s/Metadata.bin", arguments->pokemon);
+	sprintf(filePath,"/Files/Pokemones/%s/Metadata.bin", arguments->pokemon);
 
 	//	Verificar si el Pokémon existe dentro de nuestro Filesystem. DONE
 	if(access(filePath, F_OK) != -1 ) { // El archivo existe. Se prosigue a verificar si está en uso. DONE
@@ -85,20 +85,22 @@ void* procesarNewPokemon(void*args){
 
 			int abierto = checkingOpenFile(filePath);
 
-			if (!abierto){ //lo abro y le cambio el OPEN = Y. DONE
-				cambiarAAbierto(filePath);
+			if (abierto){ //Si está abierto que el hilo duerma. DONE
+				pthread_mutex_unlock(&semaforoOpen);
+				sleep(TIEMPO_DE_REINTENTO_OPERACION);
 			}
 
-			pthread_mutex_unlock(&semaforoOpen);
-
-			if (abierto){
-				sleep(TIEMPO_DE_REINTENTO_OPERACION);
+			else { // Está cerrado -> abro y le cambio el OPEN = Y. DONE
+				cambiarAAbierto(filePath);
+				pthread_mutex_unlock(&semaforoOpen);
+				break;
 			}
 		}
 	}
 
-	else { //	En caso de no existir se deberá crear.
+	else { //	En caso de no existir se deberá crear. DONE
 
+		crearArchivo(filePath);
 	}
 
 	//	Verificar si las posiciones ya existen dentro del archivo.
@@ -172,9 +174,9 @@ void leer_config(void){
 
 }
 
-int checkingOpenFile (char* filePath){
+int checkingOpenFile(char* filePath){
 
-	t_config* configFile = config_create ((char*)filePath);
+	t_config* configFile = config_create (filePath);
 	char* openFile = config_get_string_value(config, "OPEN");
 	config_destroy(configFile);
 
@@ -189,11 +191,20 @@ int checkingOpenFile (char* filePath){
 
 }
 
-void cambiarAAbierto (char* filePath){
+void cambiarAAbierto(char* filePath){
 
 	t_config* metadata = config_create(filePath);
 	config_set_value(metadata, "OPEN", "Y");
 	config_save(metadata);
 	config_destroy(metadata);
+
+}
+
+void crearArchivo(char* filePath){
+
+	FILE* metadata = fopen (filePath, "wb");
+	char* open = "OPEN=Y";
+	fwrite (&open, sizeof (open), 1, metadata);
+	fclose(metadata);
 
 }

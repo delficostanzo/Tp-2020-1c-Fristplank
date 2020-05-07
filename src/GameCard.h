@@ -45,7 +45,8 @@ void* procesarCatchPokemon(void);
 void* procesarNewPokemon(void* args);
 
 int checkingOpenFile(char* filePath);
-void cambiarAAbierto (char* filePath);
+void cambiarAAbierto(char* filePath);
+void crearArchivo(char* filePath);
 
 void leer_config(void);
 
