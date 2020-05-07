@@ -10,8 +10,13 @@
 
 
 t_config* leerConfigDesde(String nombreDeArchivo);
+// el "static" es para que las funciones queden privadas
 static t_list* inicializarEntrenadoresHasta(int cantidad);
 static void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores);
+static void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores);
+static void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores);
+
+
 //si declaras aca arriba las funciones con un 'static' adelante, es la manera de hacerlas privadas. No alcanza solo con omitirlas en el ".h"
 
 //delego el comportamiento para crear una lista de entrenadores a partir del archivo de configuracion de donde estan
@@ -73,11 +78,38 @@ void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores) {
 }
 
 void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
-	//TODO: desarrollar
+	typedef void*(*erasedType)(void*);
+
+	String* stringPokemonesAtrapados = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
+	t_list* atrapados = list_map(crearListaCon(stringPokemonesAtrapados, list_size(entrenadores)), (erasedType)pokemonDesde);
+
+	for(int index = 0; index < list_size(entrenadores); index++) {
+			t_entrenador* entrenador = list_get(entrenadores, index);
+			t_pokemon* atrapado = list_get(atrapados, index);
+
+			setPosicion(entrenador, atrapado);
+		}
+
+	list_destroy(atrapados);
+	quickLog("Cargados los pokemones atrapados de los entrenadores");
 }
 
 void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores) {
-	//TODO: desarrollar
+	typedef void*(*erasedType)(void*);
+
+	String* stringPokemonesObjetivos = config_get_array_value(config, "POKEMON_ENTRENADORES");
+	t_list* objetivos = list_map(crearListaCon(stringPokemonesObjetivos, list_size(entrenadores)), (erasedType)pokemonDesde);
+
+	for(int index = 0; index < list_size(entrenadores); index++) {
+			t_entrenador* entrenador = list_get(entrenadores, index);
+			t_pokemon* objetivo = list_get(objetivos, index);
+
+			setPosicion(entrenador, objetivo);
+		}
+
+	list_destroy(objetivos);
+	quickLog("Cargados los objetivos de los entrenadores");
+
 }
 
 

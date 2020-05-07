@@ -16,6 +16,10 @@ Pokemon newPokemon() {
 	return malloc(sizeof(Pokemon));
 }
 
+Posicion newPosicion() {
+	return malloc(sizeof(t_posicion));
+}// esto no tendria que estar aca, lo dejamos por ahora (ACORDARSE DE CAMBIARLO)
+
 //Setters
 void setNombreTo(Pokemon pokemon, String nombre) {
 	pokemon->nombre = nombre;
@@ -24,3 +28,5 @@ void setNombreTo(Pokemon pokemon, String nombre) {
 void setPositionTo(Pokemon pokemon, Posicion posicion) {
 	pokemon->posicion = posicion;
 }
+
+
