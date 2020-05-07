@@ -11,6 +11,7 @@
 #include "utils.h"
 #include<commons/string.h>
 #include<commons/config.h>
+#include"../Model/Pokemon.h"
 
 t_config* leerConfigDesde(String nombreDeArchivo);
 t_list* crearListaCon(String* strings, int cantidad);

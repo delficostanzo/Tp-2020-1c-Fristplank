@@ -18,6 +18,7 @@ typedef struct {
 
 t_entrenador* newTrainer();
 void setPosicion(t_entrenador* entrenador, t_posicion* posicion);
-void setPokemonesTo(t_entrenador* entrenador, t_list* pokemones);
+void setPokemonesObjetivosTo(t_entrenador* entrenador, t_list* pokemones);
+void setPokemonesAtrapadosTo(t_entrenador* entrenador, t_list* pokemones);
 
 #endif /* SRC_MODEL_TRAINER_H_ */
