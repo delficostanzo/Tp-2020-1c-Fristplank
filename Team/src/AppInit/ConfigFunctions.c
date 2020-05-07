@@ -32,6 +32,7 @@ t_list* crearListaCon(String* strings, int cantidad) {
 
 	return lista;
 }
+["Pikachu", "otro"]
 
 //esto convierte un string de tipo "1|2" de posicion, en una t_posicion.
 t_posicion* posicionDesde(String stringDePosicion) {
@@ -43,4 +44,10 @@ t_posicion* posicionDesde(String stringDePosicion) {
 	return posicion;
 }
 
+t_pokemon* pokemonDesde(String nombrePokemon){
+	t_pokemon* pokemon = newPokemon();
 
+	pokemon->nombre = nombrePokemon;
+
+	return pokemon;
+}
