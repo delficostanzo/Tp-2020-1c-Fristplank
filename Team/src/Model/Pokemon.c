@@ -1,0 +1,26 @@
+/*
+ * Pokemon.c
+ *
+ *  Created on: 5 may. 2020
+ *      Author: utnso
+ */
+
+#include "Pokemon.h"
+
+//esto es como pdep, podes declararte alias de tipos para hacerte la vida mas facil. Fijate que si los declaras en el ".c", son privados
+typedef t_pokemon* Pokemon;
+typedef t_posicion* Posicion;
+
+//inicializa y devuelve un pokemon nuevo. Es el new, al estilo Java
+Pokemon newPokemon() {
+	return malloc(sizeof(Pokemon));
+}
+
+//Setters
+void setNombreTo(Pokemon pokemon, String nombre) {
+	pokemon->nombre = nombre;
+}
+
+void setPositionTo(Pokemon pokemon, Posicion posicion) {
+	pokemon->posicion = posicion;
+}
