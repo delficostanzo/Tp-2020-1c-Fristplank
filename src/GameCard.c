@@ -12,7 +12,7 @@
 
 int main(void) {
 
-	logger = iniciar_log();
+	logger = iniciar_logger();
 	log_info(logger, "Logger iniciado.");
 
 	leer_config();
@@ -176,7 +176,6 @@ void leer_config(void){
 	log_info(logger, "Config file | Tiempo de reintento de operación: %d", TIEMPO_DE_REINTENTO_OPERACION);
 
 	config_destroy(config);
-
 }
 
 int checkingOpenFile(char* filePath){
@@ -226,6 +225,16 @@ void crearArchivo(char* filePath){
 	free(directory);
 	free(open);
 	fclose(metadata);
+}
+
+t_log* iniciar_logger(void){
+
+	t_log* logger;
+	if((logger = log_create("./gamecard.log", "GAMECARD", 1, log_level_from_string("INFO"))) == NULL){
+		printf("No pude crear el logger\n");
+		exit(1);
+	}
+	return logger;
 }
 
 

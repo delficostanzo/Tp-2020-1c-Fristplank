@@ -13,10 +13,9 @@
 #include<netdb.h>
 #include<commons/collections/list.h>
 //UTILS
-#include <utils.h>
+#include<utils.h>
 //THREADS
 #include<pthread.h>
-
 
 typedef struct
 {
@@ -27,7 +26,6 @@ typedef struct
 	int cantidad;
 	char* pokemon;
 } t_new_pokemon_args;
-
 
 //agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
 int TIEMPO_DE_REINTENTO_CONEXION;
@@ -52,5 +50,6 @@ void crearArchivo(char* filePath);
 //void iniciar_server_escucha(void);
 
 void leer_config(void);
+t_log* iniciar_logger(void);
 
 #endif /* GAMECARD_H_ */
