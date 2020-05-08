@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Team.h"
+#include "./Model/Pokemon.h"
 #include "./AppInit/EntrenadoresInit.h"
 
 int main(int argc, char *argv[]) {
@@ -12,10 +13,10 @@ int main(int argc, char *argv[]) {
 	t_config* configConnection = leerConfigDesde("src/connection.config");
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
 
-	//ejemplo
-	t_caught_pokemon* caughtStruct = malloc(sizeof(t_caught_pokemon));
-	caughtStruct->id_correlativo=1;
-	caughtStruct->ok=true;
+	//t_list* objetivosGlobales = getObjetivosGlobalesDesde("src/team.config");
+	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
+	quickLog("primer objetivo de pokemones");
+	quickLog(((t_pokemon*)list_get(objetivosGlobales, 0))->nombre);
 
 	int TIEMPO_RECONEXION = config_get_int_value(configConnection, "TIEMPO_RECONEXION");
 	int RETARDO_CICLO_CPU = config_get_int_value(configConnection, "RETARDO_CICLO_CPU");
@@ -31,8 +32,6 @@ int main(int argc, char *argv[]) {
 	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
 
 	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
-
-	enviar_caught_pokemon(caughtStruct,conexion);
 
 	// recibir mensaje
 	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete

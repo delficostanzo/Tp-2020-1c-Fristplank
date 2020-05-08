@@ -1,10 +1,9 @@
 
-//aca podes hacer funciones para ayudarte a extraer la info desde el archivo de configuracion
-
+//funciones para extraer la info desde el archivo de configuracion
 #include "ConfigFunctions.h"
 #include "../TeamUtils/LogManager.h"
 
-//crea un config a partir del nombre de un archivo de configuracion, y lo devuelve
+//crea un config a partir del nombre de un archivo de configuracion y lo devuelve
 t_config* leerConfigDesde(String nombreDeArchivo) {
 	t_config* config = config_create(nombreDeArchivo);
 	t_log* logger = newLoggerFrom("team.log");
@@ -20,14 +19,18 @@ t_config* leerConfigDesde(String nombreDeArchivo) {
 	return config;
 }
 
-//con esto, transformas la lista de strings que te viene del config, en una t_list*
-t_list* crearListaCon(String* strings, int cantidad) {
+//con esto transformas la lista de strings que te viene del config en una t_list*
+t_list* crearListaConStringsDeConfig(String* strings) {
 	t_list* lista = list_create();
 
-	for(int index=0; index<cantidad; index++) {
-		String unString = strings[index];
+	for(int index=0; index; index++) {
+		if(strings[index] != NULL){
+			String unString = strings[index];
 
-		list_add(lista, unString);
+			list_add(lista, unString);
+		} else{
+			break;
+		}
 	}
 
 	return lista;
@@ -41,6 +44,21 @@ t_posicion* posicionDesde(String stringDePosicion) {
 	posicion->y = atoi(string_split(stringDePosicion,"|")[1]);
 
 	return posicion;
+}
+
+//recibe cada conjunto de pokemones de cada entrenador separados por |
+t_list* pokemonesDesdeString(String stringDePokemones) {
+	typedef void*(*erasedType)(void*);
+
+
+	String* stringDeNombresPokemones = string_split(stringDePokemones, "|");
+
+	//pasarlo de String* a t_list* para usarlo en el map
+	t_list* listaDeNombres = crearListaConStringsDeConfig(stringDeNombresPokemones);
+
+	t_list* pokemones = list_map(listaDeNombres, (erasedType)pokemonDesde);
+
+	return pokemones;
 }
 
 t_pokemon* pokemonDesde(String nombrePokemon){

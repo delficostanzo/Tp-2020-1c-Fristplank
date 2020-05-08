@@ -22,7 +22,7 @@ Posicion newPosicion() {
 
 //Setters
 void setNombreTo(Pokemon pokemon, String nombre) {
-	pokemon->nombre = nombre;
+	strcpy(pokemon->nombre, nombre);
 }
 
 void setPositionTo(Pokemon pokemon, Posicion posicion) {

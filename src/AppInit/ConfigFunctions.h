@@ -14,9 +14,10 @@
 #include"../Model/Pokemon.h"
 
 t_config* leerConfigDesde(String nombreDeArchivo);
-t_list* crearListaCon(String* strings, int cantidad);
+t_list* crearListaConStringsDeConfig(String* strings);
 t_posicion* posicionDesde(String stringDePosicion);
-t_pokemon* pokemonDesde(String nombrePokemons);
+t_list* pokemonesDesdeString(String nombrePokemons);
+t_pokemon* pokemonDesde(String nombrePokemon);
 
 
 #endif /* SRC_APPINIT_CONFIGFUNCTIONS_H_ */
