@@ -26,7 +26,7 @@ char* PUERTO_GAMECARD;
 t_log* logger;
 t_log* loggerObligatorio;
 
-t_log* iniciar_logger(void);
+t_log* iniciarLogger(void);
 t_log* iniciarLoggerObligatorio(void);
 void leer_config(t_log* logger);
 void terminar_programa(int, t_log*, t_config*);
