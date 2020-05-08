@@ -1,82 +1,115 @@
-
-
-#include <stdio.h>
-#include <stdlib.h>
 #include "GameBoy.h"
 
-int main(void) {
-	int conexion;
-	int conexionTeam;
-	int conexionGameCard;
+int main(int argc, char* argv[]) {
 
-	//ejemplo
-	t_get_pokemon* getStruct = malloc(sizeof(t_get_pokemon));
-	getStruct->pokemon = malloc(sizeof(t_get_pokemon));
-	getStruct->pokemon = "Pikachu.txt";
-	// inicializo el log del Broker
-	t_log* logger = iniciar_logger();
+	//Inicio el logger para debuggear nosotros y también el que piden en la consigna.
+	/* Las acciones a loguear en este archivo son:
+		* Conexión a cualquier proceso.
+		* Suscripción a una cola de mensajes.
+		* Llegada de un nuevo mensaje a una cola de mensajes.
+		* Envío de un mensaje a un suscriptor específico.
+	 */
 
-	// creo y devuelvo un puntero a la estructura t_config
-	t_config* config = leer_config();
+	logger = iniciar_logger();
+	log_info(logger, "Logger creado.");
+	loggerObligatorio = iniciarLoggerObligatorio();
+	log_info(logger, "Logger obligatorio creado.");
+	leer_config(logger);
 
-	IP_BROKER = config_get_string_value(config, "IP_BROKER");
-	IP_TEAM = config_get_string_value(config, "IP_TEAM");
-	IP_GAMECARD = config_get_string_value(config, "IP_GAMECARD");
-	PUERTO_BROKER = config_get_string_value(config, "IP_BROKER");
-	PUERTO_TEAM = config_get_string_value(config, "PUERTO_TEAM");
-	PUERTO_GAMECARD = config_get_string_value(config, "PUERTO_GAMECARD");
+//  ./gameboy [PROCESO] [TIPO_MENSAJE] [ARGUMENTOS]*
 
+//	DONE ./gameboy BROKER NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
+//	./gameboy BROKER APPEARED_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
+//	./gameboy BROKER CATCH_POKEMON [POKEMON] [POSX] [POSY]
+//	./gameboy BROKER CAUGHT_POKEMON [ID_MENSAJE] [OK/FAIL]
+//	./gameboy BROKER GET_POKEMON [POKEMON]
+//	./gameboy TEAM APPEARED_POKEMON [POKEMON] [POSX] [POSY]
+//  ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
+//	./gameboy GAMECARD CATCH_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
+//	./gameboy GAMECARD GET_POKEMON [POKEMON]
+//	./gameboy SUSCRIPTOR [COLA_DE_MENSAJES] [TIEMPO]
+//
 
-	log_info(logger, "Lei la IP %s y PUERTO %s\n del broker", IP_BROKER, PUERTO_BROKER);
-	log_info(logger, "Lei la IP %s y PUERTO %s\n del broker", IP_TEAM, PUERTO_TEAM);
-	log_info(logger, "Lei la IP %s y PUERTO %s\n del broker", IP_GAMECARD, PUERTO_GAMECARD);
+	if (strcmp(argv[1], "BROKER") == 0){ //MENSAJES AL TEAM
 
-	//crear conexion de cada proceso, un socket conectado
+		int socket = crear_conexion(IP_BROKER, PUERTO_BROKER);
+		log_debug(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_BROKER, PUERTO_BROKER);
 
-	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
-	conexionTeam = crear_conexion(IP_TEAM, PUERTO_TEAM);
-	conexionGameCard = crear_conexion(IP_GAMECARD, PUERTO_GAMECARD);
+		if (strcmp(argv[2], "NEW_POKEMON")){
+			procesarBrokerNewPokemon(socket, argv);
+		}
+		else if (strcmp(argv[2], "APPEARED_POKEMON")){
 
-	enviar_get_pokemon(getStruct,conexion);
-	enviar_get_pokemon(getStruct,conexionTeam);
-	enviar_get_pokemon(getStruct,conexionGameCard);
+		}
+		else if (strcmp(argv[2], "CATCH_POKEMON")){
 
-	// recibir mensaje
-	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
+		}
+		else if (strcmp(argv[2], "CAUGHT_POKEMON")){
 
-	//loguear mensaje recibido
-	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
+		}
+		else if (strcmp(argv[2], "GET_POKEMON")){
 
-	terminar_programa(conexion, logger, config);
-
-	free(getStruct->pokemon);
-	free(getStruct);
-}
-
-t_log* iniciar_logger(void){
-	t_log * log = malloc(sizeof(t_log));
-	log = log_create("gameboy.log", "GAMEBOY", 1,0);
-	if(log == NULL){
-		printf("No pude crear el logger \n");
-		exit(1);
+		}
+		else{
+			log_info(logger, "Tipo de mensaje incorrecto.");
+		}
 	}
-	log_info(log,"Logger Iniciado");
-	return log;
+	else if (strcmp(argv[1], "TEAM") == 0){ //MENSAJES AL TEAM
+
+	}
+	else if (strcmp(argv[1], "GAMECARD") == 0){ //MENSAJES AL GAMECARD
+
+	}
+	else if (strcmp(argv[1], "SUSCRIPTOR") == 0){ //MENSAJES PARA SUSCBRIBIRSE AL BROKER POR X SEGUNDOS
+
+	}
+
+	else{
+		log_info(logger, "Proceso incorrecto.");
+	}
 }
 
-t_config* leer_config(void)
+void procesarBrokerNewPokemon(int socket, char* argv[]){
+	char* pokemon = (char*)argv[3];
+	int posX = (int) argv[4];
+	int posY = (int) argv[5];
+	int cant = (int) argv[6];
+
+	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
+	new_pokemon->pokemon = pokemon;
+	new_pokemon->cantidad = cant;
+	new_pokemon->posicionX = posX;
+	new_pokemon->posicionY = posY;
+
+	enviar_new_pokemon(new_pokemon, socket);
+	log_debug(loggerObligatorio, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", new_pokemon->pokemon, new_pokemon->posicionX, new_pokemon->posicionY, new_pokemon->cantidad);
+
+	free(new_pokemon);
+}
+
+void leer_config(t_log* logger)
 {
-	t_config* config = config_create("src/gameboy.config");
-	t_log* logger = iniciar_logger();
+	t_config* config = config_create("./src/gameboy.config");
 
 	if(config == NULL){
 		printf("No pude leer la config \n");
 		exit(2);
 	}
-	log_info(logger,"Archivo de configuracion seteado");
-	return config;
-}
 
+	IP_BROKER = config_get_string_value(config, "IP_BROKER");
+	IP_TEAM = config_get_string_value(config, "IP_TEAM");
+	IP_GAMECARD = config_get_string_value(config, "IP_GAMECARD");
+	PUERTO_BROKER = config_get_string_value(config, "PUERTO_BROKER");
+	PUERTO_TEAM = config_get_string_value(config, "PUERTO_TEAM");
+	PUERTO_GAMECARD = config_get_string_value(config, "PUERTO_GAMECARD");
+
+	log_info(logger, "CONFIG FILE -> IP Broker: %s", IP_BROKER);
+	log_info(logger, "CONFIG FILE -> Puerto Broker: %s", PUERTO_BROKER);
+	log_info(logger, "CONFIG FILE -> IP Team: %s", IP_TEAM);
+	log_info(logger, "CONFIG FILE -> Puerto Team: %s", PUERTO_TEAM);
+	log_info(logger, "CONFIG FILE -> IP GameCard: %s", IP_GAMECARD);
+	log_info(logger, "CONFIG FILE -> Puerto GameCard: %s", PUERTO_GAMECARD);
+}
 
 void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
@@ -93,4 +126,23 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 
 }
 
+t_log* iniciarLoggerObligatorio(void){
+
+	t_log* logger;
+	if((logger = log_create("./gameboyObligatorio.log", "GAMEBOY", 1, log_level_from_string("INFO"))) == NULL){
+		printf("No pude crear el logger\n");
+		exit(1);
+	}
+	return logger;
+}
+
+t_log* iniciar_logger(void){
+
+	t_log* logger;
+	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("INFO"))) == NULL){
+		printf("No pude crear el logger\n");
+		exit(1);
+	}
+	return logger;
+}
 
