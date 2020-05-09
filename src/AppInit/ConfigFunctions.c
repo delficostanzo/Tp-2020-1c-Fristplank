@@ -23,7 +23,7 @@ t_config* leerConfigDesde(String nombreDeArchivo) {
 t_list* crearListaConStringsDeConfig(String* strings) {
 	t_list* lista = list_create();
 
-	for(int index=0; index; index++) {
+	for(int index=0; index >= 0; index++) {
 		if(strings[index] != NULL){
 			String unString = strings[index];
 
