@@ -13,6 +13,10 @@ int main(int argc, char *argv[]) {
 	t_config* configConnection = leerConfigDesde("src/connection.config");
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
 
+	crearHilosDeEntrenadores(entrenadores);
+	quickLog("Se crean un hilo por cada entrenador");
+
+
 	//t_list* objetivosGlobales = getObjetivosGlobalesDesde("src/team.config");
 	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
 	quickLog("primer objetivo de pokemones");
@@ -46,6 +50,7 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+
 
 t_log* iniciar_logger(void){
 	t_log * log = malloc(sizeof(t_log));
