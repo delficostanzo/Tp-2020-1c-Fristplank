@@ -111,6 +111,21 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 
 }
 
+/////// CREACION DE LOS ENTRENADORES /////////////////
+// para cada entrenador que hay, creo un hilo. Primero tengo que contar la cantidad de entrenadores que hay en ese team,
+//en base a eso, crear los hilos (hacer un for donde su index sea < la cantidad de entrenadores que tiene el team. dentro del for se crean los hilos
+void crearEntrenadores(t_list entrenadores){
+	int cantidadDeEntrenadores = list_size(entrenadores);
+	quickLog(string_from_format("Cantidad de entrenadores: %d", cantidadDeEntrenadores));
+
+	for(int index = 0, index <= cantidadDeEntrenadores, index++){
+		pthread_t unEntrenador;
+		pthread_create(&unEntrenador, NULL, funcionQueHaceElHilo(), variablesDeLaFuncion);
+
+	}
+
+}
+
 ///////OBJETIVOS////////
 t_list* list_adding_all(t_list* firstList, t_list* secondList){
 	list_add_all(firstList, secondList);
@@ -138,5 +153,4 @@ t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
 t_list* getObjetivoDesde(t_entrenador* entrenador) {
 	return entrenador->pokemonesObjetivos;
 }
-
 
