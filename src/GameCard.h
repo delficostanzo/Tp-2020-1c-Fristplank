@@ -48,6 +48,10 @@ void cambiarACerrado(char* filePath);
 void crearArchivo(char* filePath);
 
 //void iniciar_server_escucha(void);
+//void* leerRequest(int codeOp, int socketBroker);
+//void leerRequest(int* socketBroker);
+void* leerRequest(void* args);
+
 
 void leer_config(void);
 t_log* iniciar_logger(void);

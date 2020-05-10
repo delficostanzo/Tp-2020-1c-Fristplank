@@ -29,42 +29,52 @@ int main(void) {
 	//aca corro hilo con socket de escucha para el gameboy
 	//iniciar_server_escucha();
 
-//	while (1){
-//		// recibir mensaje
-//
+	while (1){
+		// recibir mensaje
 
-		int codeOp;
-		recv(socketBroker, &codeOp, sizeof(int), MSG_WAITALL);
-		log_info(logger, "Op code procesado: %d.", codeOp);
+		pthread_t procesaRequest;
+		pthread_create(&procesaRequest, NULL, leerRequest, &socketBroker);
 
-		switch(codeOp){
-
-		case 1:; //new_pokemon
-			t_new_pokemon_args *arguments = malloc(sizeof(t_new_pokemon_args));
-
-			//recv(socketBroker, arguments->ID, sizeof(int), MSG_WAITALL) TODAVIA NO ESTA EN LA LIBRERIA
-
-			recv(socketBroker, &arguments->size, sizeof(int), MSG_WAITALL);
-			arguments->pokemon = malloc(arguments->size - (2 * sizeof(int)));
-			recv(socketBroker, &arguments->pokemon, arguments->size - (2 * sizeof(int)), MSG_WAITALL);
-			recv(socketBroker, &arguments->posX, sizeof(int), MSG_WAITALL);
-			recv(socketBroker, &arguments->posY, sizeof(int), MSG_WAITALL);
-			recv(socketBroker, &arguments->cantidad, sizeof(int), MSG_WAITALL);
-
-			pthread_t nuevoHilo;
-			pthread_create(&nuevoHilo, NULL, procesarNewPokemon, (void*)arguments);
-
-			break;
-
-		case 3: //catch_pokemon
-			break;
-
-		case 5: //get_pokemon
-			break;
-		}
-//	}
+	}
 
 	//terminar_programa(conexion, logger, config);
+}
+
+void* leerRequest(void* args){
+
+	int* socketBroker = (int *)args;
+	int codeOp;
+	recv(*socketBroker, &codeOp, sizeof(int), MSG_WAITALL);
+	log_info(logger, "Op code procesado: %d.", codeOp);
+
+
+	switch(codeOp){
+
+	case 1:; //new_pokemon
+		t_new_pokemon_args *arguments = malloc(sizeof(t_new_pokemon_args)); //va a ser t_new_pokemon* porque vamos a cambiar la library
+
+		//recv(socketBroker, arguments->ID, sizeof(int), MSG_WAITALL) TODAVIA NO ESTA EN LA LIBRERIA
+
+		recv(*socketBroker, &arguments->size, sizeof(int), MSG_WAITALL);
+		arguments->pokemon = malloc(arguments->size - (2 * sizeof(int)));
+		recv(*socketBroker, &arguments->pokemon, arguments->size - (2 * sizeof(int)), MSG_WAITALL); //VA A CAMBIAR CUANDO AGREGUEN EL LENGTH
+		recv(*socketBroker, &arguments->posX, sizeof(int), MSG_WAITALL);
+		recv(*socketBroker, &arguments->posY, sizeof(int), MSG_WAITALL);
+		recv(*socketBroker, &arguments->cantidad, sizeof(int), MSG_WAITALL);
+
+		pthread_t nuevoHilo;
+		pthread_create(&nuevoHilo, NULL, procesarNewPokemon, (void*)arguments);
+
+		break;
+
+	case 3: //catch_pokemon
+		break;
+
+	case 5: //get_pokemon
+		break;
+	}
+
+	return 0;
 }
 
 void* procesarNewPokemon(void*args){
