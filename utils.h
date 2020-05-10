@@ -14,6 +14,7 @@
 
 typedef enum
 {
+	SUBSCRIBE = 0,
 	NEW_POKEMON = 1,
 	APPEARED_POKEMON = 2,
 	CATCH_POKEMON = 3,
@@ -22,8 +23,13 @@ typedef enum
 	LOCALIZED_POKEMON = 6,
 }op_code;
 
+typedef struct { //TODO
+
+} t_subscribe;
+
 typedef struct
 {
+	int lengthOfPokemon;
 	char* pokemon;
 	int posicionX;
 	int posicionY;
@@ -32,14 +38,15 @@ typedef struct
 
 typedef struct
 {
+	int lengthOfPokemon;
 	char* pokemon;
 	int posicionX;
 	int posicionY;
-	int id_correlativo; //id del mensaje al que esta respondiendo
 } t_appeared_pokemon;
 
 typedef struct
 {
+	int lengthOfPokemon;
 	char* pokemon;
 	int posicionX;
 	int posicionY;
@@ -47,18 +54,18 @@ typedef struct
 
 typedef struct
 {
-	int id_correlativo;
 	bool ok;
 } t_caught_pokemon;
 
 typedef struct
 {
+	int lengthOfPokemon;
 	char* pokemon;
 } t_get_pokemon;
 
-typedef struct
+typedef struct // No se bien como resolver esto TODO
 {
-	int id_correlativo;
+	int lengthOfPokemon;
 	char* pokemon;
 	t_list* listaPosiciones;
 } t_localized_pokemon;
@@ -73,17 +80,18 @@ typedef struct
 typedef struct
 {
 	op_code codigo_operacion;
+	int ID;
 	t_buffer* buffer;
 } t_paquete;
 
 int crear_conexion(char* ip, char* puerto);
-void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente);
-void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente);
-void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente);
-void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente);
-void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente);
-void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente);
-t_paquete* recibir_mensaje(int socket_cliente);
+void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int ID);
+void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int ID);
+void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, int ID);
+void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int ID);
+void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int ID);
+void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int ID);
+t_paquete* recibir_mensaje(int socket);
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
 t_log* iniciar_log(void);
