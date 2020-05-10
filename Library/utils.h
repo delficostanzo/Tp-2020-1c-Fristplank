@@ -23,8 +23,8 @@ typedef enum
 	LOCALIZED_POKEMON = 6,
 }op_code;
 
-typedef struct { //TODO
-
+typedef struct {
+	op_code cola;
 } t_subscribe;
 
 typedef struct
@@ -85,12 +85,15 @@ typedef struct
 } t_paquete;
 
 int crear_conexion(char* ip, char* puerto);
+
+void enviar_subscribe(t_subscribe* subscribe, int socket_cliente, int ID);
 void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int ID);
 void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int ID);
 void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, int ID);
 void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int ID);
 void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int ID);
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int ID);
+
 t_paquete* recibir_mensaje(int socket);
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
