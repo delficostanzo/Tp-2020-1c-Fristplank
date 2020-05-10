@@ -1,8 +1,10 @@
 #include "utils.h"
 
-// TODO
-void serializarSubscribe(t_subscribe* subscribe, void* stream){
 
+void serializarSubscribe(t_subscribe* subscribe, void* stream){
+	int offset = 0;
+
+	memcpy(stream + offset, &(subscribe->cola), sizeof(op_code));
 }
 
 void serializarNewPokemon(t_new_pokemon* new_pokemon, void* stream){
@@ -184,6 +186,12 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int ID, op_code op_cod
 	return paquete;
 }
 
+void enviar_subscribe(t_subscribe* subscribe, int socket_cliente, int ID) {
+	int size = sizeof(op_code);
+	t_paquete* paquete = crearPaqueteCon(subscribe, size, ID, SUBSCRIBE);
+	enviar(paquete, socket_cliente);
+}
+
 void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int ID) {
 	int size = sizeof(int)*4 + new_pokemon->lengthOfPokemon;
 	t_paquete* paquete = crearPaqueteCon(new_pokemon, size, ID, NEW_POKEMON);
@@ -223,7 +231,8 @@ void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket
 
 
 void des_serializarSubscribe(int socket, void* stream){
-	//TODO
+	t_subscribe subscribe = stream;
+	recv(socket, &(subscribe->cola), sizeof(op_code),0);
 }
 
 void des_serializarNewPokemon(int socket, void* stream){
@@ -287,7 +296,6 @@ t_paquete* recibir_mensaje(int socket)
 	switch(paquete->codigo_operacion){
 
 		case SUBSCRIBE:
-			// TODO
 			des_serializarSubscribe(socket, &(paquete->buffer->stream));
 			break;
 		case NEW_POKEMON:
