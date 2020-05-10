@@ -231,7 +231,7 @@ void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket
 
 
 void des_serializarSubscribe(int socket, void* stream){
-	t_subscribe subscribe = stream;
+	t_subscribe* subscribe = stream;
 	recv(socket, &(subscribe->cola), sizeof(op_code),0);
 }
 
