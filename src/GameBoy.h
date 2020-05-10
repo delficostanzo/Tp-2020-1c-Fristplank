@@ -31,6 +31,13 @@ t_log* iniciarLoggerObligatorio(void);
 void leer_config(t_log* logger);
 void terminar_programa(int, t_log*, t_config*);
 
-void procesarBrokerNewPokemon(int socket, char* argv[]);
+void procesarNewPokemon(int socket, char* argv[], char* nombreModulo);
+void procesarGetPokemon(int socket, char* argv[], char* nombreModulo);
+void procesarBrokerAppearedPokemon(int socket, char* argv[]);
+void procesarBrokerCatchPokemon(int socket, char* argv[]);
+void procesarBrokerCaughtPokemon(int socket, char* argv[]);
+void procesarTeamAppearedPokemon(int socket, char* argv[]);
+void procesarGamecardCatchPokemon(int socket, char* argv[]);
+void procesarSubscribe(int socket, char* argv[]);
 
 #endif /* GAMEBOY_H_ */
