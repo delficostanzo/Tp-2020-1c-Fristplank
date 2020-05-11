@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
 
 	crearHilosDeEntrenadores(entrenadores);
-	quickLog("Se crean un hilo por cada entrenador");
+	quickLog("Se crea un hilo por cada entrenador");
 
 
 	//t_list* objetivosGlobales = getObjetivosGlobalesDesde("src/team.config");
