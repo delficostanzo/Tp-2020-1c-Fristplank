@@ -1,3 +1,10 @@
+/*
+ * util.h
+ *
+ *
+ *      Author: fritsplank
+ */
+
 #ifndef UTILS_H_
 #define UTILS_H_
 
@@ -11,6 +18,7 @@
 #include<commons/log.h>
 #include<commons/collections/list.h>
 #include<pthread.h>
+#include "conexion.h"
 
 typedef enum
 {
@@ -24,25 +32,28 @@ typedef enum
 
 typedef struct
 {
-	char* pokemon;
 	int posicionX;
 	int posicionY;
+} t_posicion;
+
+typedef struct
+{
+	char* pokemon;
+	t_posicion* posicion;
 	int cantidad;
 } t_new_pokemon;
 
 typedef struct
 {
 	char* pokemon;
-	int posicionX;
-	int posicionY;
+	t_posicion* posicion;
 	int id_correlativo; //id del mensaje al que esta respondiendo
 } t_appeared_pokemon;
 
 typedef struct
 {
 	char* pokemon;
-	int posicionX;
-	int posicionY;
+	t_posicion* posicion;
 } t_catch_pokemon;
 
 typedef struct

@@ -1,3 +1,10 @@
+/*
+ * utils.c
+ *
+ *
+ *      Author: fritsplank
+ */
+
 #include "utils.h"
 
 void* serializar_paquete(t_paquete* paquete, int *bytes)
@@ -127,16 +134,13 @@ t_paquete* recibir_mensaje(int socket_cliente)
 	//int size_datos;
 	recv(socket_cliente, &(paquete->buffer->size), sizeof(int), 0);
 
-	//void* datos = malloc(size_datos);
-	recv(socket_cliente, paquete->buffer->stream, paquete->buffer->size, 0);
+	//el recv de un stream muy grande puede cortarse
+	void* datos = recibirDatos(socket_cliente, paquete->buffer->size);
+	paquete->buffer->stream = datos;
 	log_info(logger, "Recibimos el mensaje correspondiente");
 
 	return paquete;
 }
-
-//t_new_pokemon* desempaquetar_new_pokemon(t_buffer* paquete->buffer) {
-//
-//}
 
 void liberar_conexion(int socket_cliente)
 {
