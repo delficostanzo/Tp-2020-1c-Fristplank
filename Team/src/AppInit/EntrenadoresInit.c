@@ -1,7 +1,4 @@
-/*
- *
- *
- */
+
 
 #include "EntrenadoresInit.h"
 #include "../Model/Trainer.h"
@@ -15,7 +12,7 @@ static t_list* inicializarEntrenadoresHasta(int cantidad);
 static void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores);
-static t_list* getObjetivoDesde(t_entrenador* entrenador);
+static t_list* getObjetivoDesde(Entrenador* entrenador);
 
 //si declaras aca arriba las funciones con un 'static' adelante, es la manera de hacerlas privadas. No alcanza solo con omitirlas en el ".h"
 
@@ -42,7 +39,7 @@ t_list* inicializarEntrenadoresHasta(int cantidad) {
 	t_list* entrenadores = list_create();
 
 	for(int contador=0; contador<cantidad; contador++) {
-		t_entrenador* entrenador = newTrainer();
+		Entrenador* entrenador = newTrainer();
 
 		list_add(entrenadores, entrenador);
 	}
@@ -62,7 +59,7 @@ void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores) {
 
 	//para cada entrenador, le seteo su correspondiente posicion
 	for(int index = 0; index < list_size(entrenadores); index++) {
-		t_entrenador* entrenador = list_get(entrenadores, index);
+		Entrenador* entrenador = list_get(entrenadores, index);
 		t_posicion* posicion = list_get(posiciones, index);
 
 		setPosicion(entrenador, posicion);
@@ -79,7 +76,7 @@ void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores) {
 	t_list* atrapados = list_map(crearListaConStringsDeConfig(stringPokemonesAtrapados), (erasedType)pokemonesDesdeString);
 
 	for(int index = 0; index < list_size(entrenadores); index++) {
-			t_entrenador* entrenador = list_get(entrenadores, index);
+			Entrenador* entrenador = list_get(entrenadores, index);
 			t_list* atrapadosDelEntrenador = list_get(atrapados, index);
 
 			setPokemonesAtrapadosTo(entrenador, atrapadosDelEntrenador);
@@ -96,14 +93,14 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 	t_list* objetivos = list_map(crearListaConStringsDeConfig(stringPokemonesObjetivos), (erasedType)pokemonesDesdeString);
 
 	for(int index = 0; index < list_size(entrenadores); index++) {
-			t_entrenador* entrenador = list_get(entrenadores, index);
+			Entrenador* entrenador = list_get(entrenadores, index);
 			t_list* objetivosDelEntrenador = list_get(objetivos, index);
 
 			setPokemonesObjetivosTo(entrenador, objetivosDelEntrenador);
 		}
 
-	quickLog(string_from_format("%d", (((t_entrenador*)list_get(entrenadores, 0))->posicion->x)));
-	quickLog(string_from_format("%d", (((t_entrenador*)list_get(entrenadores, 0))->posicion->y)));
+	quickLog(string_from_format("%d", (((Entrenador*)list_get(entrenadores, 0))->posicion->x)));
+	quickLog(string_from_format("%d", (((Entrenador*)list_get(entrenadores, 0))->posicion->y)));
 
 	list_destroy(objetivos);
 	quickLog("Cargados los objetivos de los entrenadores");
@@ -135,7 +132,7 @@ t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
 
 }
 
-t_list* getObjetivoDesde(t_entrenador* entrenador) {
+t_list* getObjetivoDesde(Entrenador* entrenador) {
 	return entrenador->pokemonesObjetivos;
 }
 
