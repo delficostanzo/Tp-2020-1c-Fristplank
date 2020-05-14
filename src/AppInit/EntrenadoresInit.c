@@ -17,7 +17,6 @@ static void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores);
 static t_list* getObjetivoDesde(t_entrenador* entrenador);
 
-
 //si declaras aca arriba las funciones con un 'static' adelante, es la manera de hacerlas privadas. No alcanza solo con omitirlas en el ".h"
 
 //delego el comportamiento para crear una lista de entrenadores a partir del archivo de configuracion de donde estan
@@ -111,19 +110,6 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 
 }
 
-/////// CREACION DE LOS ENTRENADORES /////////////////
-// para cada entrenador que hay, creo un hilo. Primero tengo que contar la cantidad de entrenadores que hay en ese team,
-//en base a eso, crear los hilos (hacer un for donde su index sea < la cantidad de entrenadores que tiene el team. dentro del for se crean los hilos
-void crearHilosDeEntrenadores(t_list* entrenadores){
-	int cantidadDeEntrenadores = list_size(entrenadores);
-	quickLog(string_from_format("Cantidad de entrenadores: %d", cantidadDeEntrenadores));
-
-	for(int index = 0; index < cantidadDeEntrenadores; index++){
-		pthread_t unEntrenador;
-		//pthread_create(&unEntrenador, NULL, funcionQueHaceElHilo(), variablesDeLaFuncion);
-	}
-
-}
 
 ///////OBJETIVOS////////
 t_list* list_adding_all(t_list* firstList, t_list* secondList){
