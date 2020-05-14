@@ -4,16 +4,18 @@
 #include "Team.h"
 #include "./Model/Pokemon.h"
 #include "./AppInit/EntrenadoresInit.h"
+#include "./AppInit/HilosEntrenadores.h"
 
 int main(int argc, char *argv[]) {
 	int conexion;
+	t_list* hilosDeEntrenadores;
 
 	t_log* logger = newLoggerFrom("team.log");
 
 	t_config* configConnection = leerConfigDesde("src/connection.config");
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
 
-	crearHilosDeEntrenadores(entrenadores);
+	hilosDeEntrenadores = crearHilosDeEntrenadores(entrenadores);
 	quickLog("Se crea un hilo por cada entrenador");
 
 
