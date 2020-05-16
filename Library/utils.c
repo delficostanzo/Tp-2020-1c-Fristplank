@@ -320,7 +320,7 @@ t_paquete* recibir_mensaje(int socket)
 
 	}
 
-	log_info(logger, "Recibimos el mensaje correspondiente");
+	//log_info(logger, "Recibimos el mensaje correspondiente");
 	return paquete;
 }
 
@@ -341,3 +341,4 @@ t_log* iniciar_log(void)
 	}
 	return logger;
 }
+
