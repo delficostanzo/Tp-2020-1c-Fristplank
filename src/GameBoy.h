@@ -13,7 +13,7 @@
 #include<unistd.h>
 #include<sys/socket.h>
 #include<netdb.h>
-#include<utils.h>
+#include "Library/utils.h"
 
 //agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
 char* IP_BROKER;

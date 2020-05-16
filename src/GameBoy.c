@@ -252,7 +252,7 @@ void procesarGamecardCatchPokemon(int socket, char* argv[]){
 
 void leer_config(t_log* logger)
 {
-	t_config* config = config_create("./src/gameboy.config");
+	t_config* config = config_create("./gameboy.config"); //
 
 	if(config == NULL){
 		printf("No pude leer la config \n");
