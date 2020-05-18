@@ -13,9 +13,8 @@
 #include<unistd.h>
 #include<sys/socket.h>
 #include<netdb.h>
-#include "Library/utils.h"
+#include"Library/utils.h"
 
-//agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
 char* IP_BROKER;
 char* IP_TEAM;
 char* IP_GAMECARD;

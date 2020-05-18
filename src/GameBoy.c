@@ -25,32 +25,38 @@ int main(int argc, char* argv[]) {
 //  DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
 //	DONE ./gameboy GAMECARD CATCH_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
 //	DONE ./gameboy GAMECARD GET_POKEMON [POKEMON]
-//	DONE ./gameboy SUSCRIPTOR [COLA_DE_MENSAJES] [TIEMPO]
+//	./gameboy SUSCRIPTOR [COLA_DE_MENSAJES] [TIEMPO] TODO tiempo
 //
 
-int socket;
+	int socket;
 
 	if (strcmp(argv[1], "BROKER") == 0){ //MENSAJES AL BROKER
 
 		socket = crear_conexion(IP_BROKER, PUERTO_BROKER);
 		log_debug(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_BROKER, PUERTO_BROKER);
 
-		if (strcmp(argv[2], "NEW_POKEMON")){
+		if (strcmp(argv[2], "NEW_POKEMON") == 0){
+
 			procesarNewPokemon(socket, argv, "Broker");
 		}
-		else if (strcmp(argv[2], "APPEARED_POKEMON")){
+		else if (strcmp(argv[2], "APPEARED_POKEMON") == 0){
+
 			procesarBrokerAppearedPokemon(socket, argv);
 		}
-		else if (strcmp(argv[2], "CATCH_POKEMON")){
+		else if (strcmp(argv[2], "CATCH_POKEMON") == 0){
+
 			procesarBrokerCatchPokemon(socket, argv);
 		}
-		else if (strcmp(argv[2], "CAUGHT_POKEMON")){
+		else if (strcmp(argv[2], "CAUGHT_POKEMON") == 0){
+
 			procesarBrokerCaughtPokemon(socket, argv);
 		}
-		else if (strcmp(argv[2], "GET_POKEMON")){
+		else if (strcmp(argv[2], "GET_POKEMON") == 0){
+
 			procesarGetPokemon(socket, argv, "Broker");
 		}
 		else{
+			puts(argv[2]);
 			log_info(logger, "Tipo de mensaje incorrecto.");
 		}
 
@@ -59,7 +65,7 @@ int socket;
 		socket = crear_conexion(IP_TEAM, PUERTO_TEAM);
 		log_debug(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_TEAM, PUERTO_TEAM);
 
-		if (strcmp(argv[2], "APPEARED_POKEMON")){
+		if (strcmp(argv[2], "APPEARED_POKEMON") == 0){
 			procesarTeamAppearedPokemon(socket, argv);
 		}
 
@@ -72,13 +78,13 @@ int socket;
 		socket = crear_conexion(IP_GAMECARD, PUERTO_GAMECARD);
 		log_debug(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_GAMECARD, PUERTO_GAMECARD);
 
-		if (strcmp(argv[2], "NEW_POKEMON")){
+		if (strcmp(argv[2], "NEW_POKEMON") == 0){
 			procesarNewPokemon(socket, argv, "GameCard");
 		}
-		else if (strcmp(argv[2], "CATCH_POKEMON")){
+		else if (strcmp(argv[2], "CATCH_POKEMON") == 0){
 			procesarGamecardCatchPokemon(socket, argv);
 		}
-		else if (strcmp(argv[2], "GET_POKEMON")){
+		else if (strcmp(argv[2], "GET_POKEMON") == 0){
 			procesarGetPokemon(socket, argv, "GameCard");
 		}
 		else{
@@ -106,22 +112,24 @@ void procesarSubscribe(int socket, char* argv[]){ //TODO -> HAY QUE VER COMO HAC
 
 	op_code cola;
 
-	if (strcmp(argv[2], "NEW_POKEMON")){
+	puts(argv[2]);
+
+	if (strcmp(argv[2], "NEW_POKEMON") == 0){
 		cola = NEW_POKEMON;
 	}
-	else if (strcmp(argv[2], "APPEARED_POKEMON")){
+	else if (strcmp(argv[2], "APPEARED_POKEMON") == 0){
 		cola = APPEARED_POKEMON;
 	}
-	else if (strcmp(argv[2], "CATCH_POKEMON")){
+	else if (strcmp(argv[2], "CATCH_POKEMON") == 0){
 		cola = CATCH_POKEMON;
 	}
-	else if (strcmp(argv[2], "CAUGHT_POKEMON")){
+	else if (strcmp(argv[2], "CAUGHT_POKEMON") == 0){
 		cola = CAUGHT_POKEMON;
 	}
-	else if (strcmp(argv[2], "GET_POKEMON")){
+	else if (strcmp(argv[2], "GET_POKEMON") == 0){
 		cola = GET_POKEMON;
 	}
-	else if (strcmp(argv[2], "LOCALIZED_POKEMON")){
+	else if (strcmp(argv[2], "LOCALIZED_POKEMON") == 0){
 		cola = LOCALIZED_POKEMON;
 	}
 
@@ -135,6 +143,8 @@ void procesarSubscribe(int socket, char* argv[]){ //TODO -> HAY QUE VER COMO HAC
 }
 
 void procesarNewPokemon(int socket, char* argv[], char* nombreModulo){
+	log_debug(logger, "Mensaje a enviar a %s | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", nombreModulo, (char*) argv[3], (int) argv[4], (int) argv[5], (int) argv[6]);
+
 	char* pokemon = (char*)argv[3];
 	int posX = (int) argv[4];
 	int posY = (int) argv[5];
