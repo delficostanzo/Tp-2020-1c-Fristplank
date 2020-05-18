@@ -94,9 +94,17 @@ void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente,
 void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int ID);
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int ID);
 
-t_paquete* recibir_mensaje(int socket);
+t_subscribe* des_serializar_subscribe(int socket);
+t_new_pokemon* des_serializar_new_pokemon(int socket);
+t_appeared_pokemon* des_serializar_appeared_pokemon(int socket);
+t_catch_pokemon* des_serializar_catch_pokemon(int socket);
+t_caught_pokemon* des_serializar_caught_pokemon(int socket);
+t_get_pokemon* des_serializar_get_pokemon(int socket);
+t_localized_pokemon* des_serializar_localized_pokemon(int socket); //TODO
+
+
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
-t_log* iniciar_log(void);
+t_log* iniciar_log(char* nombreProceso);
 
 #endif /* UTILS_H_ */
