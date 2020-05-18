@@ -82,8 +82,8 @@ void* serializarLocalizedPokemon(t_localized_pokemon* localized_pokemon, void* s
 
 void* serializar_paquete(t_paquete* paquete, int *bytes)
 {
-	t_log* logger = iniciar_log();
-	log_info(logger, "Inicio de Serializacion");
+	t_log* logger = iniciar_log("Proceso: serializar_paquete");
+
 
 	//El size sería el opcode + el id + variable size + lo que tenga el mensaje
 	int size_serializado = sizeof(op_code) + sizeof(int)*2 + (paquete->buffer->size);
@@ -92,12 +92,14 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 
 	int offset = 0;
 
+	log_info(logger, "Inicio de Serializacion");
+
 	memcpy(streamFinal + offset, &(paquete->codigo_operacion), sizeof(op_code));
-	log_info(logger, "Codigo de operacion (protocolo) copiado al stream");
+	log_info(logger, "Codigo de operacion copiado al stream");
 	offset += sizeof(op_code);
 
 	memcpy(streamFinal + offset, &(paquete->ID), sizeof(int));
-	log_info(logger, "ID (protocolo) copiado al stream");
+	log_info(logger, "ID copiado al stream %d", (int)paquete->ID);
 	offset += sizeof(int);
 
 	memcpy(streamFinal + offset, &paquete->buffer->size, sizeof(paquete->buffer->size));
@@ -106,7 +108,10 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 
 	void* mensajeSerializado = malloc(paquete->buffer->size);
 
+	log_info(logger, "Asignación de memoria realizada.");
+
 	switch (paquete->codigo_operacion){
+
 		case SUBSCRIBE:
 			serializarSubscribe(paquete->buffer->stream, &mensajeSerializado);
 			break;
@@ -130,10 +135,11 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 			break;
 	}
 
-	memcpy(streamFinal + offset, mensajeSerializado, paquete->buffer->size);
+	memcpy(streamFinal + offset, &mensajeSerializado, paquete->buffer->size);
 	log_info(logger, "Mensaje copiado al stream");
 
 	free(mensajeSerializado);
+	log_destroy(logger);
 	return streamFinal;
 }
 
@@ -162,16 +168,17 @@ int crear_conexion(char *ip, char* puerto)
 void enviar(t_paquete* paquete, int socket_cliente)
 {
 	int size_serializado;
-	t_log* logger = iniciar_log();
+	t_log* logger = iniciar_log("Proceso: enviar");
 
 	void* mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
-	log_info(logger, "Serializacion del paquete");
+	log_info(logger, "Serializacion del paquete finalizada.");
 
 	send(socket_cliente, mensajeAEnviar, size_serializado, 0);
 
 	free(mensajeAEnviar);
 	free(paquete->buffer);
 	free(paquete);
+	log_destroy(logger);
 
 }
 
@@ -183,6 +190,11 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int ID, op_code op_cod
 	paquete->buffer->size = sizeOfStream;
 	paquete->codigo_operacion = op_code;
 
+	t_log* logger = iniciar_log("Proceso: crearPaqueteCon");
+
+	log_info(logger, "Paquete creado con: ID: %d - Size: %d", paquete->ID, paquete->buffer->size);
+
+	log_destroy(logger);
 	return paquete;
 }
 
@@ -230,112 +242,76 @@ void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket
 }
 
 
-void des_serializarSubscribe(int socket, void* stream){
-	t_subscribe* subscribe = stream;
+t_subscribe* des_serializarSubscribe(int socket){
+	t_subscribe* subscribe = malloc(sizeof(t_subscribe));
 	recv(socket, &(subscribe->cola), sizeof(op_code),0);
+
+	return subscribe;
 }
 
-void des_serializarNewPokemon(int socket, void* stream){
-	t_new_pokemon* new_pokemon = stream;
+t_new_pokemon* des_serializarNewPokemon(int socket){
+	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
 	recv(socket, &(new_pokemon->lengthOfPokemon), sizeof(int), 0);
 	recv(socket, &(new_pokemon->pokemon), new_pokemon->lengthOfPokemon, 0);
 	recv(socket, &(new_pokemon->posicionX), sizeof(int), 0);
 	recv(socket, &(new_pokemon->posicionY), sizeof(int), 0);
 	recv(socket, &(new_pokemon->cantidad), sizeof(int), 0);
+
+	return new_pokemon;
 }
 
-void des_serializarAppearedPokemon(int socket, void* stream){
-	t_appeared_pokemon* appeared_pokemon = stream;
+t_appeared_pokemon* des_serializarAppearedPokemon(int socket){
+	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
 	recv(socket, &(appeared_pokemon->lengthOfPokemon), sizeof(int), 0);
 	recv(socket, &(appeared_pokemon->pokemon), appeared_pokemon->lengthOfPokemon, 0);
 	recv(socket, &(appeared_pokemon->posicionX), sizeof(int), 0);
 	recv(socket, &(appeared_pokemon->posicionY), sizeof(int), 0);
+
+	return appeared_pokemon;
 }
 
-void des_serializarCatchPokemon(int socket, void* stream){
-	t_catch_pokemon* catch_pokemon = stream;
+t_catch_pokemon* des_serializarCatchPokemon(int socket){
+	t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
 	recv(socket, &(catch_pokemon->lengthOfPokemon), sizeof(int), 0);
 	recv(socket, &(catch_pokemon->pokemon), catch_pokemon->lengthOfPokemon, 0);
 	recv(socket, &(catch_pokemon->posicionX), sizeof(int), 0);
 	recv(socket, &(catch_pokemon->posicionY), sizeof(int), 0);
+
+	return catch_pokemon;
 }
 
-void des_serializarCaughtPokemon(int socket, void* stream){
-	t_caught_pokemon* caught_pokemon = stream;
+t_caught_pokemon* des_serializarCaughtPokemon(int socket){
+	t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
 	recv(socket, &(caught_pokemon->ok), sizeof(bool), 0);
+
+	return caught_pokemon;
 }
 
-void des_serializarGetPokemon(int socket, void* stream){
-	t_get_pokemon* get_pokemon = stream;
+t_get_pokemon* des_serializarGetPokemon(int socket, void* stream){
+	t_get_pokemon* get_pokemon = malloc(sizeof(get_pokemon));
 	recv(socket, &(get_pokemon->lengthOfPokemon), sizeof(int), 0);
 	recv(socket, &(get_pokemon->pokemon), get_pokemon->lengthOfPokemon, 0);
+
+	return get_pokemon;
 }
 
 void des_serializarLocalizedPokemon(int socket, void* stream){
 	//TODO
 }
 
-t_paquete* recibir_mensaje(int socket)
-{
-	t_log* logger = iniciar_log();
-	t_paquete* paquete = malloc(sizeof(t_paquete));
-
-	//primero recibimos el codigo de operacion
-	//op_code operacion;
-	recv(socket, &(paquete->codigo_operacion), sizeof(op_code), 0);
-	log_info(logger, "Recibimos el codigo de operacion: %d", paquete->codigo_operacion);
-
-	recv(socket, &(paquete->ID), sizeof(int), 0);
-	log_info(logger, "Recibimos el ID del mensaje: %d", paquete->ID);
-
-	//despues recibimos el buffer. Primero su tamaño y despues el contenido
-	recv(socket, &(paquete->buffer->size), sizeof(int), 0);
-
-	paquete->buffer->stream = malloc(paquete->buffer->size);
-
-	switch(paquete->codigo_operacion){
-
-		case SUBSCRIBE:
-			des_serializarSubscribe(socket, &(paquete->buffer->stream));
-			break;
-		case NEW_POKEMON:
-			des_serializarNewPokemon(socket, &(paquete->buffer->stream));
-			break;
-		case APPEARED_POKEMON:
-			des_serializarAppearedPokemon(socket, &(paquete->buffer->stream));
-			break;
-		case CATCH_POKEMON:
-			des_serializarCatchPokemon(socket, &(paquete->buffer->stream));
-			break;
-		case CAUGHT_POKEMON:
-			des_serializarCaughtPokemon(socket, &(paquete->buffer->stream));
-			break;
-		case GET_POKEMON:
-			des_serializarGetPokemon(socket, &(paquete->buffer->stream));
-			break;
-		case LOCALIZED_POKEMON:
-			// TODO
-			des_serializarLocalizedPokemon(socket, &(paquete->buffer->stream));
-			break;
-
-	}
-
-	//log_info(logger, "Recibimos el mensaje correspondiente");
-	return paquete;
-}
-
 void liberar_conexion(int socket_cliente)
 {
-	t_log* logger = iniciar_log();
+	t_log* logger = iniciar_log("Proceso: liberar_conexion");
 	if (close(socket_cliente) == -1) {
 		log_error(logger, "Error al cerrar la conexion");
 	}
+	log_destroy(logger);
 }
 
-t_log* iniciar_log(void)
+t_log* iniciar_log(char* nombreProceso)
 {
 	t_log* logger;
-	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
+	if((logger = log_create("broker.log", nombreProceso, 1, log_level_from_string("INFO"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}
