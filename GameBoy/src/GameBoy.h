@@ -13,15 +13,8 @@
 #include<sys/socket.h>
 #include<netdb.h>
 #include<commons/collections/list.h>
-#include<utils.h>
+#include"utils.h"
 
-//agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
-char* IP_BROKER;
-char* IP_TEAM;
-char* IP_GAMECARD;
-char* PUERTO_BROKER;
-char* PUERTO_TEAM;
-char* PUERTO_GAMECARD;
 
 t_log* iniciar_logger(void);
 t_config* leer_config(void);

@@ -5,34 +5,43 @@
 
 
 int main(void) {
-	int conexion;
+	int conexionBroker; //cliente del broker
+	int conexionGameBoy; //servidor del gameboy
 
 	t_log* logger = iniciar_logger();
 	t_config* config = leer_config();
 
-	//ejemplo
-	t_caught_pokemon* caughtStruct = malloc(sizeof(t_caught_pokemon));
-	caughtStruct->id_correlativo=1;
-	caughtStruct->ok=true;
 
-	POSICONES_ENTRENADORES = config_get_array_value(config, "POSICONES_ENTRENADORES");
-	POKEMON_ENTRENADORES = config_get_array_value(config, "POKEMON_ENTRENADORES");
-	OBJETIVOS_ENTRENADORES = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
-	TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
-	RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
-	ALGORITMO_PLANIFICACION = config_get_string_value(config, "ALGORITMO_PLANIFICACION");
-	QUANTUM = config_get_int_value(config, "QUANTUM");
-	IP_BROKER = config_get_string_value(config, "IP_BROKER");
-	ESTIMACION_INICIAL = config_get_int_value(config, "ESTIMACION_INICIAL");
-	PUERTO_BROKER = config_get_string_value(config, "PUERTO_BROKER");
-	LOG_FILE =  config_get_string_value(config,"LOG_FILE");
+//	char** POSICONES_ENTRENADORES = config_get_array_value(config, "POSICONES_ENTRENADORES");
+//	char** POKEMON_ENTRENADORES = config_get_array_value(config, "POKEMON_ENTRENADORES");
+//	char** OBJETIVOS_ENTRENADORES = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
+//	int TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
+//	int RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
+//	char* ALGORITMO_PLANIFICACION = config_get_string_value(config, "ALGORITMO_PLANIFICACION");
+//	int QUANTUM = config_get_int_value(config, "QUANTUM");
+//	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
+//	int ESTIMACION_INICIAL = config_get_int_value(config, "ESTIMACION_INICIAL");
+//	int PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
+//	char* LOG_FILE =  config_get_string_value(config,"LOG_FILE");
 
+	int puertoTeam = config_get_int_value(config,"PUERTO_TEAM");
 	// faltaria loggear la info de todo el archivo de configuracion, ademas de ip y puerto
-	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
+	//log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
 
-	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
+	//conexionBroker = crear_conexion(IP_BROKER, PUERTO_BROKER);
+	conexionGameBoy = crearSocket();
 
-	enviar_caught_pokemon(caughtStruct,conexion);
+	if(escuchaEn(conexionGameBoy,puertoTeam)){
+		log_info(logger, "Escuchando conexiones del GameBoy");
+	}
+
+	//se queda bloqueado esperando que el gameboy se conecte
+	int socketGameBoy = aceptarConexion(conexionGameBoy);
+
+	id_proceso idProcesoConectado;
+	idProcesoConectado = iniciarHandshake(socketGameBoy, TEAM);
+	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoConectado);
+
 
 	// recibir mensaje
 	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete

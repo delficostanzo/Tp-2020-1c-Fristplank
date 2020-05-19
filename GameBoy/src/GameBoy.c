@@ -5,41 +5,46 @@
 #include "GameBoy.h"
 
 int main(void) {
-	int conexion;
+	//siempre es CLEINTE de los demas
+	int conexionBroker;
 	int conexionTeam;
 	int conexionGameCard;
 
-	//ejemplo
-	t_get_pokemon* getStruct = malloc(sizeof(t_get_pokemon));
-	getStruct->pokemon = malloc(sizeof(t_get_pokemon));
-	getStruct->pokemon = "Pikachu.txt";
-	// inicializo el log del Broker
+
 	t_log* logger = iniciar_logger();
 
 	// creo y devuelvo un puntero a la estructura t_config
 	t_config* config = leer_config();
 
-	IP_BROKER = config_get_string_value(config, "IP_BROKER");
-	IP_TEAM = config_get_string_value(config, "IP_TEAM");
-	IP_GAMECARD = config_get_string_value(config, "IP_GAMECARD");
-	PUERTO_BROKER = config_get_string_value(config, "IP_BROKER");
-	PUERTO_TEAM = config_get_string_value(config, "PUERTO_TEAM");
-	PUERTO_GAMECARD = config_get_string_value(config, "PUERTO_GAMECARD");
+	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
+	char* IP_TEAM = config_get_string_value(config, "IP_TEAM");
+	char* IP_GAMECARD = config_get_string_value(config, "IP_GAMECARD");
+	int PUERTO_BROKER = config_get_int_value(config, "IP_BROKER");
+	int PUERTO_TEAM = config_get_int_value(config, "PUERTO_TEAM");
+	int PUERTO_GAMECARD = config_get_int_value(config, "PUERTO_GAMECARD");
 
 
-	log_info(logger, "Lei la IP %s y PUERTO %s\n del broker", IP_BROKER, PUERTO_BROKER);
-	log_info(logger, "Lei la IP %s y PUERTO %s\n del broker", IP_TEAM, PUERTO_TEAM);
-	log_info(logger, "Lei la IP %s y PUERTO %s\n del broker", IP_GAMECARD, PUERTO_GAMECARD);
+	log_info(logger, "Lei la IP %s y PUERTO %d\n del broker", IP_BROKER, PUERTO_BROKER);
+	log_info(logger, "Lei la IP %s y PUERTO %d\n del team", IP_TEAM, PUERTO_TEAM);
+	log_info(logger, "Lei la IP %s y PUERTO %d\n del gamecard", IP_GAMECARD, PUERTO_GAMECARD);
 
 	//crear conexion de cada proceso, un socket conectado
 
-	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
-	conexionTeam = crear_conexion(IP_TEAM, PUERTO_TEAM);
-	conexionGameCard = crear_conexion(IP_GAMECARD, PUERTO_GAMECARD);
+//	conexionBroker = crear_conexion(IP_BROKER, PUERTO_BROKER);
+//	conexionTeam = crear_conexion(IP_TEAM, PUERTO_TEAM);
+//	conexionGameCard = crear_conexion(IP_GAMECARD, PUERTO_GAMECARD);
 
-	enviar_get_pokemon(getStruct,conexion);
-	enviar_get_pokemon(getStruct,conexionTeam);
-	enviar_get_pokemon(getStruct,conexionGameCard);
+
+	conexionTeam = crearSocket();
+
+	if(conectarA(conexionTeam, IP_TEAM, PUERTO_TEAM)){
+		log_info(logger, "Conectando al Team");
+	}
+
+	id_proceso idProcesoTeam;
+	idProcesoTeam = responderHandshake(conexionTeam, GAMEBOY);
+	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoTeam);
+
 
 	// recibir mensaje
 	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
@@ -47,10 +52,8 @@ int main(void) {
 	//loguear mensaje recibido
 	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
 
-	terminar_programa(conexion, logger, config);
+	//terminar_programa(conexion, logger, config);
 
-	free(getStruct->pokemon);
-	free(getStruct);
 }
 
 t_log* iniciar_logger(void){
