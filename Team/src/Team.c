@@ -19,14 +19,12 @@ int main(void) {
 //	int RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
 //	char* ALGORITMO_PLANIFICACION = config_get_string_value(config, "ALGORITMO_PLANIFICACION");
 //	int QUANTUM = config_get_int_value(config, "QUANTUM");
-//	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
+	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
 //	int ESTIMACION_INICIAL = config_get_int_value(config, "ESTIMACION_INICIAL");
-//	int PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
+	int PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
 //	char* LOG_FILE =  config_get_string_value(config,"LOG_FILE");
 
 	int puertoTeam = config_get_int_value(config,"PUERTO_TEAM");
-	// faltaria loggear la info de todo el archivo de configuracion, ademas de ip y puerto
-	//log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
 
 	//conexionBroker = crear_conexion(IP_BROKER, PUERTO_BROKER);
 	conexionGameBoy = crearSocket();
@@ -42,6 +40,30 @@ int main(void) {
 	idProcesoConectado = iniciarHandshake(socketGameBoy, TEAM);
 	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoConectado);
 
+
+	conexionBroker = crearSocket();
+
+	if(conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)){
+		log_info(logger, "Conectando al Broker");
+	}
+
+	id_proceso idProcesoBroker;
+	idProcesoBroker = responderHandshake(conexionBroker, TEAM);
+	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoBroker);
+
+	int suscripcionAppeared = crearSocket();
+	int suscripcionCaught = crearSocket();
+	int suscripcionLocalized = crearSocket();
+
+	if(conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)){
+		log_info(logger, "Suscripto a la cola de appeared_pokemon");
+	}
+	if(conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)){
+		log_info(logger, "Suscripto a la cola de caught_pokemon");
+	}
+	if(conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)){
+		log_info(logger, "Suscripto a la cola de localized_pokemon");
+	}
 
 	// recibir mensaje
 	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
