@@ -1,3 +1,9 @@
+/*
+ * HilosEntrenadores.h
+ *
+ *  Created on:
+ *      Author: fritsplank
+ */
 
 #ifndef SRC_APPINIT_HILOSENTRENADORES_H_
 #define SRC_APPINIT_HILOSENTRENADORES_H_

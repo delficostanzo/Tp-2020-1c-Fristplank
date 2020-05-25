@@ -2,7 +2,7 @@
  * Pokemon.c
  *
  *  Created on: 5 may. 2020
- *      Author: utnso
+ *      Author: fritsplank
  */
 
 #include "Pokemon.h"

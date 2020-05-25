@@ -1,8 +1,8 @@
 /*
- * t_pokemon.h
+ * Pokemon.h
  *
  *  Created on: 5 may. 2020
- *      Author: utnso
+ *      Author: fritsplank
  */
 
 #ifndef SRC_MODEL_POKEMON_H_

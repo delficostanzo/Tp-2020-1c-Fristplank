@@ -2,7 +2,7 @@
  * Trainer.h
  *
  *  Created on: 4 may. 2020
- *      Author: utnso
+ *      Author: fritsplank
  */
 
 #ifndef SRC_MODEL_TRAINER_H_
@@ -16,9 +16,9 @@ typedef struct {
 	t_list* pokemonesAtrapados;
 }Entrenador;
 
-Entrenador* newTrainer();
-void setPosicion(Entrenador* entrenador, t_posicion* posicion);
-void setPokemonesObjetivosTo(Entrenador* entrenador, t_list* pokemones);
-void setPokemonesAtrapadosTo(Entrenador* entrenador, t_list* pokemones);
+Entrenador* newEntrenador();
+void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
+void setPokemonesObjetivosA(Entrenador* entrenador, t_list* pokemones);
+void setPokemonesAtrapadosA(Entrenador* entrenador, t_list* pokemones);
 
 #endif /* SRC_MODEL_TRAINER_H_ */

@@ -1,3 +1,9 @@
+/*
+ * ConfigFunctions.c
+ *
+ *  Created on:
+ *      Author: fritsplank
+ */
 
 //funciones para extraer la info desde el archivo de configuracion
 #include "ConfigFunctions.h"

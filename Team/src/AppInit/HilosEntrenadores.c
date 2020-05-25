@@ -1,3 +1,10 @@
+/*
+ * HilosEntrenadores.c
+ *
+ *  Created on:
+ *      Author: fritsplank
+ */
+
 #include "HilosEntrenadores.h"
 #include "../Model/Trainer.h"
 #include "../TeamUtils/LogManager.h"
@@ -18,7 +25,7 @@ pthread_t crearHiloParaEntrenador(Data entrenador){
 	pthread_t hilo;
 
 	// pthread_create(el hilo creado, por ahora NULL, la funcion (micromain) donde el hilo hace todas sus tareas, los parametros que usa esa funcion)
-	pthread_create(&hilo, NULL, (Data)funcionesDelEntrenador, entrenador);
+	//pthread_create(&hilo, NULL, (Data)funcionesDelEntrenador, entrenador);
 
 	return hilo;
 }

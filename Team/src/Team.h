@@ -1,3 +1,9 @@
+/*
+ * Team.h
+ *
+ *  Created on: 25 may. 2020
+ *      Author: fritsplank
+ */
 
 #ifndef TEAM_H_
 #define TEAM_H_
@@ -13,10 +19,6 @@
 #include "AppInit/EntrenadoresInit.h"
 #include "Model/Trainer.h"
 #include "TeamUtils/LogManager.h"
-
-//agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
-// los primeros 3 no estoy segura se esta bien asi. Se supone que son una lista de listas. Son bienvenidos a revisar si eso esta bien :)
-
 
 
 #endif /* TEAM_H_ */
