@@ -37,26 +37,32 @@ Casillero* casilleroParaLaPosicion(Mapa* mapa, t_posicion* posicion) {
 
 void agregarPokemonAlMapa(Mapa* mapa, t_pokemon* pokemon) {
 	Casillero* casillero = casilleroParaLaPosicion(mapa, pokemon->posicion);
-
 	agregarPokemonAlCasillero(casillero, pokemon);
 }
 
 void agregarEntrenadorPrincipalAlMapa(Mapa* mapa, Entrenador* entrenador) {
 	Casillero* casillero = casilleroParaLaPosicion(mapa, entrenador->posicion);
-
 	agregarEntrenadorPrincipalAlCasillero(casillero, entrenador);
 }
 
 //solo cuando hay DEADLOCK
 void agregarEntrenadorIntercambioAlMapa(Mapa* mapa, Entrenador* entrenador) {
 	Casillero* casillero = casilleroParaLaPosicion(mapa, entrenador->posicion);
-
 	agregarEntrenadorIntercambioAlCasillero(casillero, entrenador);
 }
 
-void moverEntrenadorPrincipalALaPosicion(Mapa* mapa, Entrenador* entrenador, t_posicion* nuevaPosicion) {
-	Casillero* casillero = casilleroParaLaPosicion(mapa, entrenador->posicion);
+void borrarEntrenadorPrincipalDe(Mapa* mapa, t_posicion* posicion) {
+	Casillero* casillero = casilleroParaLaPosicion(mapa, posicion);
+	borrarEntrenadorPrincipalDelCasillero(casillero);
+}
 
+void borrarEntrenadorIntercambioDe(Mapa* mapa, t_posicion* posicion) {
+	Casillero* casillero = casilleroParaLaPosicion(mapa, posicion);
+	borrarEntrenadorIntercambioDelCasillero(casillero);
+}
+
+void moverEntrenadorPrincipalALaPosicion(Mapa* mapa, Entrenador* entrenador, t_posicion* nuevaPosicion) {
+	borrarEntrenadorPrincipalDe(mapa, entrenador->posicion);
 	setPosicionA(entrenador, nuevaPosicion);
 	agregarEntrenadorPrincipalAlMapa(mapa, entrenador);
 }
@@ -64,8 +70,7 @@ void moverEntrenadorPrincipalALaPosicion(Mapa* mapa, Entrenador* entrenador, t_p
 //esa nueva posicion seria en donde esta el entrenadorPrincipal
 //el entrenadorIntercambio se acerca a la posicion del entrenadorPrincipal, con el que hace el cambio
 void moverEntrenadorIntercambioALaPosicion(Mapa* mapa, Entrenador* entrenador, t_posicion* nuevaPosicion) {
-	Casillero* casillero = casilleroParaLaPosicion(mapa, entrenador->posicion);
-
+	borrarEntrenadorIntercambioDe(mapa, entrenador->posicion);
 	setPosicionA(entrenador, nuevaPosicion);
 	agregarEntrenadorIntercambioAlMapa(mapa, entrenador);
 }
