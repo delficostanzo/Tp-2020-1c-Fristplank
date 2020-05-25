@@ -1,3 +1,9 @@
+/*
+ * Team.c
+ *
+ *  Created on: 25 may. 2020
+ *      Author: fritsplank
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,8 +39,6 @@ int main(int argc, char *argv[]) {
 	char* PUERTO_BROKER = config_get_string_value(configConnection, "PUERTO_BROKER");
 	char* LOG_FILE =  config_get_string_value(configConnection,"LOG_FILE");
 
-	// faltaria loggear la info de todo el archivo de configuracion, ademas de ip y puerto
-	// -----> NO, solo se van loggeando las acciones que va haciendo el sistema, como que se cargaron bien los entrenadores, o cosas asi
 	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
 
 	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);

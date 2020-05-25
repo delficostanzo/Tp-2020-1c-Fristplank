@@ -1,8 +1,8 @@
 /*
- * ConfigParser.h
+ * ConfigFunctions.h
  *
- *  Created on: 5 may. 2020
- *      Author: utnso
+ *  Created on:
+ *      Author: fritsplank
  */
 
 #ifndef SRC_APPINIT_CONFIGFUNCTIONS_H_

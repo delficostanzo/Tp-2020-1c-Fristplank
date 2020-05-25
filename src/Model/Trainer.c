@@ -1,20 +1,26 @@
+/*
+ * Trainer.c
+ *
+ *  Created on:
+ *      Author: fritsplank
+ */
 
 #include "Trainer.h"
 
 //inicializa y devuelve un trainer nuevo. Es el new, al estilo Java
-Entrenador* newTrainer() {
+Entrenador* newEntrenador() {
 	return malloc(sizeof(Entrenador));
 }
 
 //imaginate esto como setters
-void setPosicion(Entrenador* entrenador, t_posicion* posicion) {
+void setPosicionA(Entrenador* entrenador, t_posicion* posicion) {
 	entrenador->posicion = posicion;
 }
 
-void setPokemonesObjetivosTo(Entrenador* entrenador, t_list* pokemones) {
+void setPokemonesObjetivosA(Entrenador* entrenador, t_list* pokemones) {
 	entrenador->pokemonesObjetivos = pokemones;
 }
 
-void setPokemonesAtrapadosTo(Entrenador* entrenador, t_list* pokemones) {
+void setPokemonesAtrapadosA(Entrenador* entrenador, t_list* pokemones) {
 	entrenador->pokemonesAtrapados = pokemones;
 }

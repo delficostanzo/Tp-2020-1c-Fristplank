@@ -1,4 +1,9 @@
-
+/*
+ * EntrenadoresInit.c
+ *
+ *  Created on: 25 may. 2020
+ *      Author: fritsplank
+ */
 
 #include "EntrenadoresInit.h"
 #include "../Model/Trainer.h"
@@ -39,7 +44,7 @@ t_list* inicializarEntrenadoresHasta(int cantidad) {
 	t_list* entrenadores = list_create();
 
 	for(int contador=0; contador<cantidad; contador++) {
-		Entrenador* entrenador = newTrainer();
+		Entrenador* entrenador = newEntrenador();
 
 		list_add(entrenadores, entrenador);
 	}
@@ -62,7 +67,7 @@ void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores) {
 		Entrenador* entrenador = list_get(entrenadores, index);
 		t_posicion* posicion = list_get(posiciones, index);
 
-		setPosicion(entrenador, posicion);
+		setPosicionA(entrenador, posicion);
 	}
 
 	list_destroy(posiciones);
@@ -79,7 +84,7 @@ void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores) {
 			Entrenador* entrenador = list_get(entrenadores, index);
 			t_list* atrapadosDelEntrenador = list_get(atrapados, index);
 
-			setPokemonesAtrapadosTo(entrenador, atrapadosDelEntrenador);
+			setPokemonesAtrapadosA(entrenador, atrapadosDelEntrenador);
 		}
 
 	list_destroy(atrapados);
@@ -96,7 +101,7 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 			Entrenador* entrenador = list_get(entrenadores, index);
 			t_list* objetivosDelEntrenador = list_get(objetivos, index);
 
-			setPokemonesObjetivosTo(entrenador, objetivosDelEntrenador);
+			setPokemonesObjetivosA(entrenador, objetivosDelEntrenador);
 		}
 
 	quickLog(string_from_format("%d", (((Entrenador*)list_get(entrenadores, 0))->posicion->x)));
