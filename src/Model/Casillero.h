@@ -30,6 +30,8 @@ Casillero* newCasillero();
 void agregarPokemonAlCasillero(Casillero* casillero, t_pokemon* pokemon);
 void agregarEntrenadorPrincipalAlCasillero(Casillero* casillero, Entrenador* entrenador);
 void agregarEntrenadorIntercambioAlCasillero(Casillero* casillero, Entrenador* entrenador);
+void borrarEntrenadorPrincipalDelCasillero(Casillero* casillero);
+void borrarEntrenadorIntercambioDelCasillero(Casillero* casillero);
 void liberarCasillero(Casillero* casillero);
 
 

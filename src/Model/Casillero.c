@@ -30,6 +30,14 @@ void agregarEntrenadorIntercambioAlCasillero(Casillero* casillero, Entrenador* e
 	casillero->entrenadorIntercambio = entrenador;
 }
 
+void borrarEntrenadorPrincipalDelCasillero(Casillero* casillero) {
+	casillero->entrenadorPrincipal = NULL;
+}
+
+void borrarEntrenadorIntercambioDelCasillero(Casillero* casillero) {
+	casillero->entrenadorIntercambio = NULL;
+}
+
 void liberarCasillero(Casillero* casillero) {
 	free(casillero->pokemon);
 	free(casillero->entrenadorPrincipal);
