@@ -1,9 +1,3 @@
-/*
- * Mapa.c
- *
- *  Created on: 25 may. 2020
- *      Author: fritsplank
- */
 
 #include "Mapa.h"
 #include "utils.h"

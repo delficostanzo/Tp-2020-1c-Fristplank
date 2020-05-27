@@ -1,9 +1,3 @@
-/*
- * HilosEntrenadores.c
- *
- *  Created on:
- *      Author: fritsplank
- */
 
 #include "HilosEntrenadores.h"
 #include "../Model/Trainer.h"
@@ -11,13 +5,14 @@
 #include "ConfigFunctions.h"
 
 void funcionesDelEntrenador(Data entrenador);
-pthread_t crearHiloParaEntrenador(Data entrenador);
+void crearHiloParaEntrenador(Data entrenador);
 
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
 
 // esta funcion agarra una lista de entrenadores y devuelve una lista de hilos
 t_list* crearHilosDeEntrenadores(t_list* entrenadores){
-	return list_map(entrenadores, (Data)crearHiloParaEntrenador);
+	typedef void*(*erasedType)(void*);
+	return list_map(entrenadores, (erasedType)crearHiloParaEntrenador);
 }
 
 // esta funcion agarra un entrenador del tipo Entrenador y lo convierte en un hilo (este seria el estado NEW)

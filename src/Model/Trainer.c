@@ -1,13 +1,6 @@
-/*
- * Trainer.c
- *
- *  Created on:
- *      Author: fritsplank
- */
-
 #include "Trainer.h"
 
-//inicializa y devuelve un trainer nuevo. Es el new, al estilo Java
+//inicializa y devuelve un trainer nuevo. Es el new, al estilo Java. ESTADO NEW
 Entrenador* newEntrenador() {
 	return malloc(sizeof(Entrenador));
 }
