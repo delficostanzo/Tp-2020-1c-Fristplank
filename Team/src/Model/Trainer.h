@@ -1,9 +1,3 @@
-/*
- * Trainer.h
- *
- *  Created on: 4 may. 2020
- *      Author: fritsplank
- */
 
 #ifndef SRC_MODEL_TRAINER_H_
 #define SRC_MODEL_TRAINER_H_
