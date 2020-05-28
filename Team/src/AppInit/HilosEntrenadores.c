@@ -5,7 +5,7 @@
 #include "ConfigFunctions.h"
 
 void funcionesDelEntrenador(Data entrenador);
-void crearHiloParaEntrenador(Data entrenador);
+void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo);
 
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
 
