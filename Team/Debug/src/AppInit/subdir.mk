@@ -6,17 +6,20 @@
 C_SRCS += \
 ../src/AppInit/ConfigFunctions.c \
 ../src/AppInit/EntrenadoresInit.c \
-../src/AppInit/HilosEntrenadores.c 
+../src/AppInit/HilosEntrenadores.c \
+../src/AppInit/Planificador.c 
 
 OBJS += \
 ./src/AppInit/ConfigFunctions.o \
 ./src/AppInit/EntrenadoresInit.o \
-./src/AppInit/HilosEntrenadores.o 
+./src/AppInit/HilosEntrenadores.o \
+./src/AppInit/Planificador.o 
 
 C_DEPS += \
 ./src/AppInit/ConfigFunctions.d \
 ./src/AppInit/EntrenadoresInit.d \
-./src/AppInit/HilosEntrenadores.d 
+./src/AppInit/HilosEntrenadores.d \
+./src/AppInit/Planificador.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

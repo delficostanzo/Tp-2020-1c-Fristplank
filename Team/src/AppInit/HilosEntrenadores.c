@@ -18,7 +18,7 @@ void crearHilosDeEntrenadores(t_list* entrenadores, pthread_t* hilos[]){
 }
 
 // esta funcion agarra un entrenador del tipo Entrenador y lo convierte en un hilo (este seria el estado NEW)
-void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo){
+void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo){ // ESTADO NEW
 	typedef void*(*erasedType)(void*);
 
 	// pthread_create(el hilo creado, por ahora NULL, la funcion (micromain) donde el hilo hace todas sus tareas, los parametros que usa esa funcion)
