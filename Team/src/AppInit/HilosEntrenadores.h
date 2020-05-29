@@ -7,6 +7,6 @@
 
 typedef void* Data;
 
-t_list* crearHilosDeEntrenadores(t_list* entrenadores);
+void crearHilosDeEntrenadores(t_list* entrenadores, pthread_t* hilos[]);
 
 #endif /* SRC_APPINIT_HILOSENTRENADORES_H_ */
