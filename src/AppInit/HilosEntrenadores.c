@@ -10,9 +10,11 @@ void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo);
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
 
 // esta funcion agarra una lista de entrenadores y devuelve una lista de hilos
-t_list* crearHilosDeEntrenadores(t_list* entrenadores){
-	typedef void*(*erasedType)(void*);
-	return list_map(entrenadores, (erasedType)crearHiloParaEntrenador);
+//hilos[list_size(entrenadores)] cuando lo llame inicializar los hilos asi
+void crearHilosDeEntrenadores(t_list* entrenadores, pthread_t* hilos[]){
+	for(int index=0; index < list_size(entrenadores); index ++) {
+		crearHiloParaEntrenador(list_get(entrenadores, index), hilos[index]);
+	}
 }
 
 // esta funcion agarra un entrenador del tipo Entrenador y lo convierte en un hilo (este seria el estado NEW)
@@ -20,7 +22,7 @@ void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo){
 	typedef void*(*erasedType)(void*);
 
 	// pthread_create(el hilo creado, por ahora NULL, la funcion (micromain) donde el hilo hace todas sus tareas, los parametros que usa esa funcion)
-	pthread_create(&hilo, NULL, (erasedType) funcionesDelEntrenador, entrenador);
+	pthread_create(&hilo, NULL, (erasedType)funcionesDelEntrenador, entrenador);
 }
 
 //la funcion funcionesDelEntrenador tendria que estar en el Team.c, lo dejo aca por ahora
@@ -30,5 +32,8 @@ void funcionesDelEntrenador(Data entrenador){
 
 	char* posicionX = string_from_format("La posicion del entrenador esta sig: %d", unEntrenador->posicion->x);
 
-	quickLog(posicionX);
+	while(true) {
+		quickLog(posicionX);
+		sleep(3);
+	}
 }

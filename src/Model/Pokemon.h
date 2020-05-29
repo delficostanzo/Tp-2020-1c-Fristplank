@@ -20,7 +20,7 @@ typedef struct {
 
 PokemonEnElMapa* newPokemon();
 void setNombreTo(PokemonEnElMapa* pokemon, String nombre);
-void setPositionTo(PokemonEnElMapa* pokemon, t_posicion* posicion);
+void setPosicionTo(PokemonEnElMapa* pokemon, t_posicion* posicion);
 void setCantidadTo(PokemonEnElMapa* pokemon, int cantidad);
 t_posicion* newPosicion();
 
