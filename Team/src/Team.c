@@ -24,11 +24,20 @@ int main(int argc, char *argv[]) {
 	hilosDeEntrenadores = crearHilosDeEntrenadores(entrenadores);
 	quickLog("Se crea un hilo por cada entrenador");
 
+	//casos de prueba para el mapa
+	PokemonEnElMapa* pokemonDePrueba = newPokemon();
+	t_posicion* posicionDePrueba = newPosicion();
+	posicionDePrueba->x = 5;
+	posicionDePrueba->y = 5;
+	setPosicionA(pokemonDePrueba, posicionDePrueba);
+
+	Entrenador* entrenadorMasCercano = entrenadorMasCercanoA(pokemonDePrueba, entrenadores);
+	log_info(logger, "La posicion x: %d , la posicion y: %d del entrenador mas cerca", entrenadorMasCercano->posicion->x, entrenadorMasCercano->posicion->y);
 
 	//t_list* objetivosGlobales = getObjetivosGlobalesDesde("src/team.config");
 	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
 	quickLog("primer objetivo de pokemones");
-	quickLog(((t_pokemon*)list_get(objetivosGlobales, 0))->nombre);
+	quickLog(((PokemonEnElMapa*)list_get(objetivosGlobales, 0))->nombre);
 
 	int TIEMPO_RECONEXION = config_get_int_value(configConnection, "TIEMPO_RECONEXION");
 	int RETARDO_CICLO_CPU = config_get_int_value(configConnection, "RETARDO_CICLO_CPU");

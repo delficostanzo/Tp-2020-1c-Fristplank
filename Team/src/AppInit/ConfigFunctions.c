@@ -67,8 +67,8 @@ t_list* pokemonesDesdeString(String stringDePokemones) {
 	return pokemones;
 }
 
-t_pokemon* pokemonDesde(String nombrePokemon){
-	t_pokemon* pokemon = newPokemon();
+PokemonEnElMapa* pokemonDesde(String nombrePokemon){
+	PokemonEnElMapa* pokemon = newPokemon();
 
 	pokemon->nombre = nombrePokemon;
 
