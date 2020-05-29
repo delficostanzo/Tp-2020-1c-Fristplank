@@ -1,9 +1,3 @@
-/*
- * Team.c
- *
- *  Created on: 25 may. 2020
- *      Author: fritsplank
- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +26,7 @@ int main(int argc, char *argv[]) {
 //		sleep(3);
 //	}
 
-	//casos de prueba para el mapa
+	//casos de prueba para ver si funciona bien el mapa
 	PokemonEnElMapa* pokemonDePrueba = newPokemon();
 	t_posicion* posicionDePrueba = newPosicion();
 	posicionDePrueba->x = 5;
@@ -44,8 +38,23 @@ int main(int argc, char *argv[]) {
 
 	//t_list* objetivosGlobales = getObjetivosGlobalesDesde("src/team.config");
 	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
-	quickLog("primer objetivo de pokemones");
+	quickLog("primer objetivo de pokemons");
 	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 0))->nombre);
+	quickLog("segundo objetivo de pokemons");
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 1))->nombre);
+
+	t_list* objetivosGlobalesOrdenadosPorEspecie =  especiesDePokemonsQueHayQueAtraparOrdenados(objetivosGlobales);
+	quickLog("Ahora aparecen ordenados por especie:");
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 0))->nombre);
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 1))->nombre);
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 2))->nombre);
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 3))->nombre);
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 4))->nombre);
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 5))->nombre);
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 6))->nombre);
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 7))->nombre);
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 8))->nombre);
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 9))->nombre);
 
 	int TIEMPO_RECONEXION = config_get_int_value(configConnection, "TIEMPO_RECONEXION");
 	int RETARDO_CICLO_CPU = config_get_int_value(configConnection, "RETARDO_CICLO_CPU");

@@ -1,9 +1,3 @@
-/*
- * EntrenadoresInit.c
- *
- *  Created on: 25 may. 2020
- *      Author: fritsplank
- */
 
 #include "EntrenadoresInit.h"
 #include "../Model/Trainer.h"
@@ -129,6 +123,7 @@ t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
 	//me devuelve una lista de listas de objetivos globales
 	objetivosGlobales = list_map(entrenadores, (erasedTypeMap)getObjetivoDesde);
 
+	//listaFinal es la lista con todos los pokemons que se deben atrapar en total
 	t_list* listaFinal = list_create();
 	list_fold(objetivosGlobales, listaFinal, (erasedTypeFold)list_adding_all);
 
@@ -137,7 +132,30 @@ t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
 
 }
 
+
 t_list* getObjetivoDesde(Entrenador* entrenador) {
 	return entrenador->pokemonesObjetivos;
 }
 
+//TODO: el proceso Team debera conocer cuales (esto ya esta) y que cantidad de Pokemones de cada especie requiere en total para cumplir su objetivo global
+
+// necesita saber el proceso Team que especies y la cantidad de cada especie que necesita en total
+// Ej: Pikachu necesita 4, Squirtle necesita 2, Delfina necesita 9, Victoria necesita 8
+
+// ordeno la lista de objetivos por especie, asi te queda ej: [Pikachu, Pikachu, Delfina, Delfina, Delfina, Victoria]
+//t_list* especiesDePokemonsQueHayQueAtraparOrdenados(t_list* objetivosGlobales){
+//	typedef bool(*erasedTypeSort)(void*, void*);
+//
+//	bool tipoDeEspecieSegunElNombre(PokemonEnElMapa* pokemon1, PokemonEnElMapa* pokemon2){
+//		String nombrePokemon1 = pokemon1->nombre;
+//		String nombrePokemon2 = pokemon2->nombre;
+//
+//		return nombrePokemon1 == nombrePokemon2;
+//	}
+//	// ordeno la lista de objetivos segun la especie
+//	t_list* objetivosOrdenadosPorEspecie = list_sorted(objetivosGlobales, (erasedTypeSort)tipoDeEspecieSegunElNombre);
+//
+//	return objetivosOrdenadosPorEspecie;
+//}
+//
+//
