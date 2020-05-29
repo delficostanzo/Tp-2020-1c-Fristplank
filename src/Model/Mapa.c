@@ -1,70 +1,28 @@
 
 #include "Mapa.h"
-#include "utils.h"
-#include "Trainer.h"
-#include "Pokemon.h"
 
-static Casillero* casilleroParaLaPosicion(Mapa* mapa, t_posicion* posicion);
 
-//link: https://stackoverflow.com/questions/14450123/c-pointer-to-a-matrix
-Mapa* nuevoMapaConLimites(t_posicion* limitePosicion) {
+int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);
 
-	Mapa* mapa = malloc(sizeof(Mapa));
 
-	mapa->cantidadFilas = limitePosicion->x;
-	mapa->cantidadColumnas = limitePosicion->y;
-	mapa->matriz = malloc(sizeof(Casillero) * mapa->cantidadFilas * mapa->cantidadColumnas);
+Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores) {
+	//Mapa mapa;
+	typedef bool(*erasedTypeSort)(void*, void*);
 
-	for(int fila = 0; fila < mapa->cantidadFilas; fila++) {
-		for(int columna = 0; columna < mapa->cantidadColumnas; columna++) {
-			//mapa->matriz[fila * mapa->cantidadColumnas + columna] = newCasillero();
-			mapa->matriz[fila][columna] = newCasillero();
-		}
+	bool estaMasCerca(Entrenador* entrenador1, Entrenador* entrenador2, PokemonEnElMapa* pokemon) {
+		int distanciaEntrenador1 = distanciaEntre(entrenador1->posicion, pokemon->posicion);
+		int distanciaEntrenador2 = distanciaEntre(entrenador2->posicion, pokemon->posicion);
+		return distanciaEntrenador1 < distanciaEntrenador2;
+
 	}
 
-	return mapa;
+	t_list* entrenadoresOrdenadores = list_sorted(entrenadores, (erasedTypeSort)estaMasCerca);
+	return list_take(entrenadoresOrdenadores, 1);
 }
 
-Casillero* casilleroParaLaPosicion(Mapa* mapa, t_posicion* posicion) {
-	return mapa->matriz[posicion->x][posicion->y];
+int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2) {
+	int distanciaEnX = posicion1->x - posicion2->x;
+	int distanciaEnY = posicion1->y - posicion2->y;
+	return abs(distanciaEnX) + abs(distanciaEnY);
 }
 
-void agregarPokemonAlMapa(Mapa* mapa, t_pokemon* pokemon) {
-	Casillero* casillero = casilleroParaLaPosicion(mapa, pokemon->posicion);
-	agregarPokemonAlCasillero(casillero, pokemon);
-}
-
-void agregarEntrenadorPrincipalAlMapa(Mapa* mapa, Entrenador* entrenador) {
-	Casillero* casillero = casilleroParaLaPosicion(mapa, entrenador->posicion);
-	agregarEntrenadorPrincipalAlCasillero(casillero, entrenador);
-}
-
-//solo cuando hay DEADLOCK
-void agregarEntrenadorIntercambioAlMapa(Mapa* mapa, Entrenador* entrenador) {
-	Casillero* casillero = casilleroParaLaPosicion(mapa, entrenador->posicion);
-	agregarEntrenadorIntercambioAlCasillero(casillero, entrenador);
-}
-
-void borrarEntrenadorPrincipalDe(Mapa* mapa, t_posicion* posicion) {
-	Casillero* casillero = casilleroParaLaPosicion(mapa, posicion);
-	borrarEntrenadorPrincipalDelCasillero(casillero);
-}
-
-void borrarEntrenadorIntercambioDe(Mapa* mapa, t_posicion* posicion) {
-	Casillero* casillero = casilleroParaLaPosicion(mapa, posicion);
-	borrarEntrenadorIntercambioDelCasillero(casillero);
-}
-
-void moverEntrenadorPrincipalALaPosicion(Mapa* mapa, Entrenador* entrenador, t_posicion* nuevaPosicion) {
-	borrarEntrenadorPrincipalDe(mapa, entrenador->posicion);
-	setPosicionA(entrenador, nuevaPosicion);
-	agregarEntrenadorPrincipalAlMapa(mapa, entrenador);
-}
-
-//esa nueva posicion seria en donde esta el entrenadorPrincipal
-//el entrenadorIntercambio se acerca a la posicion del entrenadorPrincipal, con el que hace el cambio
-void moverEntrenadorIntercambioALaPosicion(Mapa* mapa, Entrenador* entrenador, t_posicion* nuevaPosicion) {
-	borrarEntrenadorIntercambioDe(mapa, entrenador->posicion);
-	setPosicionA(entrenador, nuevaPosicion);
-	agregarEntrenadorIntercambioAlMapa(mapa, entrenador);
-}

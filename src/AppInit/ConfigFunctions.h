@@ -17,7 +17,7 @@ t_config* leerConfigDesde(String nombreDeArchivo);
 t_list* crearListaConStringsDeConfig(String* strings);
 t_posicion* posicionDesde(String stringDePosicion);
 t_list* pokemonesDesdeString(String nombrePokemons);
-t_pokemon* pokemonDesde(String nombrePokemon);
+PokemonEnElMapa* pokemonDesde(String nombrePokemon);
 
 
 #endif /* SRC_APPINIT_CONFIGFUNCTIONS_H_ */

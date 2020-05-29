@@ -10,13 +10,18 @@
 
 #include "utils.h"
 
+
+
 typedef struct {
 	String nombre;
 	t_posicion* posicion;
-}t_pokemon;
+	int cantidad;
+}PokemonEnElMapa;
 
-t_pokemon* newPokemon();
-void setNombreTo(t_pokemon* pokemon, String nombre);
-void setPositionTo(t_pokemon* pokemon, t_posicion* posicion);
+PokemonEnElMapa* newPokemon();
+void setNombreTo(PokemonEnElMapa* pokemon, String nombre);
+void setPositionTo(PokemonEnElMapa* pokemon, t_posicion* posicion);
+void setCantidadTo(PokemonEnElMapa* pokemon, int cantidad);
+t_posicion* newPosicion();
 
 #endif /* SRC_MODEL_POKEMON_H_ */
