@@ -1,25 +1,24 @@
 
 #include "HilosEntrenadores.h"
-#include "../Model/Trainer.h"
-#include "../TeamUtils/LogManager.h"
-#include "ConfigFunctions.h"
 
+
+void crearHiloParaEntrenador(Entrenador* entrenador);
 void funcionesDelEntrenador(Data entrenador);
-void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo);
 
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
 
 //esta funcion agarra una lista de entrenadores y devuelve una lista de hilos
 //hilos[list_size(entrenadores)] cuando lo llame inicializar los hilos asi
-void crearHilosDeEntrenadores(t_list* entrenadores, pthread_t* hilos[]){
+void crearHilosDeEntrenadores(t_list* entrenadores){
 	for(int index=0; index < list_size(entrenadores); index ++) {
-		crearHiloParaEntrenador(list_get(entrenadores, index), hilos[index]);
+		crearHiloParaEntrenador(list_get(entrenadores, index));
 	}
 }
 
 // esta funcion agarra un entrenador del tipo Entrenador y lo convierte en un hilo (este seria el estado NEW)
-void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo){ // ESTADO NEW -TODO
+void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
 	typedef void*(*erasedType)(void*);
+	pthread_t* hilo = entrenador->hiloEntrenador;
 
 	// pthread_create(el hilo creado, por ahora NULL, la funcion (micromain) donde el hilo hace todas sus tareas, los parametros que usa esa funcion)
 	pthread_create(&hilo, NULL, (erasedType)funcionesDelEntrenador, entrenador);
@@ -27,13 +26,23 @@ void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo){ // ESTADO NEW -T
 
 //la funcion funcionesDelEntrenador tendria que estar en el Team.c, lo dejo aca por ahora
 void funcionesDelEntrenador(Data entrenador){
+
 	// por ahora usamos esto como ejemplo, donde de cada hilo te devuelve la posicion en x del entrenador
 	Entrenador* unEntrenador = entrenador;
+	EstadoNew* estadoNew = malloc(sizeof(EstadoNew));
 
-	char* posicionX = string_from_format("La posicion del entrenador esta sig: %d", unEntrenador->posicion->x);
+	//Agrego entrenador a la lista del estado NEW
+	list_add(estadoNew->hilosEntrenadoresNew, unEntrenador);
 
-	while(true) {
-		quickLog(posicionX);
-		sleep(3);
-	}
+//
+//	if(no hay ninguno ejecutando){
+//		lock();
+//		entrenador pasa de READY a EXEC
+//		hace lo que tenga en su objetivo (enum de objetivos)
+//		entrenador pasa a estado BLOCK / EXIT / READY
+//		unlock();
+//	}
+
+	//free(estadoNew->hilosEntrenadoresNew);
+	//free(estadoNew);
 }

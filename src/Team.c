@@ -18,13 +18,13 @@ int main(int argc, char *argv[]) {
 
 	//pasar de array a t_list
 
-	crearHilosDeEntrenadores(entrenadores, hilosDeEntrenadores);
+	crearHilosDeEntrenadores(entrenadores);
 	quickLog("Se crea un hilo por cada entrenador");
 
-//	while (true) {
-//		quickLog("cualquier cosa");
-//		sleep(3);
-//	}
+	while (true) {
+		quickLog("cualquier cosa");
+		sleep(3);
+	}
 
 	//casos de prueba para ver si funciona bien el mapa
 	PokemonEnElMapa* pokemonDePrueba = newPokemon();

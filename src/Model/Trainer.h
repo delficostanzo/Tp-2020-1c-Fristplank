@@ -4,13 +4,19 @@
 
 #include "utils.h"
 
+typedef enum{
+	MOVER = 1,
+	INTERCAMBIAR = 2,
+	ATRAPAR = 3
+}ObjetivoEnExec;
+
 typedef struct {
 	t_posicion* posicion;
 	t_list* pokemonesObjetivos;
 	t_list* pokemonesAtrapados;
-	//enum objetivo -> movimiento, intercambio, atrapar
-	//pthread
-	//pthread_mutex o contador
+	ObjetivoEnExec objetivo;
+	pthread_t* hiloEntrenador;
+	//pthread_mutex o contador, despues vemo
 }Entrenador;
 
 Entrenador* newEntrenador();

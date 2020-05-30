@@ -160,3 +160,4 @@ t_list* getObjetivoDesde(Entrenador* entrenador) {
 //}
 //
 //
+
