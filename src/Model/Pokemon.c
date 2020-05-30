@@ -12,19 +12,15 @@
 
 //inicializa y devuelve un pokemon nuevo. Es el new, al estilo Java
 PokemonEnElMapa* newPokemon() {
-	return malloc(sizeof(PokemonEnElMapa*));
+	return malloc(sizeof(PokemonEnElMapa));
 }
-
-t_posicion* newPosicion() {
-	return malloc(sizeof(t_posicion));
-}// esto no tendria que estar aca, lo dejamos por ahora (ACORDARSE DE CAMBIARLO)
 
 //Setters
 void setNombreTo(PokemonEnElMapa* pokemon, String nombre) {
 	strcpy(pokemon->nombre, nombre);
 }
 
-void setPosicionTo(PokemonEnElMapa* pokemon, t_posicion* posicion) {
+void setPosicionTo(PokemonEnElMapa* pokemon, t_posicion posicion) {
 	pokemon->posicion = posicion;
 }
 

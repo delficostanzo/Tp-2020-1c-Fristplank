@@ -28,42 +28,45 @@ int main(int argc, char *argv[]) {
 
 	//casos de prueba para ver si funciona bien el mapa
 	PokemonEnElMapa* pokemonDePrueba = newPokemon();
-	t_posicion* posicionDePrueba = newPosicion();
-	posicionDePrueba->x = 5;
-	posicionDePrueba->y = 5;
+	t_posicion posicionDePrueba;
+	posicionDePrueba.x = 2;
+	posicionDePrueba.y = 2;
 	setPosicionTo(pokemonDePrueba, posicionDePrueba);
 
 	Entrenador* entrenadorMasCercano = entrenadorMasCercanoA(pokemonDePrueba, entrenadores);
+
 	log_info(logger, "La posicion x: %d , la posicion y: %d del entrenador mas cerca", entrenadorMasCercano->posicion->x, entrenadorMasCercano->posicion->y);
 
 	//t_list* objetivosGlobales = getObjetivosGlobalesDesde("src/team.config");
 	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
-	quickLog("primer objetivo de pokemons");
+	quickLog("primer objetivo de pokemones");
 	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 0))->nombre);
-	quickLog("segundo objetivo de pokemons");
+	quickLog("segundo objetivo de pokemones");
 	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 1))->nombre);
 
-	t_list* objetivosGlobalesOrdenadosPorEspecie =  especiesDePokemonsQueHayQueAtraparOrdenados(objetivosGlobales);
-	quickLog("Ahora aparecen ordenados por especie:");
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 0))->nombre);
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 1))->nombre);
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 2))->nombre);
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 3))->nombre);
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 4))->nombre);
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 5))->nombre);
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 6))->nombre);
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 7))->nombre);
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 8))->nombre);
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 9))->nombre);
+//	t_list* objetivosGlobalesOrdenadosPorEspecie =  especiesDePokemonsQueHayQueAtraparOrdenados(objetivosGlobales);
+//	quickLog("Ahora aparecen ordenados por especie:");
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 0))->nombre);
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 1))->nombre);
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 2))->nombre);
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 3))->nombre);
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 4))->nombre);
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 5))->nombre);
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 6))->nombre);
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 7))->nombre);
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 8))->nombre);
+//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 9))->nombre);
 
-	int TIEMPO_RECONEXION = config_get_int_value(configConnection, "TIEMPO_RECONEXION");
-	int RETARDO_CICLO_CPU = config_get_int_value(configConnection, "RETARDO_CICLO_CPU");
-	char* ALGORITMO_PLANIFICACION = config_get_string_value(configConnection, "ALGORITMO_PLANIFICACION");
-	int QUANTUM = config_get_int_value(configConnection, "QUANTUM");
+//	int TIEMPO_RECONEXION = config_get_int_value(configConnection, "TIEMPO_RECONEXION");
+//	int RETARDO_CICLO_CPU = config_get_int_value(configConnection, "RETARDO_CICLO_CPU");
+//	char* ALGORITMO_PLANIFICACION = config_get_string_value(configConnection, "ALGORITMO_PLANIFICACION");
+//	int QUANTUM = config_get_int_value(configConnection, "QUANTUM");
+//	int ESTIMACION_INICIAL = config_get_int_value(configConnection, "ESTIMACION_INICIAL");
+//	char* LOG_FILE = config_get_string_value(configConnection, "LOG_FILE");
+
+
 	char* IP_BROKER = config_get_string_value(configConnection, "IP_BROKER");
-	int ESTIMACION_INICIAL = config_get_int_value(configConnection, "ESTIMACION_INICIAL");
 	char* PUERTO_BROKER = config_get_string_value(configConnection, "PUERTO_BROKER");
-	char* LOG_FILE = config_get_string_value(configConnection, "LOG_FILE");
 
 	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
 

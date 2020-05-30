@@ -17,3 +17,7 @@ void setPokemonesObjetivosA(Entrenador* entrenador, t_list* pokemones) {
 void setPokemonesAtrapadosA(Entrenador* entrenador, t_list* pokemones) {
 	entrenador->pokemonesAtrapados = pokemones;
 }
+
+t_posicion* newPosicion() {
+	return malloc(sizeof(t_posicion));
+}

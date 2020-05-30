@@ -12,6 +12,7 @@
 #include<commons/string.h>
 #include<commons/config.h>
 #include"../Model/Pokemon.h"
+#include"../Model/Trainer.h"
 
 t_config* leerConfigDesde(String nombreDeArchivo);
 t_list* crearListaConStringsDeConfig(String* strings);

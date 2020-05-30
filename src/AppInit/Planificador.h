@@ -9,7 +9,6 @@ typedef struct{
 	t_list* hilosEntrenadores;
 }EstadoNew;
 
-
 typedef struct{
 	t_list* hilosEntrenadores;
 }EstadoReady;
