@@ -3,8 +3,8 @@
 
 void newAReady(t_list* estadoNew, t_list* estadoReady){
 	for(int index = 0; index < list_size(estadoNew); index++){
-	pthread_t* hiloEntrenador = list_remove(estadoNew, index);
-	list_add(estadoReady, hiloEntrenador);
+		pthread_t* hiloEntrenador = list_remove(estadoNew, index);
+		list_add(estadoReady, hiloEntrenador);
 	}
 }
 //memmove(estadoNew, estadoNew + 1, list_size(estadoNew) - list_size(*estadoNew));

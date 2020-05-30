@@ -137,6 +137,7 @@ t_list* getObjetivoDesde(Entrenador* entrenador) {
 	return entrenador->pokemonesObjetivos;
 }
 
+
 //TODO: el proceso Team debera conocer cuales (esto ya esta) y que cantidad de Pokemones de cada especie requiere en total para cumplir su objetivo global
 
 // necesita saber el proceso Team que especies y la cantidad de cada especie que necesita en total

@@ -46,8 +46,14 @@ t_list* crearListaConStringsDeConfig(String* strings) {
 t_posicion* posicionDesde(String stringDePosicion) {
 	t_posicion* posicion = newPosicion();
 
-	posicion->x = atoi(string_split(stringDePosicion,"|")[0]);
-	posicion->y = atoi(string_split(stringDePosicion,"|")[1]);
+	String* posicionString = string_split(stringDePosicion,"|");
+
+	posicion->x = atoi(posicionString[0]);
+	posicion->y = atoi(posicionString[1]);
+
+	free(posicionString[0]);
+	free(posicionString[1]);
+	free(posicionString);
 
 	return posicion;
 }

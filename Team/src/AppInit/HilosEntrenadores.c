@@ -9,7 +9,7 @@ void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo);
 
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
 
-// esta funcion agarra una lista de entrenadores y devuelve una lista de hilos
+//esta funcion agarra una lista de entrenadores y devuelve una lista de hilos
 //hilos[list_size(entrenadores)] cuando lo llame inicializar los hilos asi
 void crearHilosDeEntrenadores(t_list* entrenadores, pthread_t* hilos[]){
 	for(int index=0; index < list_size(entrenadores); index ++) {
@@ -18,7 +18,7 @@ void crearHilosDeEntrenadores(t_list* entrenadores, pthread_t* hilos[]){
 }
 
 // esta funcion agarra un entrenador del tipo Entrenador y lo convierte en un hilo (este seria el estado NEW)
-void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo){ // ESTADO NEW
+void crearHiloParaEntrenador(Data entrenador, pthread_t* hilo){ // ESTADO NEW -TODO
 	typedef void*(*erasedType)(void*);
 
 	// pthread_create(el hilo creado, por ahora NULL, la funcion (micromain) donde el hilo hace todas sus tareas, los parametros que usa esa funcion)
