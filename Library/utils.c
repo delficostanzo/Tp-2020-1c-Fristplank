@@ -52,7 +52,7 @@ void enviar(t_paquete* paquete, int socket_cliente)
 
 	int size_serializado;
 
-	void* mensajeAEnviar = malloc(sizeof(paquete->buffer->size) + sizeof(int) + sizeof(op_code));
+	void* mensajeAEnviar = malloc(paquete->buffer->size + 3 * sizeof(int) + sizeof(op_code));
 
 	mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
 
