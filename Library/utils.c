@@ -131,6 +131,11 @@ void enviar_ACK(int socket_cliente, int Id, int IdCorrelativo){
 	enviar(paquete, socket_cliente);
 }
 
+void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, int Id, int IdCorrelativo){
+	t_paquete* paquete = crearPaqueteCon(gameboy_suscribe, 0, Id, IdCorrelativo, GAMEBOYSUSCRIBE);
+	enviar(paquete, socket_cliente);
+}
+
 
 t_paquete* recibir_mensaje(int socket_cliente) {
 //	t_log* logger = iniciar_log();
