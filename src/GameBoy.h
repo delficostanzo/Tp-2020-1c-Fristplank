@@ -13,6 +13,7 @@
 #include<unistd.h>
 #include<sys/socket.h>
 #include<netdb.h>
+#include<time.h>
 #include"Library/utils.h"
 
 char* IP_BROKER;
@@ -45,8 +46,21 @@ void procesarGameCardCatchPokemon(int socket, char* argv[]);
 void procesarGameCardNewPokemon(int socket, char* argv[]);
 void procesarGameCardGetPokemon(int socket, char* argv[]);
 
-void procesarSubscribe(int socket, char* argv[]);
+void procesarSubscribe(char* argv[]);
 
 void* escucharCola(void* colaAEscuchar);
+
+static const char* COLAS_STRING[] = {
+		"NEW_POKEMON",
+		"APPEARED_POKEMON",
+		"CATCH_POKEMON",
+		"CAUGHT_POKEMON",
+		"GET_POKEMON",
+		"LOCALIZED_POKEMON",
+		"RESPUESTA_ID",
+		"ACK",
+		"GAMEBOYSUSCRIBE"
+};
+
 
 #endif /* GAMEBOY_H_ */

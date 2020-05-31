@@ -93,10 +93,10 @@ int main(int argc, char* argv[]) {
 
 	}
 	else if (strcmp(argv[1], "SUSCRIPTOR") == 0){ //MENSAJES PARA SUSCBRIBIRSE AL BROKER POR X SEGUNDOS
-		socket = crear_conexion(IP_BROKER, PUERTO_BROKER);
+//		socket = crear_conexion(IP_BROKER, PUERTO_BROKER);
 		log_debug(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_BROKER, PUERTO_BROKER);
 
-		procesarSubscribe(socket, argv);
+		procesarSubscribe(argv);
 	}
 
 	else{
@@ -108,11 +108,9 @@ int main(int argc, char* argv[]) {
 	log_destroy(loggerObligatorio);
 }
 
-void procesarSubscribe(int socket, char* argv[]){
+void procesarSubscribe(char* argv[]){
 
 	op_code cola;
-
-	puts(argv[2]);
 
 	if (strcmp(argv[2], "NEW_POKEMON") == 0){
 		cola = NEW_POKEMON;
@@ -135,11 +133,14 @@ void procesarSubscribe(int socket, char* argv[]){
 
 	int segundosAEscuchar = (int) argv[3];
 
+
+	//TODO ver como hacer para que termine despues de segundosAEscuchar
+
 	//Iniciar thread de escucha
 	pthread_t threadEscucha;
 	pthread_create(&threadEscucha, NULL, escucharCola, (void*) cola);
 	sleep(segundosAEscuchar);
-	exit(1);
+	exit(0);
 }
 
 void* escucharCola(void* colaAEscuchar){
@@ -157,16 +158,13 @@ void* escucharCola(void* colaAEscuchar){
 	idProcesoBroker = responderHandshake(conexionBroker, GAMEBOY);
 	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoBroker);
 
-	int suscripcionDeseada = crearSocket();
+	t_gameboy_suscribe* gameboysuscribe = malloc(sizeof(t_gameboy_suscribe));
+	gameboysuscribe->codigoCola = cola;
 
-		if(conectarA(suscripcionDeseada, IP_BROKER, puertoBrokerInt)){
+	log_info(logger, "Se envía un mensaje a Broker con la cola a la cual nos queremos suscribir: %s", COLAS_STRING[cola]);
+	enviar_gameboy_suscribe(gameboysuscribe, conexionBroker, -1, -1);
 
-			t_gameboy_suscribe* gameboysuscribe = malloc(sizeof(t_gameboy_suscribe));
-			gameboysuscribe->codigoCola = cola;
-
-			enviar_gameboy_suscribe(gameboysuscribe, suscripcionDeseada, -1, -1);
-			log_info(logger, "Suscripto a la cola de %d", cola);
-		}
+	log_info(logger, "Suscripto a la cola de %s", COLAS_STRING[cola]);
 
 	int escucharCola = crearSocket();
 	int puertoPropio = atoi(PUERTO_GAMEBOY);
