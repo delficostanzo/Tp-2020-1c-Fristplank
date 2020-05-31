@@ -1,7 +1,7 @@
 # tp-2020-1c-Fritsplank
 
-##2020-05-31 Conexión
-###Cambios hechos:
+## 2020-05-31 Conexión
+### Cambios hechos:
 
 - Agrego RESPUESTA_ID como mensaje en enum.
 
@@ -17,6 +17,6 @@
 	free(paquete);
 
 - Creé un nuevo iniciar_log porque estaba hardcodeado el nombre "broker", entonces no te deja iniciar loggers en ningún módulo que tengan otro nombre (De todos modos dejé comentado el anterior).
-	Pensé en un iniciar_log que le enviás el nombre que querés que tenga (Si estás en Team le mandás Team, en GameCard Gamecard, duh).
-	Relacionado a esto, habría que ver si tiene sentido cambiar la firma de por ejemplo "liberar_conexion" para que acepte por parámetro un logger, así no tiene que crear uno adentro).
-	Lo mismo con "enviar" y todos los otros métodos que loggeen.
+Pensé en un iniciar_log que le enviás el nombre que querés que tenga (Si estás en Team le mandás Team, en GameCard Gamecard, duh).
+Relacionado a esto, habría que ver si tiene sentido cambiar la firma de por ejemplo "liberar_conexion" para que acepte por parámetro un logger, así no tiene que crear uno adentro).
+Lo mismo con "enviar" y todos los otros métodos que loggeen.
