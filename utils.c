@@ -9,31 +9,18 @@
 
 void* serializar_paquete(t_paquete* paquete, int *bytes)
 {
-	int size_serializado = sizeof(op_code) + sizeof(int) + (paquete->buffer->size); //----
-
-//	t_log* logger = iniciar_log();
-	t_log* logger = iniciar_log("serializarpaquete");
-	log_info(logger, "Inicio de Serializacion");
+	int size_serializado = sizeof(op_code) + 2*sizeof(int) + (paquete->buffer->size); //----
 
 	void* streamFinal = malloc(size_serializado);
-	log_info(logger, "Asignacion de espacio al stream");
-
 	int offset = 0;
 
 	memcpy(streamFinal + offset, &(paquete->codigo_operacion), sizeof(op_code));
-	log_info(logger, "Codigo de operacion (protocolo) copiado al stream");
 	offset += sizeof(op_code);
-
 	memcpy(streamFinal + offset, &paquete->buffer->size, sizeof(paquete->buffer->size));
-	log_info(logger, "Tamaño del mensaje copiado al stream");
 	offset += sizeof(paquete->buffer->size);
-
 	memcpy(streamFinal + offset, paquete->buffer->stream, paquete->buffer->size);
-	log_info(logger, "Mensaje copiado al stream");
 
 	*bytes = size_serializado;
-	log_info(logger, "Insercion del tamaño en bytes al int apuntado");
-
 
 	return streamFinal;
 }
@@ -62,15 +49,12 @@ int crear_conexion(char *ip, char* puerto)
 
 void enviar(t_paquete* paquete, int socket_cliente)
 {
-//	t_log* logger = iniciar_log();
-	t_log* logger = iniciar_log("enviarpaquete");
 
 	int size_serializado;
 
 	void* mensajeAEnviar = malloc(sizeof(paquete->buffer->size) + sizeof(int) + sizeof(op_code));
 
 	mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
-	log_info(logger, "Serializacion del paquete");
 
 	send(socket_cliente, mensajeAEnviar, size_serializado, 0);
 
@@ -80,6 +64,7 @@ void enviar(t_paquete* paquete, int socket_cliente)
 }
 
 t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int Id, int IdCorrelativo, op_code op_code) {
+
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	paquete->ID = Id;
 	paquete->ID_CORRELATIVO = IdCorrelativo;
@@ -87,6 +72,7 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int Id, int IdCorrelat
 	paquete->buffer->stream = datos;
 	paquete->buffer->size = sizeOfStream;
 	paquete->codigo_operacion = op_code;
+
 	return paquete;
 }
 
@@ -132,30 +118,26 @@ void enviar_ACK(int socket_cliente, int Id, int IdCorrelativo){
 }
 
 void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, int Id, int IdCorrelativo){
-	t_paquete* paquete = crearPaqueteCon(gameboy_suscribe, 0, Id, IdCorrelativo, GAMEBOYSUSCRIBE);
+	t_paquete* paquete = crearPaqueteCon((void*) gameboy_suscribe, sizeof(op_code), Id, IdCorrelativo, GAMEBOYSUSCRIBE);
 	enviar(paquete, socket_cliente);
 }
 
 
 t_paquete* recibir_mensaje(int socket_cliente) {
-//	t_log* logger = iniciar_log();
-	t_log* logger = iniciar_log("recibirmensaje");
+
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	//primero recibimos el codigo de operacion
-	//op_code operacion;
 	recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), 0);
-	log_info(logger, "Recibimos el codigo de operacion");
+	recv(socket_cliente, &(paquete->ID), sizeof(int), 0);
+	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(int), 0);
 
-	//despues recibimos el buffer. Primero su tamaño y despues el contenido
-	//int size_datos;
+	paquete->buffer = malloc(sizeof(t_buffer));
 	recv(socket_cliente, &(paquete->buffer->size), sizeof(int), 0);
 
-	//el recv de un stream muy grande puede cortarse
-	void* datos = recibirDatos(socket_cliente, paquete->buffer->size);
-	paquete->buffer->stream = datos;
-	log_info(logger, "Recibimos el mensaje correspondiente");
-
+	paquete->buffer->stream = malloc(paquete->buffer->size);
+	recv(socket_cliente, &(paquete->buffer->stream), paquete->buffer->size, 0);
+//	void* datos = recibirDatos(socket_cliente, paquete->buffer->size);
+//	paquete->buffer->stream = datos;
 	return paquete;
 }
 
