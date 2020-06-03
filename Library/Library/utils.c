@@ -9,7 +9,7 @@
 
 void* serializar_paquete(t_paquete* paquete, int *bytes)
 {
-	int size_serializado = sizeof(op_code) + sizeof(int) + (paquete->buffer->size); //----
+	int size_serializado = sizeof(op_code) + sizeof(uint32_t)*2 + sizeof(int) + (paquete->buffer->size);
 
 //	t_log* logger = iniciar_log();
 	t_log* logger = iniciar_log("serializarpaquete");
@@ -24,6 +24,14 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 	log_info(logger, "Codigo de operacion (protocolo) copiado al stream");
 	offset += sizeof(op_code);
 
+	memcpy(streamFinal + offset, &(paquete->ID), sizeof(uint32_t));
+	log_info(logger, "Id copiado al stream");
+	offset += sizeof(uint32_t);
+
+	memcpy(streamFinal + offset, &(paquete->ID_CORRELATIVO), sizeof(uint32_t));
+	log_info(logger, "Id correlativo copiado al stream");
+	offset += sizeof(uint32_t);
+
 	memcpy(streamFinal + offset, &paquete->buffer->size, sizeof(paquete->buffer->size));
 	log_info(logger, "Tamaño del mensaje copiado al stream");
 	offset += sizeof(paquete->buffer->size);
@@ -32,34 +40,34 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 	log_info(logger, "Mensaje copiado al stream");
 
 	*bytes = size_serializado;
-	log_info(logger, "Insercion del tamaño en bytes al int apuntado");
+	log_info(logger, "Insercion del tamaño en bytes al uint32_t apuntado");
 
 
 	return streamFinal;
 
 }
 
-int crear_conexion(char *ip, char* puerto)
-{
-	struct addrinfo hints;
-	struct addrinfo *server_info;
-
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
-
-	getaddrinfo(ip, puerto, &hints, &server_info);
-
-	int socket_cliente = socket(server_info->ai_family, server_info->ai_socktype, server_info->ai_protocol);
-
-	if(connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen) == -1)
-		printf("error");
-
-	freeaddrinfo(server_info);
-
-	return socket_cliente;
-}
+//int crear_conexion(char *ip, char* puerto)
+//{
+//	struct addrinfo hints;
+//	struct addrinfo *server_info;
+//
+//	memset(&hints, 0, sizeof(hints));
+//	hints.ai_family = AF_UNSPEC;
+//	hints.ai_socktype = SOCK_STREAM;
+//	hints.ai_flags = AI_PASSIVE;
+//
+//	getaddrinfo(ip, puerto, &hints, &server_info);
+//
+//	int socket_cliente = socket(server_info->ai_family, server_info->ai_socktype, server_info->ai_protocol);
+//
+//	if(connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen) == -1)
+//		printf("error");
+//
+//	freeaddrinfo(server_info);
+//
+//	return socket_cliente;
+//}
 
 void enviar(t_paquete* paquete, int socket_cliente)
 {
@@ -68,7 +76,7 @@ void enviar(t_paquete* paquete, int socket_cliente)
 
 	int size_serializado;
 
-	void* mensajeAEnviar = malloc(sizeof(paquete->buffer->size) + sizeof(int) + sizeof(op_code));
+	void* mensajeAEnviar = malloc(sizeof(paquete->buffer->size) + sizeof(uint32_t)*2 + sizeof(op_code));
 
 	mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
 	log_info(logger, "Serializacion del paquete");
@@ -81,7 +89,7 @@ void enviar(t_paquete* paquete, int socket_cliente)
 
 }
 
-t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int Id, int IdCorrelativo, op_code op_code) {
+t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, uint32_t Id, uint32_t IdCorrelativo, op_code op_code) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	paquete->ID = Id;
 	paquete->ID_CORRELATIVO = IdCorrelativo;
@@ -93,43 +101,43 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int Id, int IdCorrelat
 	return paquete;
 }
 
-void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon(new_pokemon, new_pokemon->lengthOfPokemon + sizeof(int)*4, Id, IdCorrelativo, NEW_POKEMON);
+void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+	t_paquete* paquete = crearPaqueteCon(new_pokemon, new_pokemon->lengthOfPokemon + sizeof(uint32_t)*4, Id, IdCorrelativo, NEW_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon(appeared_pokemon, appeared_pokemon->lengthOfPokemon + sizeof(int)*4, Id, IdCorrelativo, APPEARED_POKEMON);
+void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+	t_paquete* paquete = crearPaqueteCon(appeared_pokemon, appeared_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, APPEARED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon((void*) catch_pokemon, catch_pokemon->lengthOfPokemon + sizeof(int)*3, Id, IdCorrelativo, CATCH_POKEMON);
+void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+	t_paquete* paquete = crearPaqueteCon((void*) catch_pokemon, catch_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, CATCH_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon((void*) caught_pokemon, sizeof(int) + sizeof(bool), Id, IdCorrelativo, APPEARED_POKEMON);
+void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+	t_paquete* paquete = crearPaqueteCon((void*) caught_pokemon, sizeof(uint32_t), Id, IdCorrelativo, APPEARED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon((void*) get_pokemon, get_pokemon->lengthOfPokemon + sizeof(int), Id, IdCorrelativo, GET_POKEMON);
+void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+	t_paquete* paquete = crearPaqueteCon((void*) get_pokemon, get_pokemon->lengthOfPokemon + sizeof(uint32_t), Id, IdCorrelativo, GET_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	int sizeListaPosiciones = list_size(localized_pokemon->listaPosiciones)*sizeof(t_posicion);
-	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, localized_pokemon->lengthOfPokemon + sizeof(int)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
+void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+	uint32_t sizeListaPosiciones = (localized_pokemon->cantidadPosiciones)*sizeof(t_posicion);
+	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int Id, int IdCorrelativo){
-	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(int), Id, IdCorrelativo, RESPUESTA_ID);
+void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo){
+	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(uint32_t), Id, IdCorrelativo, RESPUESTA_ID);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_ACK(int socket_cliente, int Id, int IdCorrelativo){
+void enviar_ACK(int socket_cliente, uint32_t Id, uint32_t IdCorrelativo){
 	t_paquete* paquete = crearPaqueteCon(NULL, 0, Id, IdCorrelativo, ACK);
 	enviar(paquete, socket_cliente);
 }
@@ -145,8 +153,14 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 	recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), 0);
 	log_info(logger, "Recibimos el codigo de operacion");
 
+	recv(socket_cliente, &(paquete->ID), sizeof(uint32_t), 0);
+	log_info(logger, "Recibimos el id del mensaje");
+
+	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(uint32_t), 0);
+	log_info(logger, "Recibimos el id del mensaje correlativo");
+
 	//despues recibimos el buffer. Primero su tamaño y despues el contenido
-	//int size_datos;
+	//uint32_t size_datos;
 	recv(socket_cliente, &(paquete->buffer->size), sizeof(int), 0);
 
 	//el recv de un stream muy grande puede cortarse
@@ -168,7 +182,7 @@ void liberar_conexion(int socket_cliente) {
 //t_log* iniciar_log(void) {
 //	t_log* logger;
 //	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
-//		printf("No pude crear el logger\n");
+//		pruint32_tf("No pude crear el logger\n");
 //		exit(1);
 //	}
 //	return logger;
