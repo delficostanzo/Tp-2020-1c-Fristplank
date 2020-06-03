@@ -9,15 +9,19 @@
 
 void* serializar_paquete(t_paquete* paquete, int *bytes)
 {
-	int size_serializado = sizeof(op_code) + 2*sizeof(int) + (paquete->buffer->size); //----
+	int size_serializado = sizeof(op_code) + 3*sizeof(int) + (paquete->buffer->size);
 
 	void* streamFinal = malloc(size_serializado);
 	int offset = 0;
 
 	memcpy(streamFinal + offset, &(paquete->codigo_operacion), sizeof(op_code));
 	offset += sizeof(op_code);
+	memcpy(streamFinal + offset, &paquete->ID, sizeof(paquete->buffer->size));
+	offset += sizeof(int);
+	memcpy(streamFinal + offset, &paquete->ID_CORRELATIVO, sizeof(paquete->buffer->size));
+	offset += sizeof(int);
 	memcpy(streamFinal + offset, &paquete->buffer->size, sizeof(paquete->buffer->size));
-	offset += sizeof(paquete->buffer->size);
+	offset += sizeof(int);
 	memcpy(streamFinal + offset, paquete->buffer->stream, paquete->buffer->size);
 
 	*bytes = size_serializado;
@@ -52,14 +56,13 @@ void enviar(t_paquete* paquete, int socket_cliente)
 
 	int size_serializado;
 
-	void* mensajeAEnviar = malloc(paquete->buffer->size + 3 * sizeof(int) + sizeof(op_code));
-
-	mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
+	void* mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
 
 	send(socket_cliente, mensajeAEnviar, size_serializado, 0);
 
 	free(mensajeAEnviar);
 	free(paquete->buffer);
+	free(paquete->buffer->stream);
 	free(paquete);
 }
 
@@ -135,9 +138,8 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 	recv(socket_cliente, &(paquete->buffer->size), sizeof(int), 0);
 
 	paquete->buffer->stream = malloc(paquete->buffer->size);
-	recv(socket_cliente, &(paquete->buffer->stream), paquete->buffer->size, 0);
-//	void* datos = recibirDatos(socket_cliente, paquete->buffer->size);
-//	paquete->buffer->stream = datos;
+	paquete->buffer->stream = recibirDatos(socket_cliente, paquete->buffer->size);
+
 	return paquete;
 }
 
