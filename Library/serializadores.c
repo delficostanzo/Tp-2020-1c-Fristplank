@@ -75,7 +75,31 @@ void serializar_get_pokemon(void** streamAEnviar, int offset, void* streamPayloa
 }
 
 void serializar_localized_pokemon(void** streamAEnviar, int offset, void* streamPayload, int *bytes){
-	//TODO
+	t_localized_pokemon* pokemon = streamPayload;
+
+	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
+	offset += sizeof(uint32_t);
+	memcpy(*streamAEnviar + offset, &pokemon->pokemon, pokemon->lengthOfPokemon);
+	offset += pokemon->lengthOfPokemon;
+	memcpy(*streamAEnviar + offset, &pokemon->cantidadPosiciones, sizeof(uint32_t));
+	offset += sizeof(uint32_t);
+
+	char* posicionesEnTextoPlano = string_new();
+
+	for(int i = 0; i < pokemon->cantidadPosiciones; i++){
+		t_posicion* posicion = list_get(pokemon->listaPosiciones, i);
+		string_append(posicionesEnTextoPlano, string_itoa(posicion->posicionX));
+		string_append(posicionesEnTextoPlano, "-");
+		string_append(posicionesEnTextoPlano, string_itoa(posicion->posicionY));
+		string_append(posicionesEnTextoPlano, "-");
+	}
+
+	memcpy(*streamAEnviar + offset, &posicionesEnTextoPlano, string_length(posicionesEnTextoPlano) + 1);
+	offset += string_length(posicionesEnTextoPlano) + 1;
+
+	*bytes = offset;
+
+	free(posicionesEnTextoPlano);
 }
 
 void serializar_respuesta_id(void** streamAEnviar, int offset, void* streamPayload, int *bytes){
