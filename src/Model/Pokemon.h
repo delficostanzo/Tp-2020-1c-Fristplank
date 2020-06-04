@@ -22,5 +22,6 @@ PokemonEnElMapa* newPokemon();
 void setNombreTo(PokemonEnElMapa* pokemon, String nombre);
 void setPosicionTo(PokemonEnElMapa* pokemon, t_posicion posicion);
 void setCantidadTo(PokemonEnElMapa* pokemon, int cantidad);
+PokemonEnElMapa* buscarPorNombre(String nombrePokemon, t_list* pokemones);
 
 #endif /* SRC_MODEL_POKEMON_H_ */

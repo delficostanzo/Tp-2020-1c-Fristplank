@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
 	t_log* logger = iniciar_logger();
 
 	t_config* config = leerConfigDesde("src/team.config");
+	//obtiene la lista de entrenadores desde el config
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
 
 	//	char** POSICONES_ENTRENADORES = config_get_array_value(config, "POSICONES_ENTRENADORES");
@@ -30,21 +31,22 @@ int main(int argc, char *argv[]) {
 	int puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
 	quickLog("LLegamos hasta aca");
 
-	//conexionBroker = crear_conexion(IP_BROKER, PUERTO_BROKER);
-	conexionGameBoy = crearSocket();
-
-	if (escuchaEn(conexionGameBoy, puertoTeam)) {
-		quickLog("Escuchando conexiones del GameBoy");
-	}
-
-	//se queda bloqueado esperando que el gameboy se conecte
-	int socketGameBoy = aceptarConexion(conexionGameBoy);
-
-	id_proceso idProcesoConectado;
-	idProcesoConectado = iniciarHandshake(socketGameBoy, TEAM);
-	log_info(logger, "El id del proceso con el que me conecte es: %d",
-			idProcesoConectado);
-
+//	conexionGameBoy = crearSocket();
+//
+//	//TODO: Si muere la conexion del broker, escucho al GameBoy. Y intentar reconexion del Broker varias veces
+//	if (escuchaEn(conexionGameBoy, puertoTeam)) {
+//		quickLog("Escuchando conexiones del GameBoy");
+//	}
+//
+//	//se queda bloqueado esperando que el gameboy se conecte
+//	int socketGameBoy = aceptarConexion(conexionGameBoy);
+//
+//	id_proceso idProcesoConectado;
+//	idProcesoConectado = iniciarHandshake(socketGameBoy, TEAM);
+//	log_info(logger, "El id del proceso con el que me conecte es: %d",
+//			idProcesoConectado);
+//
+	// CONEXION BROKER
 	conexionBroker = crearSocket();
 
 	if (conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) {
@@ -69,6 +71,14 @@ int main(int argc, char *argv[]) {
 		quickLog("Suscripto a la cola de localized_pokemon");
 	}
 
+	//ENVIA MSJ GET CON LA LISTA DE LOS OBJETIVOS GLOBALES
+	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
+	quickLog("primer objetivo de pokemones");
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 0))->nombre);
+	quickLog("segundo objetivo de pokemones");
+	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 1))->nombre);
+
+
 
 	//pasar de array a t_list
 
@@ -90,11 +100,8 @@ int main(int argc, char *argv[]) {
 			entrenadorMasCercano->posicion->posicionY);
 
 	//t_list* objetivosGlobales = getObjetivosGlobalesDesde("src/team.config");
-	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
-	quickLog("primer objetivo de pokemones");
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 0))->nombre);
-	quickLog("segundo objetivo de pokemones");
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 1))->nombre);
+
+
 
 	t_paquete* paquetePrueba = recibir_mensaje(suscripcionCaught);
 
