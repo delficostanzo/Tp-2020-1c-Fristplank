@@ -15,6 +15,7 @@
 #include<netdb.h>
 #include<time.h>
 #include"Library/utils.h"
+#include"procesar.h"
 
 char* IP_BROKER;
 char* IP_TEAM;
@@ -27,25 +28,12 @@ char* IP_GAMEBOY;
 char* PUERTO_GAMEBOY;
 
 t_log* logger;
-t_log* loggerObligatorio;
 t_config* config;
 
 t_log* iniciarLogger(void);
 t_log* iniciarLoggerObligatorio(void);
 t_config* leer_config(void);
 void terminar_programa(int, t_log*, t_config*);
-
-void procesarBrokerGetPokemon(int socket, char* argv[]);
-void procesarBrokerNewPokemon(int socket, char* argv[]);
-void procesarBrokerAppearedPokemon(int socket, char* argv[]);
-void procesarBrokerCatchPokemon(int socket, char* argv[]);
-void procesarBrokerCaughtPokemon(int socket, char* argv[]);
-
-void procesarTeamAppearedPokemon(int socket, char* argv[]);
-
-void procesarGameCardCatchPokemon(int socket, char* argv[]);
-void procesarGameCardNewPokemon(int socket, char* argv[]);
-void procesarGameCardGetPokemon(int socket, char* argv[]);
 
 void procesarSubscribe(char* argv[]);
 
