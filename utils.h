@@ -9,7 +9,6 @@
 #include<sys/socket.h>
 #include<netdb.h>
 #include<string.h>
-
 #include<pthread.h>
 
 #include<commons/log.h>
@@ -92,7 +91,7 @@ typedef struct
 
 typedef struct
 {
-	uint32_t size;
+	int size;
 	void* stream;
 } t_buffer;
 
