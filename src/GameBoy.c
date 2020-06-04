@@ -14,8 +14,6 @@ int main(int argc, char* argv[]) {
 	log_debug(logger, "Logger creado.");
 	config = leer_config();
 
-	//TODO CAMBIAR LOS ARGV[
-	//TODO CAMBIAR EL EJECUTABLE DE GAMEBOY
 /*	DONE ./gameboy BROKER NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
  * ejemplo: ./GameBoy BROKER NEW_POKEMON "pikachu" 3 7 2
  *
@@ -221,22 +219,16 @@ void procesarBrokerNewPokemon(int socket, char* argv[]){
 void procesarGameCardNewPokemon(int socket, char* argv[]){
 	log_debug(logger, "Mensaje a enviar a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], (int) argv[4], (int) argv[5], (int) argv[6]);
 
-	char* pokemon = (char*)argv[3];
-	int posX = (int) argv[4];
-	int posY = (int) argv[5];
-	int cant = (int) argv[6];
-	int id = (int) argv[7];
-
 	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
-	new_pokemon->pokemon = pokemon;
-	new_pokemon->lengthOfPokemon = strlen(pokemon + 1);
-	new_pokemon->cantidad = cant;
+	new_pokemon->pokemon = argv[3];
+	new_pokemon->lengthOfPokemon = strlen(argv[3] + 1);
+	new_pokemon->cantidad = atoi(argv[6]);
 	new_pokemon->posicion = malloc(sizeof(t_posicion));
-	new_pokemon->posicion->posicionX = posX;
-	new_pokemon->posicion->posicionX = posY;
+	new_pokemon->posicion->posicionX = atoi(argv[4]);
+	new_pokemon->posicion->posicionY = atoi(argv[5]);
 
-	enviar_new_pokemon(new_pokemon, socket, id, -1);
-	log_info(logger, "Mensaje enviado a GameCard | ID del Mensaje: %d | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", id, new_pokemon->pokemon, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
+	enviar_new_pokemon(new_pokemon, socket, atoi(argv[7]), -1);
+	log_info(logger, "Mensaje enviado a GameCard | ID del Mensaje: %d | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", argv[7], new_pokemon->pokemon, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
 
 	free(new_pokemon->posicion);
 	free(new_pokemon);
@@ -244,26 +236,21 @@ void procesarGameCardNewPokemon(int socket, char* argv[]){
 
 
 void procesarGameCardGetPokemon(int socket, char* argv[]){
-	char* pokemon = (char*) argv[3];
-	int id = (int) argv[4];
-
 	t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
-	get_pokemon->lengthOfPokemon = strlen(pokemon + 1);
-	get_pokemon->pokemon = pokemon;
+	get_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	get_pokemon->pokemon = argv[3];
 
 
-	enviar_get_pokemon(get_pokemon, socket, id, -1);
-	log_info(logger, "Mensaje enviado a GameCard | ID del Mensaje: %d | Pokemon: %s", id, get_pokemon->pokemon);
+	enviar_get_pokemon(get_pokemon, socket, -1, -1);
+	log_info(logger, "Mensaje enviado a GameCard | Pokemon: %s", get_pokemon->pokemon);
 
 	free(get_pokemon);
 }
 
 void procesarBrokerGetPokemon(int socket, char* argv[]){
-	char* pokemon = (char*) argv[3];
-
 	t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
-	get_pokemon->lengthOfPokemon = strlen(pokemon + 1);
-	get_pokemon->pokemon = pokemon;
+	get_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	get_pokemon->pokemon = argv[3];
 
 
 	enviar_get_pokemon(get_pokemon, socket, -1, -1);
@@ -273,34 +260,25 @@ void procesarBrokerGetPokemon(int socket, char* argv[]){
 }
 
 void procesarBrokerAppearedPokemon(int socket, char* argv[]){
-	char* pokemon = (char*)argv[3];
-	int posX = (int) argv[4];
-	int posY = (int) argv[5];
-	int idCorrelativo = (int) argv[6];
-
 	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
-	appeared_pokemon->lengthOfPokemon = strlen(pokemon + 1);
-	appeared_pokemon->pokemon = pokemon;
-	appeared_pokemon->posicion->posicionX = posX;
-	appeared_pokemon->posicion->posicionX = posY;
+	appeared_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	appeared_pokemon->pokemon = argv[3];
+	appeared_pokemon->posicion->posicionX = atoi(argv[4]);
+	appeared_pokemon->posicion->posicionX = atoi(argv[5]);
 
-	enviar_appeared_pokemon(appeared_pokemon, socket, -1, idCorrelativo);
-	log_info(logger, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d | ID Correlativo del Mensaje: %d", appeared_pokemon->pokemon, appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY, idCorrelativo);
+	enviar_appeared_pokemon(appeared_pokemon, socket, -1, atoi(argv[6]));
+	log_info(logger, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d | ID Correlativo del Mensaje: %d", appeared_pokemon->pokemon, appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY, atoi(argv[6]));
 
 	free(appeared_pokemon->posicion);
 	free(appeared_pokemon);
 }
 
 void procesarBrokerCatchPokemon(int socket, char* argv[]){
-	char* pokemon = (char*)argv[3];
-	int posX = (int) argv[4];
-	int posY = (int) argv[5];
-
 	t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
-	catch_pokemon->lengthOfPokemon = strlen(pokemon + 1);
-	catch_pokemon->pokemon = pokemon;
-	catch_pokemon->posicion->posicionX = posX;
-	catch_pokemon->posicion->posicionX = posY;
+	catch_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	catch_pokemon->pokemon = argv[3];
+	catch_pokemon->posicion->posicionX = atoi(argv[4]);
+	catch_pokemon->posicion->posicionX = atoi(argv[5]);
 
 	enviar_catch_pokemon(catch_pokemon, socket, -1, -1);
 	log_info(logger, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d", catch_pokemon->pokemon, catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
@@ -310,28 +288,21 @@ void procesarBrokerCatchPokemon(int socket, char* argv[]){
 }
 
 void procesarBrokerCaughtPokemon(int socket, char* argv[]){
-	int idCorrelativo = (int) argv[3];
-	bool ok = (bool) argv[4];
-
 	t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
-	caught_pokemon->ok = ok;
+	caught_pokemon->ok = atoi(argv[4]);
 
-	enviar_caught_pokemon(caught_pokemon, socket, -1, idCorrelativo);
-	log_info(logger, "Mensaje enviado a Broker | ID Correlativo del Mensaje: %d - Bool enviado: %d", idCorrelativo, caught_pokemon->ok);
+	enviar_caught_pokemon(caught_pokemon, socket, -1, atoi(argv[3]));
+	log_info(logger, "Mensaje enviado a Broker | ID Correlativo del Mensaje: %d - Bool enviado: %d", atoi(argv[3]), caught_pokemon->ok);
 
 	free(caught_pokemon);
 }
 
 void procesarTeamAppearedPokemon(int socket, char* argv[]){
-	char* pokemon = (char*)argv[3];
-	int posX = (int) argv[4];
-	int posY = (int) argv[5];
-
 	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
-	appeared_pokemon->lengthOfPokemon = strlen(pokemon + 1);
-	appeared_pokemon->pokemon = pokemon;
-	appeared_pokemon->posicion->posicionX = posX;
-	appeared_pokemon->posicion->posicionX = posY;
+	appeared_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	appeared_pokemon->pokemon = argv[3];
+	appeared_pokemon->posicion->posicionX = atoi(argv[4]);
+	appeared_pokemon->posicion->posicionX = atoi(argv[5]);
 
 	enviar_appeared_pokemon(appeared_pokemon, socket, -1, -1);
 	log_info(logger, "Mensaje enviado a Team | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared_pokemon->pokemon, appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY);
@@ -341,19 +312,14 @@ void procesarTeamAppearedPokemon(int socket, char* argv[]){
 }
 
 void procesarGameCardCatchPokemon(int socket, char* argv[]){
-	char* pokemon = (char*)argv[3];
-	int posX = (int) argv[4];
-	int posY = (int) argv[5];
-	int ID = (int) argv[6];
-
 	t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
-	catch_pokemon->lengthOfPokemon = strlen(pokemon + 1);
-	catch_pokemon->pokemon = pokemon;
-	catch_pokemon->posicion->posicionX = posX;
-	catch_pokemon->posicion->posicionX = posY;
+	catch_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	catch_pokemon->pokemon = argv[3];
+	catch_pokemon->posicion->posicionX = atoi(argv[4]);
+	catch_pokemon->posicion->posicionX = atoi(argv[5]);
 
-	enviar_catch_pokemon(catch_pokemon, socket, ID, -1);
-	log_info(logger, "Mensaje enviado a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d | ID del Mensaje: %d", catch_pokemon->pokemon, catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY, ID);
+	enviar_catch_pokemon(catch_pokemon, socket, atoi(argv[6]), -1);
+	log_info(logger, "Mensaje enviado a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d | ID del Mensaje: %d", catch_pokemon->pokemon, catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY, atoi(argv[6]));
 
 	free(catch_pokemon->posicion);
 	free(catch_pokemon);
