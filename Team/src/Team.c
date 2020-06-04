@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "Team.h"
@@ -7,12 +6,69 @@
 #include "./AppInit/HilosEntrenadores.h"
 
 int main(int argc, char *argv[]) {
-	int conexion;
+	int conexionBroker; //cliente del broker
+	int conexionGameBoy; //servidor del gameboy
 
-	t_log* logger = newLoggerFrom("team.log");
+	//t_log* logger = iniciar_log("team");
+	t_log* logger = iniciar_logger();
 
-	t_config* configConnection = leerConfigDesde("src/connection.config");
+	t_config* config = leerConfigDesde("src/team.config");
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
+
+	quickLog("LLegamos hasta aca");
+	//	char** POSICONES_ENTRENADORES = config_get_array_value(config, "POSICONES_ENTRENADORES");
+	//	char** POKEMON_ENTRENADORES = config_get_array_value(config, "POKEMON_ENTRENADORES");
+	//	char** OBJETIVOS_ENTRENADORES = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
+	//	int TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
+	//	int RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
+	//	char* ALGORITMO_PLANIFICACION = config_get_string_value(config, "ALGORITMO_PLANIFICACION");
+	//	int QUANTUM = config_get_int_value(config, "QUANTUM");
+	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
+	//	int ESTIMACION_INICIAL = config_get_int_value(config, "ESTIMACION_INICIAL");
+	int PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
+	//	char* LOG_FILE =  config_get_string_value(config,"LOG_FILE");
+
+	int puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
+
+	//conexionBroker = crear_conexion(IP_BROKER, PUERTO_BROKER);
+	conexionGameBoy = crearSocket();
+
+	if (escuchaEn(conexionGameBoy, puertoTeam)) {
+		quickLog("Escuchando conexiones del GameBoy");
+	}
+
+	//se queda bloqueado esperando que el gameboy se conecte
+	int socketGameBoy = aceptarConexion(conexionGameBoy);
+
+	id_proceso idProcesoConectado;
+	idProcesoConectado = iniciarHandshake(socketGameBoy, TEAM);
+	log_info(logger, "El id del proceso con el que me conecte es: %d",
+			idProcesoConectado);
+
+	conexionBroker = crearSocket();
+
+	if (conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) {
+		quickLog("Conectando al Broker");
+	}
+
+	id_proceso idProcesoBroker;
+	idProcesoBroker = responderHandshake(conexionBroker, TEAM);
+	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoBroker);
+
+	int suscripcionAppeared = crearSocket();
+	int suscripcionCaught = crearSocket();
+	int suscripcionLocalized = crearSocket();
+
+	if (conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)) {
+		quickLog("Suscripto a la cola de appeared_pokemon");
+	}
+	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
+		quickLog("Suscripto a la cola de caught_pokemon");
+	}
+	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
+		quickLog("Suscripto a la cola de localized_pokemon");
+	}
+
 
 	pthread_t* hilosDeEntrenadores[list_size(entrenadores)];
 
@@ -29,13 +85,16 @@ int main(int argc, char *argv[]) {
 	//casos de prueba para ver si funciona bien el mapa
 	PokemonEnElMapa* pokemonDePrueba = newPokemon();
 	t_posicion posicionDePrueba;
-	posicionDePrueba.x = 2;
-	posicionDePrueba.y = 2;
+	posicionDePrueba.posicionX = 2;
+	posicionDePrueba.posicionY = 2;
 	setPosicionTo(pokemonDePrueba, posicionDePrueba);
+	Entrenador* entrenadorMasCercano = newEntrenador();
+	entrenadorMasCercano = entrenadorMasCercanoA(pokemonDePrueba, entrenadores);
 
-	Entrenador* entrenadorMasCercano = entrenadorMasCercanoA(pokemonDePrueba, entrenadores);
-
-	log_info(logger, "La posicion x: %d , la posicion y: %d del entrenador mas cerca", entrenadorMasCercano->posicion->x, entrenadorMasCercano->posicion->y);
+	//CONEXION//
+	log_info(logger, "La posicion x: %d , la posicion y: %d del entrenador mas cerca",
+			entrenadorMasCercano->posicion->posicionX,
+			entrenadorMasCercano->posicion->posicionY);
 
 	//t_list* objetivosGlobales = getObjetivosGlobalesDesde("src/team.config");
 	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
@@ -43,34 +102,6 @@ int main(int argc, char *argv[]) {
 	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 0))->nombre);
 	quickLog("segundo objetivo de pokemones");
 	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 1))->nombre);
-
-//	t_list* objetivosGlobalesOrdenadosPorEspecie =  especiesDePokemonsQueHayQueAtraparOrdenados(objetivosGlobales);
-//	quickLog("Ahora aparecen ordenados por especie:");
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 0))->nombre);
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 1))->nombre);
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 2))->nombre);
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 3))->nombre);
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 4))->nombre);
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 5))->nombre);
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 6))->nombre);
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 7))->nombre);
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 8))->nombre);
-//	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobalesOrdenadosPorEspecie, 9))->nombre);
-
-//	int TIEMPO_RECONEXION = config_get_int_value(configConnection, "TIEMPO_RECONEXION");
-//	int RETARDO_CICLO_CPU = config_get_int_value(configConnection, "RETARDO_CICLO_CPU");
-//	char* ALGORITMO_PLANIFICACION = config_get_string_value(configConnection, "ALGORITMO_PLANIFICACION");
-//	int QUANTUM = config_get_int_value(configConnection, "QUANTUM");
-//	int ESTIMACION_INICIAL = config_get_int_value(configConnection, "ESTIMACION_INICIAL");
-//	char* LOG_FILE = config_get_string_value(configConnection, "LOG_FILE");
-
-
-	char* IP_BROKER = config_get_string_value(configConnection, "IP_BROKER");
-	char* PUERTO_BROKER = config_get_string_value(configConnection, "PUERTO_BROKER");
-
-	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
-
-	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
 
 	// recibir mensaje
 	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
@@ -86,16 +117,6 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-t_log* iniciar_logger(void) {
-	t_log * log = malloc(sizeof(t_log));
-	log = log_create("team.log", "TEAM", 1, 0);
-	if (log == NULL) {
-		printf("No pude crear el logger \n");
-		exit(1);
-	}
-	log_info(log, "Logger Iniciado");
-	return log;
-}
 
 void terminar_programa(int conexion, t_log* logger, t_config* config) {
 	if (logger != NULL) {

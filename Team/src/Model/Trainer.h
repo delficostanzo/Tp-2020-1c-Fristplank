@@ -3,6 +3,7 @@
 #define SRC_MODEL_TRAINER_H_
 
 #include "utils.h"
+#include "../AppInit/ConfigFunctions.h"
 
 typedef enum{
 	MOVER = 1,

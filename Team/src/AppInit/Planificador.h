@@ -1,5 +1,6 @@
 
-#include "utils.c"
+#include "utils.h"
+#include "ConfigFunctions.h"
 
 
 #ifndef SRC_APPINIT_PLANIFICADOR_H_

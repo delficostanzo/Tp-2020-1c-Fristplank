@@ -8,48 +8,58 @@ int main(void) {
 	t_log* logger;
 	t_config* config;
 
-	//ejemplo
-	t_get_pokemon* getStruct = malloc(sizeof(t_get_pokemon));
-	getStruct->pokemon = malloc(sizeof(t_get_pokemon));
-	getStruct->pokemon = "Pikachu.txt";
-
 	// inicializo el log del Broker
 	logger = iniciar_logger();
 
 	// creo y devuelvo un puntero a la estructura t_config
 	config = leer_config();
 
-	TAMANO_MEMORIA = config_get_int_value(config, "TAMANO_MEMORIA");
-	TAMANO_MINIMO_PARTICION = config_get_int_value(config, "TAMANO_MINIMO_PARTICION");
-	ALGORITMO_MEMORIA = config_get_string_value(config, "ALGORITMO_MEMORIA");
-	ALGORITMO_REEMPLAZO = config_get_string_value(config, "ALGORITMO_REEMPLAZO");
-	ALGORITMO_PARTICION_LIBRE = config_get_string_value(config,"ALGORITMO_PARTICION_LIBRE");
-	IP_BROKER = config_get_string_value(config, "IP_BROKER");
-	PUERTO_BROKER = config_get_string_value(config, "PUERTO_BROKER");
-	FRECUENCIA_COMPACTACION = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
-	LOG_FILE =  config_get_string_value(config,"LOG_FILE");
+//	int TAMANO_MEMORIA = config_get_int_value(config, "TAMANO_MEMORIA");
+//	int TAMANO_MINIMO_PARTICION = config_get_int_value(config, "TAMANO_MINIMO_PARTICION");
+//	char* ALGORITMO_MEMORIA = config_get_string_value(config, "ALGORITMO_MEMORIA");
+//	char* ALGORITMO_REEMPLAZO = config_get_string_value(config, "ALGORITMO_REEMPLAZO");
+//	char* ALGORITMO_PARTICION_LIBRE = config_get_string_value(config,"ALGORITMO_PARTICION_LIBRE");
+	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
+	int PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
+//	char* FRECUENCIA_COMPACTACION = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
+//	char* LOG_FILE =  config_get_string_value(config,"LOG_FILE");
 
 	// faltaria loggear la info de todo el archivo de configuracion, ademas de ip y puerto
-	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
+	log_info(logger, "Lei la IP %s y PUERTO %d\n", IP_BROKER, PUERTO_BROKER);
 
 	//crear conexion, un socket conectado
-	int conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
+	int conexion = crearSocket();
 
-	// envio mensaje (el primer parametro esta vacio porque depende de cada estructura de mensaje, va un valor distinto).
-	enviar_get_pokemon(getStruct,conexion);
-	log_info(logger, "Mensaje serializado enviado"); //TODO: no llega
+	if(escuchaEn(conexion, PUERTO_BROKER)){
+		log_info(logger, "Escuchando conexiones al Broker");
+	}
 
+	//se queda bloqueado esperando que los procesos se conecten
+	int teamSocket = aceptarConexion(conexion);
 
-	// recibir mensaje
-	t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
+	id_proceso idProcesoConectado;
+	idProcesoConectado = iniciarHandshake(teamSocket, BROKER);
+	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoConectado);
+
+	int suscripcionAppeared, suscripcionCaught, suscripcionLocalized;
+	switch(idProcesoConectado) {
+	case TEAM:
+		suscripcionAppeared = aceptarConexion(conexion);
+		suscripcionCaught = aceptarConexion(conexion);
+		suscripcionLocalized = aceptarConexion(conexion);
+
+		liberar_conexion(teamSocket);
+		log_info(logger, "Team se suscribio a 3 colas");
+		break;
+	default:
+		break;
+	}
 
 	//loguear mensaje recibido
 	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
 
-	terminar_programa(conexion, logger, config);
+	//terminar_programa(conexion, logger, config);
 
-	free(getStruct->pokemon);
-	free(getStruct);
 }
 
 t_log* iniciar_logger(void){

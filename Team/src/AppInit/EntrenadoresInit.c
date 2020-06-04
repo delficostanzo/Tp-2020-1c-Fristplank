@@ -1,7 +1,6 @@
 
 #include "EntrenadoresInit.h"
 #include "../Model/Trainer.h"
-#include "../TeamUtils/LogManager.h"
 #include "ConfigFunctions.h"
 
 
@@ -17,12 +16,15 @@ static t_list* getObjetivoDesde(Entrenador* entrenador);
 
 //delego el comportamiento para crear una lista de entrenadores a partir del archivo de configuracion de donde estan
 t_list* getEntrenadoresDesde(String nombreDeArchivo) {
+	//t_log* logger = iniciar_log("team");
+	t_log* logger = iniciar_logger();
+
 	t_config* configEntrenador = leerConfigDesde(nombreDeArchivo);
 	t_list* entrenadores;
 
 	//esto lo agregamos al archivo de configuracion, ya que podiamos agregar lo que necesitabamos. Sirve para saber cuantos entrenadores hay
 	int cantidadEntrenadores = config_get_int_value(configEntrenador, "CANTIDAD_ENTRENADORES");
-	quickLog(string_from_format("Cantidad de entrenadores: %d", cantidadEntrenadores));
+	log_info(logger, string_from_format("Cantidad de entrenadores: %d", cantidadEntrenadores));
 	entrenadores = inicializarEntrenadoresHasta(cantidadEntrenadores); //aca inicializamos tantos entrenadores como haya
 
 	//aca delego lo de setear posiciones dentro de los entrenadores
@@ -98,8 +100,8 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 			setPokemonesObjetivosA(entrenador, objetivosDelEntrenador);
 		}
 
-	quickLog(string_from_format("%d", (((Entrenador*)list_get(entrenadores, 0))->posicion->x)));
-	quickLog(string_from_format("%d", (((Entrenador*)list_get(entrenadores, 0))->posicion->y)));
+	quickLog(string_from_format("%d", (((Entrenador*)list_get(entrenadores, 0))->posicion->posicionX)));
+	quickLog(string_from_format("%d", (((Entrenador*)list_get(entrenadores, 0))->posicion->posicionY)));
 
 	list_destroy(objetivos);
 	quickLog("Cargados los objetivos de los entrenadores");

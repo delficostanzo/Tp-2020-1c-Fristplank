@@ -5,7 +5,6 @@
 
 #include "utils.h"
 #include "../Model/Trainer.h"
-#include "../TeamUtils/LogManager.h"
 #include "ConfigFunctions.h"
 #include "Planificador.h"
 
