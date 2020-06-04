@@ -15,10 +15,10 @@
 #include<commons/config.h>
 #include<readline/readline.h>
 #include<utils.h>
-
 #include "AppInit/EntrenadoresInit.h"
+#include "AppInit/ConfigFunctions.h"
 #include "Model/Trainer.h"
-#include "TeamUtils/LogManager.h"
+
 
 
 #endif /* TEAM_H_ */

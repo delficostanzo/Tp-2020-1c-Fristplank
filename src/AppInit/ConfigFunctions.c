@@ -7,12 +7,15 @@
 
 //funciones para extraer la info desde el archivo de configuracion
 #include "ConfigFunctions.h"
-#include "../TeamUtils/LogManager.h"
+
+
+PokemonEnElMapa* pokemonDesde(String nombrePokemon);
 
 //crea un config a partir del nombre de un archivo de configuracion y lo devuelve
 t_config* leerConfigDesde(String nombreDeArchivo) {
 	t_config* config = config_create(nombreDeArchivo);
-	t_log* logger = newLoggerFrom("team.log");
+	//t_log* logger = iniciar_log("team");
+	t_log* logger = iniciar_logger();
 
 	if(config == NULL){
 		log_error(logger, "No se pudo abrir el archivo de configuracion '%s'", nombreDeArchivo);
@@ -20,10 +23,29 @@ t_config* leerConfigDesde(String nombreDeArchivo) {
 	}
 
 	log_info(logger,"Archivo de configuracion '%s' leido correctamente", nombreDeArchivo);
-	destroyLogger(logger);
+	log_destroy(logger);
 
 	return config;
 }
+
+//LOGS
+void quickLog(String mensaje) {
+	//t_log* logger = iniciar_log("team");
+	t_log* logger = iniciar_logger();
+	log_info(logger, mensaje);
+	log_destroy(logger);
+}
+
+t_log* iniciar_logger(void) {
+	t_log * log = malloc(sizeof(t_log));
+	log = log_create("team.log", "TEAM", 1, 0);
+	if (log == NULL) {
+		printf("No pude crear el logger \n");
+		exit(1);
+	}
+	return log;
+}
+///////
 
 //con esto transformas la lista de strings que te viene del config en una t_list*
 t_list* crearListaConStringsDeConfig(String* strings) {
@@ -48,8 +70,8 @@ t_posicion* posicionDesde(String stringDePosicion) {
 
 	String* posicionString = string_split(stringDePosicion,"|");
 
-	posicion->x = atoi(posicionString[0]);
-	posicion->y = atoi(posicionString[1]);
+	posicion->posicionX = atoi(posicionString[0]);
+	posicion->posicionY = atoi(posicionString[1]);
 
 	free(posicionString[0]);
 	free(posicionString[1]);
@@ -80,3 +102,5 @@ PokemonEnElMapa* pokemonDesde(String nombrePokemon){
 
 	return pokemon;
 }
+
+

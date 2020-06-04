@@ -9,7 +9,7 @@
 #define SRC_MODEL_POKEMON_H_
 
 #include "utils.h"
-
+#include "../AppInit/ConfigFunctions.h"
 
 
 typedef struct {

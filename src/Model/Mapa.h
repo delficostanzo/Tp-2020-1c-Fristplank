@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "Trainer.h"
 #include "Pokemon.h"
+#include "../AppInit/ConfigFunctions.h"
 
 //
 //typedef struct {

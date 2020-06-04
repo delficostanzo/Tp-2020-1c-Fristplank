@@ -16,5 +16,4 @@ SUBDIRS := \
 src/AppInit \
 src/Model \
 src \
-src/TeamUtils \
 

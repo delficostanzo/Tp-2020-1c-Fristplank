@@ -21,8 +21,8 @@ Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores
 }
 
 int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2) {
-	int distanciaEnX = posicion1->x - posicion2->x;
-	int distanciaEnY = posicion1->y - posicion2->y;
+	int distanciaEnX = posicion1->posicionX - posicion2->posicionX;
+	int distanciaEnY = posicion1->posicionY - posicion2->posicionY;
 	return abs(distanciaEnX) + abs(distanciaEnY);
 }
 
