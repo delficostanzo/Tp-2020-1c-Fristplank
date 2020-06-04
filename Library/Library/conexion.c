@@ -11,7 +11,6 @@
 #include <sys/socket.h>
 #include "netdb.h"
 
-
 //1- el SERVIDOR y CLIENTE crean su socket. si se creo bien me devuelve el socket, sino devuelve -1
 int crearSocket() {
 	return socket(AF_INET, SOCK_STREAM, 0);

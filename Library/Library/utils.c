@@ -76,8 +76,8 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, uint32_t Id, uint32_t 
 	paquete->ID = Id;
 	paquete->ID_CORRELATIVO = IdCorrelativo;
 	paquete->buffer = malloc(sizeof(t_buffer));
-	paquete->buffer->stream = datos;
 	paquete->buffer->size = sizeOfStream;
+	paquete->buffer->stream = datos;
 	return paquete;
 }
 
@@ -223,21 +223,20 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 }
 
 void liberar_conexion(int socket_cliente) {
-//	t_log* logger = iniciar_log();
-	t_log* logger = iniciar_log("liberarconexion");
+	t_log* logger = iniciar_log();
 	if (close(socket_cliente) == -1) {
 		log_error(logger, "Error al cerrar la conexion");
 	}
 }
 
-//t_log* iniciar_log(void) {
-//	t_log* logger;
-//	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
-//		pruint32_tf("No pude crear el logger\n");
-//		exit(1);
-//	}
-//	return logger;
-//}
+t_log* iniciar_log(void) {
+	t_log* logger;
+	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
+		printf("No pude crear el logger\n");
+		exit(1);
+	}
+	return logger;
+}
 
 t_log* iniciar_logger_modulo(char* nombreModulo) {
 	t_log* logger;
