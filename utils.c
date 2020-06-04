@@ -229,14 +229,14 @@ void liberar_conexion(int socket_cliente) {
 	}
 }
 
-//t_log* iniciar_log(void) {
-//	t_log* logger;
-//	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
-//		pruint32_tf("No pude crear el logger\n");
-//		exit(1);
-//	}
-//	return logger;
-//}
+t_log* iniciar_log(void) {
+	t_log* logger;
+	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
+		printf("No pude crear el logger\n");
+		exit(1);
+	}
+	return logger;
+}
 
 t_log* iniciar_logger_modulo(char* nombreModulo) {
 	t_log* logger;
