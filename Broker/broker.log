@@ -66,3 +66,39 @@
 [INFO] 22:24:18:15 BROKER/(5436:5436): Mensaje copiado al stream
 [INFO] 22:24:18:15 BROKER/(5436:5436): Insercion del tamaño en bytes al int apuntado
 [INFO] 22:24:18:15 BROKER/(5436:5436): Serializacion del paquete
+[INFO] 16:52:54:765 BROKER/(5688:5688): Logger Iniciado
+[INFO] 16:52:54:770 BROKER/(5688:5688): Logger Iniciado
+[INFO] 16:52:54:770 BROKER/(5688:5688): Archivo de configuracion seteado
+[INFO] 16:52:54:771 BROKER/(5688:5688): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 16:52:54:771 BROKER/(5688:5688): Escuchando conexiones al Broker
+[INFO] 18:03:12:326 BROKER/(9029:9029): Logger Iniciado
+[INFO] 18:03:12:327 BROKER/(9029:9029): Logger Iniciado
+[INFO] 18:04:26:533 BROKER/(9084:9084): Logger Iniciado
+[INFO] 18:04:26:543 BROKER/(9084:9084): Logger Iniciado
+[INFO] 18:04:26:545 BROKER/(9084:9084): Archivo de configuracion seteado
+[INFO] 18:04:26:546 BROKER/(9084:9084): Lei la IP 127.0.0.1 y PUERTO 6009
+
+[INFO] 18:04:26:546 BROKER/(9084:9084): El id del proceso con el que me conecte es: -1
+[INFO] 18:04:26:546 BROKER/(9084:9084): Inicio de Serializacion
+[INFO] 18:04:26:546 BROKER/(9084:9084): Asignacion de espacio al stream
+[INFO] 18:04:26:547 BROKER/(9084:9084): Codigo de operacion (protocolo) copiado al stream
+[INFO] 18:04:26:547 BROKER/(9084:9084): Id copiado al stream
+[INFO] 18:04:26:547 BROKER/(9084:9084): Id correlativo copiado al stream
+[INFO] 18:04:26:547 BROKER/(9084:9084): Tamaño del mensaje copiado al stream
+[INFO] 18:04:26:547 BROKER/(9084:9084): Mensaje copiado al stream
+[INFO] 18:04:26:547 BROKER/(9084:9084): Insercion del tamaño en bytes al int apuntado
+[INFO] 18:04:26:548 BROKER/(9084:9084): Serializacion del paquete
+[INFO] 18:04:26:548 BROKER/(9084:9084): Se envio el mensaje
+[INFO] 18:08:21:137 BROKER/(5688:5688): El id del proceso con el que me conecte es: 2
+[INFO] 18:08:21:141 BROKER/(5688:5688): Team se suscribio a 3 colas
+[INFO] 18:08:21:141 BROKER/(5688:5688): Inicio de Serializacion
+[INFO] 18:08:21:141 BROKER/(5688:5688): Asignacion de espacio al stream
+[INFO] 18:08:21:141 BROKER/(5688:5688): Codigo de operacion (protocolo) copiado al stream
+[INFO] 18:08:21:141 BROKER/(5688:5688): Id copiado al stream
+[INFO] 18:08:21:141 BROKER/(5688:5688): Id correlativo copiado al stream
+[INFO] 18:08:21:141 BROKER/(5688:5688): Tamaño del mensaje copiado al stream
+[INFO] 18:08:21:141 BROKER/(5688:5688): Mensaje copiado al stream
+[INFO] 18:08:21:141 BROKER/(5688:5688): Insercion del tamaño en bytes al int apuntado
+[INFO] 18:08:21:141 BROKER/(5688:5688): Serializacion del paquete
+[INFO] 18:08:21:141 BROKER/(5688:5688): Se envio el mensaje

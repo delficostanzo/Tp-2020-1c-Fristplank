@@ -20,6 +20,7 @@ int main(void) {
 //	char* ALGORITMO_REEMPLAZO = config_get_string_value(config, "ALGORITMO_REEMPLAZO");
 //	char* ALGORITMO_PARTICION_LIBRE = config_get_string_value(config,"ALGORITMO_PARTICION_LIBRE");
 	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
+
 	int PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
 //	char* FRECUENCIA_COMPACTACION = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
 //	char* LOG_FILE =  config_get_string_value(config,"LOG_FILE");

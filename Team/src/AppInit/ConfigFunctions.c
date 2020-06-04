@@ -95,6 +95,7 @@ t_list* pokemonesDesdeString(String stringDePokemones) {
 	return pokemones;
 }
 
+// te retorna un pokemon en el mapa
 PokemonEnElMapa* pokemonDesde(String nombrePokemon){
 	PokemonEnElMapa* pokemon = newPokemon();
 

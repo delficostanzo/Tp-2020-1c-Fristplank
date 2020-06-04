@@ -10,7 +10,7 @@ int main(void) {
 
 	//ejemplo
 	t_caught_pokemon* caughtStruct = malloc(sizeof(t_caught_pokemon));
-	caughtStruct->id_correlativo=1;
+	//caughtStruct->id_correlativo=1;
 	caughtStruct->ok=true;
 
 	// inicializo el log del Broker

@@ -15,6 +15,14 @@ PokemonEnElMapa* newPokemon() {
 	return malloc(sizeof(PokemonEnElMapa));
 }
 
+// retorna la estructura poke que tiene ese nombre si esta en la lista  pasado por parametro
+// si no cumple la condicion, DEVUELVE NULL
+PokemonEnElMapa* buscarPorNombre(String nombrePokemon, t_list* pokemones){
+	bool tieneNombre(PokemonEnElMapa* pokemon){
+		return pokemon->nombre == nombrePokemon;
+	}
+	return list_find(pokemones, tieneNombre);
+}
 //Setters
 void setNombreTo(PokemonEnElMapa* pokemon, String nombre) {
 	strcpy(pokemon->nombre, nombre);

@@ -10,7 +10,8 @@ static t_list* inicializarEntrenadoresHasta(int cantidad);
 static void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores);
-static t_list* getObjetivoDesde(Entrenador* entrenador);
+static t_list* getObjetivosDesde(Entrenador* entrenador);
+static t_list* list_adding_all(t_list* firstList, t_list* secondList);
 
 //si declaras aca arriba las funciones con un 'static' adelante, es la manera de hacerlas privadas. No alcanza solo con omitirlas en el ".h"
 
@@ -77,11 +78,17 @@ void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores) {
 	t_list* atrapados = list_map(crearListaConStringsDeConfig(stringPokemonesAtrapados), (erasedType)pokemonesDesdeString);
 
 	for(int index = 0; index < list_size(entrenadores); index++) {
-			Entrenador* entrenador = list_get(entrenadores, index);
-			t_list* atrapadosDelEntrenador = list_get(atrapados, index);
+		Entrenador* entrenador = list_get(entrenadores, index);
 
-			setPokemonesAtrapadosA(entrenador, atrapadosDelEntrenador);
+		t_list* atrapadosDelEntrenador = list_get(atrapados, index);
+
+		for(int index2 = 0; index2 < list_size(atrapadosDelEntrenador); index2 ++){
+			setPokemonAtrapadoA(entrenador, list_get(atrapadosDelEntrenador, index2));
 		}
+
+		//setPokemonesAtrapadosA(entrenador, objetivosDelEntrenador);
+
+	}
 
 	list_destroy(atrapados);
 	quickLog("Cargados los pokemones atrapados de los entrenadores");
@@ -91,17 +98,24 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 	typedef void*(*erasedType)(void*);
 
 	String* stringPokemonesObjetivos = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
+	//lista de estructuras de pokes objetivos
 	t_list* objetivos = list_map(crearListaConStringsDeConfig(stringPokemonesObjetivos), (erasedType)pokemonesDesdeString);
 
 	for(int index = 0; index < list_size(entrenadores); index++) {
-			Entrenador* entrenador = list_get(entrenadores, index);
-			t_list* objetivosDelEntrenador = list_get(objetivos, index);
+		Entrenador* entrenador = list_get(entrenadores, index);
 
-			setPokemonesObjetivosA(entrenador, objetivosDelEntrenador);
+		t_list* objetivosDelEntrenador = list_get(objetivos, index);
+
+		for(int index2 = 0; index2 < list_size(objetivosDelEntrenador); index2 ++){
+			setPokemonObjetivoA(entrenador, list_get(objetivosDelEntrenador, index2));
 		}
 
-	quickLog(string_from_format("%d", (((Entrenador*)list_get(entrenadores, 0))->posicion->posicionX)));
-	quickLog(string_from_format("%d", (((Entrenador*)list_get(entrenadores, 0))->posicion->posicionY)));
+		//setPokemonesObjetivosA(entrenador, objetivosDelEntrenador);
+
+		quickLog(string_from_format("Un entrenador tiene posX: %d", (((Entrenador*)list_get(entrenadores, 0))->posicion->posicionX)));
+		quickLog(string_from_format("Un entrenador tiene posY: %d", (((Entrenador*)list_get(entrenadores, 0))->posicion->posicionY)));
+
+	}
 
 	list_destroy(objetivos);
 	quickLog("Cargados los objetivos de los entrenadores");
@@ -110,35 +124,76 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 
 
 ///////OBJETIVOS////////
-t_list* list_adding_all(t_list* firstList, t_list* secondList){
-	list_add_all(firstList, secondList);
+//Esas listas son listas de pokes en el mapa
+t_list* unirPokemones(t_list* firstList, t_list* secondList){
+	for(int index=0;index < sizeof(secondList);index++){
+		PokemonEnElMapa* pokemon = list_get(secondList, index);
+
+		if(buscarPorNombre(pokemon->nombre, firstList) != NULL){
+			PokemonEnElMapa* pokemonPrimerLista = buscarPorNombre(pokemon->nombre, firstList);
+			PokemonEnElMapa* pokemonSegundaLista = buscarPorNombre(pokemon->nombre, secondList);
+			pokemonPrimerLista->cantidad += pokemonSegundaLista->cantidad;
+		}else{
+			list_add(firstList, pokemon);
+		}
+
+	}
 
 	return firstList;
 }
 
-t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
+t_list* getObjetivosTotalesDesde(t_list* entrenadores) {
 	typedef void*(*erasedTypeMap)(void*);
 	typedef void*(*erasedTypeFold)(void*, void*);
 
-	t_list* objetivosGlobales;
+	t_list* objetivosTotales;
 
 	//me devuelve una lista de listas de objetivos globales
-	objetivosGlobales = list_map(entrenadores, (erasedTypeMap)getObjetivoDesde);
+	objetivosTotales = list_map(entrenadores, (erasedTypeMap)getObjetivosDesde);
 
 	//listaFinal es la lista con todos los pokemons que se deben atrapar en total
-	t_list* listaFinal = list_create();
-	list_fold(objetivosGlobales, listaFinal, (erasedTypeFold)list_adding_all);
+	t_list* listaObjetivos = list_create();
+	list_fold(objetivosTotales, listaObjetivos, (erasedTypeFold)list_adding_all);
 
-	list_destroy(objetivosGlobales);
-	return listaFinal;
+	list_destroy(objetivosTotales);
+	return listaObjetivos;
+}
+
+t_list* getObjetivosAtrapadosDesde(t_list* entrenadores) {
+	typedef void*(*erasedTypeMap)(void*);
+	typedef void*(*erasedTypeFold)(void*, void*);
+
+	t_list* objetivosAtrapados;
+
+	//me devuelve una lista de listas de objetivos globales
+	objetivosAtrapados = list_map(entrenadores, (erasedTypeMap)getAtrapadosDesde);
+
+	//listaFinal es la lista con todos los pokemons que se deben atrapar en total
+	t_list* listaAtrapados = list_create();
+	list_fold(objetivosAtrapados, listaAtrapados, (erasedTypeFold)list_adding_all);
+
+	list_destroy(objetivosAtrapados);
+	return listaAtrapados;
+
+}
+
+t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
+	bool noEstaAtrapado(PokemonEnElMapa* pokemon) {
+
+	}
+	//diferencia entre la lista de objetivos totales y los atrapados
+	return list_filter(getObjetivosTotalesDesde(entrenadores), noEstaAtrapado);
 
 }
 
 
-t_list* getObjetivoDesde(Entrenador* entrenador) {
+t_list* getObjetivosDesde(Entrenador* entrenador) {
 	return entrenador->pokemonesObjetivos;
 }
 
+t_list* getAtrapadosDesde(Entrenador* entrenador) {
+	return entrenador->pokemonesAtrapados;
+}
 
 //TODO: el proceso Team debera conocer cuales (esto ya esta) y que cantidad de Pokemones de cada especie requiere en total para cumplir su objetivo global
 
