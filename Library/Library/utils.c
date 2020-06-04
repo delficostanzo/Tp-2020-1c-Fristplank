@@ -40,7 +40,7 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 	log_info(logger, "Mensaje copiado al stream");
 
 	*bytes = size_serializado;
-	log_info(logger, "Insercion del tamaño en bytes al uint32_t apuntado");
+	log_info(logger, "Insercion del tamaño en bytes al int apuntado");
 
 
 	return streamFinal;
@@ -82,6 +82,8 @@ void enviar(t_paquete* paquete, int socket_cliente)
 	log_info(logger, "Serializacion del paquete");
 
 	send(socket_cliente, mensajeAEnviar, size_serializado, 0);
+	log_info(logger, "Se envio el mensaje");
+
 
 	free(mensajeAEnviar);
 	free(paquete->buffer);
@@ -147,6 +149,7 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 	t_log* logger = iniciar_log();
 	//t_log* logger = iniciar_log("recibirmensaje");
 	t_paquete* paquete = malloc(sizeof(t_paquete));
+	paquete->buffer = malloc(sizeof(t_buffer));
 
 	//primero recibimos el codigo de operacion
 	//op_code operacion;
@@ -164,8 +167,8 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 	recv(socket_cliente, &(paquete->buffer->size), sizeof(int), 0);
 
 	//el recv de un stream muy grande puede cortarse
-	void* datos = recibirDatos(socket_cliente, paquete->buffer->size);
-	paquete->buffer->stream = datos;
+	//void* datos = recibirDatos(socket_cliente, paquete->buffer->size);
+	//paquete->buffer->stream = datos;
 	log_info(logger, "Recibimos el mensaje correspondiente");
 
 	return paquete;

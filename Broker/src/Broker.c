@@ -55,6 +55,12 @@ int main(void) {
 		break;
 	}
 
+	t_caught_pokemon* caughtPrueba = malloc(sizeof(t_caught_pokemon));
+	caughtPrueba->ok = 54; //FALSE
+
+	enviar_caught_pokemon(caughtPrueba, suscripcionCaught, 1, -1);
+
+
 	//loguear mensaje recibido
 	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
 

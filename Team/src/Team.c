@@ -15,7 +15,6 @@ int main(int argc, char *argv[]) {
 	t_config* config = leerConfigDesde("src/team.config");
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
 
-	quickLog("LLegamos hasta aca");
 	//	char** POSICONES_ENTRENADORES = config_get_array_value(config, "POSICONES_ENTRENADORES");
 	//	char** POKEMON_ENTRENADORES = config_get_array_value(config, "POKEMON_ENTRENADORES");
 	//	char** OBJETIVOS_ENTRENADORES = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
@@ -29,6 +28,7 @@ int main(int argc, char *argv[]) {
 	//	char* LOG_FILE =  config_get_string_value(config,"LOG_FILE");
 
 	int puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
+	quickLog("LLegamos hasta aca");
 
 	//conexionBroker = crear_conexion(IP_BROKER, PUERTO_BROKER);
 	conexionGameBoy = crearSocket();
@@ -70,17 +70,10 @@ int main(int argc, char *argv[]) {
 	}
 
 
-	pthread_t* hilosDeEntrenadores[list_size(entrenadores)];
-
 	//pasar de array a t_list
 
 	crearHilosDeEntrenadores(entrenadores);
 	quickLog("Se crea un hilo por cada entrenador");
-
-	while (true) {
-		quickLog("cualquier cosa");
-		sleep(3);
-	}
 
 	//casos de prueba para ver si funciona bien el mapa
 	PokemonEnElMapa* pokemonDePrueba = newPokemon();
@@ -102,6 +95,15 @@ int main(int argc, char *argv[]) {
 	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 0))->nombre);
 	quickLog("segundo objetivo de pokemones");
 	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 1))->nombre);
+
+	t_paquete* paquetePrueba = recibir_mensaje(suscripcionCaught);
+
+	//DESEREALIZAMOS
+	t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
+	if(recv(suscripcionCaught, &(caught_pokemon->ok), sizeof(uint32_t), 0) !=-1) {
+		quickLog("Se pudo recibir el puto mensaje");
+	}
+	log_info(logger, "El resultado del mensaje es: %d", caught_pokemon->ok);
 
 	// recibir mensaje
 	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
