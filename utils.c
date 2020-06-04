@@ -107,8 +107,8 @@ void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, uint32_t
 }
 
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
-	int sizeListaPosiciones = list_size(localized_pokemon->listaPosiciones)*sizeof(t_posicion);
-	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, localized_pokemon->lengthOfPokemon + sizeof(int)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
+	uint32_t sizeListaPosiciones = (localized_pokemon->cantidadPosiciones)*sizeof(t_posicion);
+	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
@@ -126,7 +126,6 @@ void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cl
 	t_paquete* paquete = crearPaqueteCon((void*) gameboy_suscribe, sizeof(op_code), Id, IdCorrelativo, GAMEBOYSUSCRIBE);
 	enviar(paquete, socket_cliente);
 }
-
 
 /* Retorna el mensaje completo: Header y Payload ya serializado
  *
@@ -230,14 +229,14 @@ void liberar_conexion(int socket_cliente) {
 	}
 }
 
-t_log* iniciar_log(void) {
-	t_log* logger;
-	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
-		printf("No pude crear el logger\n");
-		exit(1);
-	}
-	return logger;
-}
+//t_log* iniciar_log(void) {
+//	t_log* logger;
+//	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
+//		pruint32_tf("No pude crear el logger\n");
+//		exit(1);
+//	}
+//	return logger;
+//}
 
 t_log* iniciar_logger_modulo(char* nombreModulo) {
 	t_log* logger;
