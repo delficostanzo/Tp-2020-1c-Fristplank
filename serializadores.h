@@ -29,6 +29,6 @@ void serializar_caught_pokemon(void** streamAEnviar, int offset, void* streamPay
 void serializar_get_pokemon(void** streamAEnviar, int offset, void* streamPayload, int *bytes);
 void serializar_localized_pokemon(void** streamAEnviar, int offset, void* streamPayload, int *bytes);
 void serializar_respuesta_id(void** streamAEnviar, int offset, void* streamPayload, int *bytes);
-void serializar_gameboysuscribe(void** streamAEnviar, int offset, void* streamPayload, int *bytes);
+void serializar_gameboy_suscribe(void** streamAEnviar, int offset, void* streamPayload, int *bytes);
 
 #endif /* SERIALIZADORES_H_ */
