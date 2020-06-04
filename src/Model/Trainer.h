@@ -16,7 +16,7 @@ typedef struct {
 	t_list* pokemonesObjetivos;
 	t_list* pokemonesAtrapados;
 	ObjetivoEnExec objetivo;
-	pthread_t* hiloEntrenador;
+	pthread_t hiloEntrenador;
 	//pthread_mutex o contador, despues vemo
 }Entrenador;
 
