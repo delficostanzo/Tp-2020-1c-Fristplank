@@ -135,10 +135,8 @@ int main(int argc, char* argv[]) {
 	log_debug(logger, "Destruyendo config...");
 	config_destroy(config);
 
-	log_debug(logger, "Destruyendo loggers...");
+	log_debug(logger, "Destruyendo logger...");
 	log_destroy(logger);
-	log_destroy(loggerObligatorio);
-
 
 	return 0;
 }
