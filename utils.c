@@ -41,7 +41,7 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 		serializar_get_pokemon(&streamFinal, offset, paquete->buffer->stream, bytes);
 		break;
 	case LOCALIZED_POKEMON:
-		//TODO IMPLEMENTACION
+		serializar_localized_pokemon(&streamFinal, offset, paquete->buffer->stream, bytes);
 		break;
 	case RESPUESTA_ID:
 		serializar_respuesta_id(&streamFinal, offset, paquete->buffer->stream, bytes);
@@ -107,7 +107,7 @@ void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, uint32_t
 }
 
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
-	uint32_t sizeListaPosiciones = (localized_pokemon->cantidadPosiciones)*sizeof(t_posicion);
+	uint32_t sizeListaPosiciones = list_size(localized_pokemon->listaPosiciones);
 	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
@@ -196,8 +196,31 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 		paquete->buffer->stream = get_pokemon;
 		break;
 
-	case LOCALIZED_POKEMON:
-		//TODO IMPLEMENTACION
+	case LOCALIZED_POKEMON:;
+		t_localized_pokemon* localized_pokemon = malloc(sizeof(localized_pokemon));
+		recv(socket_cliente, &(localized_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
+		localized_pokemon->pokemon = malloc(localized_pokemon->lengthOfPokemon);
+		recv(socket_cliente, &(localized_pokemon->pokemon), localized_pokemon->lengthOfPokemon, 0);
+		recv(socket_cliente, &(localized_pokemon->cantidadPosiciones), sizeof(uint32_t), 0);
+
+		int lengthPosicionesEnTextoPlano = localized_pokemon->cantidadPosiciones * (sizeof(uint32_t)*2 + sizeof("-")*2) + 1;
+		char* posicionesEnTextoPlano = malloc(lengthPosicionesEnTextoPlano);
+		recv(socket_cliente, &posicionesEnTextoPlano, lengthPosicionesEnTextoPlano, 0);
+		char** listaPosicionesPlanas = string_split(posicionesEnTextoPlano, "-");
+
+		localized_pokemon->listaPosiciones = list_create();
+
+		for(int i = 0; i < (localized_pokemon->cantidadPosiciones * 2); i+=2){
+			t_posicion* posicion = malloc(sizeof(t_posicion));
+			posicion->posicionX = atoi(listaPosicionesPlanas[i]);
+			posicion->posicionY = atoi(listaPosicionesPlanas[i+1]);
+			list_add(localized_pokemon->listaPosiciones, posicion);
+			free(posicion);
+		}
+
+		free(posicionesEnTextoPlano);
+		free(listaPosicionesPlanas);
+		paquete->buffer->stream = localized_pokemon;
 		break;
 
 	case RESPUESTA_ID:;
