@@ -1,9 +1,3 @@
-/*
- * util.h
- *
- *
- *      Author: fritsplank
- */
 
 #ifndef UTILS_H_
 #define UTILS_H_
@@ -22,6 +16,7 @@
 #include<commons/string.h>
 
 #include"conexion.h"
+#include"serializadores.h"
 
 typedef enum
 {
@@ -32,7 +27,8 @@ typedef enum
 	GET_POKEMON = 5,
 	LOCALIZED_POKEMON = 6,
 	RESPUESTA_ID = 7,
-	ACK = 8
+	ACK = 8,
+	GAMEBOYSUSCRIBE = 9
 }op_code;
 
 typedef struct
@@ -89,6 +85,11 @@ typedef struct
 
 typedef struct
 {
+	op_code codigoCola;
+} t_gameboy_suscribe;
+
+typedef struct
+{
 	int size;
 	void* stream;
 } t_buffer;
@@ -100,8 +101,6 @@ typedef struct
 	uint32_t ID_CORRELATIVO;
 	t_buffer* buffer;
 } t_paquete;
-
-uint32_t crear_conexion(char* ip, char* puerto);
 
 void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
