@@ -28,10 +28,11 @@ char* PUERTO_GAMEBOY;
 
 t_log* logger;
 t_log* loggerObligatorio;
+t_config* config;
 
 t_log* iniciarLogger(void);
 t_log* iniciarLoggerObligatorio(void);
-void leer_config(t_log* logger);
+t_config* leer_config(void);
 void terminar_programa(int, t_log*, t_config*);
 
 void procesarBrokerGetPokemon(int socket, char* argv[]);
@@ -47,6 +48,8 @@ void procesarGameCardNewPokemon(int socket, char* argv[]);
 void procesarGameCardGetPokemon(int socket, char* argv[]);
 
 void procesarSubscribe(char* argv[]);
+
+int conectarAModulo(String PUERTO, String IP);
 
 void* escucharCola(void* colaAEscuchar);
 

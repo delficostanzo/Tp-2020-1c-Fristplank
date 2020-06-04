@@ -14,29 +14,50 @@ int main(int argc, char* argv[]) {
 	log_info(logger, "Logger creado.");
 	loggerObligatorio = iniciarLoggerObligatorio();
 	log_info(logger, "Logger obligatorio creado.");
-	leer_config(logger);
+	config = leer_config();
 
-//	DONE ./gameboy BROKER NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
-//	DONE ./gameboy BROKER APPEARED_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
-//	DONE ./gameboy BROKER CATCH_POKEMON [POKEMON] [POSX] [POSY]
-//	DONE ./gameboy BROKER CAUGHT_POKEMON [ID_MENSAJE] [OK/FAIL]
-//	DONE ./gameboy BROKER GET_POKEMON [POKEMON]
-//	DONE ./gameboy TEAM APPEARED_POKEMON [POKEMON] [POSX] [POSY]
-//  DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
-//	DONE ./gameboy GAMECARD CATCH_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
-//	DONE ./gameboy GAMECARD GET_POKEMON [POKEMON]
-//	./gameboy SUSCRIPTOR [COLA_DE_MENSAJES] [TIEMPO]
-//
+	//TODO CAMBIAR LOS ARGV[
+	//TODO CAMBIAR EL EJECUTABLE DE GAMEBOY
+/*	DONE ./gameboy BROKER NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
+ * ejemplo: ./GameBoy BROKER NEW_POKEMON "pikachu" 3 7 2
+ *
+ * DONE ./gameboy BROKER APPEARED_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
+ * ejemplo:
+ *
+ * DONE ./gameboy BROKER CATCH_POKEMON [POKEMON] [POSX] [POSY]
+ * ejemplo:
+ *
+ * DONE ./gameboy BROKER CAUGHT_POKEMON [ID_MENSAJE] [OK/FAIL]
+ * ejemplo:
+ *
+ * DONE ./gameboy BROKER GET_POKEMON [POKEMON]
+ * ejemplo:
+ *
+ * DONE ./gameboy TEAM APPEARED_POKEMON [POKEMON] [POSX] [POSY]
+ * ejemplo:
+ *
+ * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
+ * ejemplo:
+ *
+ * DONE ./gameboy GAMECARD CATCH_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
+ * ejemplo:
+ *
+ * DONE ./gameboy GAMECARD GET_POKEMON [POKEMON]
+ * ejemplo:
+ *
+ * DONE ./gameboy SUSCRIPTOR [COLA_DE_MENSAJES] [TIEMPO] TODO TEMA TIEMPO
+ * ejemplo:
+*/
 
 	int socket;
 
-	if (strcmp(argv[1], "BROKER") == 0){ //MENSAJES AL BROKER
+	//MENSAJES AL BROKER
+	if (strcmp(argv[1], "BROKER") == 0){
 
-		socket = crear_conexion(IP_BROKER, PUERTO_BROKER);
-		log_debug(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_BROKER, PUERTO_BROKER);
+		socket = conectarAModulo(PUERTO_BROKER, IP_BROKER);
+		log_info(logger, "Conexión hecha a IP %s | Puerto %s", IP_BROKER, PUERTO_BROKER);
 
 		if (strcmp(argv[2], "NEW_POKEMON") == 0){
-
 			procesarBrokerNewPokemon(socket, argv);
 		}
 		else if (strcmp(argv[2], "APPEARED_POKEMON") == 0){
@@ -59,11 +80,13 @@ int main(int argc, char* argv[]) {
 			puts(argv[2]);
 			log_info(logger, "Tipo de mensaje incorrecto.");
 		}
-
 	}
-	else if (strcmp(argv[1], "TEAM") == 0){ //MENSAJES AL TEAM
-		socket = crear_conexion(IP_TEAM, PUERTO_TEAM);
-		log_debug(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_TEAM, PUERTO_TEAM);
+
+	//MENSAJES AL TEAM
+	else if (strcmp(argv[1], "TEAM") == 0){
+
+		socket = conectarAModulo(PUERTO_TEAM, IP_TEAM);
+		log_info(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_TEAM, PUERTO_TEAM);
 
 		if (strcmp(argv[2], "APPEARED_POKEMON") == 0){
 			procesarTeamAppearedPokemon(socket, argv);
@@ -73,10 +96,12 @@ int main(int argc, char* argv[]) {
 			log_info(logger, "Tipo de mensaje incorrecto.");
 		}
 	}
-	else if (strcmp(argv[1], "GAMECARD") == 0){ //MENSAJES AL GAMECARD
 
-		socket = crear_conexion(IP_GAMECARD, PUERTO_GAMECARD);
-		log_debug(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_GAMECARD, PUERTO_GAMECARD);
+	//MENSAJES AL GAMECARD
+	else if (strcmp(argv[1], "GAMECARD") == 0){
+
+		socket = conectarAModulo(PUERTO_GAMECARD, IP_GAMECARD);
+		log_info(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_GAMECARD, PUERTO_GAMECARD);
 
 		if (strcmp(argv[2], "NEW_POKEMON") == 0){
 			procesarGameCardNewPokemon(socket, argv);
@@ -92,9 +117,9 @@ int main(int argc, char* argv[]) {
 		}
 
 	}
-	else if (strcmp(argv[1], "SUSCRIPTOR") == 0){ //MENSAJES PARA SUSCBRIBIRSE AL BROKER POR X SEGUNDOS
-//		socket = crear_conexion(IP_BROKER, PUERTO_BROKER);
-		log_debug(loggerObligatorio, "Conexión hecha a IP %s | Puerto %s", IP_BROKER, PUERTO_BROKER);
+
+	//MENSAJES PARA SUSCBRIBIRSE AL BROKER POR X SEGUNDOS
+	else if (strcmp(argv[1], "SUSCRIPTOR") == 0){
 
 		procesarSubscribe(argv);
 	}
@@ -103,9 +128,21 @@ int main(int argc, char* argv[]) {
 		log_info(logger, "Proceso incorrecto.");
 	}
 
-	liberar_conexion(socket);
+
+	log_info(logger, "Preparando para terminar programa...");
+
+	log_info(logger, "Liberando conexion...");
+	close(socket);
+
+	log_info(logger, "Destruyendo config...");
+	config_destroy(config);
+
+	log_info(logger, "Destruyendo loggers...");
 	log_destroy(logger);
 	log_destroy(loggerObligatorio);
+
+
+	return 0;
 }
 
 void procesarSubscribe(char* argv[]){
@@ -131,10 +168,8 @@ void procesarSubscribe(char* argv[]){
 		cola = LOCALIZED_POKEMON;
 	}
 
-	int segundosAEscuchar = (int) argv[3];
-
-
 	//TODO ver como hacer para que termine despues de segundosAEscuchar
+	int segundosAEscuchar = (int) argv[3];
 
 	//Iniciar thread de escucha
 	pthread_t threadEscucha;
@@ -146,17 +181,7 @@ void procesarSubscribe(char* argv[]){
 void* escucharCola(void* colaAEscuchar){
 	op_code cola = (op_code) colaAEscuchar;
 
-	// CONEXION A BROKER
-	int conexionBroker = crearSocket();
-
-	int puertoBrokerInt = atoi(PUERTO_BROKER);
-	if(conectarA(conexionBroker, IP_BROKER, puertoBrokerInt)){
-		log_info(logger, "Conectando al Broker");
-	}
-
-	id_proceso idProcesoBroker;
-	idProcesoBroker = responderHandshake(conexionBroker, GAMEBOY);
-	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoBroker);
+	int conexionBroker = conectarAModulo(PUERTO_BROKER, IP_BROKER);
 
 	t_gameboy_suscribe* gameboysuscribe = malloc(sizeof(t_gameboy_suscribe));
 	gameboysuscribe->codigoCola = cola;
@@ -173,38 +198,32 @@ void* escucharCola(void* colaAEscuchar){
 
 		//TODO ACA HAY QUE LEER LO QUE NOS LLEGA
 	}
-
-	// END CONEXION A BROKER
-
+	liberar_conexion(conexionBroker);
 	return NULL;
 }
 
 void procesarBrokerNewPokemon(int socket, char* argv[]){
-	log_debug(logger, "Mensaje a enviar a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], (int) argv[4], (int) argv[5], (int) argv[6]);
 
-	char* pokemon = (char*)argv[3];
-	int posX = (int) argv[4];
-	int posY = (int) argv[5];
-	int cant = (int) argv[6];
+	log_info(logger, "Comienza procesarBrokerNewPokemon");
+	log_info(logger, "Mensaje a enviar a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
-	new_pokemon->pokemon = pokemon;
-	new_pokemon->lengthOfPokemon = strlen(pokemon + 1);
-	new_pokemon->cantidad = cant;
+	new_pokemon->pokemon = argv[3];
+	new_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	new_pokemon->cantidad = atoi(argv[6]);
 	new_pokemon->posicion = malloc(sizeof(t_posicion));
-	new_pokemon->posicion->posicionX = posX;
-	new_pokemon->posicion->posicionX = posY;
+	new_pokemon->posicion->posicionX = atoi(argv[4]);
+	new_pokemon->posicion->posicionY = atoi(argv[5]);
 
-	//TODO ENVIAR MENSAJE CON NUEVA LIBRARY
-//	enviar_new_pokemon(new_pokemon, socket, -1, -1);
-//	log_debug(loggerObligatorio, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", new_pokemon->pokemon, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
+	enviar_new_pokemon(new_pokemon, socket, -1, -1);
+	log_info(loggerObligatorio, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", new_pokemon->pokemon, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
 
-	free(new_pokemon->posicion);
-	free(new_pokemon);
+	log_info(logger, "Termina procesarBrokerNewPokemon");
+
 }
 
 void procesarGameCardNewPokemon(int socket, char* argv[]){
-	log_debug(logger, "Mensaje a enviar a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], (int) argv[4], (int) argv[5], (int) argv[6]);
+	log_info(logger, "Mensaje a enviar a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], (int) argv[4], (int) argv[5], (int) argv[6]);
 
 	char* pokemon = (char*)argv[3];
 	int posX = (int) argv[4];
@@ -220,9 +239,8 @@ void procesarGameCardNewPokemon(int socket, char* argv[]){
 	new_pokemon->posicion->posicionX = posX;
 	new_pokemon->posicion->posicionX = posY;
 
-	//TODO ENVIAR MENSAJE CON NUEVA LIBRARY
-//	enviar_new_pokemon(new_pokemon, socket, id, -1);
-//	log_debug(loggerObligatorio, "Mensaje enviado a GameCard | ID del Mensaje: %d | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", id, new_pokemon->pokemon, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
+	enviar_new_pokemon(new_pokemon, socket, id, -1);
+	log_info(loggerObligatorio, "Mensaje enviado a GameCard | ID del Mensaje: %d | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", id, new_pokemon->pokemon, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
 
 	free(new_pokemon->posicion);
 	free(new_pokemon);
@@ -237,9 +255,9 @@ void procesarGameCardGetPokemon(int socket, char* argv[]){
 	get_pokemon->lengthOfPokemon = strlen(pokemon + 1);
 	get_pokemon->pokemon = pokemon;
 
-	//TODO ENVIAR MENSAJE CON NUEVA LIBRARY
-//	enviar_get_pokemon(get_pokemon, socket, id, -1);
-//	log_debug(loggerObligatorio, "Mensaje enviado a GameCard | ID del Mensaje: %d | Pokemon: %s", id, get_pokemon->pokemon);
+
+	enviar_get_pokemon(get_pokemon, socket, id, -1);
+	log_info(loggerObligatorio, "Mensaje enviado a GameCard | ID del Mensaje: %d | Pokemon: %s", id, get_pokemon->pokemon);
 
 	free(get_pokemon);
 }
@@ -251,9 +269,9 @@ void procesarBrokerGetPokemon(int socket, char* argv[]){
 	get_pokemon->lengthOfPokemon = strlen(pokemon + 1);
 	get_pokemon->pokemon = pokemon;
 
-	//TODO ENVIAR MENSAJE CON NUEVA LIBRARY
-//	enviar_get_pokemon(get_pokemon, socket, -1, -1);
-//	log_debug(loggerObligatorio, "Mensaje enviado a GameCard | Pokemon: %s", get_pokemon->pokemon);
+
+	enviar_get_pokemon(get_pokemon, socket, -1, -1);
+	log_info(loggerObligatorio, "Mensaje enviado a GameCard | Pokemon: %s", get_pokemon->pokemon);
 
 	free(get_pokemon);
 }
@@ -270,9 +288,8 @@ void procesarBrokerAppearedPokemon(int socket, char* argv[]){
 	appeared_pokemon->posicion->posicionX = posX;
 	appeared_pokemon->posicion->posicionX = posY;
 
-	//TODO ENVIAR MENSAJE CON NUEVA LIBRARY
-//	enviar_appeared_pokemon(appeared_pokemon, socket, -1, idCorrelativo);
-//	log_debug(loggerObligatorio, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d | ID Correlativo del Mensaje: %d", appeared_pokemon->pokemon, appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY, idCorrelativo);
+	enviar_appeared_pokemon(appeared_pokemon, socket, -1, idCorrelativo);
+	log_info(loggerObligatorio, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d | ID Correlativo del Mensaje: %d", appeared_pokemon->pokemon, appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY, idCorrelativo);
 
 	free(appeared_pokemon->posicion);
 	free(appeared_pokemon);
@@ -289,9 +306,8 @@ void procesarBrokerCatchPokemon(int socket, char* argv[]){
 	catch_pokemon->posicion->posicionX = posX;
 	catch_pokemon->posicion->posicionX = posY;
 
-	//TODO ENVIAR MENSAJE CON NUEVA LIBRARY
-//	enviar_catch_pokemon(catch_pokemon, socket, -1, -1);
-//	log_debug(loggerObligatorio, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d", catch_pokemon->pokemon, catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
+	enviar_catch_pokemon(catch_pokemon, socket, -1, -1);
+	log_info(loggerObligatorio, "Mensaje enviado a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d", catch_pokemon->pokemon, catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
 
 	free(catch_pokemon->posicion);
 	free(catch_pokemon);
@@ -304,9 +320,8 @@ void procesarBrokerCaughtPokemon(int socket, char* argv[]){
 	t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
 	caught_pokemon->ok = ok;
 
-	//TODO ENVIAR MENSAJE CON NUEVA LIBRARY
-//	enviar_caught_pokemon(caught_pokemon, socket, -1, idCorrelativo);
-//	log_debug(loggerObligatorio, "Mensaje enviado a Broker | ID Correlativo del Mensaje: %d - Bool enviado: %d", idCorrelativo, caught_pokemon->ok);
+	enviar_caught_pokemon(caught_pokemon, socket, -1, idCorrelativo);
+	log_info(loggerObligatorio, "Mensaje enviado a Broker | ID Correlativo del Mensaje: %d - Bool enviado: %d", idCorrelativo, caught_pokemon->ok);
 
 	free(caught_pokemon);
 }
@@ -322,9 +337,8 @@ void procesarTeamAppearedPokemon(int socket, char* argv[]){
 	appeared_pokemon->posicion->posicionX = posX;
 	appeared_pokemon->posicion->posicionX = posY;
 
-	//TODO ENVIAR MENSAJE CON NUEVA LIBRARY
-//	enviar_appeared_pokemon(appeared_pokemon, socket, -1, -1);
-//	log_debug(loggerObligatorio, "Mensaje enviado a Team | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared_pokemon->pokemon, appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY);
+	enviar_appeared_pokemon(appeared_pokemon, socket, -1, -1);
+	log_info(loggerObligatorio, "Mensaje enviado a Team | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared_pokemon->pokemon, appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY);
 
 	free(appeared_pokemon->posicion);
 	free(appeared_pokemon);
@@ -342,18 +356,37 @@ void procesarGameCardCatchPokemon(int socket, char* argv[]){
 	catch_pokemon->posicion->posicionX = posX;
 	catch_pokemon->posicion->posicionX = posY;
 
-	//TODO ENVIAR MENSAJE CON NUEVA LIBRARY
-//	enviar_catch_pokemon(catch_pokemon, socket, ID, -1);
-//	log_debug(loggerObligatorio, "Mensaje enviado a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d | ID del Mensaje: %d", catch_pokemon->pokemon, catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY, ID);
+	enviar_catch_pokemon(catch_pokemon, socket, ID, -1);
+	log_info(loggerObligatorio, "Mensaje enviado a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d | ID del Mensaje: %d", catch_pokemon->pokemon, catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY, ID);
 
 	free(catch_pokemon->posicion);
 	free(catch_pokemon);
 }
 
 
-void leer_config(t_log* logger)
+
+/* OBJETIVO Conecta al módulo que sea y realiza el Handshake
+ * PARAMETROS Precisa del Puerto y el IP en formato String
+ * RETORNA socket
+ */
+int conectarAModulo(String PUERTO, String IP){
+	int conexion = crearSocket();
+
+	int puertoInt = atoi(PUERTO);
+	if(conectarA(conexion, IP, puertoInt)){
+		log_info(logger, "Conectando al módulo...");
+	}
+
+	id_proceso idProceso;
+	idProceso = responderHandshake(conexion, GAMEBOY);
+	log_info(logger, "El id del proceso con el que me conecte es: %d", idProceso);
+
+	return conexion;
+}
+
+t_config* leer_config(void)
 {
-	t_config* config = config_create("./gameboy.config"); //
+	t_config* config = config_create("./gameboy.config");
 
 	if(config == NULL){
 		printf("No pude leer la config \n");
@@ -376,6 +409,8 @@ void leer_config(t_log* logger)
 	log_info(logger, "CONFIG FILE -> Puerto Team: %s", PUERTO_TEAM);
 	log_info(logger, "CONFIG FILE -> IP GameCard: %s", IP_GAMECARD);
 	log_info(logger, "CONFIG FILE -> Puerto GameCard: %s", PUERTO_GAMECARD);
+
+	return config;
 }
 
 t_log* iniciarLoggerObligatorio(void){
