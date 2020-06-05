@@ -1,7 +1,5 @@
 
 #include "EntrenadoresInit.h"
-#include "../Model/Trainer.h"
-#include "ConfigFunctions.h"
 
 
 t_config* leerConfigDesde(String nombreDeArchivo);
@@ -11,6 +9,7 @@ static void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenado
 static void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores);
 static t_list* getObjetivosDesde(Entrenador* entrenador);
+static t_list* getAtrapadosDesde(Entrenador* entrenador);
 static t_list* unirPokemones(t_list* primerosPokes, t_list* segundosPokes);
 
 //si declaras aca arriba las funciones con un 'static' adelante, es la manera de hacerlas privadas. No alcanza solo con omitirlas en el ".h"
@@ -28,8 +27,8 @@ t_list* getEntrenadoresDesde(String nombreDeArchivo) {
 	log_info(logger, string_from_format("Cantidad de entrenadores: %d", cantidadEntrenadores));
 	entrenadores = inicializarEntrenadoresHasta(cantidadEntrenadores); //aca inicializamos tantos entrenadores como haya
 
-	//aca delego lo de setear posiciones dentro de los entrenadores
 	setPosicionesEnEntrenadoresDesde(configEntrenador, entrenadores);
+	//
 	setPokemonesObjetivosDesde(configEntrenador, entrenadores);
 	setPokemonesAtrapadosDesde(configEntrenador, entrenadores);
 
@@ -98,16 +97,21 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 	typedef void*(*erasedType)(void*);
 
 	String* stringPokemonesObjetivos = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
-	//lista de estructuras de pokes objetivos
+	//lista de listas de estructuras de pokes objetivos (solo tienen el nombre)
 	t_list* objetivos = list_map(crearListaConStringsDeConfig(stringPokemonesObjetivos), (erasedType)pokemonesDesdeString);
 
 	for(int index = 0; index < list_size(entrenadores); index++) {
 		Entrenador* entrenador = list_get(entrenadores, index);
 
+		//lista de pokemones objetivos de cada entrenador
+
 		t_list* objetivosDelEntrenador = list_get(objetivos, index);
 
-		for(int index2 = 0; index2 < list_size(objetivosDelEntrenador); index2 ++){
-			setPokemonObjetivoA(entrenador, list_get(objetivosDelEntrenador, index2));
+		for(int index2 = 0; index2 < list_size(objetivosDelEntrenador); index2++){
+			PokemonEnElMapa* objetivoDelEntrenador =  list_get(objetivosDelEntrenador, index2);
+			quickLog("Llega hasta aca"); //ROMPE EN LIST_FIND_ELEMENT??
+			setPokemonObjetivoA(entrenador, objetivoDelEntrenador);
+			quickLog("Aca no llega");
 		}
 
 		//setPokemonesObjetivosA(entrenador, objetivosDelEntrenador);
@@ -143,7 +147,7 @@ t_list* getObjetivosTotalesDesde(t_list* entrenadores) {
 	return listaObjetivos;
 }
 
-t_list* getObjetivosAtrapadosDesde(t_list* entrenadores) {
+t_list* getTotalAtrapadosDesde(t_list* entrenadores) {
 	typedef void*(*erasedTypeMap)(void*);
 	typedef void*(*erasedTypeFold)(void*, void*);
 
@@ -164,18 +168,21 @@ t_list* getObjetivosAtrapadosDesde(t_list* entrenadores) {
 // devuelve una lista de los pokemones objetivos disminuyendo la cantidad, si esta atrapado
 // Si hay un pokemon que ya se atrapo, te va a devolver que ese objetivo es cantidad 0
 t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
+	typedef void*(*erasedTypeMap)(void*);
 
 	PokemonEnElMapa* restarCantidadQueFalta(PokemonEnElMapa* pokemonRestado) {
-		bool esIgualAPokemon(PokemonEnElMapa* pokemonARestar){
-			return pokemonRestado == pokemonARestar;
+		typedef bool(*erasedTypeMap)(void*);
+
+		bool esLaMismaEspecie(PokemonEnElMapa* pokemonARestar){
+			return pokemonRestado->nombre == pokemonARestar->nombre;
 		}
-		PokemonEnElMapa* pokemonAtrapado = list_find(getObjetivosAtrapadosDesde(entrenadores), esIgualAPokemon);
+		PokemonEnElMapa* pokemonAtrapado = list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeMap)esLaMismaEspecie);
 		pokemonRestado->cantidad -= pokemonAtrapado->cantidad;
 		return pokemonRestado;
 
 	}
 	//diferencia entre la lista de objetivos totales y los atrapados
-	return list_map(getObjetivosTotalesDesde(entrenadores), restarCantidadQueFalta);
+	return list_map(getObjetivosTotalesDesde(entrenadores), (erasedTypeMap)restarCantidadQueFalta);
 
 
 }

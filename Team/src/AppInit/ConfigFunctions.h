@@ -13,10 +13,9 @@
 #include<commons/config.h>
 #include"../Model/Pokemon.h"
 #include"../Model/Trainer.h"
+#include"LogFunctions.h"
 
 t_config* leerConfigDesde(String nombreDeArchivo);
-void quickLog(String mensaje);
-t_log* iniciar_logger(void);
 t_list* crearListaConStringsDeConfig(String* strings);
 t_posicion* posicionDesde(String stringDePosicion);
 t_list* pokemonesDesdeString(String nombrePokemons);

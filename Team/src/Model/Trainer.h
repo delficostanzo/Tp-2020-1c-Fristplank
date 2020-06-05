@@ -3,7 +3,8 @@
 #define SRC_MODEL_TRAINER_H_
 
 #include "utils.h"
-#include "../AppInit/ConfigFunctions.h"
+#include "../AppInit/LogFunctions.h"
+#include "Pokemon.h"
 
 typedef enum{
 	MOVER = 1,
@@ -22,7 +23,7 @@ typedef struct {
 
 Entrenador* newEntrenador();
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
-void setPokemonObjetivoA(Entrenador* entrenador, PokemonEnElMapa* pokemon);
+void setPokemonObjetivoA(Entrenador* entrenador, PokemonEnElMapa* nuevoObjetivo);
 void setPokemonAtrapadoA(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 t_posicion* newPosicion();
 

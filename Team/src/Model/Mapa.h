@@ -9,9 +9,8 @@
 #define SRC_MODEL_MAPA_H_
 
 #include "utils.h"
-#include "Trainer.h"
-#include "Pokemon.h"
 #include "../AppInit/ConfigFunctions.h"
+#include "Trainer.h"
 
 //
 //typedef struct {
