@@ -11,7 +11,7 @@ static void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenado
 static void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores);
 static t_list* getObjetivosDesde(Entrenador* entrenador);
-static t_list* list_adding_all(t_list* firstList, t_list* secondList);
+static t_list* unirPokemones(t_list* primerosPokes, t_list* segundosPokes);
 
 //si declaras aca arriba las funciones con un 'static' adelante, es la manera de hacerlas privadas. No alcanza solo con omitirlas en el ".h"
 
@@ -125,22 +125,6 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 
 ///////OBJETIVOS////////
 //Esas listas son listas de pokes en el mapa
-t_list* unirPokemones(t_list* firstList, t_list* secondList){
-	for(int index=0;index < sizeof(secondList);index++){
-		PokemonEnElMapa* pokemon = list_get(secondList, index);
-
-		if(buscarPorNombre(pokemon->nombre, firstList) != NULL){
-			PokemonEnElMapa* pokemonPrimerLista = buscarPorNombre(pokemon->nombre, firstList);
-			PokemonEnElMapa* pokemonSegundaLista = buscarPorNombre(pokemon->nombre, secondList);
-			pokemonPrimerLista->cantidad += pokemonSegundaLista->cantidad;
-		}else{
-			list_add(firstList, pokemon);
-		}
-
-	}
-
-	return firstList;
-}
 
 t_list* getObjetivosTotalesDesde(t_list* entrenadores) {
 	typedef void*(*erasedTypeMap)(void*);
@@ -153,7 +137,7 @@ t_list* getObjetivosTotalesDesde(t_list* entrenadores) {
 
 	//listaFinal es la lista con todos los pokemons que se deben atrapar en total
 	t_list* listaObjetivos = list_create();
-	list_fold(objetivosTotales, listaObjetivos, (erasedTypeFold)list_adding_all);
+	list_fold(objetivosTotales, listaObjetivos, (erasedTypeFold)unirPokemones);
 
 	list_destroy(objetivosTotales);
 	return listaObjetivos;
@@ -170,21 +154,32 @@ t_list* getObjetivosAtrapadosDesde(t_list* entrenadores) {
 
 	//listaFinal es la lista con todos los pokemons que se deben atrapar en total
 	t_list* listaAtrapados = list_create();
-	list_fold(objetivosAtrapados, listaAtrapados, (erasedTypeFold)list_adding_all);
+	list_fold(objetivosAtrapados, listaAtrapados, (erasedTypeFold)unirPokemones);
 
 	list_destroy(objetivosAtrapados);
 	return listaAtrapados;
 
 }
 
+// devuelve una lista de los pokemones objetivos disminuyendo la cantidad, si esta atrapado
+// Si hay un pokemon que ya se atrapo, te va a devolver que ese objetivo es cantidad 0
 t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
-	bool noEstaAtrapado(PokemonEnElMapa* pokemon) {
+
+	PokemonEnElMapa* restarCantidadQueFalta(PokemonEnElMapa* pokemonRestado) {
+		bool esIgualAPokemon(PokemonEnElMapa* pokemonARestar){
+			return pokemonRestado == pokemonARestar;
+		}
+		PokemonEnElMapa* pokemonAtrapado = list_find(getObjetivosAtrapadosDesde(entrenadores), esIgualAPokemon);
+		pokemonRestado->cantidad -= pokemonAtrapado->cantidad;
+		return pokemonRestado;
 
 	}
 	//diferencia entre la lista de objetivos totales y los atrapados
-	return list_filter(getObjetivosTotalesDesde(entrenadores), noEstaAtrapado);
+	return list_map(getObjetivosTotalesDesde(entrenadores), restarCantidadQueFalta);
+
 
 }
+
 
 
 t_list* getObjetivosDesde(Entrenador* entrenador) {
@@ -195,26 +190,19 @@ t_list* getAtrapadosDesde(Entrenador* entrenador) {
 	return entrenador->pokemonesAtrapados;
 }
 
-//TODO: el proceso Team debera conocer cuales (esto ya esta) y que cantidad de Pokemones de cada especie requiere en total para cumplir su objetivo global
+t_list* unirPokemones(t_list* primerosPokes, t_list* segundosPokes){
+	for(int index=0;index < sizeof(segundosPokes);index++){
+		PokemonEnElMapa* pokemon = list_get(segundosPokes, index);
 
-// necesita saber el proceso Team que especies y la cantidad de cada especie que necesita en total
-// Ej: Pikachu necesita 4, Squirtle necesita 2, Delfina necesita 9, Victoria necesita 8
+		if(buscarPorNombre(pokemon->nombre, primerosPokes) != NULL){
+			PokemonEnElMapa* pokemonPrimerLista = buscarPorNombre(pokemon->nombre, primerosPokes);
+			PokemonEnElMapa* pokemonSegundaLista = buscarPorNombre(pokemon->nombre, segundosPokes);
+			pokemonPrimerLista->cantidad += pokemonSegundaLista->cantidad;
+		}else{
+			list_add(primerosPokes, pokemon);
+		}
 
-// ordeno la lista de objetivos por especie, asi te queda ej: [Pikachu, Pikachu, Delfina, Delfina, Delfina, Victoria]
-//t_list* especiesDePokemonsQueHayQueAtraparOrdenados(t_list* objetivosGlobales){
-//	typedef bool(*erasedTypeSort)(void*, void*);
-//
-//	bool tipoDeEspecieSegunElNombre(PokemonEnElMapa* pokemon1, PokemonEnElMapa* pokemon2){
-//		String nombrePokemon1 = pokemon1->nombre;
-//		String nombrePokemon2 = pokemon2->nombre;
-//
-//		return nombrePokemon1 == nombrePokemon2;
-//	}
-//	// ordeno la lista de objetivos segun la especie
-//	t_list* objetivosOrdenadosPorEspecie = list_sorted(objetivosGlobales, (erasedTypeSort)tipoDeEspecieSegunElNombre);
-//
-//	return objetivosOrdenadosPorEspecie;
-//}
-//
-//
+	}
 
+	return primerosPokes;
+}
