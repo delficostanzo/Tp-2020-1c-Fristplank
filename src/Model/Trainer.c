@@ -14,22 +14,24 @@ void setPosicionA(Entrenador* entrenador, t_posicion* posicion) {
 //	entrenador->pokemonesObjetivos = pokemones;
 //}
 
-void setPokemonObjetivoA(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
+void setPokemonObjetivoA(Entrenador* entrenador, PokemonEnElMapa* nuevoObjetivo) {
+	typedef bool(*erasedType)(void*);
+
 	bool tieneElMismoNombre(PokemonEnElMapa* pokemonEntrenador){
-		return pokemonEntrenador == pokemon;
+		return pokemonEntrenador->nombre == nuevoObjetivo->nombre;
 	}
 
 	t_list* objetivosDelEntrenador = entrenador->pokemonesObjetivos;
-	//YA HAY UNO DE ESOS POKES EN SU LISTA DE OBJETIVOS
-	if(buscarPorNombre(pokemon->nombre, objetivosDelEntrenador) != NULL){
+	//YA HAY UNO DE ESA ESPECIE EN SU LISTA DE OBJETIVOS
+	if(buscarPorNombre(nuevoObjetivo->nombre, objetivosDelEntrenador) != NULL){
 		//le aumento la cantidad
-		PokemonEnElMapa* pokemonASumar = list_find(objetivosDelEntrenador, tieneElMismoNombre);
+		PokemonEnElMapa* pokemonASumar = list_find(objetivosDelEntrenador, (erasedType)tieneElMismoNombre);
 		pokemonASumar->cantidad += 1;
 	}
 	else {
 		//lo agrego con cantidad 1
-		pokemon->cantidad = 1;
-		list_add(objetivosDelEntrenador, pokemon);
+		nuevoObjetivo->cantidad = 1;
+		list_add(objetivosDelEntrenador, nuevoObjetivo);
 	}
 }
 
@@ -38,15 +40,17 @@ void setPokemonObjetivoA(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 //}
 
 void setPokemonAtrapadoA(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
+	typedef bool(*erasedType)(void*);
+
 	bool tieneElMismoNombre(PokemonEnElMapa* pokemonEntrenador){
-		return pokemonEntrenador == pokemon;
+		return pokemonEntrenador->nombre == pokemon->nombre;
 	}
 
 	t_list* atrapadosDelEntrenador = entrenador->pokemonesObjetivos;
 	//YA HAY UNO DE ESOS POKES EN SU LISTA DE ATRAPADOS
 	if(buscarPorNombre(pokemon->nombre, atrapadosDelEntrenador) != NULL){
 		//le aumento la cantidad
-		PokemonEnElMapa* pokemonASumar = list_find(atrapadosDelEntrenador, tieneElMismoNombre);
+		PokemonEnElMapa* pokemonASumar = list_find(atrapadosDelEntrenador, (erasedType)tieneElMismoNombre);
 		pokemonASumar->cantidad += 1;
 	}
 	else {

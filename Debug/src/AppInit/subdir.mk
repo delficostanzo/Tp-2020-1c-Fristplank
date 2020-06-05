@@ -7,18 +7,21 @@ C_SRCS += \
 ../src/AppInit/ConfigFunctions.c \
 ../src/AppInit/EntrenadoresInit.c \
 ../src/AppInit/HilosEntrenadores.c \
+../src/AppInit/LogFunctions.c \
 ../src/AppInit/Planificador.c 
 
 OBJS += \
 ./src/AppInit/ConfigFunctions.o \
 ./src/AppInit/EntrenadoresInit.o \
 ./src/AppInit/HilosEntrenadores.o \
+./src/AppInit/LogFunctions.o \
 ./src/AppInit/Planificador.o 
 
 C_DEPS += \
 ./src/AppInit/ConfigFunctions.d \
 ./src/AppInit/EntrenadoresInit.d \
 ./src/AppInit/HilosEntrenadores.d \
+./src/AppInit/LogFunctions.d \
 ./src/AppInit/Planificador.d 
 
 

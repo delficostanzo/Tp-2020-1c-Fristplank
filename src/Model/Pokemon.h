@@ -9,8 +9,7 @@
 #define SRC_MODEL_POKEMON_H_
 
 #include "utils.h"
-#include "../AppInit/ConfigFunctions.h"
-
+#include "../AppInit/LogFunctions.h"
 
 typedef struct {
 	String nombre;

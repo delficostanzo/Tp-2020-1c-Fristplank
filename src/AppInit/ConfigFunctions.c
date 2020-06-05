@@ -28,25 +28,6 @@ t_config* leerConfigDesde(String nombreDeArchivo) {
 	return config;
 }
 
-//LOGS
-void quickLog(String mensaje) {
-	//t_log* logger = iniciar_log("team");
-	t_log* logger = iniciar_logger();
-	log_info(logger, mensaje);
-	log_destroy(logger);
-}
-
-t_log* iniciar_logger(void) {
-	t_log * log = malloc(sizeof(t_log));
-	log = log_create("team.log", "TEAM", 1, 0);
-	if (log == NULL) {
-		printf("No pude crear el logger \n");
-		exit(1);
-	}
-	return log;
-}
-///////
-
 //con esto transformas la lista de strings que te viene del config en una t_list*
 t_list* crearListaConStringsDeConfig(String* strings) {
 	t_list* lista = list_create();
@@ -81,6 +62,7 @@ t_posicion* posicionDesde(String stringDePosicion) {
 }
 
 //recibe cada conjunto de pokemones de cada entrenador separados por |
+//DEVUELVE UNA LISTA DE ESTRUCTURAS DE POKEMONES
 t_list* pokemonesDesdeString(String stringDePokemones) {
 	typedef void*(*erasedType)(void*);
 
@@ -95,12 +77,12 @@ t_list* pokemonesDesdeString(String stringDePokemones) {
 	return pokemones;
 }
 
-// te retorna un pokemon en el mapa
+// recibiendo un string con el nombre del pokemon te retorna una estructura de pokemon en el mapa
 PokemonEnElMapa* pokemonDesde(String nombrePokemon){
 	PokemonEnElMapa* pokemon = newPokemon();
 
 	pokemon->nombre = nombrePokemon;
-
+	//(*pokemon) = { .nombre = nombrePokemon, .posicion = NULL, .cantidad = 0 }
 	return pokemon;
 }
 
