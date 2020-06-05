@@ -97,19 +97,21 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 	typedef void*(*erasedType)(void*);
 
 	String* stringPokemonesObjetivos = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
-	//lista de listas de estructuras de pokes objetivos (solo tienen el nombre)
+
+	//lista de listas de estructuras de pokes objetivos (solo tienen el nombre) de cada entrenador
+	//llegan 3 valores OK
 	t_list* objetivos = list_map(crearListaConStringsDeConfig(stringPokemonesObjetivos), (erasedType)pokemonesDesdeString);
 
 	for(int index = 0; index < list_size(entrenadores); index++) {
 		Entrenador* entrenador = list_get(entrenadores, index);
 
 		//lista de pokemones objetivos de cada entrenador
-
+		//LLEGA VACIA
 		t_list* objetivosDelEntrenador = list_get(objetivos, index);
 
 		for(int index2 = 0; index2 < list_size(objetivosDelEntrenador); index2++){
 			PokemonEnElMapa* objetivoDelEntrenador =  list_get(objetivosDelEntrenador, index2);
-			quickLog("Llega hasta aca"); //ROMPE EN LIST_FIND_ELEMENT??
+			quickLog("Llega hasta aca");
 			setPokemonObjetivoA(entrenador, objetivoDelEntrenador);
 			quickLog("Aca no llega");
 		}

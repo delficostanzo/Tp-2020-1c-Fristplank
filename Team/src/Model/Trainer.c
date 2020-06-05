@@ -15,17 +15,19 @@ void setPosicionA(Entrenador* entrenador, t_posicion* posicion) {
 //}
 
 void setPokemonObjetivoA(Entrenador* entrenador, PokemonEnElMapa* nuevoObjetivo) {
-	typedef bool(*erasedType)(void*);
+	//typedef bool(*erasedType)(void*);
 
-	bool tieneElMismoNombre(PokemonEnElMapa* pokemonEntrenador){
-		return pokemonEntrenador->nombre == nuevoObjetivo->nombre;
-	}
+//	bool tieneElMismoNombre(PokemonEnElMapa* pokemonEntrenador){
+//		//return pokemonEntrenador->nombre == nuevoObjetivo->nombre;
+//		return (strcmp(pokemonEntrenador->nombre, nuevoObjetivo->nombre) == 0);
+//	}
 
 	t_list* objetivosDelEntrenador = entrenador->pokemonesObjetivos;
 	//YA HAY UNO DE ESA ESPECIE EN SU LISTA DE OBJETIVOS
 	if(buscarPorNombre(nuevoObjetivo->nombre, objetivosDelEntrenador) != NULL){
 		//le aumento la cantidad
-		PokemonEnElMapa* pokemonASumar = list_find(objetivosDelEntrenador, (erasedType)tieneElMismoNombre);
+		//PokemonEnElMapa* pokemonASumar = list_find(objetivosDelEntrenador, (erasedType)tieneElMismoNombre);
+		PokemonEnElMapa* pokemonASumar = buscarPorNombre(nuevoObjetivo->nombre, objetivosDelEntrenador);
 		pokemonASumar->cantidad += 1;
 	}
 	else {

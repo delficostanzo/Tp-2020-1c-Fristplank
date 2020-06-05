@@ -20,11 +20,14 @@ PokemonEnElMapa* newPokemon() {
 PokemonEnElMapa* buscarPorNombre(String nombrePokemon, t_list* pokemones){
 	typedef bool(*erasedType)(void*);
 
+	quickLog("llega");
 	bool tieneNombre(PokemonEnElMapa* pokemon){
-		return strcmp(pokemon->nombre, nombrePokemon) == 0;
+		return (strcmp(pokemon->nombre, nombrePokemon) == 0);
 		//return pokemon->nombre == nombrePokemon;
 	}
-	return list_find(pokemones, (erasedType)tieneNombre);
+
+	PokemonEnElMapa* pokemonBuscado = list_find(pokemones, (erasedType)tieneNombre);
+	return pokemonBuscado;
 }
 
 //Setters
