@@ -17,21 +17,19 @@ PokemonEnElMapa* newPokemon() {
 
 // retorna la estructura poke que tiene ese nombre si esta en la lista pasada por parametro
 // si no cumple la condicion, DEVUELVE NULL
-PokemonEnElMapa* buscarPorNombre(String nombrePokemon, t_list* pokemones){
-	typedef bool(*erasedType)(void*);
+PokemonEnElMapa* buscarPorNombre(char* nombrePokemon, t_list* pokemones){
 
-	quickLog("llega");
 	bool tieneNombre(PokemonEnElMapa* pokemon){
 		return (strcmp(pokemon->nombre, nombrePokemon) == 0);
 		//return pokemon->nombre == nombrePokemon;
 	}
 
-	PokemonEnElMapa* pokemonBuscado = list_find(pokemones, (erasedType)tieneNombre);
+	PokemonEnElMapa* pokemonBuscado = list_find(pokemones, (void*)tieneNombre);
 	return pokemonBuscado;
 }
 
 //Setters
-void setNombreTo(PokemonEnElMapa* pokemon, String nombre) {
+void setNombreTo(PokemonEnElMapa* pokemon, char* nombre) {
 	strcpy(pokemon->nombre, nombre);
 }
 

@@ -9,10 +9,10 @@
 #include "ConfigFunctions.h"
 
 
-PokemonEnElMapa* pokemonDesde(String nombrePokemon);
+PokemonEnElMapa* pokemonDesde(char* nombrePokemon);
 
 //crea un config a partir del nombre de un archivo de configuracion y lo devuelve
-t_config* leerConfigDesde(String nombreDeArchivo) {
+t_config* leerConfigDesde(char* nombreDeArchivo) {
 	t_config* config = config_create(nombreDeArchivo);
 	//t_log* logger = iniciar_log("team");
 	t_log* logger = iniciar_logger();
@@ -29,12 +29,13 @@ t_config* leerConfigDesde(String nombreDeArchivo) {
 }
 
 //con esto transformas la lista de strings que te viene del config en una t_list*
-t_list* crearListaConStringsDeConfig(String* strings) {
+t_list* crearListaConStringsDeConfig(char** strings) {
 	t_list* lista = list_create();
 
 	for(int index=0; index >= 0; index++) {
 		if(strings[index] != NULL){
-			String unString = strings[index];
+			char* unString = malloc(strlen(strings[index])+1);
+			memcpy(unString, strings[index],strlen(strings[index])+1);
 
 			list_add(lista, unString);
 		} else{
@@ -46,10 +47,10 @@ t_list* crearListaConStringsDeConfig(String* strings) {
 }
 
 //esto convierte un string de tipo "1|2" de posicion, en una t_posicion.
-t_posicion* posicionDesde(String stringDePosicion) {
+t_posicion* posicionDesde(char* stringDePosicion) {
 	t_posicion* posicion = newPosicion();
 
-	String* posicionString = string_split(stringDePosicion,"|");
+	char** posicionString = string_split(stringDePosicion,"|");
 
 	posicion->posicionX = atoi(posicionString[0]);
 	posicion->posicionY = atoi(posicionString[1]);
@@ -63,11 +64,11 @@ t_posicion* posicionDesde(String stringDePosicion) {
 
 //recibe cada conjunto de pokemones de cada entrenador separados por |
 //DEVUELVE UNA LISTA DE ESTRUCTURAS DE POKEMONES
-t_list* pokemonesDesdeString(String stringDePokemones) {
+t_list* pokemonesDesdeString(char* stringDePokemones) {
 	typedef void*(*erasedType)(void*);
 
 
-	String* stringDeNombresPokemones = string_split(stringDePokemones, "|");
+	char** stringDeNombresPokemones = string_split(stringDePokemones, "|");
 
 	//pasarlo de String* a t_list* para usarlo en el map
 	t_list* listaDeNombres = crearListaConStringsDeConfig(stringDeNombresPokemones);
@@ -78,11 +79,13 @@ t_list* pokemonesDesdeString(String stringDePokemones) {
 }
 
 // recibiendo un string con el nombre del pokemon te retorna una estructura de pokemon en el mapa
-PokemonEnElMapa* pokemonDesde(String nombrePokemon){
+PokemonEnElMapa* pokemonDesde(char* nombrePokemon){
 	PokemonEnElMapa* pokemon = newPokemon();
 
 	pokemon->nombre = nombrePokemon;
-	//(*pokemon) = { .nombre = nombrePokemon, .posicion = NULL, .cantidad = 0 }
+	pokemon->posicion.posicionX = 0;
+	pokemon->posicion.posicionY = 0;
+	pokemon->cantidad = 1;
 	return pokemon;
 }
 

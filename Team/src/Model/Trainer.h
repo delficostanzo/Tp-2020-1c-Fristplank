@@ -23,8 +23,7 @@ typedef struct {
 
 Entrenador* newEntrenador();
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
-void setPokemonObjetivoA(Entrenador* entrenador, PokemonEnElMapa* nuevoObjetivo);
-void setPokemonAtrapadoA(Entrenador* entrenador, PokemonEnElMapa* pokemon);
+void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon);
 t_posicion* newPosicion();
 
 #endif /* SRC_MODEL_TRAINER_H_ */

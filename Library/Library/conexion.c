@@ -34,7 +34,7 @@ bool escuchaEn(int socketListener, int puerto) {
 
 //3- el CLIENTE hace el connect con el servidor que ya esta escuchando. Si se conecta bien te devuelve true, sino false
 //por cada conectarA tiene que haber un aceptarConexion
-bool conectarA(int socketServidor, String ip, int puerto) {
+bool conectarA(int socketServidor, char* ip, int puerto) {
 	struct sockaddr_in direccion;
 	direccion.sin_family = AF_INET;
 	direccion.sin_addr.s_addr = inet_addr(ip);

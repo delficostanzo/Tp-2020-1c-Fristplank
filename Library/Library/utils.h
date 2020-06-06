@@ -23,7 +23,6 @@
 
 #include"conexion.h"
 
-typedef char* String;
 
 typedef enum
 {

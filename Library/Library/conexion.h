@@ -10,7 +10,6 @@
 
 #include "utils.h"
 
-typedef char* String;
 
 typedef enum {
 	IDERROR = -1,
@@ -22,7 +21,7 @@ typedef enum {
 
 int crearSocket();
 bool escuchaEn(int socketListener, int puerto);
-bool conectarA(int socketServidor, String ip, int puerto);
+bool conectarA(int socketServidor, char* ip, int puerto);
 int aceptarConexion(int socketListener);
 id_proceso iniciarHandshake(int socketDestino, id_proceso idProcesoOrigen);
 id_proceso responderHandshake(int socketDestino, id_proceso idProcesoOrigen);

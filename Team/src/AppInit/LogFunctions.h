@@ -10,7 +10,7 @@
 
 #include "utils.h"
 
-void quickLog(String mensaje);
+void quickLog(char* mensaje);
 t_log* iniciar_logger(void);
 
 #endif /* SRC_APPINIT_LOGFUNCTIONS_H_ */
