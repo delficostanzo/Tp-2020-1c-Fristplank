@@ -7,7 +7,7 @@
 
 #include "LogFunctions.h"
 
-void quickLog(String mensaje) {
+void quickLog(char* mensaje) {
 	//t_log* logger = iniciar_log("team");
 	t_log* logger = iniciar_logger();
 	log_info(logger, mensaje);

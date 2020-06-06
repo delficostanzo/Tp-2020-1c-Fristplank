@@ -14,11 +14,10 @@ int main(int argc, char *argv[]) {
 
 	t_config* config = leerConfigDesde("src/team.config");
 	//obtiene la lista de entrenadores desde el config
+	quickLog("Se arrancan a cargar los entrenadores");
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
+	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
-	//	char** POSICONES_ENTRENADORES = config_get_array_value(config, "POSICONES_ENTRENADORES");
-	//	char** POKEMON_ENTRENADORES = config_get_array_value(config, "POKEMON_ENTRENADORES");
-	//	char** OBJETIVOS_ENTRENADORES = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
 	//	int TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
 	//	int RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
 	//	char* ALGORITMO_PLANIFICACION = config_get_string_value(config, "ALGORITMO_PLANIFICACION");

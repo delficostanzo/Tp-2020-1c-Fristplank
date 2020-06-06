@@ -12,15 +12,15 @@
 #include "../AppInit/LogFunctions.h"
 
 typedef struct {
-	String nombre;
+	char* nombre;
 	t_posicion posicion; //no es puntero porque el pokemon no se mueve
 	int cantidad;
 }PokemonEnElMapa;
 
 PokemonEnElMapa* newPokemon();
-void setNombreTo(PokemonEnElMapa* pokemon, String nombre);
+void setNombreTo(PokemonEnElMapa* pokemon, char* nombre);
 void setPosicionTo(PokemonEnElMapa* pokemon, t_posicion posicion);
 void setCantidadTo(PokemonEnElMapa* pokemon, int cantidad);
-PokemonEnElMapa* buscarPorNombre(String nombrePokemon, t_list* pokemones);
+PokemonEnElMapa* buscarPorNombre(char* nombrePokemon, t_list* pokemones);
 
 #endif /* SRC_MODEL_POKEMON_H_ */
