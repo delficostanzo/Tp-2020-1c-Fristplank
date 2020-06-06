@@ -1,9 +1,3 @@
-/*
- * utils.c
- *
- *
- *      Author: fritsplank
- */
 
 #include "utils.h"
 
@@ -11,95 +5,73 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 {
 	int size_serializado = sizeof(op_code) + sizeof(uint32_t)*2 + sizeof(int) + (paquete->buffer->size);
 
-	t_log* logger = iniciar_log();
-	//t_log* logger = iniciar_log("serializarpaquete");
-	log_info(logger, "Inicio de Serializacion");
-
 	void* streamFinal = malloc(size_serializado);
-	log_info(logger, "Asignacion de espacio al stream");
-
 	int offset = 0;
 
-	memcpy(streamFinal + offset, &(paquete->codigo_operacion), sizeof(op_code));
-	log_info(logger, "Codigo de operacion (protocolo) copiado al stream");
+	memcpy(streamFinal + offset, &paquete->codigo_operacion, sizeof(op_code));
 	offset += sizeof(op_code);
-
-	memcpy(streamFinal + offset, &(paquete->ID), sizeof(uint32_t));
-	log_info(logger, "Id copiado al stream");
+	memcpy(streamFinal + offset, &paquete->ID, sizeof(uint32_t));
+	offset += sizeof(uint32_t);
+	memcpy(streamFinal + offset, &paquete->ID_CORRELATIVO, sizeof(uint32_t));
+	offset += sizeof(uint32_t);
+	memcpy(streamFinal + offset, &paquete->buffer->size, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 
-	memcpy(streamFinal + offset, &(paquete->ID_CORRELATIVO), sizeof(uint32_t));
-	log_info(logger, "Id correlativo copiado al stream");
-	offset += sizeof(uint32_t);
-
-	memcpy(streamFinal + offset, &paquete->buffer->size, sizeof(paquete->buffer->size));
-	log_info(logger, "Tamaño del mensaje copiado al stream");
-	offset += sizeof(paquete->buffer->size);
-
-	memcpy(streamFinal + offset, paquete->buffer->stream, paquete->buffer->size);
-	log_info(logger, "Mensaje copiado al stream");
-
-	*bytes = size_serializado;
-	log_info(logger, "Insercion del tamaño en bytes al int apuntado");
-
-
+	/* Serializo dependiendo de tipo de mensaje */
+	switch(paquete->codigo_operacion){
+	case NEW_POKEMON:
+		serializar_new_pokemon(&streamFinal, offset, paquete->buffer->stream, bytes);
+		break;
+	case APPEARED_POKEMON:
+		serializar_appeared_pokemon(&streamFinal, offset, paquete->buffer->stream, bytes);
+		break;
+	case CATCH_POKEMON:
+		serializar_catch_pokemon(&streamFinal, offset, paquete->buffer->stream, bytes);
+		break;
+	case CAUGHT_POKEMON:
+		serializar_caught_pokemon(&streamFinal, offset, paquete->buffer->stream, bytes);
+		break;
+	case GET_POKEMON:
+		serializar_get_pokemon(&streamFinal, offset, paquete->buffer->stream, bytes);
+		break;
+	case LOCALIZED_POKEMON:
+		//TODO IMPLEMENTACION
+		break;
+	case RESPUESTA_ID:
+		serializar_respuesta_id(&streamFinal, offset, paquete->buffer->stream, bytes);
+		break;
+	case ACK:
+		// No se hace nada porque el ACK no tiene payload
+		break;
+	case GAMEBOYSUSCRIBE:
+		serializar_gameboy_suscribe(&streamFinal, offset, paquete->buffer->stream, bytes);
+		break;
+	}
 	return streamFinal;
-
 }
-
-//int crear_conexion(char *ip, char* puerto)
-//{
-//	struct addrinfo hints;
-//	struct addrinfo *server_info;
-//
-//	memset(&hints, 0, sizeof(hints));
-//	hints.ai_family = AF_UNSPEC;
-//	hints.ai_socktype = SOCK_STREAM;
-//	hints.ai_flags = AI_PASSIVE;
-//
-//	getaddrinfo(ip, puerto, &hints, &server_info);
-//
-//	int socket_cliente = socket(server_info->ai_family, server_info->ai_socktype, server_info->ai_protocol);
-//
-//	if(connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen) == -1)
-//		printf("error");
-//
-//	freeaddrinfo(server_info);
-//
-//	return socket_cliente;
-//}
 
 void enviar(t_paquete* paquete, int socket_cliente)
 {
-	t_log* logger = iniciar_log();
-	//t_log* logger = iniciar_log("enviarpaquete");
-
 	int size_serializado;
 
-	void* mensajeAEnviar = malloc(sizeof(paquete->buffer->size) + sizeof(uint32_t)*2 + sizeof(op_code));
-
-	mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
-	log_info(logger, "Serializacion del paquete");
+	void* mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
 
 	send(socket_cliente, mensajeAEnviar, size_serializado, 0);
-	log_info(logger, "Se envio el mensaje");
-
 
 	free(mensajeAEnviar);
+	free(paquete->buffer->stream);
 	free(paquete->buffer);
 	free(paquete);
-
 }
 
 t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, uint32_t Id, uint32_t IdCorrelativo, op_code op_code) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
+	paquete->codigo_operacion = op_code;
 	paquete->ID = Id;
 	paquete->ID_CORRELATIVO = IdCorrelativo;
 	paquete->buffer = malloc(sizeof(t_buffer));
-	paquete->buffer->stream = datos;
 	paquete->buffer->size = sizeOfStream;
-	paquete->codigo_operacion = op_code;
-
+	paquete->buffer->stream = datos;
 	return paquete;
 }
 
@@ -144,39 +116,110 @@ void enviar_ACK(int socket_cliente, uint32_t Id, uint32_t IdCorrelativo){
 	enviar(paquete, socket_cliente);
 }
 
+void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo){
+	t_paquete* paquete = crearPaqueteCon((void*) gameboy_suscribe, sizeof(op_code), Id, IdCorrelativo, GAMEBOYSUSCRIBE);
+	enviar(paquete, socket_cliente);
+}
 
+/* Retorna el mensaje completo: Header y Payload ya serializado
+ *
+ * No me deja por alguna razón llevar esas funciones des_serializar a otro fuente
+ * porque me tira que no reconoce t_paquete (idk, no intenté mucho para ser honesto)
+ *
+ */
 t_paquete* recibir_mensaje(int socket_cliente) {
-	t_log* logger = iniciar_log();
-	//t_log* logger = iniciar_log("recibirmensaje");
 	t_paquete* paquete = malloc(sizeof(t_paquete));
-	paquete->buffer = malloc(sizeof(t_buffer));
 
-	//primero recibimos el codigo de operacion
-	//op_code operacion;
 	recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), 0);
-	log_info(logger, "Recibimos el codigo de operacion");
-
 	recv(socket_cliente, &(paquete->ID), sizeof(uint32_t), 0);
-	log_info(logger, "Recibimos el id del mensaje");
-
 	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(uint32_t), 0);
-	log_info(logger, "Recibimos el id del mensaje correlativo");
-
-	//despues recibimos el buffer. Primero su tamaño y despues el contenido
-	//uint32_t size_datos;
+	paquete->buffer = malloc(sizeof(t_buffer));
 	recv(socket_cliente, &(paquete->buffer->size), sizeof(int), 0);
 
-	//el recv de un stream muy grande puede cortarse
-	//void* datos = recibirDatos(socket_cliente, paquete->buffer->size);
-	//paquete->buffer->stream = datos;
-	log_info(logger, "Recibimos el mensaje correspondiente");
+	paquete->buffer = malloc(sizeof(t_buffer));
+	recv(socket_cliente, &(paquete->buffer->size), sizeof(uint32_t), 0);
 
+	switch(paquete->codigo_operacion){
+	case NEW_POKEMON:;
+		t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
+		recv(socket_cliente, &(new_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
+		new_pokemon->pokemon = malloc(new_pokemon->lengthOfPokemon);
+		recv(socket_cliente, &(new_pokemon->pokemon), new_pokemon->lengthOfPokemon, 0);
+		new_pokemon->posicion = malloc(sizeof(t_posicion));
+		recv(socket_cliente, &(new_pokemon->posicion->posicionX), sizeof(uint32_t), 0);
+		recv(socket_cliente, &(new_pokemon->posicion->posicionY), sizeof(uint32_t), 0);
+		recv(socket_cliente, &(new_pokemon->cantidad), sizeof(uint32_t), 0);
+
+		paquete->buffer->stream = new_pokemon;
+		break;
+
+	case APPEARED_POKEMON:;
+		t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
+		recv(socket_cliente, &(appeared_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
+		appeared_pokemon->pokemon = malloc(appeared_pokemon->lengthOfPokemon);
+		recv(socket_cliente, &(appeared_pokemon->pokemon), appeared_pokemon->lengthOfPokemon, 0);
+		appeared_pokemon->posicion = malloc(sizeof(t_posicion));
+		recv(socket_cliente, &(appeared_pokemon->posicion->posicionX), sizeof(uint32_t), 0);
+		recv(socket_cliente, &(appeared_pokemon->posicion->posicionY), sizeof(uint32_t), 0);
+
+		paquete->buffer->stream = appeared_pokemon;
+		break;
+
+	case CATCH_POKEMON:;
+		t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
+		recv(socket_cliente, &(catch_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
+		catch_pokemon->pokemon = malloc(catch_pokemon->lengthOfPokemon);
+		recv(socket_cliente, &(catch_pokemon->pokemon), catch_pokemon->lengthOfPokemon, 0);
+		catch_pokemon->posicion = malloc(sizeof(t_posicion));
+		recv(socket_cliente, &(catch_pokemon->posicion->posicionX), sizeof(uint32_t), 0);
+		recv(socket_cliente, &(catch_pokemon->posicion->posicionY), sizeof(uint32_t), 0);
+
+		paquete->buffer->stream = catch_pokemon;
+		break;
+
+	case CAUGHT_POKEMON:;
+		t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
+		recv(socket_cliente, &(caught_pokemon->ok), sizeof(uint32_t), 0);
+
+		paquete->buffer->stream = caught_pokemon;
+		break;
+
+	case GET_POKEMON:;
+		t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
+		recv(socket_cliente, &(get_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
+		get_pokemon->pokemon = malloc(get_pokemon->lengthOfPokemon);
+		recv(socket_cliente, &(get_pokemon->pokemon), get_pokemon->lengthOfPokemon, 0);
+
+		paquete->buffer->stream = get_pokemon;
+		break;
+
+	case LOCALIZED_POKEMON:
+		//TODO IMPLEMENTACION
+		break;
+
+	case RESPUESTA_ID:;
+		t_respuesta_id* respuesta_id = malloc(sizeof(t_respuesta_id));
+		recv(socket_cliente, &(respuesta_id->idCorrelativo), sizeof(uint32_t), 0);
+
+		paquete->buffer->stream = respuesta_id;
+		break;
+
+	case ACK:
+		// No se hace nada porque no tiene payload
+		break;
+
+	case GAMEBOYSUSCRIBE:;
+		t_gameboy_suscribe* gameboy_suscribe = malloc(sizeof(t_gameboy_suscribe));
+		recv(socket_cliente, &(gameboy_suscribe->codigoCola), sizeof(op_code), 0);
+
+		paquete->buffer->stream = gameboy_suscribe;
+		break;
+	}
 	return paquete;
 }
 
 void liberar_conexion(int socket_cliente) {
 	t_log* logger = iniciar_log();
-	//t_log* logger = iniciar_log("liberarconexion");
 	if (close(socket_cliente) == -1) {
 		log_error(logger, "Error al cerrar la conexion");
 	}
@@ -191,25 +234,24 @@ t_log* iniciar_log(void) {
 	return logger;
 }
 
-//t_log* iniciar_log(char* nombreModulo) {
-//	t_log* logger;
-//
-//	char* nombreArchivoLog = malloc(strlen(nombreModulo) + 1);
-//	strcpy(nombreArchivoLog, nombreModulo);
-//	strcat(nombreArchivoLog, ".log");
-//	string_to_upper(nombreModulo);
-//
-//	if((logger = log_create(nombreArchivoLog, nombreModulo, 1, log_level_from_string("INFO"))) == NULL){
-//		printf("No pude crear el logger\n");
-//
-//		free(nombreArchivoLog);
-//		free(nombreModulo);
-//		exit(1);
-//	}
-//
-//	free(nombreArchivoLog);
-//	free(nombreModulo);
-//	return logger;
-//}
+t_log* iniciar_logger_modulo(char* nombreModulo) {
+	t_log* logger;
 
+	char* nombreArchivoLog = malloc(strlen(nombreModulo) + 1);
+	strcpy(nombreArchivoLog, nombreModulo);
+	strcat(nombreArchivoLog, ".log");
+	string_to_upper(nombreModulo);
+
+	if((logger = log_create(nombreArchivoLog, nombreModulo, 1, log_level_from_string("INFO"))) == NULL){
+		printf("No pude crear el logger\n");
+
+		free(nombreArchivoLog);
+		free(nombreModulo);
+		exit(1);
+	}
+
+	free(nombreArchivoLog);
+	free(nombreModulo);
+	return logger;
+}
 

@@ -1,9 +1,3 @@
-/*
- * util.h
- *
- *
- *      Author: fritsplank
- */
 
 #ifndef UTILS_H_
 #define UTILS_H_
@@ -22,6 +16,7 @@
 #include<commons/string.h>
 
 #include"conexion.h"
+#include"serializadores.h"
 
 
 typedef enum
@@ -33,7 +28,8 @@ typedef enum
 	GET_POKEMON = 5,
 	LOCALIZED_POKEMON = 6,
 	RESPUESTA_ID = 7,
-	ACK = 8
+	ACK = 8,
+	GAMEBOYSUSCRIBE = 9
 }op_code;
 
 typedef struct
@@ -75,6 +71,7 @@ typedef struct
 	char* pokemon;
 } t_get_pokemon;
 
+
 typedef struct
 {
 	uint32_t lengthOfPokemon;
@@ -90,6 +87,11 @@ typedef struct
 
 typedef struct
 {
+	op_code codigoCola;
+} t_gameboy_suscribe;
+
+typedef struct
+{
 	int size;
 	void* stream;
 } t_buffer;
@@ -102,8 +104,11 @@ typedef struct
 	t_buffer* buffer;
 } t_paquete;
 
+<<<<<<< HEAD
 //int crear_conexion(char* ip, char* puerto);
 
+=======
+>>>>>>> conexion
 void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
@@ -111,12 +116,17 @@ void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente,
 void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_ACK(int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
+void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 
 t_paquete* recibir_mensaje(int socket_cliente);
 
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
 t_log* iniciar_log(void);
+<<<<<<< HEAD
 //t_log* iniciar_log(char* nombreModulo);
+=======
+t_log* iniciar_logger_modulo(char* nombreModulo);
+>>>>>>> conexion
 
 #endif /* UTILS_H_ */
