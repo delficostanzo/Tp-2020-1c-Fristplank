@@ -30,11 +30,12 @@ int main(int argc, char *argv[]) {
 	int puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
 	quickLog("LLegamos hasta aca");
 
+	t_list* objetivosTotales = getObjetivosTotalesDesde(entrenadores);
+	t_list* objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
 	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
-		quickLog("primer objetivo de pokemones");
-		quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 0))->nombre);
-		quickLog("segundo objetivo de pokemones");
-		quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 1))->nombre);
+	log_info(logger, "La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
+	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
+	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
 
 //	conexionGameBoy = crearSocket();
 //
