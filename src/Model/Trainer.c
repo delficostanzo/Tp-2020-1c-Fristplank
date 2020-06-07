@@ -23,12 +23,11 @@ void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon) {
 	else if(buscarPorNombre(nuevoPokemon->nombre, listaPokemones) != NULL){
 		//le aumento la cantidad
 		PokemonEnElMapa* pokemonASumar = buscarPorNombre(nuevoPokemon->nombre, listaPokemones);
-		pokemonASumar->cantidad += 1;
+		pokemonASumar->cantidad += nuevoPokemon->cantidad;
 	}
-	else {
-		//lo agrego con cantidad 1
+		else {
 		list_add(listaPokemones, nuevoPokemon);
-	}
+		}
 }
 
 //void setPokemonesAtrapadosA(Entrenador* entrenador, t_list* pokemones) {
