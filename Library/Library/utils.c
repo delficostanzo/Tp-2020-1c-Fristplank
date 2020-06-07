@@ -234,24 +234,24 @@ t_log* iniciar_log(void) {
 	return logger;
 }
 
-t_log* iniciar_logger_modulo(char* nombreModulo) {
-	t_log* logger;
-
-	char* nombreArchivoLog = malloc(strlen(nombreModulo) + 1);
-	strcpy(nombreArchivoLog, nombreModulo);
-	strcat(nombreArchivoLog, ".log");
-	string_to_upper(nombreModulo);
-
-	if((logger = log_create(nombreArchivoLog, nombreModulo, 1, log_level_from_string("INFO"))) == NULL){
-		printf("No pude crear el logger\n");
-
-		free(nombreArchivoLog);
-		free(nombreModulo);
-		exit(1);
-	}
-
-	free(nombreArchivoLog);
-	free(nombreModulo);
-	return logger;
-}
-
+//t_log* iniciar_logger_modulo(char* nombreModulo) {
+//	t_log* logger;
+//
+//	char* nombreArchivoLog = malloc(strlen(nombreModulo) + 1);
+//	strcpy(nombreArchivoLog, nombreModulo);
+//	strcat(nombreArchivoLog, ".log");
+//	string_to_upper(nombreModulo);
+//
+//	if((logger = log_create(nombreArchivoLog, nombreModulo, 1, log_level_from_string("INFO"))) == NULL){
+//		printf("No pude crear el logger\n");
+//
+//		free(nombreArchivoLog);
+//		free(nombreModulo);
+//		exit(1);
+//	}
+//
+//	free(nombreArchivoLog);
+//	free(nombreModulo);
+//	return logger;
+//}
+//

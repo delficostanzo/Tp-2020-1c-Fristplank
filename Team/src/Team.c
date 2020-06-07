@@ -30,6 +30,12 @@ int main(int argc, char *argv[]) {
 	int puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
 	quickLog("LLegamos hasta aca");
 
+	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
+		quickLog("primer objetivo de pokemones");
+		quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 0))->nombre);
+		quickLog("segundo objetivo de pokemones");
+		quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 1))->nombre);
+
 //	conexionGameBoy = crearSocket();
 //
 //	//TODO: Si muere la conexion del broker, escucho al GameBoy. Y intentar reconexion del Broker varias veces
@@ -71,11 +77,6 @@ int main(int argc, char *argv[]) {
 	}
 
 	//ENVIA MSJ GET CON LA LISTA DE LOS OBJETIVOS GLOBALES
-	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
-	quickLog("primer objetivo de pokemones");
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 0))->nombre);
-	quickLog("segundo objetivo de pokemones");
-	quickLog(((PokemonEnElMapa*) list_get(objetivosGlobales, 1))->nombre);
 
 
 

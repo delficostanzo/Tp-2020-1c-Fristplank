@@ -104,11 +104,7 @@ typedef struct
 	t_buffer* buffer;
 } t_paquete;
 
-<<<<<<< HEAD
-//int crear_conexion(char* ip, char* puerto);
 
-=======
->>>>>>> conexion
 void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
@@ -123,10 +119,8 @@ t_paquete* recibir_mensaje(int socket_cliente);
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
 t_log* iniciar_log(void);
-<<<<<<< HEAD
-//t_log* iniciar_log(char* nombreModulo);
-=======
-t_log* iniciar_logger_modulo(char* nombreModulo);
->>>>>>> conexion
+
+//t_log* iniciar_logger_modulo(char* nombreModulo);
+
 
 #endif /* UTILS_H_ */
