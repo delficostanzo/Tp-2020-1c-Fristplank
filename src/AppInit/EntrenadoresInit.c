@@ -13,6 +13,7 @@ static t_list* getAtrapadosDesde(Entrenador* entrenador);
 static t_list* unirPokemones(t_list* primerosPokes, t_list* segundosPokes);
 static void agregarObjetivosA(Entrenador* entrenador, t_list* objetivosDelEntrenador);
 static void agregarAtrapadosA(Entrenador* entrenador, t_list* pokemonesAAgregar);
+static bool noTieneCantidadCero(PokemonEnElMapa* pokemon);
 
 //si declaras aca arriba las funciones con un 'static' adelante, es la manera de hacerlas privadas. No alcanza solo con omitirlas en el ".h"
 
@@ -149,15 +150,17 @@ t_list* getObjetivosTotalesDesde(t_list* entrenadores) {
 
 	t_list* objetivosTotales;
 
-	//me devuelve una lista de listas de objetivos globales
+	//me devuelve una lista de todos los pokemones (los que atrapo y los que no)
+	//es una lista de listas
 	objetivosTotales = list_map(entrenadores, (erasedTypeMap)getObjetivosDesde);
 
-	//listaFinal es la lista con todos los pokemons que se deben atrapar en total
-	t_list* listaObjetivos = list_create();
-	list_fold(objetivosTotales, listaObjetivos, (erasedTypeFold)unirPokemones);
+	// objetivosTotales agarra la primer lista y la une con la lista del segundo parametro (que es una lista con otros pokes) y te devuelve
+	// una lista
+	t_list* objetivosAgrupados = list_create();
+	list_fold(objetivosTotales, objetivosAgrupados, (erasedTypeFold)unirPokemones);
 
 	list_destroy(objetivosTotales);
-	return listaObjetivos;
+	return objetivosAgrupados;
 }
 
 t_list* getTotalAtrapadosDesde(t_list* entrenadores) {
@@ -173,13 +176,13 @@ t_list* getTotalAtrapadosDesde(t_list* entrenadores) {
 	t_list* listaAtrapados = list_create();
 	list_fold(objetivosAtrapados, listaAtrapados, (erasedTypeFold)unirPokemones);
 
+
 	list_destroy(objetivosAtrapados);
 	return listaAtrapados;
 
 }
 
-// devuelve una lista de los pokemones objetivos disminuyendo la cantidad, si esta atrapado
-// Si hay un pokemon que ya se atrapo, te va a devolver que ese objetivo es cantidad 0
+// devuelve una lista de los pokemones objetivos con su cantidad que falta atrapar
 t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
 	typedef void*(*erasedTypeMap)(void*);
 
@@ -189,15 +192,28 @@ t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
 		bool esLaMismaEspecie(PokemonEnElMapa* pokemonARestar){
 			return pokemonRestado->nombre == pokemonARestar->nombre;
 		}
-		PokemonEnElMapa* pokemonAtrapado = list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeMap)esLaMismaEspecie);
-		pokemonRestado->cantidad -= pokemonAtrapado->cantidad;
-		return pokemonRestado;
+		//si todavia no hay ninguno atrapado o se atraparon pero ninguno coincide con la especie a restar
+		if(list_is_empty(getTotalAtrapadosDesde(entrenadores)) == 1 || list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeMap)esLaMismaEspecie) == NULL){
+			//no le cambia la cantidad, entonces todavia falta por atrapar (queda como objetivo global)
+			return pokemonRestado;
+
+		} else{
+			// si coincide con alguno de la lista de pokes atrapados, se resta
+			PokemonEnElMapa* pokemonAtrapado = list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeMap)esLaMismaEspecie);
+			pokemonRestado->cantidad -= pokemonAtrapado->cantidad;
+			return pokemonRestado;
+
+		}
 
 	}
 	//diferencia entre la lista de objetivos totales y los atrapados
-	return list_map(getObjetivosTotalesDesde(entrenadores), (erasedTypeMap)restarCantidadQueFalta);
+	t_list* listaConObjetivosRestados = list_map(getObjetivosTotalesDesde(entrenadores), (erasedTypeMap)restarCantidadQueFalta);
+	return list_filter(listaConObjetivosRestados, noTieneCantidadCero);
 
+}
 
+bool noTieneCantidadCero(PokemonEnElMapa* pokemon){
+	return pokemon->cantidad != 0;
 }
 
 
@@ -210,17 +226,24 @@ t_list* getAtrapadosDesde(Entrenador* entrenador) {
 	return entrenador->pokemonesAtrapados;
 }
 
+//
 t_list* unirPokemones(t_list* primerosPokes, t_list* segundosPokes){
 	for(int index=0;index < sizeof(segundosPokes);index++){
 		PokemonEnElMapa* pokemon = list_get(segundosPokes, index);
 
-		if(buscarPorNombre(pokemon->nombre, primerosPokes) != NULL){
-			PokemonEnElMapa* pokemonPrimerLista = buscarPorNombre(pokemon->nombre, primerosPokes);
-			PokemonEnElMapa* pokemonSegundaLista = buscarPorNombre(pokemon->nombre, segundosPokes);
-			pokemonPrimerLista->cantidad += pokemonSegundaLista->cantidad;
-		}else{
+		if(list_is_empty(primerosPokes) == 1){
+
 			list_add(primerosPokes, pokemon);
-		}
+
+		} else if(buscarPorNombre(pokemon->nombre, primerosPokes) != NULL){
+
+				PokemonEnElMapa* pokemonPrimerLista = buscarPorNombre(pokemon->nombre, primerosPokes);
+				//PokemonEnElMapa* pokemonSegundaLista = buscarPorNombre(pokemon->nombre, segundosPokes);
+				pokemonPrimerLista->cantidad += pokemon->cantidad;
+
+				} else{
+					list_add(primerosPokes, pokemon);
+				}
 
 	}
 
