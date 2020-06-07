@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 
 	t_list* objetivosTotales = getObjetivosTotalesDesde(entrenadores);
 	t_list* objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
-	t_list* objetivosGlobales = getObjetivosGlobalesDesde(entrenadores);
+	t_list* objetivosGlobales = getObjetivosGlobalesDesde2(objetivosTotales, objetivosAtrapados);
 	log_info(logger, "La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
 	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
 	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));

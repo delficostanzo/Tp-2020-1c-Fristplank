@@ -204,22 +204,25 @@ t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
 	typedef void*(*erasedTypeMap)(void*);
 	typedef bool(*erasedTypeFilter)(void*);
 
+	//el pokemon restado serian los pokemones objetivos, que se va a agregar con la cantidad restada si ya se atrapo
 	PokemonEnElMapa* restarCantidadQueFalta(PokemonEnElMapa* pokemonRestado) {
-
 		bool esLaMismaEspecie(PokemonEnElMapa* pokemonARestar){
 			return strcmp(pokemonRestado->nombre, pokemonARestar->nombre) == 0;
 		}
 		//si todavia no hay ninguno atrapado o se atraparon pero ninguno coincide con la especie a restar
-		if(list_is_empty(getTotalAtrapadosDesde(entrenadores)) == 1 || list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeFilter)esLaMismaEspecie) == NULL){
+		//if(list_is_empty(getTotalAtrapadosDesde(entrenadores)) == 1 || list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeFilter)esLaMismaEspecie) == NULL){
+		if(list_is_empty(getTotalAtrapadosDesde(entrenadores)) == 1 || buscarPorNombre(pokemonRestado->nombre,getTotalAtrapadosDesde(entrenadores)) == NULL){
 			//no le cambia la cantidad, entonces todavia falta por atrapar (queda como objetivo global)
 			return pokemonRestado;
 		}else {
 			// si coincide con alguno de la lista de pokes atrapados, se resta
-			PokemonEnElMapa* pokemonAtrapado = list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeFilter)esLaMismaEspecie);
+			//PokemonEnElMapa* pokemonAtrapado = list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeFilter)esLaMismaEspecie);
+			PokemonEnElMapa* pokemonAtrapado = buscarPorNombre(pokemonRestado->nombre,getTotalAtrapadosDesde(entrenadores));
 			pokemonRestado->cantidad = pokemonRestado->cantidad - pokemonAtrapado->cantidad;
 			return pokemonRestado;
 		}
 	}
+
 	//diferencia entre la lista de objetivos totales y los atrapados
 	t_list* listaConObjetivosRestados = list_map(getObjetivosTotalesDesde(entrenadores), (erasedTypeMap)restarCantidadQueFalta);
 	quickLog("Se cargaron todos los objetivos globales");
@@ -229,6 +232,39 @@ t_list* getObjetivosGlobalesDesde(t_list* entrenadores) {
 
 }
 
+
+t_list* getObjetivosGlobalesDesde2(t_list* pokemonesObjetivos, t_list* pokemonesAtrapados) {
+	typedef void*(*erasedTypeMap)(void*);
+	typedef bool(*erasedTypeFilter)(void*);
+
+	//el pokemon restado serian los pokemones objetivos, que se va a agregar con la cantidad restada si ya se atrapo
+	PokemonEnElMapa* restarCantidadQueFalta(PokemonEnElMapa* pokemonRestado) {
+		bool esLaMismaEspecie(PokemonEnElMapa* pokemonARestar){
+			return strcmp(pokemonRestado->nombre, pokemonARestar->nombre) == 0;
+		}
+		//si todavia no hay ninguno atrapado o se atraparon pero ninguno coincide con la especie a restar
+		//if(list_is_empty(getTotalAtrapadosDesde(entrenadores)) == 1 || list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeFilter)esLaMismaEspecie) == NULL){
+		if(list_is_empty(pokemonesAtrapados) == 1 || buscarPorNombre(pokemonRestado->nombre,pokemonesAtrapados) == NULL){
+			//no le cambia la cantidad, entonces todavia falta por atrapar (queda como objetivo global)
+			return pokemonRestado;
+		}else {
+			// si coincide con alguno de la lista de pokes atrapados, se resta
+			//PokemonEnElMapa* pokemonAtrapado = list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeFilter)esLaMismaEspecie);
+			PokemonEnElMapa* pokemonAtrapado = buscarPorNombre(pokemonRestado->nombre,pokemonesAtrapados);
+			pokemonRestado->cantidad = pokemonRestado->cantidad - pokemonAtrapado->cantidad;
+			return pokemonRestado;
+		}
+	}
+
+	//diferencia entre la lista de objetivos totales y los atrapados
+	t_list* listaConObjetivosRestados = list_create();
+	listaConObjetivosRestados = list_map(pokemonesObjetivos, (erasedTypeMap)restarCantidadQueFalta);
+	quickLog("Se cargaron todos los objetivos globales");
+	quickLog("Se cargaron todos los objetivos globales");
+	quickLog("Se cargaron todos los objetivos globales");
+	return list_filter(listaConObjetivosRestados, (erasedTypeFilter)noTieneCantidadNegativa);
+
+}
 int noTieneCantidadNegativa(PokemonEnElMapa* pokemon){
 	return pokemon->cantidad != 0;
 }

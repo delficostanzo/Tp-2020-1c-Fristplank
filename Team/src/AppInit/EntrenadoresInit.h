@@ -7,6 +7,7 @@
 
 t_list* getEntrenadoresDesde(char* nombreDeArchivo);
 t_list* getObjetivosGlobalesDesde(t_list* entrenadores);
+t_list* getObjetivosGlobalesDesde2(t_list* pokemonesObjetivos, t_list* pokemonesAtrapados);
 t_list* getObjetivosTotalesDesde(t_list* entrenadores);
 t_list* getTotalAtrapadosDesde(t_list* entrenadores);
 
