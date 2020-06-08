@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
 	//recibe los nombres de pokemones encontrados libres con sus posiciones
 	//y si se necesitan (estan en los objetivos globales) se agregan a la lista de pokemones libres
 	recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
-	recibirAppearedYGuardalos(suscripcionAppeared, objetivosGlobales);
+	recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
 
 	//pasar de array a t_list
 

@@ -5,21 +5,27 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/AppInit/ConfigFunctions.c \
+../src/AppInit/CreacionEstructurasMsj.c \
 ../src/AppInit/EntrenadoresInit.c \
+../src/AppInit/EnvioMensajes.c \
 ../src/AppInit/HilosEntrenadores.c \
 ../src/AppInit/LogFunctions.c \
 ../src/AppInit/Planificador.c 
 
 OBJS += \
 ./src/AppInit/ConfigFunctions.o \
+./src/AppInit/CreacionEstructurasMsj.o \
 ./src/AppInit/EntrenadoresInit.o \
+./src/AppInit/EnvioMensajes.o \
 ./src/AppInit/HilosEntrenadores.o \
 ./src/AppInit/LogFunctions.o \
 ./src/AppInit/Planificador.o 
 
 C_DEPS += \
 ./src/AppInit/ConfigFunctions.d \
+./src/AppInit/CreacionEstructurasMsj.d \
 ./src/AppInit/EntrenadoresInit.d \
+./src/AppInit/EnvioMensajes.d \
 ./src/AppInit/HilosEntrenadores.d \
 ./src/AppInit/LogFunctions.d \
 ./src/AppInit/Planificador.d 

@@ -158,9 +158,10 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 		recv(socket_cliente, &(appeared_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
 		appeared_pokemon->pokemon = malloc(appeared_pokemon->lengthOfPokemon);
 		recv(socket_cliente, &(appeared_pokemon->pokemon), appeared_pokemon->lengthOfPokemon, 0);
-		appeared_pokemon->posicion = malloc(sizeof(t_posicion));
-		recv(socket_cliente, &(appeared_pokemon->posicion->posicionX), sizeof(uint32_t), 0);
-		recv(socket_cliente, &(appeared_pokemon->posicion->posicionY), sizeof(uint32_t), 0);
+		//appeared_pokemon->posicion = malloc(sizeof(t_posicion));
+		//CAMBIO TODO
+		recv(socket_cliente, &(appeared_pokemon->posicion.posicionX), sizeof(uint32_t), 0);
+		recv(socket_cliente, &(appeared_pokemon->posicion.posicionY), sizeof(uint32_t), 0);
 
 		paquete->buffer->stream = appeared_pokemon;
 		break;
