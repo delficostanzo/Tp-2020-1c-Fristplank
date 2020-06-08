@@ -17,6 +17,7 @@
 #include<utils.h>
 #include "AppInit/EntrenadoresInit.h"
 #include "AppInit/ConfigFunctions.h"
+#include "AppInit/Planificador.h"
 #include "Model/Trainer.h"
 #include "AppInit/EnvioMensajes.h"
 
