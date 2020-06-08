@@ -11,4 +11,6 @@ typedef struct{
 	t_list* entrenadores;
 }ListaEstados;
 
+void pasarDeNewAReady(ListaEstados* entrenadores, Entrenador* entrenador);
+void pasarDeReadyAExec(ListaEstados* entrenadores, Entrenador* entrenador);
 #endif /* SRC_APPINIT_PLANIFICADOR_H_ */
