@@ -13,8 +13,8 @@ void serializar_new_pokemon(void** streamAEnviar, int offset, void* streamPayloa
 
 	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*streamAEnviar + offset, &pokemon->pokemon, pokemon->lengthOfPokemon);
-	offset += pokemon->lengthOfPokemon;
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionY, sizeof(uint32_t));
@@ -29,8 +29,8 @@ void serializar_appeared_pokemon(void** streamAEnviar, int offset, void* streamP
 
 	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*streamAEnviar + offset, &pokemon->pokemon, pokemon->lengthOfPokemon);
-	offset += pokemon->lengthOfPokemon;
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionY, sizeof(uint32_t));
@@ -44,8 +44,8 @@ void serializar_catch_pokemon(void** streamAEnviar, int offset, void* streamPayl
 
 	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*streamAEnviar + offset, &pokemon->pokemon, pokemon->lengthOfPokemon);
-	offset += pokemon->lengthOfPokemon;
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionY, sizeof(uint32_t));
@@ -68,8 +68,8 @@ void serializar_get_pokemon(void** streamAEnviar, int offset, void* streamPayloa
 
 	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*streamAEnviar + offset, &pokemon->pokemon, pokemon->lengthOfPokemon);
-	offset += pokemon->lengthOfPokemon;
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
 
 	*bytes = offset;
 }
@@ -79,27 +79,21 @@ void serializar_localized_pokemon(void** streamAEnviar, int offset, void* stream
 
 	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*streamAEnviar + offset, &pokemon->pokemon, pokemon->lengthOfPokemon);
-	offset += pokemon->lengthOfPokemon;
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
 	memcpy(*streamAEnviar + offset, &pokemon->cantidadPosiciones, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 
-	char* posicionesEnTextoPlano = string_new();
-
 	for(int i = 0; i < pokemon->cantidadPosiciones; i++){
 		t_posicion* posicion = list_get(pokemon->listaPosiciones, i);
-		string_append(posicionesEnTextoPlano, string_itoa(posicion->posicionX));
-		string_append(posicionesEnTextoPlano, "-");
-		string_append(posicionesEnTextoPlano, string_itoa(posicion->posicionY));
-		string_append(posicionesEnTextoPlano, "-");
+		memcpy(*streamAEnviar + offset, &posicion->posicionX, sizeof(uint32_t));
+		offset += sizeof(uint32_t);
+		memcpy(*streamAEnviar + offset, &posicion->posicionY, sizeof(uint32_t));
+		offset += sizeof(uint32_t);
+		free(posicion);
 	}
 
-	memcpy(*streamAEnviar + offset, &posicionesEnTextoPlano, string_length(posicionesEnTextoPlano) + 1);
-	offset += string_length(posicionesEnTextoPlano) + 1;
-
 	*bytes = offset;
-
-	free(posicionesEnTextoPlano);
 }
 
 void serializar_respuesta_id(void** streamAEnviar, int offset, void* streamPayload, int *bytes){
@@ -115,7 +109,7 @@ void serializar_gameboy_suscribe(void** streamAEnviar, int offset, void* streamP
 	t_gameboy_suscribe* pokemon = streamPayload;
 
 	memcpy(*streamAEnviar + offset, &pokemon->codigoCola, sizeof(op_code));
-	offset += sizeof(uint32_t);
+	offset += sizeof(op_code);
 
 	*bytes = offset;
 }
