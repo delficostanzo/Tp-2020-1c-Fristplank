@@ -8,6 +8,7 @@ static t_list* inicializarEntrenadoresHasta(int cantidad);
 static void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores);
+static void setEstadoNew(t_list* entrenadores);
 static t_list* getObjetivosDesde(Entrenador* entrenador);
 static t_list* getAtrapadosDesde(Entrenador* entrenador);
 static void agregarObjetivosA(Entrenador* entrenador, t_list* objetivosDelEntrenador);
@@ -32,6 +33,7 @@ t_list* getEntrenadoresDesde(char* nombreDeArchivo) {
 	setPosicionesEnEntrenadoresDesde(configEntrenador, entrenadores);
 	setPokemonesObjetivosDesde(configEntrenador, entrenadores);
 	setPokemonesAtrapadosDesde(configEntrenador, entrenadores);
+	setEstadoNew(entrenadores);
 
 	return entrenadores;
 }
@@ -122,6 +124,12 @@ void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores) {
 	quickLog("Cargados los atrapados de los entrenadores");
 }
 
+void setEstadoNew(t_list* entrenadores){
+	for(int index=0; index < list_size(entrenadores); index++){
+		Entrenador* entrenador = list_get(entrenadores, index);
+		entrenador->estado = 1;
+	}
+}
 
 ///////POKEMONES////////
 
@@ -239,9 +247,9 @@ t_list* getObjetivosGlobalesDesde2(t_list* pokemonesObjetivos, t_list* pokemones
 
 	//el pokemon restado serian los pokemones objetivos, que se va a agregar con la cantidad restada si ya se atrapo
 	PokemonEnElMapa* restarCantidadQueFalta(PokemonEnElMapa* pokemonRestado) {
-		bool esLaMismaEspecie(PokemonEnElMapa* pokemonARestar){
-			return strcmp(pokemonRestado->nombre, pokemonARestar->nombre) == 0;
-		}
+//		bool esLaMismaEspecie(PokemonEnElMapa* pokemonARestar){
+//			return strcmp(pokemonRestado->nombre, pokemonARestar->nombre) == 0;
+//		}
 		//si todavia no hay ninguno atrapado o se atraparon pero ninguno coincide con la especie a restar
 		//if(list_is_empty(getTotalAtrapadosDesde(entrenadores)) == 1 || list_find(getTotalAtrapadosDesde(entrenadores), (erasedTypeFilter)esLaMismaEspecie) == NULL){
 		if(list_is_empty(pokemonesAtrapados) == 1 || buscarPorNombre(pokemonRestado->nombre,pokemonesAtrapados) == NULL){

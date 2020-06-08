@@ -26,15 +26,28 @@ void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
 //la funcion funcionesDelEntrenador tendria que estar en el Team.c, lo dejo aca por ahora
 void funcionesDelEntrenador(void* entrenador){
 
-	// por ahora usamos esto como ejemplo, donde de cada hilo te devuelve la posicion en x del entrenador
-	//Entrenador* unEntrenador = entrenador;
-	//EstadoNew* estadoNew = malloc(sizeof(EstadoNew));
-
-	quickLog("Nuevo entrenador a new");
-
-	//Agrego entrenador a la lista del estado NEW
-	//list_add(estadoNew->hilosEntrenadoresNew, unEntrenador);
-
+	while(1){
+		//cuando quiero cambiar de estado, dentro de la lista de entrenadores debo fijarme cual es el que tiene enum en ese estado
+		Entrenador* unEntrenador = entrenador;
+		switch(unEntrenador->estado){
+		case NEW:
+			//se odena por distancia mas corta (el entrenador mas cerca de ese poke) y se pasa a ready
+			break;
+		case READY:
+			// para que se pase a estado EXEC, se hace por fifo, primero se verifica que ningun entrenador este en EXEC
+			break;
+		case EXEC:
+			// aca hay 3 codiciones: moverse y atrapar en el mapa, intercambiar y mover
+			break;
+		case BLOCK:
+			//el entrenador que va a pasar a estado READY es el que tenga la distancia mas cerca al poke
+			//condiciones: esperando respuesta del broker o esperando otro en BLOCK por intercambio de pokes
+			break;
+		case EXIT:
+			//cada vez que entrea un entrenador, se verifica que se cumple el objetivo global
+			break;
+		}
+	}
 //
 //	if(no hay ninguno ejecutando){
 //		lock();
@@ -44,6 +57,5 @@ void funcionesDelEntrenador(void* entrenador){
 //		unlock();
 //	}
 
-	//free(estadoNew->hilosEntrenadoresNew);
-	//free(estadoNew);
 }
+
