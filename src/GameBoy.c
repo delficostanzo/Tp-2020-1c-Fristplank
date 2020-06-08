@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
  * ejemplo:	./GameBoy SUSCRIPTOR CATCH_POKEMON 10
 */
 
-	int socket;
+	int socket = crearSocket();
 
 	//MENSAJES AL BROKER
 	if (strcmp(argv[1], "BROKER") == 0){
@@ -116,7 +116,6 @@ int main(int argc, char* argv[]) {
 
 	//MENSAJES PARA SUSCBRIBIRSE AL BROKER POR X SEGUNDOS
 	else if (strcmp(argv[1], "SUSCRIPTOR") == 0){
-
 		procesarSubscribe(argv);
 	}
 
@@ -165,12 +164,12 @@ void procesarSubscribe(char* argv[]){
 	int segundosAEscuchar = atoi(argv[3]);
 
 	pthread_t threadEscucha;
-	pthread_create(&threadEscucha, NULL, escucharCola, (void*) cola);
+	pthread_create(&threadEscucha, NULL, (void*) escucharCola, (void*) cola);
 	sleep(segundosAEscuchar);
 	pthread_cancel(threadEscucha);
 }
 
-void* escucharCola(void* colaAEscuchar){
+void escucharCola(void* colaAEscuchar){
 	op_code cola = (op_code) colaAEscuchar;
 
 	int conexionBroker = conectarAModulo(PUERTO_BROKER, IP_BROKER);
@@ -183,15 +182,108 @@ void* escucharCola(void* colaAEscuchar){
 
 	log_info(logger, "Suscripto a la cola de %s", COLAS_STRING[cola]);
 
-	int escucharCola = crearSocket();
-	int puertoPropio = atoi(PUERTO_GAMEBOY);
-	if(escuchaEn(escucharCola, puertoPropio)){
-		log_info(logger, "Escuchando a Broker");
+// GENERO MI SOCKET DE ESCUCHA DONDE VOY A RECIBIR LOS MENSAJES
+//	int puertoPropio = atoi(PUERTO_GAMEBOY);
+//	if(escuchaEn(conexionBroker, puertoPropio)){
+//		while(1){ // ME QUEDO ESPERANDO CONEXIONES EN LOOP
+//			log_info(logger, "======= Esperando mensajes de Broker =======");
+//			int nuevaConexionBroker = aceptarConexion(conexionBroker);
+//			pthread_t recibirMensajeThread;
+//			pthread_create(&recibirMensajeThread, NULL, (void*) recibirEImprimirMensaje, (void*)nuevaConexionBroker);
+//			pthread_detach(recibirMensajeThread);
+//		}
+//	}
 
-		//TODO ACA HAY QUE LEER LO QUE NOS LLEGA
+//	while(1){ // ME QUEDO ESPERANDO CONEXIONES EN LOOP
+		log_info(logger, "======= Esperando mensajes de Broker =======");
+		recibirEImprimirMensaje(conexionBroker);
+//	}
+}
+
+void recibirEImprimirMensaje(int socketBroker){
+	log_debug(logger, "Entro a recibirEImprimirMensaje");
+	t_paquete* paquete = recibir_mensaje(socketBroker);
+
+	log_info(logger, "======= Nuevo mensaje recibido =======");
+	log_info(logger, "Tipo de mensaje: %s", COLAS_STRING[paquete->codigo_operacion]);
+	log_info(logger, "ID Mensaje: %d", paquete->ID);
+	log_info(logger, "ID Correlativo Mensaje: %d", paquete->ID_CORRELATIVO);
+	log_debug(logger, "Tamaño de payload: %d", paquete->buffer->size);
+
+	switch(paquete->codigo_operacion){
+
+		case NEW_POKEMON:;
+			t_new_pokemon* new_pokemon = (t_new_pokemon*) paquete->buffer->stream;
+			log_info(logger, "Nombre de Pokemon: %s", new_pokemon->pokemon);
+			log_info(logger, "Cantidad de Pokemon: %d", new_pokemon->cantidad);
+			log_info(logger, "Posicion (X,Y) = (%d,%d)", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
+
+
+			//TODO IMPRIME TODI -> EL PROBLEMA ES QUE QUIERE VOLVER A RECIBIR
+			//ONDA PARECE QUE ESTOY MANDANDO DE MAS
+
+//			free(new_pokemon->pokemon);
+//			log_info(logger, "free(new_pokemon->pokemon) realizado.");
+//			free(new_pokemon->posicion);
+//			log_info(logger, "free(new_pokemon->posicion) realizado.");
+//			free(new_pokemon);
+//			log_info(logger, "free(new_pokemon) realizado.");
+			break;
+
+		case APPEARED_POKEMON:;
+			t_appeared_pokemon* appeared_pokemon = paquete->buffer->stream;
+			log_info(logger, "Nombre de Pokemon: %s", appeared_pokemon->pokemon);
+			log_info(logger, "Posicion (X,Y) = (%d,%d)", appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY);
+//			free(appeared_pokemon->pokemon);
+//			free(appeared_pokemon->posicion);
+//			free(appeared_pokemon);
+			break;
+
+		case CATCH_POKEMON:;
+			t_catch_pokemon* catch_pokemon = paquete->buffer->stream;
+			log_info(logger, "Nombre de Pokemon: %s", catch_pokemon->pokemon);
+			log_info(logger, "Posicion (X,Y) = (%d,%d)", catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
+//			free(catch_pokemon->pokemon);
+//			free(catch_pokemon->posicion);
+//			free(catch_pokemon);
+			break;
+
+		case CAUGHT_POKEMON:;
+			t_caught_pokemon* caught_pokemon = paquete->buffer->stream;
+			log_info(logger, "%s", BOOL_CAUGHT[caught_pokemon->ok]);
+//			free(caught_pokemon);
+			break;
+
+		case GET_POKEMON:;
+			t_get_pokemon* get_pokemon = paquete->buffer->stream;
+			log_info(logger, "Nombre de Pokemon: %s", get_pokemon->pokemon);
+//			free(get_pokemon->pokemon);
+//			free(get_pokemon);
+			break;
+
+		case LOCALIZED_POKEMON:;
+			t_localized_pokemon* localized_pokemon = paquete->buffer->stream;
+			log_info(logger, "Nombre de Pokemon: %s", localized_pokemon->pokemon);
+			log_info(logger, "El pokemon se encontro en %d posiciones", localized_pokemon->cantidadPosiciones);
+			for(int i = 0; i < localized_pokemon->cantidadPosiciones; i++){
+				t_posicion* posicion = list_get(localized_pokemon->listaPosiciones, i);
+				log_info(logger, "Posicion numero %d: (X,Y) = (%d,%d)", i, posicion->posicionX, posicion->posicionY);
+				free(posicion);
+			}
+//			free(localized_pokemon->pokemon);
+//			free(localized_pokemon->listaPosiciones);
+//			free(localized_pokemon);
+			break;
+		default:
+			log_info(logger, "El tipo de mensaje es incorrecto");
 	}
-	liberar_conexion(conexionBroker);
-	return NULL;
+
+//	free(paquete->buffer->stream);
+//	log_info(logger, "free(paquete->buffer->stream) realizado.");
+//	free(paquete->buffer);
+//	log_info(logger, "free(paquete->buffer) realizado.");
+//	free(paquete);
+//	log_info(logger, "free(paquete) realizado.");
 }
 
 
@@ -209,7 +301,7 @@ int conectarAModulo(String PUERTO, String IP){
 
 	id_proceso idProceso;
 	idProceso = responderHandshake(conexion, GAMEBOY);
-	log_debug(logger, "El id del proceso con el que me conecte es: %d", idProceso);
+	log_info(logger, "El id del proceso con el que me conecte es: %s", ID_PROCESO[idProceso]);
 
 	return conexion;
 }

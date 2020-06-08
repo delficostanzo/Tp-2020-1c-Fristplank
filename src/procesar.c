@@ -13,6 +13,7 @@ void procesarBrokerNewPokemon(int socket, char* argv[]){
 	log_debug(logger, "Mensaje a enviar a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
+	new_pokemon->pokemon = malloc(strlen(argv[3] + 1));
 	new_pokemon->pokemon = argv[3];
 	new_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
 	new_pokemon->cantidad = atoi(argv[6]);
