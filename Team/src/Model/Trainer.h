@@ -7,9 +7,8 @@
 #include "Pokemon.h"
 
 typedef enum{
-	MOVER = 1,
-	INTERCAMBIAR = 2,
-	ATRAPAR = 3
+	MOVERyATRAPAR = 1,
+	MOVEReINTERCAMBIAR = 2,
 }ObjetivoEnExec;
 
 typedef enum{

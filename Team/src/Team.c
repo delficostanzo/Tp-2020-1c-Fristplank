@@ -22,6 +22,20 @@ int main(int argc, char *argv[]) {
 	//arranca vacia hasta que recibamos los localized y appeared de los pokes
 	t_list* pokemonesLibres = list_create();
 
+	//probando las funciones del planificador
+	PokemonEnElMapa* pokemonDePrueba1 = newPokemon();
+	t_posicion posicionDePrueba1;
+	posicionDePrueba1.posicionX = 1;
+	posicionDePrueba1.posicionY = 1;
+	setPosicionTo(pokemonDePrueba1, posicionDePrueba1);
+	setNombreTo(pokemonDePrueba1, "Delficapa");
+	list_add(pokemonesLibres, pokemonDePrueba1);
+	pasarDeNewAReady(entrenadores, pokemonesLibres);
+	Entrenador* entrenador1 = list_get(entrenadores, 0);
+	log_info(logger, "El estado del primer entrenador tendria que pasar de new a ready y se muestra : %d", entrenador1->estado);
+	//
+
+
 	//	int TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
 	//	int RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
 	//	char* ALGORITMO_PLANIFICACION = config_get_string_value(config, "ALGORITMO_PLANIFICACION");
