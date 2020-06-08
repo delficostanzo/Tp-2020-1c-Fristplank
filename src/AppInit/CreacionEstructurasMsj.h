@@ -9,6 +9,7 @@
 #define SRC_APPINIT_CREACIONESTRUCTURASMSJ_H_
 
 #include "utils.h"
+#include "../Model/Pokemon.h"
 
 t_get_pokemon* crearEstructuraGetDesde(PokemonEnElMapa* pokemones);
 

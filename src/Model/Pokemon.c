@@ -32,6 +32,10 @@ PokemonEnElMapa* buscarPorNombre(char* nombrePokemon, t_list* pokemones){
 	return pokemonBuscado;
 }
 
+int sonLaMismaPosicion(t_posicion posicion1, t_posicion posicion2) {
+	return (posicion1.posicionX == posicion2.posicionX) && (posicion1.posicionY == posicion2.posicionY);
+}
+
 //Setters
 void setNombreTo(PokemonEnElMapa* pokemon, char* nombre) {
 	strcpy(pokemon->nombre, nombre);
