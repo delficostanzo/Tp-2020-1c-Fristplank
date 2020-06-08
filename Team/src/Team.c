@@ -18,6 +18,10 @@ int main(int argc, char *argv[]) {
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
 	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
+	//lista de los pokemones libres que faltan atrapar y que se necesitan
+	//arranca vacia hasta que recibamos los localized y appeared de los pokes
+	t_list* pokemonesLibres = list_create();
+
 	//	int TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
 	//	int RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
 	//	char* ALGORITMO_PLANIFICACION = config_get_string_value(config, "ALGORITMO_PLANIFICACION");
@@ -66,6 +70,8 @@ int main(int argc, char *argv[]) {
 	int suscripcionAppeared = crearSocket();
 	int suscripcionCaught = crearSocket();
 	int suscripcionLocalized = crearSocket();
+	int socketGet = crearSocket();
+	int socketCatch = crearSocket();
 
 	if (conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("Suscripto a la cola de appeared_pokemon");
@@ -76,10 +82,23 @@ int main(int argc, char *argv[]) {
 	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("Suscripto a la cola de localized_pokemon");
 	}
+	if (conectarA(socketGet, IP_BROKER, PUERTO_BROKER)) {
+		quickLog("Ya se conecto a la cola de get para poder enviarle mensajes");
+	}
+	if (conectarA(socketCatch, IP_BROKER, PUERTO_BROKER)) {
+		quickLog("Ya se conecto a la cola de catch para poder enviarle mensajes");
+	}
 
 	//ENVIA MSJ GET CON LA LISTA DE LOS OBJETIVOS GLOBALES
+	//DENTRO DE SELECTS
+	enviarGetDesde(objetivosGlobales, socketGet);
+	//verificar que el mensaje vuelva a enviarse a traves de ese socket
+	recibirIdGet(socketGet);
 
-
+	//recibe los nombres de pokemones encontrados libres con sus posiciones
+	//y si se necesitan (estan en los objetivos globales) se agregan a la lista de pokemones libres
+	recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
+	recibirAppearedYGuardalos(suscripcionAppeared, objetivosGlobales);
 
 	//pasar de array a t_list
 
@@ -101,8 +120,6 @@ int main(int argc, char *argv[]) {
 			entrenadorMasCercano->posicion->posicionY);
 
 	//t_list* objetivosGlobales = getObjetivosGlobalesDesde("src/team.config");
-
-
 
 	t_paquete* paquetePrueba = recibir_mensaje(suscripcionCaught);
 

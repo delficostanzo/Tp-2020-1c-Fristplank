@@ -50,7 +50,8 @@ typedef struct
 {
 	uint32_t lengthOfPokemon;
 	char* pokemon;
-	t_posicion* posicion;
+	//CAMBIO TODO
+	t_posicion posicion;
 } t_appeared_pokemon;
 
 typedef struct
@@ -111,6 +112,7 @@ void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, ui
 void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
+void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo);
 void enviar_ACK(int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 

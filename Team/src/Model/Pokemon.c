@@ -24,6 +24,10 @@ PokemonEnElMapa* buscarPorNombre(char* nombrePokemon, t_list* pokemones){
 		//return pokemon->nombre == nombrePokemon;
 	}
 
+	if(list_is_empty(pokemones) == 1) {
+		return NULL;
+	}
+
 	PokemonEnElMapa* pokemonBuscado = list_find(pokemones, (void*)tieneNombre);
 	return pokemonBuscado;
 }
