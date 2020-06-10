@@ -8,7 +8,7 @@
 #ifndef SRC_PROCESAR_H_
 #define SRC_PROCESAR_H_
 
-#include "GameBoy.h"
+#include "gameboy.h"
 
 extern t_log* logger;
 
