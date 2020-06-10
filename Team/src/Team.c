@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]) {
 	int conexionBroker; //cliente del broker
-	int conexionGameBoy; //servidor del gameboy
+	//int conexionGameBoy; //servidor del gameboy
 
 	//t_log* logger = iniciar_log("team");
 	t_log* logger = iniciar_logger();
@@ -23,17 +23,17 @@ int main(int argc, char *argv[]) {
 	t_list* pokemonesLibres = list_create();
 
 	//probando las funciones del planificador
-	PokemonEnElMapa* pokemonDePrueba1 = newPokemon();
-	t_posicion posicionDePrueba1;
-	posicionDePrueba1.posicionX = 1;
-	posicionDePrueba1.posicionY = 1;
-	setPosicionTo(pokemonDePrueba1, posicionDePrueba1);
-	setNombreTo(pokemonDePrueba1, "Delficapa");
-	list_add(pokemonesLibres, pokemonDePrueba1);
-	pasarDeNewAReady(entrenadores, pokemonesLibres);
-	Entrenador* entrenador1 = list_get(entrenadores, 0);
-	log_info(logger, "El estado del primer entrenador tendria que pasar de new a ready y se muestra : %d", entrenador1->estado);
-	//
+//	PokemonEnElMapa* pokemonDePrueba1 = newPokemon();
+//	t_posicion posicionDePrueba1;
+//	posicionDePrueba1.posicionX = 1;
+//	posicionDePrueba1.posicionY = 1;
+//	setPosicionTo(pokemonDePrueba1, posicionDePrueba1);
+//	setNombreTo(pokemonDePrueba1, "Delficapa");
+//	list_add(pokemonesLibres, pokemonDePrueba1);
+//	pasarDeNewAReady(entrenadores, pokemonesLibres);
+//	Entrenador* entrenador1 = list_get(entrenadores, 0);
+//	log_info(logger, "El estado del primer entrenador tendria que pasar de new a ready y se muestra : %d", entrenador1->estado);
+//	//
 
 
 	//	int TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
