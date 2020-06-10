@@ -194,21 +194,24 @@ void escucharCola(void* colaAEscuchar){
 //		}
 //	}
 
-//	while(1){ // ME QUEDO ESPERANDO CONEXIONES EN LOOP
-		log_info(logger, "======= Esperando mensajes de Broker =======");
-		recibirEImprimirMensaje(conexionBroker);
-//	}
+	while(1){ // ME QUEDO ESPERANDO MENSAJES EN LOOP
+		log_info(logger, "============== Esperando mensajes de Broker ==============");
+		recibirEImprimirMensaje(conexionBroker, cola);
+	}
 }
 
-void recibirEImprimirMensaje(int socketBroker){
+void recibirEImprimirMensaje(int socketBroker, op_code cola){
 	log_debug(logger, "Entro a recibirEImprimirMensaje");
+
+//	t_paquete* paquete = recibir_mensaje_cola_especifica(socketBroker, cola);
 	t_paquete* paquete = recibir_mensaje(socketBroker);
+
 
 	log_info(logger, "======= Nuevo mensaje recibido =======");
 	log_info(logger, "Tipo de mensaje: %s", COLAS_STRING[paquete->codigo_operacion]);
-	log_info(logger, "ID Mensaje: %d", paquete->ID);
-	log_info(logger, "ID Correlativo Mensaje: %d", paquete->ID_CORRELATIVO);
-	log_debug(logger, "Tamaño de payload: %d", paquete->buffer->size);
+	log_info(logger, "ID del mensaje: %d", paquete->ID);
+	log_info(logger, "ID correlativo del mensaje: %d", paquete->ID_CORRELATIVO);
+	log_debug(logger,"Tamaño de payload: %d", paquete->buffer->size);
 
 	switch(paquete->codigo_operacion){
 
@@ -217,17 +220,12 @@ void recibirEImprimirMensaje(int socketBroker){
 			log_info(logger, "Nombre de Pokemon: %s", new_pokemon->pokemon);
 			log_info(logger, "Cantidad de Pokemon: %d", new_pokemon->cantidad);
 			log_info(logger, "Posicion (X,Y) = (%d,%d)", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
-
-
-			//TODO IMPRIME TODI -> EL PROBLEMA ES QUE QUIERE VOLVER A RECIBIR
-			//ONDA PARECE QUE ESTOY MANDANDO DE MAS
-
-//			free(new_pokemon->pokemon);
-//			log_info(logger, "free(new_pokemon->pokemon) realizado.");
-//			free(new_pokemon->posicion);
-//			log_info(logger, "free(new_pokemon->posicion) realizado.");
-//			free(new_pokemon);
-//			log_info(logger, "free(new_pokemon) realizado.");
+//				free(new_pokemon->pokemon);
+//				log_info(logger, "free(new_pokemon->pokemon) realizado.");
+//				free(new_pokemon->posicion);
+//				log_info(logger, "free(new_pokemon->posicion) realizado.");
+//				free(new_pokemon);
+//				log_info(logger, "free(new_pokemon) realizado.");
 			break;
 
 		case APPEARED_POKEMON:;
@@ -250,7 +248,7 @@ void recibirEImprimirMensaje(int socketBroker){
 
 		case CAUGHT_POKEMON:;
 			t_caught_pokemon* caught_pokemon = paquete->buffer->stream;
-			log_info(logger, "%s", BOOL_CAUGHT[caught_pokemon->ok]);
+			log_info(logger, "Resultado: %s", BOOL_CAUGHT[caught_pokemon->ok]);
 //			free(caught_pokemon);
 			break;
 
@@ -267,7 +265,7 @@ void recibirEImprimirMensaje(int socketBroker){
 			log_info(logger, "El pokemon se encontro en %d posiciones", localized_pokemon->cantidadPosiciones);
 			for(int i = 0; i < localized_pokemon->cantidadPosiciones; i++){
 				t_posicion* posicion = list_get(localized_pokemon->listaPosiciones, i);
-				log_info(logger, "Posicion numero %d: (X,Y) = (%d,%d)", i, posicion->posicionX, posicion->posicionY);
+				log_info(logger, "Posicion numero %d: (X,Y) = (%d,%d)", i + 1, posicion->posicionX, posicion->posicionY);
 				free(posicion);
 			}
 //			free(localized_pokemon->pokemon);
@@ -278,11 +276,12 @@ void recibirEImprimirMensaje(int socketBroker){
 			log_info(logger, "El tipo de mensaje es incorrecto");
 	}
 
+
 //	free(paquete->buffer->stream);
 //	log_info(logger, "free(paquete->buffer->stream) realizado.");
 //	free(paquete->buffer);
 //	log_info(logger, "free(paquete->buffer) realizado.");
-//	free(paquete);
+	free(paquete);
 //	log_info(logger, "free(paquete) realizado.");
 }
 
@@ -338,7 +337,7 @@ t_config* leer_config(void)
 t_log* iniciarLogger(void){
 
 	t_log* logger;
-	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("DEBUG"))) == NULL){
+	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("INFO"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}

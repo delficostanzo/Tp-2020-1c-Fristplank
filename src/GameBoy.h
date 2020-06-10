@@ -64,6 +64,6 @@ int conectarAModulo(String PUERTO, String IP);
 
 void procesarSubscribe(char* argv[]);
 void escucharCola(void* colaAEscuchar);
-void recibirEImprimirMensaje(int socketBroker);
+void recibirEImprimirMensaje(int socketBroker, op_code cola);
 
 #endif /* GAMEBOY_H_ */
