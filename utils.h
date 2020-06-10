@@ -113,6 +113,7 @@ void enviar_ACK(int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
 
 t_paquete* recibir_mensaje(int socket_cliente);
+t_paquete* recibir_mensaje_cola_especifica(int socket_cliente, op_code cola);
 
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
