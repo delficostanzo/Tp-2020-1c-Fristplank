@@ -182,18 +182,6 @@ void escucharCola(void* colaAEscuchar){
 
 	log_info(logger, "Suscripto a la cola de %s", COLAS_STRING[cola]);
 
-// GENERO MI SOCKET DE ESCUCHA DONDE VOY A RECIBIR LOS MENSAJES
-//	int puertoPropio = atoi(PUERTO_GAMEBOY);
-//	if(escuchaEn(conexionBroker, puertoPropio)){
-//		while(1){ // ME QUEDO ESPERANDO CONEXIONES EN LOOP
-//			log_info(logger, "======= Esperando mensajes de Broker =======");
-//			int nuevaConexionBroker = aceptarConexion(conexionBroker);
-//			pthread_t recibirMensajeThread;
-//			pthread_create(&recibirMensajeThread, NULL, (void*) recibirEImprimirMensaje, (void*)nuevaConexionBroker);
-//			pthread_detach(recibirMensajeThread);
-//		}
-//	}
-
 	while(1){ // ME QUEDO ESPERANDO MENSAJES EN LOOP
 		log_info(logger, "============== Esperando mensajes de Broker ==============");
 		recibirEImprimirMensaje(conexionBroker, cola);
@@ -203,9 +191,7 @@ void escucharCola(void* colaAEscuchar){
 void recibirEImprimirMensaje(int socketBroker, op_code cola){
 	log_debug(logger, "Entro a recibirEImprimirMensaje");
 
-//	t_paquete* paquete = recibir_mensaje_cola_especifica(socketBroker, cola);
 	t_paquete* paquete = recibir_mensaje(socketBroker);
-
 
 	log_info(logger, "======= Nuevo mensaje recibido =======");
 	log_info(logger, "Tipo de mensaje: %s", COLAS_STRING[paquete->codigo_operacion]);
@@ -214,49 +200,46 @@ void recibirEImprimirMensaje(int socketBroker, op_code cola){
 	log_debug(logger,"Tamaño de payload: %d", paquete->buffer->size);
 
 	switch(paquete->codigo_operacion){
-
 		case NEW_POKEMON:;
 			t_new_pokemon* new_pokemon = (t_new_pokemon*) paquete->buffer->stream;
 			log_info(logger, "Nombre de Pokemon: %s", new_pokemon->pokemon);
 			log_info(logger, "Cantidad de Pokemon: %d", new_pokemon->cantidad);
 			log_info(logger, "Posicion (X,Y) = (%d,%d)", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
-//				free(new_pokemon->pokemon);
-//				log_info(logger, "free(new_pokemon->pokemon) realizado.");
-//				free(new_pokemon->posicion);
-//				log_info(logger, "free(new_pokemon->posicion) realizado.");
-//				free(new_pokemon);
-//				log_info(logger, "free(new_pokemon) realizado.");
+
+			free(new_pokemon->pokemon);
+			free(new_pokemon->posicion);
+			free(new_pokemon);
 			break;
 
 		case APPEARED_POKEMON:;
 			t_appeared_pokemon* appeared_pokemon = paquete->buffer->stream;
 			log_info(logger, "Nombre de Pokemon: %s", appeared_pokemon->pokemon);
 			log_info(logger, "Posicion (X,Y) = (%d,%d)", appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY);
-//			free(appeared_pokemon->pokemon);
-//			free(appeared_pokemon->posicion);
-//			free(appeared_pokemon);
+			free(appeared_pokemon->pokemon);
+			free(appeared_pokemon->posicion);
+			free(appeared_pokemon);
 			break;
 
 		case CATCH_POKEMON:;
 			t_catch_pokemon* catch_pokemon = paquete->buffer->stream;
 			log_info(logger, "Nombre de Pokemon: %s", catch_pokemon->pokemon);
 			log_info(logger, "Posicion (X,Y) = (%d,%d)", catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
-//			free(catch_pokemon->pokemon);
-//			free(catch_pokemon->posicion);
-//			free(catch_pokemon);
+			free(catch_pokemon->pokemon);
+			free(catch_pokemon->posicion);
+			free(catch_pokemon);
 			break;
 
 		case CAUGHT_POKEMON:;
 			t_caught_pokemon* caught_pokemon = paquete->buffer->stream;
 			log_info(logger, "Resultado: %s", BOOL_CAUGHT[caught_pokemon->ok]);
-//			free(caught_pokemon);
+			free(caught_pokemon);
 			break;
 
 		case GET_POKEMON:;
 			t_get_pokemon* get_pokemon = paquete->buffer->stream;
 			log_info(logger, "Nombre de Pokemon: %s", get_pokemon->pokemon);
-//			free(get_pokemon->pokemon);
-//			free(get_pokemon);
+			free(get_pokemon->pokemon);
+			free(get_pokemon);
 			break;
 
 		case LOCALIZED_POKEMON:;
@@ -266,10 +249,14 @@ void recibirEImprimirMensaje(int socketBroker, op_code cola){
 			for(int i = 0; i < localized_pokemon->cantidadPosiciones; i++){
 				t_posicion* posicion = list_get(localized_pokemon->listaPosiciones, i);
 				log_info(logger, "Posicion numero %d: (X,Y) = (%d,%d)", i + 1, posicion->posicionX, posicion->posicionY);
-				free(posicion);
 			}
+
+			list_destroy(localized_pokemon->listaPosiciones);
+
+			//TODO arreglar estos free
+//			puts("antes del free del nombre");
 //			free(localized_pokemon->pokemon);
-//			free(localized_pokemon->listaPosiciones);
+//			puts("despues del free del nombre");
 //			free(localized_pokemon);
 			break;
 		default:
@@ -294,7 +281,7 @@ int conectarAModulo(String PUERTO, String IP){
 	int conexion = crearSocket();
 
 	int puertoInt = atoi(PUERTO);
-	if(conectarA(conexion, IP, puertoInt)){
+	while(conectarA(conexion, IP, puertoInt) != 1){
 		log_debug(logger, "Conectando al módulo...");
 	}
 
