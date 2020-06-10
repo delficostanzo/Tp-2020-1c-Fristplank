@@ -263,13 +263,10 @@ void recibirEImprimirMensaje(int socketBroker, op_code cola){
 			log_info(logger, "El tipo de mensaje es incorrecto");
 	}
 
-
-//	free(paquete->buffer->stream);
-//	log_info(logger, "free(paquete->buffer->stream) realizado.");
-//	free(paquete->buffer);
-//	log_info(logger, "free(paquete->buffer) realizado.");
+	free(paquete->buffer);
+	log_debug(logger, "free(paquete->buffer) realizado.");
 	free(paquete);
-//	log_info(logger, "free(paquete) realizado.");
+	log_debug(logger, "free(paquete) realizado.");
 }
 
 
