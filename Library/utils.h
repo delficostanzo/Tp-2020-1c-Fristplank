@@ -17,6 +17,7 @@
 
 #include"conexion.h"
 #include"serializadores.h"
+#include"desserializadores.h"
 
 typedef enum
 {
@@ -41,6 +42,7 @@ typedef struct
 {
 	uint32_t lengthOfPokemon;
 	char* pokemon;
+	//t_posicion posicion;
 	t_posicion* posicion;
 	uint32_t cantidad;
 } t_new_pokemon;
@@ -49,6 +51,7 @@ typedef struct
 {
 	uint32_t lengthOfPokemon;
 	char* pokemon;
+	//t_posicion posicion;
 	t_posicion* posicion;
 } t_appeared_pokemon;
 
@@ -57,6 +60,7 @@ typedef struct
 	uint32_t lengthOfPokemon;
 	char* pokemon;
 	t_posicion* posicion;
+	//t_posicion posicion;
 } t_catch_pokemon;
 
 typedef struct
@@ -98,22 +102,21 @@ typedef struct
 typedef struct
 {
 	op_code codigo_operacion;
-	uint32_t ID;
-	uint32_t ID_CORRELATIVO;
+	int ID;
+	int ID_CORRELATIVO;
 	t_buffer* buffer;
 } t_paquete;
 
-void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
-void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
-void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
-void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
-void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
-void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
-void enviar_ACK(int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
-void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, uint32_t ID, uint32_t IDCORRELATIVO);
+void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+void enviar_ACK(int socket_cliente, int ID, int IDCORRELATIVO);
+void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, int ID, int IDCORRELATIVO);
 
 t_paquete* recibir_mensaje(int socket_cliente);
-t_paquete* recibir_mensaje_cola_especifica(int socket_cliente, op_code cola);
 
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
