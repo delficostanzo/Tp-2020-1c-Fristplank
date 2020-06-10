@@ -16,9 +16,12 @@ void* des_serializar_new_pokemon(int socket_cliente, int size){
 
 	memcpy(&(new_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
-	new_pokemon->pokemon = malloc(new_pokemon->lengthOfPokemon);
-	memcpy(new_pokemon->pokemon, recorrerStream, new_pokemon->lengthOfPokemon);
+
+
+	new_pokemon->pokemon = malloc(new_pokemon->lengthOfPokemon + 1);
+	memcpy(new_pokemon->pokemon, recorrerStream, new_pokemon->lengthOfPokemon + 1);
 	recorrerStream += new_pokemon->lengthOfPokemon + 1;
+
 	new_pokemon->posicion = malloc(sizeof(t_posicion));
 	memcpy(&(new_pokemon->posicion->posicionX), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
@@ -27,6 +30,7 @@ void* des_serializar_new_pokemon(int socket_cliente, int size){
 	memcpy(&(new_pokemon->cantidad), recorrerStream, sizeof(uint32_t));
 
 //	printf("<><>INIT DEBUGEANDO ERRORES<><>\n");
+//	printf("nombrepokemon: %s\n", new_pokemon->pokemon);
 //	printf("Lengthofpokemon: %d \n", new_pokemon->lengthOfPokemon);
 //	printf("lengthcalculado: %d \n", strlen(new_pokemon->pokemon));
 //	printf("posx: %d \n", new_pokemon->posicion->posicionX);
@@ -46,8 +50,8 @@ void* des_serializar_appeared_pokemon(int socket_cliente, int size){
 
 	memcpy(&(appeared_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
-	appeared_pokemon->pokemon = malloc(appeared_pokemon->lengthOfPokemon);
-	memcpy(appeared_pokemon->pokemon, recorrerStream, appeared_pokemon->lengthOfPokemon);
+	appeared_pokemon->pokemon = malloc(appeared_pokemon->lengthOfPokemon + 1);
+	memcpy(appeared_pokemon->pokemon, recorrerStream, appeared_pokemon->lengthOfPokemon + 1);
 	recorrerStream += appeared_pokemon->lengthOfPokemon + 1;
 	appeared_pokemon->posicion = malloc(sizeof(t_posicion));
 	memcpy(&(appeared_pokemon->posicion->posicionX), recorrerStream, sizeof(uint32_t));
@@ -55,7 +59,7 @@ void* des_serializar_appeared_pokemon(int socket_cliente, int size){
 	memcpy(&(appeared_pokemon->posicion->posicionY), recorrerStream, sizeof(uint32_t));
 
 	free(stream);
-	printf("free(stream) hecho\n");
+//	printf("free(stream) hecho\n");
 	return appeared_pokemon;
 }
 
@@ -66,8 +70,8 @@ void* des_serializar_catch_pokemon(int socket_cliente, int size){
 
 	memcpy(&(catch_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
-	catch_pokemon->pokemon = malloc(catch_pokemon->lengthOfPokemon);
-	memcpy(catch_pokemon->pokemon, recorrerStream, catch_pokemon->lengthOfPokemon);
+	catch_pokemon->pokemon = malloc(catch_pokemon->lengthOfPokemon + 1);
+	memcpy(catch_pokemon->pokemon, recorrerStream, catch_pokemon->lengthOfPokemon + 1);
 	recorrerStream += catch_pokemon->lengthOfPokemon + 1;
 	catch_pokemon->posicion = malloc(sizeof(t_posicion));
 	memcpy(&(catch_pokemon->posicion->posicionX), recorrerStream, sizeof(uint32_t));
@@ -75,7 +79,7 @@ void* des_serializar_catch_pokemon(int socket_cliente, int size){
 	memcpy(&(catch_pokemon->posicion->posicionY), recorrerStream, sizeof(uint32_t));
 
 	free(stream);
-	printf("free(stream) hecho\n");
+//	printf("free(stream) hecho\n");
 	return catch_pokemon;
 }
 
@@ -87,7 +91,7 @@ void* des_serializar_caught_pokemon(int socket_cliente, int size){
 	memcpy(&(caught_pokemon->ok), recorrerStream, sizeof(uint32_t));
 
 	free(stream);
-	printf("free(stream) hecho\n");
+//	printf("free(stream) hecho\n");
 	return caught_pokemon;
 }
 
@@ -98,11 +102,11 @@ void* des_serializar_get_pokemon(int socket_cliente, int size){
 
 	memcpy(&(get_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
-	get_pokemon->pokemon = malloc(get_pokemon->lengthOfPokemon);
-	memcpy(get_pokemon->pokemon, recorrerStream, get_pokemon->lengthOfPokemon);
+	get_pokemon->pokemon = malloc(get_pokemon->lengthOfPokemon + 1);
+	memcpy(get_pokemon->pokemon, recorrerStream, get_pokemon->lengthOfPokemon + 1);
 
 	free(stream);
-	printf("free(stream) hecho\n");
+//	printf("free(stream) hecho\n");
 	return get_pokemon;
 }
 
@@ -113,26 +117,34 @@ void* des_serializar_localized_pokemon(int socket_cliente, int size){
 
 	memcpy(&(localized_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
-	localized_pokemon->pokemon = malloc(localized_pokemon->lengthOfPokemon);
-	memcpy(localized_pokemon->pokemon, recorrerStream, localized_pokemon->lengthOfPokemon);
+	localized_pokemon->pokemon = malloc(localized_pokemon->lengthOfPokemon + 1);
+	memcpy(localized_pokemon->pokemon, recorrerStream, localized_pokemon->lengthOfPokemon + 1);
 	recorrerStream += localized_pokemon->lengthOfPokemon + 1;
 	memcpy(&(localized_pokemon->cantidadPosiciones), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
 
+//	printf("<><>INIT DEBUGEANDO ERRORES<><>\n");
+//	printf("Se encontraron %d posiciones\n", localized_pokemon->cantidadPosiciones);
+//
+//	printf("<><>FIN DEBUGEANDO ERRORES<><>\n");
+
 	localized_pokemon->listaPosiciones = list_create();
-	for(int i; i < localized_pokemon->cantidadPosiciones; i++){
+//	printf("<><>Pasa list_create<><>\n");
+
+	for(int i = 0; i < localized_pokemon->cantidadPosiciones; i++){
 		t_posicion* posicion = malloc(sizeof(t_posicion));
 
 		memcpy(&(posicion->posicionX), recorrerStream, sizeof(uint32_t));
 		recorrerStream += sizeof(uint32_t);
 		memcpy(&(posicion->posicionY), recorrerStream, sizeof(uint32_t));
 		recorrerStream += sizeof(uint32_t);
+//		printf("posicion %d : (%d,%d)", i, posicion->posicionX, posicion->posicionY);
 
 		list_add(localized_pokemon->listaPosiciones, posicion);
 	}
 
-	free(stream);
-	printf("free(stream) hecho\n");
+//	free(stream);
+//	printf("free(stream) hecho\n");
 	return localized_pokemon;
 }
 
@@ -145,7 +157,7 @@ void* des_serializar_respuesta_id(int socket_cliente, int size){
 	recorrerStream += sizeof(uint32_t);
 
 	free(stream);
-	printf("free(stream) hecho\n");
+//	printf("free(stream) hecho\n");
 	return respuesta_id;
 }
 
@@ -158,6 +170,6 @@ void* des_serializar_gameboy_suscribe(int socket_cliente, int size){
 	recorrerStream += sizeof(op_code);
 
 	free(stream);
-	printf("free(stream) hecho\n");
+//	printf("free(stream) hecho\n");
 	return gameboy_suscribe;
 }
