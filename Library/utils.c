@@ -141,6 +141,7 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 		//ESPERO MENSAJE VALIDO
 	}
 
+	//ACA
 //	printf("---------------------%d------------------\n", paquete->codigo_operacion);
 	recv(socket_cliente, &(paquete->ID), sizeof(uint32_t), MSG_WAITALL);
 	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(uint32_t), MSG_WAITALL);
@@ -191,57 +192,63 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 t_paquete* recibir_mensaje_cola_especifica(int socket_cliente, op_code cola) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	while(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) < 1 || paquete->codigo_operacion != cola){}
+	/* Esto es un asco pero no se como hacer
+	 * para que reciba solamente los mensajes que quiero yo
+	 */
 
-	printf("%d", paquete->codigo_operacion);
-	if (paquete->codigo_operacion == cola){
-	//	printf("---------------------%d------------------\n", paquete->codigo_operacion);
-		recv(socket_cliente, &(paquete->ID), sizeof(uint32_t), MSG_WAITALL);
-		recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(uint32_t), MSG_WAITALL);
-		paquete->buffer = malloc(sizeof(t_buffer));
-		recv(socket_cliente, &(paquete->buffer->size), sizeof(uint32_t), MSG_WAITALL);
 
-		switch(paquete->codigo_operacion){
-			case NEW_POKEMON:
-				paquete->buffer->stream = des_serializar_new_pokemon(socket_cliente, paquete->buffer->size);
-				break;
-
-			case APPEARED_POKEMON:;
-				paquete->buffer->stream = des_serializar_appeared_pokemon(socket_cliente, paquete->buffer->size);
-				break;
-
-			case CATCH_POKEMON:;
-				paquete->buffer->stream = des_serializar_catch_pokemon(socket_cliente, paquete->buffer->size);
-				break;
-
-			case CAUGHT_POKEMON:;
-				paquete->buffer->stream = des_serializar_caught_pokemon(socket_cliente, paquete->buffer->size);
-				break;
-
-			case GET_POKEMON:;
-				paquete->buffer->stream = des_serializar_get_pokemon(socket_cliente, paquete->buffer->size);
-				break;
-
-			case LOCALIZED_POKEMON:;
-				paquete->buffer->stream = des_serializar_localized_pokemon(socket_cliente, paquete->buffer->size);
-				break;
-
-			case RESPUESTA_ID:;
-				paquete->buffer->stream = des_serializar_respuesta_id(socket_cliente, paquete->buffer->size);
-				break;
-
-			case ACK:
-				// No se hace nada porque no tiene payload
-				break;
-
-			case GAMEBOYSUSCRIBE:;
-				paquete->buffer->stream = des_serializar_gameboy_suscribe(socket_cliente, paquete->buffer->size);
-				break;
-			}
-
-		return paquete;
+	while(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) <= 4){
+		if (paquete->codigo_operacion == cola){
+			break;
+		}
 	}
+
+	recv(socket_cliente, &(paquete->ID), sizeof(uint32_t), MSG_WAITALL);
+	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(uint32_t), MSG_WAITALL);
+	paquete->buffer = malloc(sizeof(t_buffer));
+	recv(socket_cliente, &(paquete->buffer->size), sizeof(uint32_t), MSG_WAITALL);
+
+	switch(paquete->codigo_operacion){
+		case NEW_POKEMON:
+			paquete->buffer->stream = des_serializar_new_pokemon(socket_cliente, paquete->buffer->size);
+			break;
+
+		case APPEARED_POKEMON:;
+			paquete->buffer->stream = des_serializar_appeared_pokemon(socket_cliente, paquete->buffer->size);
+			break;
+
+		case CATCH_POKEMON:;
+			paquete->buffer->stream = des_serializar_catch_pokemon(socket_cliente, paquete->buffer->size);
+			break;
+
+		case CAUGHT_POKEMON:;
+			paquete->buffer->stream = des_serializar_caught_pokemon(socket_cliente, paquete->buffer->size);
+			break;
+
+		case GET_POKEMON:;
+			paquete->buffer->stream = des_serializar_get_pokemon(socket_cliente, paquete->buffer->size);
+			break;
+
+		case LOCALIZED_POKEMON:;
+			paquete->buffer->stream = des_serializar_localized_pokemon(socket_cliente, paquete->buffer->size);
+			break;
+
+		case RESPUESTA_ID:;
+			paquete->buffer->stream = des_serializar_respuesta_id(socket_cliente, paquete->buffer->size);
+			break;
+
+		case ACK:
+			// No se hace nada porque no tiene payload
+			break;
+
+		case GAMEBOYSUSCRIBE:;
+			paquete->buffer->stream = des_serializar_gameboy_suscribe(socket_cliente, paquete->buffer->size);
+			break;
+		}
+
+	return paquete;
 }
+
 
 void liberar_conexion(int socket_cliente) {
 	t_log* logger = iniciar_log();
