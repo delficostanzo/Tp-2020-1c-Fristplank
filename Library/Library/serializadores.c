@@ -13,8 +13,8 @@ void serializar_new_pokemon(void** streamAEnviar, int offset, void* streamPayloa
 
 	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*streamAEnviar + offset, &pokemon->pokemon, pokemon->lengthOfPokemon);
-	offset += pokemon->lengthOfPokemon;
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionY, sizeof(uint32_t));
@@ -33,6 +33,9 @@ void serializar_appeared_pokemon(void** streamAEnviar, int offset, void* streamP
 	offset += pokemon->lengthOfPokemon;
 	//CAMBIO TODO
 	memcpy(*streamAEnviar + offset, &pokemon->posicion.posicionX, sizeof(uint32_t));
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+//	offset += pokemon->lengthOfPokemon + 1;
+//	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 	memcpy(*streamAEnviar + offset, &pokemon->posicion.posicionY, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
@@ -45,8 +48,8 @@ void serializar_catch_pokemon(void** streamAEnviar, int offset, void* streamPayl
 
 	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*streamAEnviar + offset, &pokemon->pokemon, pokemon->lengthOfPokemon);
-	offset += pokemon->lengthOfPokemon;
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionY, sizeof(uint32_t));
@@ -69,14 +72,32 @@ void serializar_get_pokemon(void** streamAEnviar, int offset, void* streamPayloa
 
 	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*streamAEnviar + offset, &pokemon->pokemon, pokemon->lengthOfPokemon);
-	offset += pokemon->lengthOfPokemon;
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
 
 	*bytes = offset;
 }
 
 void serializar_localized_pokemon(void** streamAEnviar, int offset, void* streamPayload, int *bytes){
-	//TODO
+	t_localized_pokemon* pokemon = streamPayload;
+
+	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
+	offset += sizeof(uint32_t);
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
+	memcpy(*streamAEnviar + offset, &pokemon->cantidadPosiciones, sizeof(uint32_t));
+	offset += sizeof(uint32_t);
+
+	for(int i = 0; i < pokemon->cantidadPosiciones; i++){
+		t_posicion* posicion = list_get(pokemon->listaPosiciones, i);
+		memcpy(*streamAEnviar + offset, &posicion->posicionX, sizeof(uint32_t));
+		offset += sizeof(uint32_t);
+		memcpy(*streamAEnviar + offset, &posicion->posicionY, sizeof(uint32_t));
+		offset += sizeof(uint32_t);
+		free(posicion);
+	}
+
+	*bytes = offset;
 }
 
 void serializar_respuesta_id(void** streamAEnviar, int offset, void* streamPayload, int *bytes){
@@ -92,7 +113,7 @@ void serializar_gameboy_suscribe(void** streamAEnviar, int offset, void* streamP
 	t_gameboy_suscribe* pokemon = streamPayload;
 
 	memcpy(*streamAEnviar + offset, &pokemon->codigoCola, sizeof(op_code));
-	offset += sizeof(uint32_t);
+	offset += sizeof(op_code);
 
 	*bytes = offset;
 }

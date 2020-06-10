@@ -35,7 +35,7 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 		serializar_get_pokemon(&streamFinal, offset, paquete->buffer->stream, bytes);
 		break;
 	case LOCALIZED_POKEMON:
-		//TODO IMPLEMENTACION
+		serializar_localized_pokemon(&streamFinal, offset, paquete->buffer->stream, bytes);
 		break;
 	case RESPUESTA_ID:
 		serializar_respuesta_id(&streamFinal, offset, paquete->buffer->stream, bytes);
@@ -76,17 +76,18 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, uint32_t Id, uint32_t 
 }
 
 void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon(new_pokemon, new_pokemon->lengthOfPokemon + sizeof(uint32_t)*4, Id, IdCorrelativo, NEW_POKEMON);
+	//TODO TOQUE ACA -> Le agregue un 1 ya que ahora lenghtOfPokemon no lo tiene
+	t_paquete* paquete = crearPaqueteCon(new_pokemon, 1 + new_pokemon->lengthOfPokemon + sizeof(uint32_t)*4, Id, IdCorrelativo, NEW_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
 void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon(appeared_pokemon, appeared_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, APPEARED_POKEMON);
+	t_paquete* paquete = crearPaqueteCon(appeared_pokemon, 1 + appeared_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, APPEARED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
 void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon((void*) catch_pokemon, catch_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, CATCH_POKEMON);
+	t_paquete* paquete = crearPaqueteCon((void*) catch_pokemon, 1 + catch_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, CATCH_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
@@ -96,13 +97,13 @@ void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente,
 }
 
 void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon((void*) get_pokemon, get_pokemon->lengthOfPokemon + sizeof(uint32_t), Id, IdCorrelativo, GET_POKEMON);
+	t_paquete* paquete = crearPaqueteCon((void*) get_pokemon, 1 + get_pokemon->lengthOfPokemon + sizeof(uint32_t), Id, IdCorrelativo, GET_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
-	uint32_t sizeListaPosiciones = (localized_pokemon->cantidadPosiciones)*sizeof(t_posicion);
-	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
+	uint32_t sizeListaPosiciones = list_size(localized_pokemon->listaPosiciones) * (2*sizeof(uint32_t));
+	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, 1 + localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
@@ -130,92 +131,52 @@ void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cl
 t_paquete* recibir_mensaje(int socket_cliente) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), 0);
-	recv(socket_cliente, &(paquete->ID), sizeof(uint32_t), 0);
-	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(uint32_t), 0);
+	recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL);
+//	printf("---------------------%d------------------\n", paquete->codigo_operacion);
+	recv(socket_cliente, &(paquete->ID), sizeof(uint32_t), MSG_WAITALL);
+	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(uint32_t), MSG_WAITALL);
 	paquete->buffer = malloc(sizeof(t_buffer));
-	recv(socket_cliente, &(paquete->buffer->size), sizeof(int), 0);
 
-	paquete->buffer = malloc(sizeof(t_buffer));
-	recv(socket_cliente, &(paquete->buffer->size), sizeof(uint32_t), 0);
+	recv(socket_cliente, &(paquete->buffer->size), sizeof(uint32_t), MSG_WAITALL);
 
 	switch(paquete->codigo_operacion){
-	case NEW_POKEMON:;
-		t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
-		recv(socket_cliente, &(new_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
-		new_pokemon->pokemon = malloc(new_pokemon->lengthOfPokemon);
-		recv(socket_cliente, &(new_pokemon->pokemon), new_pokemon->lengthOfPokemon, 0);
-		new_pokemon->posicion = malloc(sizeof(t_posicion));
-		recv(socket_cliente, &(new_pokemon->posicion->posicionX), sizeof(uint32_t), 0);
-		recv(socket_cliente, &(new_pokemon->posicion->posicionY), sizeof(uint32_t), 0);
-		recv(socket_cliente, &(new_pokemon->cantidad), sizeof(uint32_t), 0);
+		case NEW_POKEMON:
+			paquete->buffer->stream = des_serializar_new_pokemon(socket_cliente, paquete->buffer->size);
+			break;
 
-		paquete->buffer->stream = new_pokemon;
-		break;
+		case APPEARED_POKEMON:;
+			paquete->buffer->stream = des_serializar_appeared_pokemon(socket_cliente, paquete->buffer->size);
+			break;
 
-	case APPEARED_POKEMON:;
-		t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
-		recv(socket_cliente, &(appeared_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
-		appeared_pokemon->pokemon = malloc(appeared_pokemon->lengthOfPokemon);
-		recv(socket_cliente, &(appeared_pokemon->pokemon), appeared_pokemon->lengthOfPokemon, 0);
-		//appeared_pokemon->posicion = malloc(sizeof(t_posicion));
-		//CAMBIO TODO
-		recv(socket_cliente, &(appeared_pokemon->posicion.posicionX), sizeof(uint32_t), 0);
-		recv(socket_cliente, &(appeared_pokemon->posicion.posicionY), sizeof(uint32_t), 0);
+		case CATCH_POKEMON:;
+			paquete->buffer->stream = des_serializar_catch_pokemon(socket_cliente, paquete->buffer->size);
+			break;
 
-		paquete->buffer->stream = appeared_pokemon;
-		break;
+		case CAUGHT_POKEMON:;
+			paquete->buffer->stream = des_serializar_caught_pokemon(socket_cliente, paquete->buffer->size);
+			break;
 
-	case CATCH_POKEMON:;
-		t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
-		recv(socket_cliente, &(catch_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
-		catch_pokemon->pokemon = malloc(catch_pokemon->lengthOfPokemon);
-		recv(socket_cliente, &(catch_pokemon->pokemon), catch_pokemon->lengthOfPokemon, 0);
-		catch_pokemon->posicion = malloc(sizeof(t_posicion));
-		recv(socket_cliente, &(catch_pokemon->posicion->posicionX), sizeof(uint32_t), 0);
-		recv(socket_cliente, &(catch_pokemon->posicion->posicionY), sizeof(uint32_t), 0);
+		case GET_POKEMON:;
+			paquete->buffer->stream = des_serializar_get_pokemon(socket_cliente, paquete->buffer->size);
+			break;
 
-		paquete->buffer->stream = catch_pokemon;
-		break;
+		case LOCALIZED_POKEMON:;
+			paquete->buffer->stream = des_serializar_localized_pokemon(socket_cliente, paquete->buffer->size);
+			break;
 
-	case CAUGHT_POKEMON:;
-		t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
-		recv(socket_cliente, &(caught_pokemon->ok), sizeof(uint32_t), 0);
+		case RESPUESTA_ID:;
+			paquete->buffer->stream = des_serializar_respuesta_id(socket_cliente, paquete->buffer->size);
+			break;
 
-		paquete->buffer->stream = caught_pokemon;
-		break;
+		case ACK:
+			// No se hace nada porque no tiene payload
+			break;
 
-	case GET_POKEMON:;
-		t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
-		recv(socket_cliente, &(get_pokemon->lengthOfPokemon), sizeof(uint32_t), 0);
-		get_pokemon->pokemon = malloc(get_pokemon->lengthOfPokemon);
-		recv(socket_cliente, &(get_pokemon->pokemon), get_pokemon->lengthOfPokemon, 0);
+		case GAMEBOYSUSCRIBE:;
+			paquete->buffer->stream = des_serializar_gameboy_suscribe(socket_cliente, paquete->buffer->size);
+			break;
+		}
 
-		paquete->buffer->stream = get_pokemon;
-		break;
-
-	case LOCALIZED_POKEMON:
-		//TODO IMPLEMENTACION
-		break;
-
-	case RESPUESTA_ID:;
-		t_respuesta_id* respuesta_id = malloc(sizeof(t_respuesta_id));
-		recv(socket_cliente, &(respuesta_id->idCorrelativo), sizeof(uint32_t), 0);
-
-		paquete->buffer->stream = respuesta_id;
-		break;
-
-	case ACK:
-		// No se hace nada porque no tiene payload
-		break;
-
-	case GAMEBOYSUSCRIBE:;
-		t_gameboy_suscribe* gameboy_suscribe = malloc(sizeof(t_gameboy_suscribe));
-		recv(socket_cliente, &(gameboy_suscribe->codigoCola), sizeof(op_code), 0);
-
-		paquete->buffer->stream = gameboy_suscribe;
-		break;
-	}
 	return paquete;
 }
 
