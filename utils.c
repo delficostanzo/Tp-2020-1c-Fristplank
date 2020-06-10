@@ -82,7 +82,6 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int Id, int IdCorrelat
 }
 
 void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	//TODO TOQUE ACA -> Le agregue un 1 ya que ahora lenghtOfPokemon no lo tiene
 	t_paquete* paquete = crearPaqueteCon(new_pokemon, 1 + new_pokemon->lengthOfPokemon + sizeof(uint32_t)*4, Id, IdCorrelativo, NEW_POKEMON);
 	enviar(paquete, socket_cliente);
 }
@@ -141,8 +140,6 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 		//ESPERO MENSAJE VALIDO
 	}
 
-	//ACA
-//	printf("---------------------%d------------------\n", paquete->codigo_operacion);
 	recv(socket_cliente, &(paquete->ID), sizeof(int), MSG_WAITALL);
 	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(int), MSG_WAITALL);
 	paquete->buffer = malloc(sizeof(t_buffer));
