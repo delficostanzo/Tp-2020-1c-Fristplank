@@ -25,39 +25,54 @@ void* generarSocketsConBroker() {
 	socketNewPokemon = crearSocket();
 	socketCatchPokemon = crearSocket();
 	socketGetPokemon = crearSocket();
+
 	socketAppearedPokemon = crearSocket();
 	socketCaughtPokemon = crearSocket();
 	socketLocalizedPokemon = crearSocket();
 
+	socketACKNewPokemon = crearSocket();
+	socketACKCatchPokemon = crearSocket();
+	socketACKGetPokemon = crearSocket();
+
 	if (conectarA(socketNewPokemon, IP_BROKER, puertoBrokerInt)) {
-		log_info(logger,
-				"Suscripto a cola New Pokemon. Lanzando socket de escucha..");
-		// TODO Lanzar hilo donde la escucho
+		log_info(logger,"Suscripto a cola New Pokemon. Lanzando socket de escucha..");
+
+		if (conectarA(socketACKNewPokemon, IP_BROKER, puertoBrokerInt)) {
+			log_debug(logger, "Socket de ACK New Pokemon guardado.");
+
+			pthread_t escucharNewPokemon;
+			pthread_create(&escucharNewPokemon, NULL, escucharColaNewPokemon, NULL);
+			pthread_detach(escucharNewPokemon);
+		}
 	}
 
 	if (conectarA(socketCatchPokemon, IP_BROKER, puertoBrokerInt)) {
-		log_info(logger,
-				"Suscripto a cola Catch Pokemon. Lanzando socket de escucha..");
-		// TODO Lanzar hilo donde la escucho
+		log_info(logger,"Suscripto a cola Catch Pokemon. Lanzando socket de escucha..");
+
+		if (conectarA(socketACKCatchPokemon, IP_BROKER, puertoBrokerInt)) {
+			log_debug(logger, "Socket de ACK Catch Pokemon guardado.");
+
+			pthread_t escucharCatchPokemon;
+			pthread_create(&escucharCatchPokemon, NULL, escucharColaCatchPokemon, NULL);
+			pthread_detach(escucharCatchPokemon);
+		}
 	}
 
 	if (conectarA(socketGetPokemon, IP_BROKER, puertoBrokerInt)) {
-		log_info(logger,
-				"Suscripto a cola Get Pokemon. Lanzando socket de escucha..");
-		// TODO Lanzar hilo donde la escucho
+		log_info(logger,"Suscripto a cola Get Pokemon. Lanzando socket de escucha..");
+
+		if (conectarA(socketACKGetPokemon, IP_BROKER, puertoBrokerInt)) {
+			log_debug(logger, "Socket de ACK Catch Pokemon guardado.");
+
+			pthread_t escucharGetPokemon;
+			pthread_create(&escucharGetPokemon, NULL, escucharColaGetPokemon, NULL);
+			pthread_detach(escucharGetPokemon);
+		}
 	}
 
-	if (conectarA(socketAppearedPokemon, IP_BROKER, puertoBrokerInt)) {
-		log_info(logger, "Socket de Appeared Pockemon guardado.");
-	}
-
-	if (conectarA(socketCaughtPokemon, IP_BROKER, puertoBrokerInt)) {
-		log_info(logger, "Socket de Caught Pockemon guardado.");
-	}
-
-	if (conectarA(socketLocalizedPokemon, IP_BROKER, puertoBrokerInt)) {
-		log_info(logger, "Socket de Localized Pockemon guardado.");
-	}
+	if (conectarA(socketAppearedPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Appeared Pokemon guardado.");}
+	if (conectarA(socketCaughtPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Caught Pokemon guardado.");}
+	if (conectarA(socketLocalizedPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Localized Pokemon guardado.");}
 
 	return 0;
 }
@@ -94,4 +109,57 @@ void* escucharGameBoy(){
 	}
 
 	return 0;
+}
+
+void* escucharColaNewPokemon(){
+
+	while(1){
+		log_info(logger, "Esperando mensajes...");
+		t_paquete* paqueteNuevo = recibir_mensaje(socketNewPokemon);
+
+		if(paqueteNuevo->codigo_operacion == NEW_POKEMON){
+			//TODO iniciar hilo para procesarlo
+
+		}
+		else{
+			log_info(logger, "Tipo de mensaje invalido.");
+		}
+
+		enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID);
+	}
+}
+
+void* escucharColaCatchPokemon(){
+
+	while(1){
+		log_info(logger, "Esperando mensajes...");
+		t_paquete* paqueteNuevo = recibir_mensaje(socketCatchPokemon);
+
+		if(paqueteNuevo->codigo_operacion == CATCH_POKEMON){
+			//TODO iniciar hilo para procesarlo
+
+		}
+		else{
+			log_info(logger, "Tipo de mensaje invalido.");
+		}
+
+		enviar_ACK(socketACKCatchPokemon, -1, paqueteNuevo->ID);
+	}
+}
+
+void* escucharColaGetPokemon(){
+
+	while(1){
+		log_info(logger, "Esperando mensajes...");
+		t_paquete* paqueteNuevo = recibir_mensaje(socketGetPokemon);
+
+		if(paqueteNuevo->codigo_operacion == GET_POKEMON){
+			//TODO iniciar hilo para procesarlo
+		}
+		else{
+			log_info(logger, "Tipo de mensaje invalido.");
+		}
+
+		enviar_ACK(socketACKGetPokemon, -1, paqueteNuevo->ID);
+	}
 }

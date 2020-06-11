@@ -42,6 +42,9 @@ int socketAppearedPokemon;
 int socketCaughtPokemon;
 int socketLocalizedPokemon;
 int socketListenerGameBoy;
+int socketACKNewPokemon;
+int socketACKCatchPokemon;
+int socketACKGetPokemon;
 
 int checkingOpenFile(char* filePath);
 void cambiarAAbierto(char* filePath);

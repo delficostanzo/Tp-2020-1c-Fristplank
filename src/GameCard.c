@@ -17,16 +17,17 @@ int main(void) {
 
 	leer_config();
 
-	//iniciar filesystem
+	//TODO iniciar filesystem
+	iniciar_filesystem();
+
+	//Lanzar hilo para escuchar a GameBoy
+	pthread_t hiloEscuchaGameBoy;
+	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
 	//Lanzar hilo para concetarme a Broker
 	pthread_t hiloConexionBroker;
 	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
 	pthread_detach(hiloConexionBroker);
-
-	//Lanzar hilo para escuchar a GameBoy
-	pthread_t hiloEscuchaGameBoy;
-	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
 	//
 	/* SUSCRIBIRSE A LAS COLAS NEW_POKEMON | CATCH_POKEMON | GET_POKEMON */
@@ -37,6 +38,13 @@ int main(void) {
 		- Volver a estar a la escucha de nuevos mensajes de la cola de mensajes en cuestión. */
 
 	//terminar_programa(conexion, logger, config);
+}
+
+void iniciar_filesystem(){
+
+	// Crear bitmap
+
+	// CRear carpeta files
 }
 
 int checkingOpenFile(char* filePath){
