@@ -13,19 +13,15 @@
 #include<netdb.h>
 #include<commons/collections/list.h>
 //UTILS
-#include<utils.h>
+#include<Library/utils.h>
+#include<Library/conexion.h>
 //THREADS
 #include<pthread.h>
+//OTROS FUENTES DEL PROYECTO
+#include"procesar.h"
+#include"conexiones.h"
+#include"utils.h"
 
-typedef struct
-{
-	int ID;
-	int size;
-	int posX;
-	int posY;
-	int cantidad;
-	char* pokemon;
-} t_new_pokemon_args;
 
 //agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
 int TIEMPO_DE_REINTENTO_CONEXION;
@@ -38,22 +34,18 @@ t_config* config;
 
 pthread_mutex_t semaforoOpen;
 
-void* procesarGetPokemon(void);
-void* procesarCatchPokemon(void);
-void* procesarNewPokemon(void* args);
+int socketBroker;
+int socketNewPokemon;
+int socketCatchPokemon;
+int socketGetPokemon;
+int socketAppearedPokemon;
+int socketCaughtPokemon;
+int socketLocalizedPokemon;
+int socketListenerGameBoy;
 
 int checkingOpenFile(char* filePath);
 void cambiarAAbierto(char* filePath);
 void cambiarACerrado(char* filePath);
 void crearArchivo(char* filePath);
-
-//void iniciar_server_escucha(void);
-//void* leerRequest(int codeOp, int socketBroker);
-//void leerRequest(int* socketBroker);
-void* leerRequest(void* args);
-
-
-void leer_config(void);
-t_log* iniciar_logger(void);
 
 #endif /* GAMECARD_H_ */
