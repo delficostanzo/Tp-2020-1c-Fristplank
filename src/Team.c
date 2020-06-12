@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 	t_config* config = leerConfigDesde("src/team.config");
 	//obtiene la lista de entrenadores desde el config
 	quickLog("Se arrancan a cargar los entrenadores");
-	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
+	entrenadores = getEntrenadoresDesde("src/team.config");
 	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
 	IP_BROKER = config_get_string_value(config, "IP_BROKER");
@@ -20,9 +20,9 @@ int main(int argc, char *argv[]) {
 
 	puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
 
-	t_list* objetivosTotales = getObjetivosTotalesDesde(entrenadores);
-	t_list* objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
-	t_list* objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
+	objetivosTotales = getObjetivosTotalesDesde(entrenadores);
+	objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
+	objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
 	log_info(logger, "La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
 	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
 	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
@@ -30,11 +30,9 @@ int main(int argc, char *argv[]) {
 
 
 
-
-
 	//Lanzar hilo para escuchar a GameBoy
-	pthread_t hiloEscuchaGameBoy;
-	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
+//	pthread_t hiloEscuchaGameBoy;
+//	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
 	//Lanzar hilo para concetarme a Broker
 	pthread_t hiloConexionBroker;
@@ -51,7 +49,7 @@ int main(int argc, char *argv[]) {
 	enviarGetDesde(objetivosGlobales, socketGet);
 	quickLog("Se enviaron los mensajes get por cada pokemon objetivo");
 
-	t_list* pokemonesLibres = list_create();
+	pokemonesLibres = list_create();
 //	//verificar que el id como respuesta vuelva a enviarse a traves de ese socket
 //
 //	//recibe los nombres de pokemones encontrados libres con sus posiciones

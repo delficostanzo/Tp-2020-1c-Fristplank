@@ -56,38 +56,38 @@ int tieneComoIdCorrelativoLocalized(uint32_t idBuscado) {
 }
 
 //////////APPEARED//////////////
-void recibirAppearedYGuardarlos(int socketAppeared, t_list* pokemonesGlobales, t_list* pokemonesLibres) {
+t_paquete* recibirAppearedYGuardarlos(int socketAppeared, t_list* pokemonesGlobales, t_list* pokemonesLibres) {
+	t_log* logger = iniciar_logger();
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
 	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
 	agregarPosicionSiLoNecesita(appeared->pokemon, *(appeared->posicion), pokemonesGlobales, pokemonesLibres);
 
-	free(appeared->pokemon);
-	free(appeared->posicion);
-	free(appeared);
-	free(paqueteAppeared->buffer);
-	free(paqueteAppeared);
-	quickLog("Aparecieron nuevos pokemones libres");
+//	free(appeared->pokemon);
+//	free(appeared->posicion);
+//	free(appeared);
+//	free(paqueteAppeared->buffer);
+//	free(paqueteAppeared);
+	log_info(logger, "Aparecieron nuevos pokemones libres");
+	log_info(logger, "------Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
+	return paqueteAppeared;
 }
 
 //si tengo ese pokemon como objetivo lo agregego en la lista de pokemones libres
 void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoPoke, t_list* pokemonesGlobales, t_list* pokemonesLibres){
 	//si ese pokemon lo tengo como objetivo
 	if(buscarPorNombre(nombreNuevoPoke, pokemonesGlobales) != NULL) {
-		//ya tengo uno de esos pokes libres en el mapa
-		if(buscarPorNombre(nombreNuevoPoke, pokemonesLibres) != NULL) {
+		//ya tengo uno de esos pokes libres en el mapa y esta en la misma posicion
+		if(buscarPorNombre(nombreNuevoPoke, pokemonesLibres) != NULL && sonLaMismaPosicion(buscarPorNombre(nombreNuevoPoke, pokemonesLibres)->posicion, posicionNuevoPoke)) {
 			PokemonEnElMapa* pokeExistente = buscarPorNombre(nombreNuevoPoke, pokemonesLibres);
-			//si esta en la misma posicion
-			if(sonLaMismaPosicion(pokeExistente->posicion, posicionNuevoPoke)){
-				pokeExistente->cantidad ++;
-			} else {
-				//solo lo agrego a la lista
-				PokemonEnElMapa* pokemonNuevo = newPokemon();
-				setPosicionTo(pokemonNuevo, posicionNuevoPoke);
-				setNombreTo(pokemonNuevo, nombreNuevoPoke);
-				setCantidadTo(pokemonNuevo, 1);
-				list_add(pokemonesLibres, pokemonNuevo);
-			}
+			pokeExistente->cantidad ++;
+		} else {
+			//solo lo agrego a la lista
+			PokemonEnElMapa* pokemonNuevo = newPokemon();
+			setPosicionTo(pokemonNuevo, posicionNuevoPoke);
+			setNombreTo(pokemonNuevo, nombreNuevoPoke);
+			setCantidadTo(pokemonNuevo, 1);
+			list_add(pokemonesLibres, pokemonNuevo);
 		}
 	}
 }

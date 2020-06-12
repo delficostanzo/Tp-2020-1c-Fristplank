@@ -38,7 +38,7 @@ int sonLaMismaPosicion(t_posicion posicion1, t_posicion posicion2) {
 
 //Setters
 void setNombreTo(PokemonEnElMapa* pokemon, char* nombre) {
-	strcpy(pokemon->nombre, nombre);
+	pokemon->nombre = nombre;
 }
 
 void setPosicionTo(PokemonEnElMapa* pokemon, t_posicion posicion) {
