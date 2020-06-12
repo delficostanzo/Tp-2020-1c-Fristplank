@@ -1,9 +1,3 @@
-/*
- * Conexion.c
- *
- *  Created on: 11 jun. 2020
- *      Author: utnso
- */
 
 #include "Conexion.h"
 
@@ -74,16 +68,16 @@ void* generarSocketsConBroker() {
 		}
 	}
 
-//	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
-//		quickLog("Suscripto a la cola de caught_pokemon");
-//		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("Socket de ACK Caught Pokemon guardado.");
-//
-//			pthread_t escucharCaughtPokemon;
-//			pthread_create(&escucharCaughtPokemon, NULL, escucharColaCaughtPokemon, NULL);
-//			pthread_detach(escucharCaughtPokemon);
-//		}
-//	}
+	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
+		quickLog("Suscripto a la cola de caught_pokemon");
+		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
+			quickLog("Socket de ACK Caught Pokemon guardado.");
+
+			pthread_t escucharCaughtPokemon;
+			pthread_create(&escucharCaughtPokemon, NULL, escucharColaCaughtPokemon, NULL);
+			pthread_detach(escucharCaughtPokemon);
+		}
+	}
 
 
 	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
@@ -99,6 +93,16 @@ void* generarSocketsConBroker() {
 
 	if (conectarA(socketGet, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("Ya se conecto a la cola de get para poder enviarle mensajes");
+
+		pthread_mutex_lock(&mutexObjetivosGlobales);
+		enviarGetDesde(objetivosGlobales, socketGet);
+		pthread_mutex_unlock(&mutexObjetivosGlobales);
+
+		quickLog("Se envia correctamente el get");
+//			pthread_t enviarGet;
+//			pthread_create(&enviarGet, NULL, enviarAColaGet, NULL);
+//			pthread_detach(enviarGet);
+
 	}
 	if (conectarA(socketCatch, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("Ya se conecto a la cola de catch para poder enviarle mensajes");
@@ -126,16 +130,11 @@ void* escucharColaCaughtPokemon(){
 
 	while(1){
 		quickLog("Esperando mensajes");
-		t_paquete* paqueteNuevo = recibir_mensaje(suscripcionCaught);
-
-		if(paqueteNuevo->codigo_operacion == CAUGHT_POKEMON){
-
+		t_paquete* paqueteNuevo = recibirCaught(suscripcionCaught);
+		if(paqueteNuevo != NULL){
+			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
+			// avisarle al entrenador si atrapo al poke o no
 		}
-		else{
-			quickLog("Tipo de mensaje invalido.");
-		}
-
-		enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
 	}
 }
 
