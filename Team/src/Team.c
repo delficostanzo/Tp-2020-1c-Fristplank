@@ -45,18 +45,8 @@ int main(int argc, char *argv[]) {
 	//los recursos son liberados cuando termina la funcion sin esperar un join
 	pthread_detach(hiloConexionBroker);
 
-
-
-
-
-	//ENVIA MSJ GET CON LA LISTA DE LOS OBJETIVOS GLOBALES
-	//DENTRO DE SELECTS
-	enviarGetDesde(objetivosGlobales, socketGet);
-	quickLog("Se enviaron los mensajes get por cada pokemon objetivo");
-
 	pokemonesLibres = list_create();
 //	//verificar que el id como respuesta vuelva a enviarse a traves de ese socket
-//
 //	//recibe los nombres de pokemones encontrados libres con sus posiciones
 //	//y si se necesitan (estan en los objetivos globales) se agregan a la lista de pokemones libres
 	//recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);

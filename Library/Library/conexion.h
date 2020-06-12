@@ -1,9 +1,4 @@
-/*
- * conexion.h
- *
- *
- *      Author: fritsplank
- */
+
 
 #ifndef CONEXION_H_
 #define CONEXION_H_

@@ -2,8 +2,11 @@
 #include "EnvioMensajes.h"
 
 static void agregarPosicionSiLoNecesita(char* nombrePokemon, t_posicion posicion, t_list* pokemonesGlobales, t_list* pokemonesLibres);
-static void agregarComoIdCorrelativoLocalized(uint32_t idCorrelativo);
-static int tieneComoIdCorrelativoLocalized(uint32_t idBuscado);
+static void agregarComoIdCorrelativoLocalized(int idCorrelativo);
+static int tieneComoIdCorrelativoLocalized(int idBuscado);
+static int tieneComoIdCorrelativoCaught(int idBuscado);
+t_list* idsCorrelativosCaught;
+t_list* idsCorrelativosLocalized;
 
 //////////GET-LOCALIZED//////////////
 void enviarGetDesde(t_list* objetivosGlobales, int socketGet){
@@ -22,12 +25,11 @@ void recibirIdGet(int socketGet) {
 	agregarComoIdCorrelativoLocalized(idGet->idCorrelativo);
 }
 
-void agregarComoIdCorrelativoLocalized(uint32_t idCorrelativo){
-	idsCorrelativosLocalized* idsCorrelativos = malloc(sizeof(idsCorrelativosLocalized));
+void agregarComoIdCorrelativoLocalized(int idCorrelativo){
 	//puntero? 	o se podria inicializar en el main e ir pasando como parametro
 	//lista de ids correlativos globales que se mandaron
 	//recien se agregan cuando recibo la respuesta del broker
-	list_add(idsCorrelativos->idsCorrelativos, &idCorrelativo);
+	list_add(idsCorrelativosLocalized, &idCorrelativo);
 }
 
 t_paquete* recibirLocalizedYGuardalos(int socketLocalized, t_list* pokemonesGlobales, t_list* pokemonesLibres) {
@@ -48,17 +50,17 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized, t_list* pokemonesGlob
 	return paqueteLocalized;
 }
 
-int tieneComoIdCorrelativoLocalized(uint32_t idBuscado) {
+int tieneComoIdCorrelativoLocalized(int idBuscado) {
 	typedef bool(*erasedTypeFind)(void*);
-	idsCorrelativosLocalized idsCorrelativos;
-	int existe(uint32_t idExistente) {
+
+	int existe(int idExistente) {
 		return idExistente == idBuscado;
 	}
-	if(list_is_empty(idsCorrelativos.idsCorrelativos) == 1) {
+	if(list_is_empty(idsCorrelativosLocalized) == 1) {
 		return 0;
 	}
 	//me fijo de la lista de idsCorrelativos que mande como get, si coincide con el id del que recien llego
-	return list_find(idsCorrelativos.idsCorrelativos, (erasedTypeFind)existe) != NULL;
+	return list_find(idsCorrelativosLocalized, (erasedTypeFind)existe) != NULL;
 }
 
 //////////APPEARED//////////////
@@ -103,5 +105,37 @@ void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevo
 	}
 }
 
-//////////CAGHT-CAUGHT//////////////
+//////////CATCH-CAUGHT/////////////
+// cuando un entrenador manda este mensaje, ese poke ya no deberia estar en la lista de pokes libres
+//void enviarCatchDesde(, int socketGet){
+//	quickLog("Esta enviando los get por cada pokemon objetivo necesario");
+//	for(int index=0; index<list_size(objetivosGlobales);index++){
+//		t_catch_pokemon* getPoke = crearEstructuraGetDesde(list_get(objetivosGlobales, index));
+//		enviar_get_pokemon(getPoke, socketGet, -1, -1);
+//		//recibirIdGet(socketGet);
+//	}
+//}
 
+t_paquete* recibirCaught(int socketCaught){
+	t_paquete* paqueteCaught = recibir_mensaje(socketCaught);
+	//t_caught_pokemon* caught = paqueteCaught->buffer->stream;
+
+	if(tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO) == 1) {
+		return paqueteCaught;
+	}
+	return NULL;
+}
+
+int tieneComoIdCorrelativoCaught(int idBuscado) {
+	typedef bool(*erasedTypeFind)(void*);
+
+	int existe(uint32_t idExistente) {
+		return idExistente == idBuscado;
+	}
+
+	if(list_is_empty(idsCorrelativosCaught) == 1) {
+		return 0;
+	}
+	//me fijo de la lista de idsCorrelativos que mande como catch, si coincide con el id del que recien llego
+	return list_find(idsCorrelativosCaught, (erasedTypeFind)existe) != NULL;
+}
