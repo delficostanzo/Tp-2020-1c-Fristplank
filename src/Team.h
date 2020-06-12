@@ -22,6 +22,21 @@
 #include "AppInit/EnvioMensajes.h"
 #include "AppInit/Conexion.h"
 
+char* IP_BROKER;
+int PUERTO_BROKER;
+int puertoTeam;
+
+int conexionBroker;
+int suscripcionAppeared;
+int suscripcionCaught;
+int suscripcionLocalized;
+int socketGet;
+int socketCatch;
+
+int socketACKAppeared;
+int socketACKCaught;
+int socketACKLocalized;
+
 
 
 #endif /* TEAM_H_ */
