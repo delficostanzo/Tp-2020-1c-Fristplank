@@ -111,15 +111,7 @@ void* escucharColaAppearedPokemon(){
 
 	while(1){
 		quickLog("Esperando mensajes");
-		t_paquete* paqueteNuevo = recibir_mensaje(suscripcionAppeared);
-
-		if(paqueteNuevo->codigo_operacion == APPEARED_POKEMON){
-			//TODO iniciar hilo para procesarlo
-
-		}
-		else{
-			quickLog("Tipo de mensaje invalido.");
-		}
+		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
 
 		enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
 	}

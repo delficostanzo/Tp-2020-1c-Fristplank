@@ -37,6 +37,10 @@ int socketACKAppeared;
 int socketACKCaught;
 int socketACKLocalized;
 
-
+t_list* entrenadores;
+t_list* objetivosTotales;
+t_list* objetivosAtrapados;
+t_list* objetivosGlobales;
+t_list* pokemonesLibres;
 
 #endif /* TEAM_H_ */
