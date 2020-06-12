@@ -3,19 +3,19 @@
 
 void* serializar_paquete(t_paquete* paquete, int *bytes)
 {
-	int size_serializado = sizeof(op_code) + sizeof(uint32_t)*2 + sizeof(int) + (paquete->buffer->size);
+	int size_serializado = sizeof(op_code) + sizeof(int)*2 + sizeof(int) + (paquete->buffer->size);
 
 	void* streamFinal = malloc(size_serializado);
 	int offset = 0;
 
 	memcpy(streamFinal + offset, &paquete->codigo_operacion, sizeof(op_code));
 	offset += sizeof(op_code);
-	memcpy(streamFinal + offset, &paquete->ID, sizeof(uint32_t));
-	offset += sizeof(uint32_t);
-	memcpy(streamFinal + offset, &paquete->ID_CORRELATIVO, sizeof(uint32_t));
-	offset += sizeof(uint32_t);
-	memcpy(streamFinal + offset, &paquete->buffer->size, sizeof(uint32_t));
-	offset += sizeof(uint32_t);
+	memcpy(streamFinal + offset, &paquete->ID, sizeof(int));
+	offset += sizeof(int);
+	memcpy(streamFinal + offset, &paquete->ID_CORRELATIVO, sizeof(int));
+	offset += sizeof(int);
+	memcpy(streamFinal + offset, &paquete->buffer->size, sizeof(int));
+	offset += sizeof(int);
 
 	/* Serializo dependiendo de tipo de mensaje */
 	switch(paquete->codigo_operacion){
@@ -64,7 +64,7 @@ void enviar(t_paquete* paquete, int socket_cliente)
 	free(paquete);
 }
 
-t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, uint32_t Id, uint32_t IdCorrelativo, op_code op_code) {
+t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int Id, int IdCorrelativo, op_code op_code) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	paquete->codigo_operacion = op_code;
 	paquete->ID = Id;
@@ -75,49 +75,49 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, uint32_t Id, uint32_t 
 	return paquete;
 }
 
-void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	//TODO TOQUE ACA -> Le agregue un 1 ya que ahora lenghtOfPokemon no lo tiene
 	t_paquete* paquete = crearPaqueteCon(new_pokemon, 1 + new_pokemon->lengthOfPokemon + sizeof(uint32_t)*4, Id, IdCorrelativo, NEW_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	t_paquete* paquete = crearPaqueteCon(appeared_pokemon, 1 + appeared_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, APPEARED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	t_paquete* paquete = crearPaqueteCon((void*) catch_pokemon, 1 + catch_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, CATCH_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	t_paquete* paquete = crearPaqueteCon((void*) caught_pokemon, sizeof(uint32_t), Id, IdCorrelativo, APPEARED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	t_paquete* paquete = crearPaqueteCon((void*) get_pokemon, 1 + get_pokemon->lengthOfPokemon + sizeof(uint32_t), Id, IdCorrelativo, GET_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo) {
+void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	uint32_t sizeListaPosiciones = list_size(localized_pokemon->listaPosiciones) * (2*sizeof(uint32_t));
 	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, 1 + localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo){
-	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(uint32_t), Id, IdCorrelativo, RESPUESTA_ID);
+void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int Id, int IdCorrelativo){
+	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(int), Id, IdCorrelativo, RESPUESTA_ID);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_ACK(int socket_cliente, uint32_t Id, uint32_t IdCorrelativo){
+void enviar_ACK(int socket_cliente, int Id, int IdCorrelativo){
 	t_paquete* paquete = crearPaqueteCon(NULL, 0, Id, IdCorrelativo, ACK);
 	enviar(paquete, socket_cliente);
 }
 
-void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, uint32_t Id, uint32_t IdCorrelativo){
+void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, int Id, int IdCorrelativo){
 	t_paquete* paquete = crearPaqueteCon((void*) gameboy_suscribe, sizeof(op_code), Id, IdCorrelativo, GAMEBOYSUSCRIBE);
 	enviar(paquete, socket_cliente);
 }
@@ -133,11 +133,11 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 
 	recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL);
 //	printf("---------------------%d------------------\n", paquete->codigo_operacion);
-	recv(socket_cliente, &(paquete->ID), sizeof(uint32_t), MSG_WAITALL);
-	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(uint32_t), MSG_WAITALL);
+	recv(socket_cliente, &(paquete->ID), sizeof(int), MSG_WAITALL);
+	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(int), MSG_WAITALL);
 	paquete->buffer = malloc(sizeof(t_buffer));
 
-	recv(socket_cliente, &(paquete->buffer->size), sizeof(uint32_t), MSG_WAITALL);
+	recv(socket_cliente, &(paquete->buffer->size), sizeof(int), MSG_WAITALL);
 
 	switch(paquete->codigo_operacion){
 		case NEW_POKEMON:

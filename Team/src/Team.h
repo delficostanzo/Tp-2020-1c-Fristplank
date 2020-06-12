@@ -20,6 +20,7 @@
 #include "AppInit/Planificador.h"
 #include "Model/Trainer.h"
 #include "AppInit/EnvioMensajes.h"
+#include "AppInit/Conexion.h"
 
 
 

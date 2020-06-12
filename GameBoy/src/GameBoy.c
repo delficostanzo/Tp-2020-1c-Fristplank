@@ -5,14 +5,11 @@
 #include "GameBoy.h"
 
 int main(void) {
-	//siempre es CLEINTE de los demas
 	//int conexionBroker;
 	int conexionTeam;
 	//int conexionGameCard;
 
-
 	t_log* logger = iniciar_logger();
-
 
 	// creo y devuelvo un puntero a la estructura t_config
 	t_config* config = leer_config();
@@ -21,9 +18,7 @@ int main(void) {
 	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
 	char* IP_TEAM = config_get_string_value(config, "IP_TEAM");
 	char* IP_GAMECARD = config_get_string_value(config, "IP_GAMECARD");
-	log_info(logger,"hola");
 	int PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
-	log_info(logger, "chequeado?");
 	int PUERTO_TEAM = config_get_int_value(config, "PUERTO_TEAM");
 	int PUERTO_GAMECARD = config_get_int_value(config, "PUERTO_GAMECARD");
 

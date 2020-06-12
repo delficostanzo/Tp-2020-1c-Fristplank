@@ -46,15 +46,15 @@ void* des_serializar_appeared_pokemon(int socket_cliente, int size){
 
 	memcpy(&(appeared_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
-	appeared_pokemon->pokemon = malloc(appeared_pokemon->lengthOfPokemon);
-	memcpy(appeared_pokemon->pokemon, recorrerStream, appeared_pokemon->lengthOfPokemon);
+	appeared_pokemon->pokemon = malloc(appeared_pokemon->lengthOfPokemon +1);
+	memcpy(appeared_pokemon->pokemon, recorrerStream, appeared_pokemon->lengthOfPokemon +1);
 	recorrerStream += appeared_pokemon->lengthOfPokemon + 1;
 	//CAMBIO TODO
-	//appeared_pokemon->posicion = malloc(sizeof(t_posicion));
-	//memcpy(&(appeared_pokemon->posicion->posicionX), recorrerStream, sizeof(uint32_t));
-	memcpy(&(appeared_pokemon->posicion.posicionX), recorrerStream, sizeof(uint32_t));
+	appeared_pokemon->posicion = malloc(sizeof(t_posicion));
+	memcpy(&(appeared_pokemon->posicion->posicionX), recorrerStream, sizeof(uint32_t));
+	//memcpy(&(appeared_pokemon->posicion.posicionX), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
-	memcpy(&(appeared_pokemon->posicion.posicionY), recorrerStream, sizeof(uint32_t));
+	memcpy(&(appeared_pokemon->posicion->posicionY), recorrerStream, sizeof(uint32_t));
 
 	free(stream);
 	printf("free(stream) hecho\n");
