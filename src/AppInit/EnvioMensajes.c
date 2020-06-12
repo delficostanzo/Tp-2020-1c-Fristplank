@@ -30,16 +30,22 @@ void agregarComoIdCorrelativoLocalized(uint32_t idCorrelativo){
 	list_add(idsCorrelativos->idsCorrelativos, &idCorrelativo);
 }
 
-void recibirLocalizedYGuardalos(int socketLocalized, t_list* pokemonesGlobales, t_list* pokemonesLibres) {
+t_paquete* recibirLocalizedYGuardalos(int socketLocalized, t_list* pokemonesGlobales, t_list* pokemonesLibres) {
 	t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
 	t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
 	//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
 	//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
 		for(int index=0; index<localized->cantidadPosiciones; index++){
 			//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
+			pthread_mutex_lock(&mutexObjetivosGlobales);
+			pthread_mutex_lock(&mutexPokemonesLibres);
 			t_posicion* posicion = list_get(localized->listaPosiciones,index);
 			agregarPosicionSiLoNecesita(localized->pokemon, *posicion, pokemonesGlobales, pokemonesLibres);
+			pthread_mutex_unlock(&mutexObjetivosGlobales);
+			pthread_mutex_unlock(&mutexPokemonesLibres);
 		}
+
+	return paqueteLocalized;
 }
 
 int tieneComoIdCorrelativoLocalized(uint32_t idBuscado) {
@@ -57,11 +63,16 @@ int tieneComoIdCorrelativoLocalized(uint32_t idBuscado) {
 
 //////////APPEARED//////////////
 t_paquete* recibirAppearedYGuardarlos(int socketAppeared, t_list* pokemonesGlobales, t_list* pokemonesLibres) {
+
 	t_log* logger = iniciar_logger();
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
 	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
+	pthread_mutex_lock(&mutexObjetivosGlobales);
+	pthread_mutex_lock(&mutexPokemonesLibres);
 	agregarPosicionSiLoNecesita(appeared->pokemon, *(appeared->posicion), pokemonesGlobales, pokemonesLibres);
+	pthread_mutex_unlock(&mutexObjetivosGlobales);
+	pthread_mutex_unlock(&mutexPokemonesLibres);
 
 //	free(appeared->pokemon);
 //	free(appeared->posicion);
