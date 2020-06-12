@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include "Broker.h"
 
-static void envioAppearedPrueba(int socketSuscripcionAppeared);
+static void envioAppearedPrueba1(int socketSuscripcionAppeared);
+static void envioAppearedPrueba2(int socketSuscripcionAppeared);
+static void envioLocalizedPrueba1(int socketSuscripcionLocalized);
 
 int main(void) {
 	t_log* logger;
@@ -51,8 +53,9 @@ int main(void) {
 		break;
 	}
 
-	envioAppearedPrueba(suscripcionAppeared);
-
+	envioAppearedPrueba1(suscripcionAppeared);
+	envioAppearedPrueba2(suscripcionAppeared);
+	envioLocalizedPrueba1(suscripcionLocalized);
 
 	//loguear mensaje recibido
 	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
@@ -61,7 +64,7 @@ int main(void) {
 
 }
 
-void envioAppearedPrueba(int socketSuscripcionAppeared) {
+void envioAppearedPrueba1(int socketSuscripcionAppeared) {
 	char* nombrePoke = "Pikachu";
 
 	t_appeared_pokemon* appearedPrueba = malloc(sizeof(t_appeared_pokemon));
@@ -74,6 +77,47 @@ void envioAppearedPrueba(int socketSuscripcionAppeared) {
 
 	enviar_appeared_pokemon(appearedPrueba, socketSuscripcionAppeared, 1, -1);
 }
+
+void envioAppearedPrueba2(int socketSuscripcionAppeared) {
+	char* nombrePoke = "Charmander";
+
+	t_appeared_pokemon* appearedPrueba = malloc(sizeof(t_appeared_pokemon));
+	appearedPrueba->pokemon = nombrePoke;
+	appearedPrueba->lengthOfPokemon = strlen(appearedPrueba->pokemon);
+
+	appearedPrueba->posicion = malloc(sizeof(t_posicion));
+	appearedPrueba->posicion->posicionX = 5;
+	appearedPrueba->posicion->posicionY = 5;
+
+	enviar_appeared_pokemon(appearedPrueba, socketSuscripcionAppeared, 1, -1);
+}
+
+
+void envioLocalizedPrueba1(int socketSuscripcionLocalized) {
+	char* nombrePoke = "Delfi";
+
+	t_localized_pokemon* localizedPrueba = malloc(sizeof(t_localized_pokemon));
+	localizedPrueba->pokemon = nombrePoke;
+	localizedPrueba->lengthOfPokemon = strlen(localizedPrueba->pokemon);
+
+	t_posicion* posicion1 = malloc(sizeof(t_posicion));
+	posicion1->posicionX = 6;
+	posicion1->posicionY = 3;
+
+	t_posicion* posicion2 = malloc(sizeof(t_posicion));
+	posicion2->posicionX = 4;
+	posicion2->posicionY = 1;
+
+	t_list* posicionesPrueba = list_create();
+	list_add(posicionesPrueba, posicion1);
+	list_add(posicionesPrueba, posicion2);
+
+	localizedPrueba->cantidadPosiciones = 2;
+	localizedPrueba->listaPosiciones = posicionesPrueba;
+
+	enviar_localized_pokemon(localizedPrueba, socketSuscripcionLocalized, 1, -1);
+}
+
 
 t_log* iniciar_logger(void){
 	t_log * log = malloc(sizeof(t_log));

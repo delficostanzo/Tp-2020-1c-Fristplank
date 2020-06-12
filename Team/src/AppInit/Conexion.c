@@ -37,15 +37,16 @@ void* escucharGameBoy(){
 				quickLog("Tipo de mensaje invalido.");
 		}
 	}
-
 	return 0;
 }
 
 void* generarSocketsConBroker() {
 
 	conexionBroker = crearSocket();
-	while (conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER) != 1) {
+
+	while ((conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) != 1) {
 		quickLog("Intentando conexión a Broker...");
+		//TODO: reconectando cada cierto tiempo
 	}
 
 	id_proceso idProceso;
@@ -73,16 +74,16 @@ void* generarSocketsConBroker() {
 		}
 	}
 
-	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de caught_pokemon");
-		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("Socket de ACK Caught Pokemon guardado.");
-
-			pthread_t escucharCaughtPokemon;
-			pthread_create(&escucharCaughtPokemon, NULL, escucharColaCaughtPokemon, NULL);
-			pthread_detach(escucharCaughtPokemon);
-		}
-	}
+//	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
+//		quickLog("Suscripto a la cola de caught_pokemon");
+//		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
+//			quickLog("Socket de ACK Caught Pokemon guardado.");
+//
+//			pthread_t escucharCaughtPokemon;
+//			pthread_create(&escucharCaughtPokemon, NULL, escucharColaCaughtPokemon, NULL);
+//			pthread_detach(escucharCaughtPokemon);
+//		}
+//	}
 
 
 	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
@@ -111,6 +112,10 @@ void* escucharColaAppearedPokemon(){
 
 	while(1){
 		quickLog("Esperando mensajes");
+//		t_list* objetivosTotales = getObjetivosTotalesDesde(entrenadores);
+//		t_list* objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
+//		t_list* objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
+
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
 
 		enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
@@ -124,7 +129,6 @@ void* escucharColaCaughtPokemon(){
 		t_paquete* paqueteNuevo = recibir_mensaje(suscripcionCaught);
 
 		if(paqueteNuevo->codigo_operacion == CAUGHT_POKEMON){
-			//TODO iniciar hilo para procesarlo
 
 		}
 		else{
@@ -139,15 +143,7 @@ void* escucharColaLocalizedPokemon(){
 
 	while(1){
 		quickLog("Esperando mensajes");
-		t_paquete* paqueteNuevo = recibir_mensaje(suscripcionLocalized);
-
-		if(paqueteNuevo->codigo_operacion == LOCALIZED_POKEMON){
-			//TODO iniciar hilo para procesarlo
-
-		}
-		else{
-			quickLog("Tipo de mensaje invalido.");
-		}
+		t_paquete* paqueteNuevo = recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
 
 		enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
 	}

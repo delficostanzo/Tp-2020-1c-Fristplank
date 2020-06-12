@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
 
 	puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
 
+	//MUTEX? TODAVIA NO HAY HILOS
 	objetivosTotales = getObjetivosTotalesDesde(entrenadores);
 	objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
 	objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
@@ -27,7 +28,11 @@ int main(int argc, char *argv[]) {
 	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
 	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
 
-
+	pthread_mutex_init(&mutexEntrenadores, NULL);
+	pthread_mutex_init(&mutexObjetivosTotales, NULL);
+	pthread_mutex_init(&mutexObjetivosAtrapados, NULL);
+	pthread_mutex_init(&mutexObjetivosGlobales, NULL);
+	pthread_mutex_init(&mutexPokemonesLibres, NULL);
 
 
 	//Lanzar hilo para escuchar a GameBoy

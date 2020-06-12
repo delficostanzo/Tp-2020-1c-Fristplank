@@ -37,6 +37,13 @@ int socketACKAppeared;
 int socketACKCaught;
 int socketACKLocalized;
 
+
+pthread_mutex_t mutexEntrenadores;
+pthread_mutex_t mutexObjetivosTotales;
+pthread_mutex_t mutexObjetivosAtrapados;
+pthread_mutex_t mutexObjetivosGlobales;
+pthread_mutex_t mutexPokemonesLibres;
+
 t_list* entrenadores;
 t_list* objetivosTotales;
 t_list* objetivosAtrapados;
