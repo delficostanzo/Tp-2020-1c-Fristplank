@@ -15,10 +15,10 @@ int main(int argc, char *argv[]) {
 	t_list* entrenadores = getEntrenadoresDesde("src/team.config");
 	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
-	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
-	int PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
+	IP_BROKER = config_get_string_value(config, "IP_BROKER");
+	PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
 
-	int puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
+	puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
 
 	t_list* objetivosTotales = getObjetivosTotalesDesde(entrenadores);
 	t_list* objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
@@ -27,44 +27,24 @@ int main(int argc, char *argv[]) {
 	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
 	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
 
-//	int conexionGameBoy = crearSocket();
-//
-//	//TODO: Si muere la conexion del broker, escucho al GameBoy. Y intentar reconexion del Broker varias veces
-//	if (escuchaEn(conexionGameBoy, puertoTeam)) {
-//		quickLog("Escuchando conexiones del GameBoy");
-//	}
-//
-//	//se queda bloqueado esperando que el gameboy se conecte
-//	int socketGameBoy = aceptarConexion(conexionGameBoy);
-//
-//	id_proceso idProcesoConectado;
-//	idProcesoConectado = iniciarHandshake(socketGameBoy, TEAM);
-//	log_info(logger, "El id del proceso con el que me conecte es: %d",
-//			idProcesoConectado);
 
-	int conexionBroker = conectarABroker(IP_BROKER, PUERTO_BROKER);
 
-	int suscripcionAppeared = crearSocket();
-	int suscripcionCaught = crearSocket();
-	int suscripcionLocalized = crearSocket();
-	int socketGet = crearSocket();
-	int socketCatch = crearSocket();
 
-	if (conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de appeared_pokemon");
-	}
-	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de caught_pokemon");
-	}
-	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de localized_pokemon");
-	}
-	if (conectarA(socketGet, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Ya se conecto a la cola de get para poder enviarle mensajes");
-	}
-	if (conectarA(socketCatch, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Ya se conecto a la cola de catch para poder enviarle mensajes");
-	}
+
+
+	//Lanzar hilo para escuchar a GameBoy
+	pthread_t hiloEscuchaGameBoy;
+	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
+
+	//Lanzar hilo para concetarme a Broker
+	pthread_t hiloConexionBroker;
+	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
+	//los recursos son liberados cuando termina la funcion sin esperar un join
+	pthread_detach(hiloConexionBroker);
+
+
+
+
 
 	//ENVIA MSJ GET CON LA LISTA DE LOS OBJETIVOS GLOBALES
 	//DENTRO DE SELECTS
@@ -78,6 +58,7 @@ int main(int argc, char *argv[]) {
 //	//y si se necesitan (estan en los objetivos globales) se agregan a la lista de pokemones libres
 	//recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
 	recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
+
 
 	crearHilosDeEntrenadores(entrenadores);
 	quickLog("Se crea un hilo por cada entrenador");

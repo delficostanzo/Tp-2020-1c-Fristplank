@@ -1,9 +1,15 @@
+/*
+ * utils.c
+ *
+ *
+ *      Author: fritsplank
+ */
 
 #include "utils.h"
 
 void* serializar_paquete(t_paquete* paquete, int *bytes)
 {
-	int size_serializado = sizeof(op_code) + sizeof(int)*2 + sizeof(int) + (paquete->buffer->size);
+	int size_serializado = sizeof(op_code) + 3*sizeof(int) + (paquete->buffer->size);
 
 	void* streamFinal = malloc(size_serializado);
 	int offset = 0;
@@ -76,7 +82,6 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int Id, int IdCorrelat
 }
 
 void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	//TODO TOQUE ACA -> Le agregue un 1 ya que ahora lenghtOfPokemon no lo tiene
 	t_paquete* paquete = crearPaqueteCon(new_pokemon, 1 + new_pokemon->lengthOfPokemon + sizeof(uint32_t)*4, Id, IdCorrelativo, NEW_POKEMON);
 	enviar(paquete, socket_cliente);
 }
@@ -92,7 +97,7 @@ void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, in
 }
 
 void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon((void*) caught_pokemon, sizeof(uint32_t), Id, IdCorrelativo, APPEARED_POKEMON);
+	t_paquete* paquete = crearPaqueteCon((void*) caught_pokemon, sizeof(uint32_t), Id, IdCorrelativo, CAUGHT_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
@@ -102,13 +107,13 @@ void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int Id, 
 }
 
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	uint32_t sizeListaPosiciones = list_size(localized_pokemon->listaPosiciones) * (2*sizeof(uint32_t));
+	uint32_t sizeListaPosiciones = localized_pokemon->cantidadPosiciones * (2 * sizeof(uint32_t));
 	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, 1 + localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
 void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int Id, int IdCorrelativo){
-	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(int), Id, IdCorrelativo, RESPUESTA_ID);
+	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(uint32_t), Id, IdCorrelativo, RESPUESTA_ID);
 	enviar(paquete, socket_cliente);
 }
 
@@ -131,12 +136,13 @@ void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cl
 t_paquete* recibir_mensaje(int socket_cliente) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL);
-//	printf("---------------------%d------------------\n", paquete->codigo_operacion);
+	while(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) < 1){
+		//ESPERO MENSAJE VALIDO
+	}
+
 	recv(socket_cliente, &(paquete->ID), sizeof(int), MSG_WAITALL);
 	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(int), MSG_WAITALL);
 	paquete->buffer = malloc(sizeof(t_buffer));
-
 	recv(socket_cliente, &(paquete->buffer->size), sizeof(int), MSG_WAITALL);
 
 	switch(paquete->codigo_operacion){
@@ -175,10 +181,11 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 		case GAMEBOYSUSCRIBE:;
 			paquete->buffer->stream = des_serializar_gameboy_suscribe(socket_cliente, paquete->buffer->size);
 			break;
-		}
+	}
 
 	return paquete;
 }
+
 
 void liberar_conexion(int socket_cliente) {
 	t_log* logger = iniciar_log();
@@ -189,31 +196,30 @@ void liberar_conexion(int socket_cliente) {
 
 t_log* iniciar_log(void) {
 	t_log* logger;
-	if((logger = log_create("broker.log", "BROKER", 1, log_level_from_string("INFO"))) == NULL){
+	if((logger = log_create("library.log", "LIBRARY", 1, log_level_from_string("INFO"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}
 	return logger;
 }
 
-//t_log* iniciar_logger_modulo(char* nombreModulo) {
-//	t_log* logger;
-//
-//	char* nombreArchivoLog = malloc(strlen(nombreModulo) + 1);
-//	strcpy(nombreArchivoLog, nombreModulo);
-//	strcat(nombreArchivoLog, ".log");
-//	string_to_upper(nombreModulo);
-//
-//	if((logger = log_create(nombreArchivoLog, nombreModulo, 1, log_level_from_string("INFO"))) == NULL){
-//		printf("No pude crear el logger\n");
-//
-//		free(nombreArchivoLog);
-//		free(nombreModulo);
-//		exit(1);
-//	}
-//
-//	free(nombreArchivoLog);
-//	free(nombreModulo);
-//	return logger;
-//}
-//
+t_log* iniciar_logger_modulo(char* nombreModulo) {
+	t_log* logger;
+
+	char* nombreArchivoLog = malloc(strlen(nombreModulo) + 1);
+	strcpy(nombreArchivoLog, nombreModulo);
+	strcat(nombreArchivoLog, ".log");
+	string_to_upper(nombreModulo);
+
+	if((logger = log_create(nombreArchivoLog, nombreModulo, 1, log_level_from_string("INFO"))) == NULL){
+		printf("No pude crear el logger\n");
+
+		free(nombreArchivoLog);
+		free(nombreModulo);
+		exit(1);
+	}
+
+	free(nombreArchivoLog);
+	free(nombreModulo);
+	return logger;
+}

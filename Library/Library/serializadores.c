@@ -29,10 +29,8 @@ void serializar_appeared_pokemon(void** streamAEnviar, int offset, void* streamP
 
 	memcpy(*streamAEnviar + offset, &pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon +1);
-	offset += pokemon->lengthOfPokemon+1;
-	//CAMBIO TODO
-	//memcpy(*streamAEnviar + offset, &pokemon->posicion.posicionX, sizeof(uint32_t));
+	memcpy(*streamAEnviar + offset, pokemon->pokemon, pokemon->lengthOfPokemon + 1);
+	offset += pokemon->lengthOfPokemon + 1;
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 	memcpy(*streamAEnviar + offset, &pokemon->posicion->posicionY, sizeof(uint32_t));
@@ -115,4 +113,3 @@ void serializar_gameboy_suscribe(void** streamAEnviar, int offset, void* streamP
 
 	*bytes = offset;
 }
-
