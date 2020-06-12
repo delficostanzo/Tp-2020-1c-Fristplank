@@ -4,6 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../src/AppInit/Conexion.c \
 ../src/AppInit/ConfigFunctions.c \
 ../src/AppInit/CreacionEstructurasMsj.c \
 ../src/AppInit/EntrenadoresInit.c \
@@ -13,6 +14,7 @@ C_SRCS += \
 ../src/AppInit/Planificador.c 
 
 OBJS += \
+./src/AppInit/Conexion.o \
 ./src/AppInit/ConfigFunctions.o \
 ./src/AppInit/CreacionEstructurasMsj.o \
 ./src/AppInit/EntrenadoresInit.o \
@@ -22,6 +24,7 @@ OBJS += \
 ./src/AppInit/Planificador.o 
 
 C_DEPS += \
+./src/AppInit/Conexion.d \
 ./src/AppInit/ConfigFunctions.d \
 ./src/AppInit/CreacionEstructurasMsj.d \
 ./src/AppInit/EntrenadoresInit.d \
