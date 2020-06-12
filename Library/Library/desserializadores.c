@@ -49,7 +49,6 @@ void* des_serializar_appeared_pokemon(int socket_cliente, int size){
 	appeared_pokemon->pokemon = malloc(appeared_pokemon->lengthOfPokemon +1);
 	memcpy(appeared_pokemon->pokemon, recorrerStream, appeared_pokemon->lengthOfPokemon +1);
 	recorrerStream += appeared_pokemon->lengthOfPokemon + 1;
-	//CAMBIO TODO
 	appeared_pokemon->posicion = malloc(sizeof(t_posicion));
 	memcpy(&(appeared_pokemon->posicion->posicionX), recorrerStream, sizeof(uint32_t));
 	//memcpy(&(appeared_pokemon->posicion.posicionX), recorrerStream, sizeof(uint32_t));
