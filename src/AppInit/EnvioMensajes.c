@@ -66,7 +66,6 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared, t_list* pokemonesGloba
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
 	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
-
 	agregarPosicionSiLoNecesita(appeared->pokemon, *(appeared->posicion), pokemonesGlobales, pokemonesLibres);
 
 //	free(appeared->pokemon);
