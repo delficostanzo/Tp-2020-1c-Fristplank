@@ -73,8 +73,8 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared, t_list* pokemonesGloba
 //	free(appeared);
 //	free(paqueteAppeared->buffer);
 //	free(paqueteAppeared);
-	log_info(logger, "Aparecieron nuevos pokemones libres");
-	log_info(logger, "------Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
+	log_info(logger, "Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d ", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);;
+	log_info(logger, "Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
 	return paqueteAppeared;
 }
 
