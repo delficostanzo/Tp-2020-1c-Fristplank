@@ -23,13 +23,13 @@ int solicitarBloque() {
 	}
 
 	log_debug(logger, "Bloque libre encontrado: %d", bloqueEncontrado);
-	pthread_mutex_unlock(&semaforoBitarray);
 
 	FILE* bitmap = fopen(PATH_BITMAP, "r+w");
 	fseek(bitmap, bloqueEncontrado, SEEK_SET);
 	fwrite("1", 1, 1, bitmap);
 	fclose(bitmap);
 
+	pthread_mutex_unlock(&semaforoBitarray);
 	log_debug(logger, "<> END: Solicitar bloque <>");
 	return bloqueEncontrado;
 }
