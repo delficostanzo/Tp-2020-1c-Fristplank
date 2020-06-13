@@ -78,6 +78,7 @@ void procesarBrokerAppearedPokemon(int socket, char* argv[]){
 	appeared_pokemon->lengthOfPokemon = strlen(argv[3]);
 	appeared_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	appeared_pokemon->pokemon = argv[3];
+	appeared_pokemon->posicion = malloc(sizeof(t_posicion));
 	appeared_pokemon->posicion->posicionX = atoi(argv[4]);
 	appeared_pokemon->posicion->posicionX = atoi(argv[5]);
 
@@ -119,6 +120,7 @@ void procesarTeamAppearedPokemon(int socket, char* argv[]){
 	appeared_pokemon->lengthOfPokemon = strlen(argv[3]);
 	appeared_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	appeared_pokemon->pokemon = argv[3];
+	appeared_pokemon->posicion = malloc(sizeof(t_posicion));
 	appeared_pokemon->posicion->posicionX = atoi(argv[4]);
 	appeared_pokemon->posicion->posicionX = atoi(argv[5]);
 
@@ -134,6 +136,7 @@ void procesarGameCardCatchPokemon(int socket, char* argv[]){
 	catch_pokemon->lengthOfPokemon = strlen(argv[3]);
 	catch_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	catch_pokemon->pokemon = argv[3];
+	catch_pokemon->posicion = malloc(sizeof(t_posicion));
 	catch_pokemon->posicion->posicionX = atoi(argv[4]);
 	catch_pokemon->posicion->posicionX = atoi(argv[5]);
 
