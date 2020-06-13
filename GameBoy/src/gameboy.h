@@ -14,7 +14,7 @@
 #include<sys/socket.h>
 #include<netdb.h>
 #include<time.h>
-#include"Library/utils.h"
+#include"utils.h"
 #include"procesar.h"
 
 static const char* COLAS_STRING[] = {
