@@ -31,6 +31,7 @@ int main(int argc, char* argv[]) {
  *
  * DONE ./gameboy TEAM APPEARED_POKEMON [POKEMON] [POSX] [POSY]
  * ejemplo:
+ * 			./GameBoy TEAM APPEARED_POKEMON Pikachu 5 3
  *
  * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
  * ejemplo:
@@ -321,7 +322,7 @@ t_config* leer_config(void)
 t_log* iniciarLogger(void){
 
 	t_log* logger;
-	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("INFO"))) == NULL){
+	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("DEBUG"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}
