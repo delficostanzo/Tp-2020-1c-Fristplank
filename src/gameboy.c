@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 	config = leer_config();
 
 /*	DONE ./gameboy BROKER NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
- * ejemplo: ./GameBoy BROKER NEW_POKEMON "pikachu" 3 7 2
+ * ejemplo: ./GameBoy BROKER NEW_POKEMON pikachu 3 7 2
  *
  * DONE ./gameboy BROKER APPEARED_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
  * ejemplo:

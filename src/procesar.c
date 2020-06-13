@@ -13,9 +13,9 @@ void procesarBrokerNewPokemon(int socket, char* argv[]){
 	log_debug(logger, "Mensaje a enviar a Broker | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
-	new_pokemon->pokemon = malloc(strlen(argv[3] + 1));
+	new_pokemon->lengthOfPokemon = strlen(argv[3]);
+	new_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	new_pokemon->pokemon = argv[3];
-	new_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
 	new_pokemon->cantidad = atoi(argv[6]);
 	new_pokemon->posicion = malloc(sizeof(t_posicion));
 	new_pokemon->posicion->posicionX = atoi(argv[4]);
@@ -32,8 +32,9 @@ void procesarGameCardNewPokemon(int socket, char* argv[]){
 	log_debug(logger, "Mensaje a enviar a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], (int) argv[4], (int) argv[5], (int) argv[6]);
 
 	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
+	new_pokemon->lengthOfPokemon = strlen(argv[3]);
+	new_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	new_pokemon->pokemon = argv[3];
-	new_pokemon->lengthOfPokemon = strlen(argv[3] + 1);
 	new_pokemon->cantidad = atoi(argv[6]);
 	new_pokemon->posicion = malloc(sizeof(t_posicion));
 	new_pokemon->posicion->posicionX = atoi(argv[4]);
@@ -49,7 +50,8 @@ void procesarGameCardNewPokemon(int socket, char* argv[]){
 
 void procesarGameCardGetPokemon(int socket, char* argv[]){
 	t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
-	get_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	get_pokemon->lengthOfPokemon = strlen(argv[3]);
+	get_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	get_pokemon->pokemon = argv[3];
 
 
@@ -61,9 +63,9 @@ void procesarGameCardGetPokemon(int socket, char* argv[]){
 
 void procesarBrokerGetPokemon(int socket, char* argv[]){
 	t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
-	get_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	get_pokemon->lengthOfPokemon = strlen(argv[3]);
+	get_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	get_pokemon->pokemon = argv[3];
-
 
 	enviar_get_pokemon(get_pokemon, socket, -1, -1);
 	log_info(logger, "Mensaje enviado a GameCard | Pokemon: %s", get_pokemon->pokemon);
@@ -73,7 +75,8 @@ void procesarBrokerGetPokemon(int socket, char* argv[]){
 
 void procesarBrokerAppearedPokemon(int socket, char* argv[]){
 	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
-	appeared_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	appeared_pokemon->lengthOfPokemon = strlen(argv[3]);
+	appeared_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	appeared_pokemon->pokemon = argv[3];
 	appeared_pokemon->posicion->posicionX = atoi(argv[4]);
 	appeared_pokemon->posicion->posicionX = atoi(argv[5]);
@@ -87,8 +90,10 @@ void procesarBrokerAppearedPokemon(int socket, char* argv[]){
 
 void procesarBrokerCatchPokemon(int socket, char* argv[]){
 	t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
-	catch_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	catch_pokemon->lengthOfPokemon = strlen(argv[3]);
+	catch_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	catch_pokemon->pokemon = argv[3];
+	catch_pokemon->posicion = malloc(sizeof(t_posicion));
 	catch_pokemon->posicion->posicionX = atoi(argv[4]);
 	catch_pokemon->posicion->posicionX = atoi(argv[5]);
 
@@ -111,7 +116,8 @@ void procesarBrokerCaughtPokemon(int socket, char* argv[]){
 
 void procesarTeamAppearedPokemon(int socket, char* argv[]){
 	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
-	appeared_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	appeared_pokemon->lengthOfPokemon = strlen(argv[3]);
+	appeared_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	appeared_pokemon->pokemon = argv[3];
 	appeared_pokemon->posicion->posicionX = atoi(argv[4]);
 	appeared_pokemon->posicion->posicionX = atoi(argv[5]);
@@ -125,7 +131,8 @@ void procesarTeamAppearedPokemon(int socket, char* argv[]){
 
 void procesarGameCardCatchPokemon(int socket, char* argv[]){
 	t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
-	catch_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	catch_pokemon->lengthOfPokemon = strlen(argv[3]);
+	catch_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	catch_pokemon->pokemon = argv[3];
 	catch_pokemon->posicion->posicionX = atoi(argv[4]);
 	catch_pokemon->posicion->posicionX = atoi(argv[5]);
