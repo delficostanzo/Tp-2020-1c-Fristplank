@@ -119,14 +119,16 @@ void* escucharColaNewPokemon(){
 		t_paquete* paqueteNuevo = recibir_mensaje(socketNewPokemon);
 
 		if(paqueteNuevo->codigo_operacion == NEW_POKEMON){
-			//TODO iniciar hilo para procesarlo
 
+			enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID);
+
+			pthread_t hiloProcesarNewPokemon;
+			pthread_create(&hiloProcesarNewPokemon, NULL, procesarNewPokemon, (void*) paqueteNuevo->buffer->stream);
+			pthread_detach(hiloProcesarNewPokemon);
 		}
 		else{
 			log_info(logger, "Tipo de mensaje invalido.");
 		}
-
-		enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID);
 	}
 }
 
