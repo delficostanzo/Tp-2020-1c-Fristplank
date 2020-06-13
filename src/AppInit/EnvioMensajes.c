@@ -39,12 +39,8 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized, t_list* pokemonesGlob
 	//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
 		for(int index=0; index<localized->cantidadPosiciones; index++){
 			//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
-			pthread_mutex_lock(&mutexObjetivosGlobales);
-			pthread_mutex_lock(&mutexPokemonesLibres);
 			t_posicion* posicion = list_get(localized->listaPosiciones,index);
 			agregarPosicionSiLoNecesita(localized->pokemon, *posicion, pokemonesGlobales, pokemonesLibres);
-			pthread_mutex_unlock(&mutexObjetivosGlobales);
-			pthread_mutex_unlock(&mutexPokemonesLibres);
 		}
 
 	return paqueteLocalized;
@@ -70,11 +66,8 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared, t_list* pokemonesGloba
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
 	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
-	pthread_mutex_lock(&mutexObjetivosGlobales);
-	pthread_mutex_lock(&mutexPokemonesLibres);
+
 	agregarPosicionSiLoNecesita(appeared->pokemon, *(appeared->posicion), pokemonesGlobales, pokemonesLibres);
-	pthread_mutex_unlock(&mutexObjetivosGlobales);
-	pthread_mutex_unlock(&mutexPokemonesLibres);
 
 //	free(appeared->pokemon);
 //	free(appeared->posicion);

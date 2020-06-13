@@ -36,14 +36,14 @@ int main(int argc, char *argv[]) {
 
 
 	//Lanzar hilo para escuchar a GameBoy
-//	pthread_t hiloEscuchaGameBoy;
-//	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
+	pthread_t hiloEscuchaGameBoy;
+	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
 	//Lanzar hilo para concetarme a Broker
-	pthread_t hiloConexionBroker;
-	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
-	//los recursos son liberados cuando termina la funcion sin esperar un join
-	pthread_detach(hiloConexionBroker);
+//	pthread_t hiloConexionBroker;
+//	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
+//	//los recursos son liberados cuando termina la funcion sin esperar un join
+//	pthread_detach(hiloConexionBroker);
 
 	pokemonesLibres = list_create();
 //	//verificar que el id como respuesta vuelva a enviarse a traves de ese socket
