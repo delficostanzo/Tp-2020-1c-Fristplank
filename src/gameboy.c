@@ -31,6 +31,7 @@ int main(int argc, char* argv[]) {
  *
  * DONE ./gameboy TEAM APPEARED_POKEMON [POKEMON] [POSX] [POSY]
  * ejemplo:
+ * 			./GameBoy TEAM APPEARED_POKEMON Pikachu 5 3
  *
  * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
  * ejemplo:
