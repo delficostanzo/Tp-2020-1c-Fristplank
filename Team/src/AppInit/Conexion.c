@@ -100,11 +100,9 @@ void* generarSocketsConBroker() {
 
 ////////FUNCIONES DE LOS HILOS DE COLAS A LAS QUE ME SUSCRIBO//////////
 void* escucharColaAppearedPokemonGameBoy(){
-		quickLog("Recibiendo appeared del gameboy");
 
 		pthread_mutex_lock(&mutexObjetivosGlobales);
 		pthread_mutex_lock(&mutexPokemonesLibres);
-		quickLog("esta por recibir el appeared del gameboy");
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy, objetivosGlobales, pokemonesLibres);
 		pthread_mutex_unlock(&mutexObjetivosGlobales);
 		pthread_mutex_unlock(&mutexPokemonesLibres);
