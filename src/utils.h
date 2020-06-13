@@ -10,7 +10,8 @@
 
 #include "GameCard.h"
 
-void leer_config(void);
+void leer_configuracionGameCard(void);
+void leer_metadata(void);
 t_log* iniciar_logger(void);
 
 #endif /* SRC_UTILS_H_ */

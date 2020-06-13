@@ -21,12 +21,15 @@
 #include"procesar.h"
 #include"conexiones.h"
 #include"utils.h"
+#include"archivos.h"
 
+int BLOCK_SIZE;
+int BLOCKS;
 
-//agrego las variables que se agregan en el archivo de conf ademas del ip y puerto
 int TIEMPO_DE_REINTENTO_CONEXION;
 int TIEMPO_DE_REINTENTO_OPERACION;
 char* PUNTO_MONTAJE_TALLGRASS;
+
 char* IP_BROKER;
 char* PUERTO_BROKER;
 t_log* logger;
@@ -46,9 +49,7 @@ int socketACKNewPokemon;
 int socketACKCatchPokemon;
 int socketACKGetPokemon;
 
-int checkingOpenFile(char* filePath);
-void cambiarAAbierto(char* filePath);
-void cambiarACerrado(char* filePath);
-void crearArchivo(char* filePath);
+void iniciar_filesystem(void);
+void init_bitmap(void);
 
 #endif /* GAMECARD_H_ */

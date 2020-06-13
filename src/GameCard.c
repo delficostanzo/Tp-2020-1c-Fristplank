@@ -15,9 +15,6 @@ int main(void) {
 	logger = iniciar_logger();
 	log_info(logger, "Logger iniciado.");
 
-	leer_config();
-
-	//TODO iniciar filesystem
 	iniciar_filesystem();
 
 	//Lanzar hilo para escuchar a GameBoy
@@ -38,60 +35,38 @@ int main(void) {
 		- Volver a estar a la escucha de nuevos mensajes de la cola de mensajes en cuestión. */
 
 	//terminar_programa(conexion, logger, config);
+	config_destroy(config);
 }
 
 void iniciar_filesystem(){
-
-	// Crear bitmap
-
-	// CRear carpeta files
+	leer_configuracionGameCard();
+	leer_metadata();
+	init_bitmap(); //TODO
+	//TODO: Crear carpetas de Files
+	//TODO: Crear careptas de Blocks
 }
 
-int checkingOpenFile(char* filePath){
 
-	t_config* configFile = config_create (filePath);
-	char* openFile = config_get_string_value(config, "OPEN");
-	config_destroy(configFile);
-
-	if (strcmp("Y",openFile) == 0){
-		//ARCHIVO ABIERTO
-		free(openFile);
-		return 1;
-	}
-	else{
-		//ARCHIVO CERRADO
-		free(openFile);
-		return 0;
-	}
-}
-
-void cambiarAAbierto(char* filePath){
-
-	t_config* metadata = config_create(filePath);
-	config_set_value(metadata, "OPEN", "Y");
-	config_save(metadata);
-	config_destroy(metadata);
-
-}
-
-void cambiarACerrado(char* filePath){
-	t_config* metadata = config_create(filePath);
-	config_set_value(metadata, "OPEN", "N");
-	config_save(metadata);
-	config_destroy(metadata);
-}
-
-void crearArchivo(char* filePath){
-
-	FILE* metadata = fopen (filePath, "wb");
-
-	char* directory = "DIRECTORY=N";
-	char* open = "OPEN=Y";
-
-	fwrite (&directory, sizeof (directory), 1, metadata);
-	fwrite (&open, sizeof (open), 1, metadata);
-
-	free(directory);
-	free(open);
-	fclose(metadata);
+void init_bitmap() {
+//	log_debug(logger, "init_bitmap: void");
+//
+//	FILE* bitmap_f = fopen(string_from_format("%s/Metadata/Bitmap.bin", PUNTO_MONTAJE_TALLGRASS), "r");
+//
+//	int size;
+//	char* buffer;
+//	fseek(bitmap_f, 0L, SEEK_END);
+//	size = ftell(bitmap_f);
+//	fseek(bitmap_f, 0L, SEEK_SET);
+//
+//	buffer = malloc(size);
+//	fread(buffer, size, 1, bitmap_f);
+//	buffer = string_substring_until(buffer, size);
+//
+//	//string_append(&buffer, string_repeat('\0', block_quantity / 8 - size));
+//	bitmap = bitarray_create(buffer, block_quantity / 8);
+//
+//	//free(buffer);
+//	fclose(bitmap_f);
+//
+//	log_debug(logger, "init_bitmap: void");
 }
