@@ -78,6 +78,7 @@ void* generarSocketsConBroker() {
 }
 
 void* escucharGameBoy(){
+	log_debug(logger, "<> START: Comienzo a escuchar GameBoy <>");
 	socketListenerGameBoy = crearSocket();
 	int puertoBrokerInt = atoi(PUERTO_BROKER);
 	if(escuchaEn(socketListenerGameBoy, puertoBrokerInt)){
@@ -114,7 +115,7 @@ void* escucharGameBoy(){
 void* escucharColaNewPokemon(){
 
 	while(1){
-		log_info(logger, "Esperando mensajes...");
+		log_info(logger, "Esperando mensajes NEW_POKEMON...");
 		t_paquete* paqueteNuevo = recibir_mensaje(socketNewPokemon);
 
 		if(paqueteNuevo->codigo_operacion == NEW_POKEMON){
@@ -132,7 +133,7 @@ void* escucharColaNewPokemon(){
 void* escucharColaCatchPokemon(){
 
 	while(1){
-		log_info(logger, "Esperando mensajes...");
+		log_info(logger, "Esperando mensajes CATCH_POKEMON...");
 		t_paquete* paqueteNuevo = recibir_mensaje(socketCatchPokemon);
 
 		if(paqueteNuevo->codigo_operacion == CATCH_POKEMON){
@@ -150,7 +151,7 @@ void* escucharColaCatchPokemon(){
 void* escucharColaGetPokemon(){
 
 	while(1){
-		log_info(logger, "Esperando mensajes...");
+		log_info(logger, "Esperando mensajes GET_POKEMON...");
 		t_paquete* paqueteNuevo = recibir_mensaje(socketGetPokemon);
 
 		if(paqueteNuevo->codigo_operacion == GET_POKEMON){

@@ -10,16 +10,24 @@
 
 #include "GameCard.h"
 
-
-
 int main(void) {
-
-	static pthread_mutex_t semaforoBitarray = PTHREAD_MUTEX_INITIALIZER;
 
 	logger = iniciar_logger();
 	log_info(logger, "Logger iniciado.");
 
 	iniciar_filesystem();
+
+	// EMPIEZO A TESTEAR
+	int caca = solicitarBloque();
+	log_debug(logger, "Utilizo el bloque %d", caca);
+	int caca2 = solicitarBloque();
+	log_debug(logger, "Utilizo el bloque %d", caca2);
+	int caac3 = solicitarBloque();
+	log_debug(logger, "Utilizo el bloque %d", caac3);
+	int caca4 = solicitarBloque();
+	log_debug(logger, "Utilizo el bloque %d", caca4);
+	liberarBloque(1);
+	// TERMINO DE TESTEAR
 
 	//Lanzar hilo para escuchar a GameBoy
 	pthread_t hiloEscuchaGameBoy;
@@ -34,39 +42,65 @@ int main(void) {
 	/* SUSCRIBIRSE A LAS COLAS NEW_POKEMON | CATCH_POKEMON | GET_POKEMON */
 
 	/* Al suscribirse a cada una de las colas deberá quedarse a la espera de recibir un mensaje del Broker. Al recibir un mensaje de cualquier hilo se deberá:
-		- Informar al Broker la recepción del mismo (ACK).
-		- Crear un hilo que atienda dicha solicitud.
-		- Volver a estar a la escucha de nuevos mensajes de la cola de mensajes en cuestión. */
+	 - Informar al Broker la recepción del mismo (ACK).
+	 - Crear un hilo que atienda dicha solicitud.
+	 - Volver a estar a la escucha de nuevos mensajes de la cola de mensajes en cuestión. */
 
 	//terminar_programa(conexion, logger, config);
 	config_destroy(config);
 }
 
-void iniciar_filesystem(){
+void iniciar_filesystem() {
 	leer_configuracionGameCard();
 	leer_metadata();
+	init_semaforos();
 	init_bitmap();
-	//TODO: Crear carpetas de Files
-	//TODO: Crear careptas de Blocks
+	init_estructura_files_blocks();
+	init_bloques();
 }
 
+void init_semaforos(){
+	log_debug(logger, "<> START: Inicializacion semaforos <>");
+	pthread_mutex_init(&semaforoOpen, NULL);
+	pthread_mutex_init(&semaforoBitarray, NULL);
+	log_debug(logger, "<> END: Inicializacion semaforos <>");
+}
 
 void init_bitmap() {
 	log_debug(logger, "<> START: Creacion bitmap <>");
 
 	FILE* bitmapFile = fopen(PATH_BITMAP, "wb");
-
 	int cantidadDeBits = BLOCKS / 8;
 
-	for(int i = 0; i < cantidadDeBits; i++){
+	for (int i = 0; i < cantidadDeBits; i++) {
 		fwrite("0", 1, 1, bitmapFile);
 	}
-
 	fclose(bitmapFile);
 
 	void* buffer = malloc(cantidadDeBits);
-
 	bitarray = bitarray_create_with_mode(buffer, cantidadDeBits, LSB_FIRST);
+	log_debug(logger, "El bitmap creado contiene %d bits",
+			bitarray_get_max_bit(bitarray));
 
 	log_debug(logger, "<> END: Creacion bitmap <>");
+}
+
+void init_estructura_files_blocks() {
+	log_debug(logger, "<> START: Creacion de carpetas blocks y files <>");
+	mkdir(PATH_FILES, S_IRWXU);
+	mkdir(PATH_BLOCKS, S_IRWXU);
+	log_debug(logger, "<> END: Creacion de carpetas blocks y files <>");
+}
+
+void init_bloques() {
+	log_debug(logger, "<> START: Creacion de archivos de bloques <>");
+	for (int i = 0; i < (BLOCKS); i++) {
+		char* path = string_new();
+		string_append(&path,
+				string_from_format("%s%s%s", PATH_BLOCKS, string_itoa(i),
+						".bin"));
+		FILE* bloqueACrear = fopen(path, "w");
+		fclose(bloqueACrear);
+	}
+	log_debug(logger, "<> END: Creacion de archivos de bloques <>");
 }

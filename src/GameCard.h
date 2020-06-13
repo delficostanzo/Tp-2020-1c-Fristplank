@@ -7,6 +7,9 @@
 #include<signal.h>
 #include<unistd.h>
 #include<sys/socket.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
 #include<netdb.h>
 
 #include<commons/log.h>
@@ -24,6 +27,7 @@
 #include"conexiones.h"
 #include"utils.h"
 #include"archivos.h"
+#include"bitmap.h"
 
 int BLOCK_SIZE;
 int BLOCKS;
@@ -57,6 +61,9 @@ int socketACKCatchPokemon;
 int socketACKGetPokemon;
 
 void iniciar_filesystem(void);
+void init_semaforos(void);
 void init_bitmap(void);
+void init_estructura_files_blocks(void);
+void init_bloques(void);
 
 #endif /* GAMECARD_H_ */
