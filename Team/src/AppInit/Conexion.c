@@ -3,13 +3,13 @@
 
 
 void* escucharGameBoy(){
-	int conexionGameboy = crearSocket();
+	conexionGameboy = crearSocket();
 	if(escuchaEn(conexionGameboy, puertoTeam)){
 		quickLog("Escuchando conexiones del GameBoy");
 	}
 
 	while(1){
-		int socketGameBoy = aceptarConexion(conexionGameboy);
+		socketGameBoy = aceptarConexion(conexionGameboy);
 
 		id_proceso idProcesoConectado;
 		idProcesoConectado = iniciarHandshake(socketGameBoy, TEAM);
@@ -55,16 +55,16 @@ void* generarSocketsConBroker() {
 		}
 	}
 
-	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de caught_pokemon");
-		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("Socket de ACK Caught Pokemon guardado.");
-
-			pthread_t escucharCaughtPokemon;
-			pthread_create(&escucharCaughtPokemon, NULL, (void*)escucharColaCaughtPokemon, NULL);
-			pthread_detach(escucharCaughtPokemon);
-		}
-	}
+//	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
+//		quickLog("Suscripto a la cola de caught_pokemon");
+//		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
+//			quickLog("Socket de ACK Caught Pokemon guardado.");
+//
+//			pthread_t escucharCaughtPokemon;
+//			pthread_create(&escucharCaughtPokemon, NULL, (void*)escucharColaCaughtPokemon, NULL);
+//			pthread_detach(escucharCaughtPokemon);
+//		}
+//	}
 
 
 	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
@@ -104,7 +104,8 @@ void* escucharColaAppearedPokemonGameBoy(){
 
 		pthread_mutex_lock(&mutexObjetivosGlobales);
 		pthread_mutex_lock(&mutexPokemonesLibres);
-		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
+		quickLog("esta por recibir el appeared del gameboy");
+		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy, objetivosGlobales, pokemonesLibres);
 		pthread_mutex_unlock(&mutexObjetivosGlobales);
 		pthread_mutex_unlock(&mutexPokemonesLibres);
 

@@ -17,6 +17,8 @@ char* IP_BROKER;
 int PUERTO_BROKER;
 int puertoTeam;
 
+int conexionGameboy;
+int socketGameBoy;
 int conexionBroker;
 int suscripcionAppeared;
 int suscripcionCaught;

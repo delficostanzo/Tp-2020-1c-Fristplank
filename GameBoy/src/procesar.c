@@ -33,7 +33,7 @@ void procesarGameCardNewPokemon(int socket, char* argv[]){
 
 	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
 	new_pokemon->pokemon = argv[3];
-	new_pokemon->lengthOfPokemon = strlen(argv[3] + 1);
+	new_pokemon->lengthOfPokemon = strlen(argv[3]);
 	new_pokemon->cantidad = atoi(argv[6]);
 	new_pokemon->posicion = malloc(sizeof(t_posicion));
 	new_pokemon->posicion->posicionX = atoi(argv[4]);
@@ -111,11 +111,12 @@ void procesarBrokerCaughtPokemon(int socket, char* argv[]){
 
 void procesarTeamAppearedPokemon(int socket, char* argv[]){
 	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
-	appeared_pokemon->lengthOfPokemon = strlen(argv[3]) + 1;
+	appeared_pokemon->lengthOfPokemon = strlen(argv[3]);
+	appeared_pokemon->pokemon = malloc(strlen(argv[3]) + 1);
 	appeared_pokemon->pokemon = argv[3];
+	appeared_pokemon->posicion = malloc(sizeof(t_posicion));
 	appeared_pokemon->posicion->posicionX = atoi(argv[4]);
-	appeared_pokemon->posicion->posicionX = atoi(argv[5]);
-
+	appeared_pokemon->posicion->posicionY = atoi(argv[5]);
 	enviar_appeared_pokemon(appeared_pokemon, socket, -1, -1);
 	log_info(logger, "Mensaje enviado a Team | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared_pokemon->pokemon, appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY);
 

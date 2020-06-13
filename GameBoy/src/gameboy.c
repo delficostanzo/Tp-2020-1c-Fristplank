@@ -321,7 +321,7 @@ t_config* leer_config(void)
 t_log* iniciarLogger(void){
 
 	t_log* logger;
-	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("INFO"))) == NULL){
+	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("DEBUG"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}
