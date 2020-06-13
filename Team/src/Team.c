@@ -1,85 +1,91 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "Team.h"
+#include "./Model/Pokemon.h"
+#include "./AppInit/EntrenadoresInit.h"
+#include "./AppInit/HilosEntrenadores.h"
 
-
-int main(void) {
-	int conexion;
+int main(int argc, char *argv[]) {
 
 	t_log* logger = iniciar_logger();
-	t_config* config = leer_config();
 
-	//ejemplo
-	t_caught_pokemon* caughtStruct = malloc(sizeof(t_caught_pokemon));
-	caughtStruct->id_correlativo=1;
-	caughtStruct->ok=true;
+	t_config* config = leerConfigDesde("src/team.config");
+	//obtiene la lista de entrenadores desde el config
+	quickLog("Se arrancan a cargar los entrenadores");
+	entrenadores = getEntrenadoresDesde("src/team.config");
+	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
-	POSICONES_ENTRENADORES = config_get_array_value(config, "POSICONES_ENTRENADORES");
-	POKEMON_ENTRENADORES = config_get_array_value(config, "POKEMON_ENTRENADORES");
-	OBJETIVOS_ENTRENADORES = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
-	TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
-	RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
-	ALGORITMO_PLANIFICACION = config_get_string_value(config, "ALGORITMO_PLANIFICACION");
-	QUANTUM = config_get_int_value(config, "QUANTUM");
 	IP_BROKER = config_get_string_value(config, "IP_BROKER");
-	ESTIMACION_INICIAL = config_get_int_value(config, "ESTIMACION_INICIAL");
-	PUERTO_BROKER = config_get_string_value(config, "PUERTO_BROKER");
-	LOG_FILE =  config_get_string_value(config,"LOG_FILE");
+	PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
 
-	// faltaria loggear la info de todo el archivo de configuracion, ademas de ip y puerto
-	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
+	puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
 
-	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
+	//MUTEX? TODAVIA NO HAY HILOS
+	objetivosTotales = getObjetivosTotalesDesde(entrenadores);
+	objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
+	objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
+	log_info(logger, "La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
+	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
+	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
 
-	enviar_caught_pokemon(caughtStruct,conexion);
+	pthread_mutex_init(&mutexEntrenadores, NULL);
+	pthread_mutex_init(&mutexObjetivosTotales, NULL);
+	pthread_mutex_init(&mutexObjetivosAtrapados, NULL);
+	pthread_mutex_init(&mutexObjetivosGlobales, NULL);
+	pthread_mutex_init(&mutexPokemonesLibres, NULL);
 
-	// recibir mensaje
-	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
 
-	//loguear mensaje recibido
+	//Lanzar hilo para escuchar a GameBoy
+	pthread_t hiloEscuchaGameBoy;
+	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
-	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
+	//Lanzar hilo para concetarme a Broker
+//	pthread_t hiloConexionBroker;
+//	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
+//	//los recursos son liberados cuando termina la funcion sin esperar un join
+//	pthread_detach(hiloConexionBroker);
 
-	//terminar_programa(conexion, logger, config);
+	pokemonesLibres = list_create();
+//	//verificar que el id como respuesta vuelva a enviarse a traves de ese socket
+//	//recibe los nombres de pokemones encontrados libres con sus posiciones
+//	//y si se necesitan (estan en los objetivos globales) se agregan a la lista de pokemones libres
+	//recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
+	recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
+
+
+	crearHilosDeEntrenadores(entrenadores);
+	quickLog("Se crea un hilo por cada entrenador");
+
+
+	//probando las funciones del planificador
+//	PokemonEnElMapa* pokemonDePrueba1 = newPokemon();
+//	t_posicion posicionDePrueba1;
+//	posicionDePrueba1.posicionX = 1;
+//	posicionDePrueba1.posicionY = 1;
+//	setPosicionTo(pokemonDePrueba1, posicionDePrueba1);
+//	setNombreTo(pokemonDePrueba1, "Delficapa");
+//	list_add(pokemonesLibres, pokemonDePrueba1);
+//	pasarDeNewAReady(entrenadores, pokemonesLibres);
+//	Entrenador* entrenador1 = list_get(entrenadores, 0);
+//	log_info(logger, "El estado del primer entrenador tendria que pasar de new a ready y se muestra : %d", entrenador1->estado);
+//	//
+
+
+	list_destroy_and_destroy_elements(entrenadores, free);
+
+	return 0;
 }
 
-t_log* iniciar_logger(void){
-	t_log * log = malloc(sizeof(t_log));
-	log = log_create("team.log", "TEAM", 1,0);
-	if(log == NULL){
-		printf("No pude crear el logger \n");
-		exit(1);
-	}
-	log_info(log,"Logger Iniciado");
-	return log;
-}
 
-t_config* leer_config(void)
-{
-	t_config* config = config_create("src/team.config");
-	t_log* logger = iniciar_logger();
-
-	if(config == NULL){
-		printf("No pude leer la config \n");
-		exit(2);
-	}
-	log_info(logger,"Archivo de configuracion seteado");
-	return config;
-}
-
-
-void terminar_programa(int conexion, t_log* logger, t_config* config)
-{
-	if(logger != NULL){
+void terminar_programa(int conexion, t_log* logger, t_config* config) {
+	if (logger != NULL) {
 		log_destroy(logger);
 	}
 
-	if(config != NULL){
-		config_destroy(config); //destruye la esctructura de config en memoria, no lo esta eliminando el archivo de config
+	if (config != NULL) {
+		config_destroy(config); //destruye la esctructura de config en memoria, no elimina el archivo de config
 	}
 
-	//liberar_conexion(conexion); // esta funcion esta en utils.c
+	liberar_conexion(conexion);
 
 }
-
