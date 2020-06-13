@@ -13,8 +13,8 @@
 #include<netdb.h>
 #include<commons/collections/list.h>
 //UTILS
-#include<Library/utils.h>
-#include<Library/conexion.h>
+#include<utils.h>
+#include<conexion.h>
 //THREADS
 #include<pthread.h>
 //OTROS FUENTES DEL PROYECTO
