@@ -12,7 +12,7 @@
 
 void* escucharGameBoy(void);
 void* generarSocketsConBroker(void);
-
+void* escucharColaAppearedPokemonGameBoy(void);
 void* escucharColaAppearedPokemon(void);
 void* escucharColaCaughtPokemon(void);
 void* escucharColaLocalizedPokemon(void);

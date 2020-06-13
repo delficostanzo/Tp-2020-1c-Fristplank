@@ -15,23 +15,10 @@ void* escucharGameBoy(){
 		idProcesoConectado = iniciarHandshake(socketGameBoy, TEAM);
 		quickLog("Me conecté con GameBoy");
 
-		t_paquete* paqueteNuevo = recibir_mensaje(socketGameBoy);
-
-		switch(paqueteNuevo->codigo_operacion){
-			case APPEARED_POKEMON:
-				//TODO iniciar hilo para procesarlo
-				break;
-			case CAUGHT_POKEMON:
-				//TODO iniciar hilo para procesarlo
-				break;
-			case LOCALIZED_POKEMON:
-				//TODO iniciar hilo para procesarlo
-				break;
-			default:
-				quickLog("Tipo de mensaje invalido.");
-		}
+		pthread_t escucharAppearedPokemon;
+		pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemonGameBoy, NULL);
+		pthread_detach(escucharAppearedPokemon);
 	}
-	return 0;
 }
 
 void* generarSocketsConBroker() {
@@ -63,7 +50,7 @@ void* generarSocketsConBroker() {
 			quickLog("Socket de ACK Get Pokemon guardado.");
 
 			pthread_t escucharAppearedPokemon;
-			pthread_create(&escucharAppearedPokemon, NULL, escucharColaAppearedPokemon, NULL);
+			pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);
 			pthread_detach(escucharAppearedPokemon);
 		}
 	}
@@ -74,7 +61,7 @@ void* generarSocketsConBroker() {
 			quickLog("Socket de ACK Caught Pokemon guardado.");
 
 			pthread_t escucharCaughtPokemon;
-			pthread_create(&escucharCaughtPokemon, NULL, escucharColaCaughtPokemon, NULL);
+			pthread_create(&escucharCaughtPokemon, NULL, (void*)escucharColaCaughtPokemon, NULL);
 			pthread_detach(escucharCaughtPokemon);
 		}
 	}
@@ -86,7 +73,7 @@ void* generarSocketsConBroker() {
 			quickLog("Socket de ACK Localized Pokemon guardado.");
 
 			pthread_t escucharLocalizedPokemon;
-			pthread_create(&escucharLocalizedPokemon, NULL, escucharColaLocalizedPokemon, NULL);
+			pthread_create(&escucharLocalizedPokemon, NULL, (void*)escucharColaLocalizedPokemon, NULL);
 			pthread_detach(escucharLocalizedPokemon);
 		}
 	}
@@ -112,15 +99,28 @@ void* generarSocketsConBroker() {
 }
 
 ////////FUNCIONES DE LOS HILOS DE COLAS A LAS QUE ME SUSCRIBO//////////
+void* escucharColaAppearedPokemonGameBoy(){
+		quickLog("Recibiendo appeared del gameboy");
+
+		pthread_mutex_lock(&mutexObjetivosGlobales);
+		pthread_mutex_lock(&mutexPokemonesLibres);
+		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
+		pthread_mutex_unlock(&mutexObjetivosGlobales);
+		pthread_mutex_unlock(&mutexPokemonesLibres);
+
+		return paqueteNuevo;
+}
+
 void* escucharColaAppearedPokemon(){
 
 	while(1){
-		quickLog("Esperando mensajes");
-//		t_list* objetivosTotales = getObjetivosTotalesDesde(entrenadores);
-//		t_list* objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
-//		t_list* objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
+		quickLog("Esperando mensajes de Appeared");
 
+		pthread_mutex_lock(&mutexObjetivosGlobales);
+		pthread_mutex_lock(&mutexPokemonesLibres);
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
+		pthread_mutex_unlock(&mutexObjetivosGlobales);
+		pthread_mutex_unlock(&mutexPokemonesLibres);
 
 		enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
 	}
@@ -141,8 +141,13 @@ void* escucharColaCaughtPokemon(){
 void* escucharColaLocalizedPokemon(){
 
 	while(1){
-		quickLog("Esperando mensajes");
+		quickLog("Esperando mensajes de Localized");
+
+		pthread_mutex_unlock(&mutexObjetivosGlobales);
+		pthread_mutex_unlock(&mutexPokemonesLibres);
 		t_paquete* paqueteNuevo = recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
+		pthread_mutex_unlock(&mutexObjetivosGlobales);
+		pthread_mutex_unlock(&mutexPokemonesLibres);
 
 		enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
 	}

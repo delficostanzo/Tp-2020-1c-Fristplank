@@ -291,7 +291,7 @@ int conectarAModulo(String PUERTO, String IP){
 
 t_config* leer_config(void)
 {
-	t_config* config = config_create("./gameboy.config");
+	t_config* config = config_create("gameboy.config");
 
 	if(config == NULL){
 		printf("No pude leer la config \n");
