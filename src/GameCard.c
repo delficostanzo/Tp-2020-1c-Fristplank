@@ -10,7 +10,11 @@
 
 #include "GameCard.h"
 
+
+
 int main(void) {
+
+	static pthread_mutex_t semaforoBitarray = PTHREAD_MUTEX_INITIALIZER;
 
 	logger = iniciar_logger();
 	log_info(logger, "Logger iniciado.");
@@ -41,32 +45,28 @@ int main(void) {
 void iniciar_filesystem(){
 	leer_configuracionGameCard();
 	leer_metadata();
-	init_bitmap(); //TODO
+	init_bitmap();
 	//TODO: Crear carpetas de Files
 	//TODO: Crear careptas de Blocks
 }
 
 
 void init_bitmap() {
-//	log_debug(logger, "init_bitmap: void");
-//
-//	FILE* bitmap_f = fopen(string_from_format("%s/Metadata/Bitmap.bin", PUNTO_MONTAJE_TALLGRASS), "r");
-//
-//	int size;
-//	char* buffer;
-//	fseek(bitmap_f, 0L, SEEK_END);
-//	size = ftell(bitmap_f);
-//	fseek(bitmap_f, 0L, SEEK_SET);
-//
-//	buffer = malloc(size);
-//	fread(buffer, size, 1, bitmap_f);
-//	buffer = string_substring_until(buffer, size);
-//
-//	//string_append(&buffer, string_repeat('\0', block_quantity / 8 - size));
-//	bitmap = bitarray_create(buffer, block_quantity / 8);
-//
-//	//free(buffer);
-//	fclose(bitmap_f);
-//
-//	log_debug(logger, "init_bitmap: void");
+	log_debug(logger, "<> START: Creacion bitmap <>");
+
+	FILE* bitmapFile = fopen(PATH_BITMAP, "wb");
+
+	int cantidadDeBits = BLOCKS / 8;
+
+	for(int i = 0; i < cantidadDeBits; i++){
+		fwrite("0", 1, 1, bitmapFile);
+	}
+
+	fclose(bitmapFile);
+
+	void* buffer = malloc(cantidadDeBits);
+
+	bitarray = bitarray_create_with_mode(buffer, cantidadDeBits, LSB_FIRST);
+
+	log_debug(logger, "<> END: Creacion bitmap <>");
 }

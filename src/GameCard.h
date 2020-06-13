@@ -3,15 +3,17 @@
 
 #include<stdio.h>
 #include<stdlib.h>
-#include<commons/log.h>
-#include<commons/string.h>
-#include<commons/config.h>
 #include<readline/readline.h>
 #include<signal.h>
 #include<unistd.h>
 #include<sys/socket.h>
 #include<netdb.h>
+
+#include<commons/log.h>
+#include<commons/string.h>
+#include<commons/config.h>
 #include<commons/collections/list.h>
+#include<commons/bitarray.h>
 //UTILS
 #include<utils.h>
 #include<conexion.h>
@@ -29,13 +31,18 @@ int BLOCKS;
 int TIEMPO_DE_REINTENTO_CONEXION;
 int TIEMPO_DE_REINTENTO_OPERACION;
 char* PUNTO_MONTAJE_TALLGRASS;
+char* PATH_BITMAP;
+char* PATH_FILES;
+char* PATH_BLOCKS;
 
 char* IP_BROKER;
 char* PUERTO_BROKER;
 t_log* logger;
 t_config* config;
+t_bitarray* bitarray;
 
 pthread_mutex_t semaforoOpen;
+pthread_mutex_t semaforoBitarray;
 
 int socketBroker;
 int socketNewPokemon;
