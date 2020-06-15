@@ -29,16 +29,17 @@ typedef struct {
 	PokemonEnElMapa* pokemonNecesitado;
 	PokemonEnElMapa* pokemonAIntercambiar; // cuando el objetivo sea atrapar, este estaria en NULL. Se va a usar cuando es mover e intercambiar(DEADLOCK)
 	ObjetivoEnExec objetivo;
-}LibreConObjetivo;
+}MovimientoEnExec;
 
 typedef struct {
 	t_posicion* posicion;
 	t_list* pokemonesObjetivos;
 	t_list* pokemonesAtrapados;
-	LibreConObjetivo* pokemonYObjetivo;
+	MovimientoEnExec* movimientoEnExec;
 	MotivoDeBloqueo motivo;
 	Estado estado;
 	pthread_t hiloEntrenador;
+	int ciclosCPUConsumido;
 	//pthread_mutex o contador, despues vemo
 }Entrenador;
 
