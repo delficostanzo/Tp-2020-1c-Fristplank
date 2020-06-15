@@ -12,6 +12,12 @@ typedef enum{
 }ObjetivoEnExec;
 
 typedef enum{
+	ESPERANDORESPUESTA = 1,
+	DORMIDO = 2,
+	DEADLOCK = 3
+}MotivoDeBloqueo;
+
+typedef enum{
 	NEW = 1,
 	READY = 2,
 	EXEC = 3,
@@ -20,10 +26,17 @@ typedef enum{
 }Estado;
 
 typedef struct {
+	PokemonEnElMapa* pokemonNecesitado;
+	PokemonEnElMapa* pokemonAIntercambiar; // cuando el objetivo sea atrapar, este estaria en NULL. Se va a usar cuando es mover e intercambiar(DEADLOCK)
+	ObjetivoEnExec objetivo;
+}LibreConObjetivo;
+
+typedef struct {
 	t_posicion* posicion;
 	t_list* pokemonesObjetivos;
 	t_list* pokemonesAtrapados;
-	ObjetivoEnExec objetivo;
+	LibreConObjetivo* pokemonYObjetivo;
+	MotivoDeBloqueo motivo;
 	Estado estado;
 	pthread_t hiloEntrenador;
 	//pthread_mutex o contador, despues vemo

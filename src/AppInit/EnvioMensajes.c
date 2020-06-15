@@ -75,7 +75,9 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared, t_list* pokemonesGloba
 //	free(paqueteAppeared);
 	log_info(logger, "Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);;
 	log_info(logger, "Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
-	log_info(logger, "La cantidad de pokemones %s en esa posicion es: %d", appeared->pokemon, (buscarPorNombre(appeared->pokemon, pokemonesLibres))->cantidad);
+	if(buscarPorNombre(appeared->pokemon, pokemonesGlobales) != NULL){
+		log_info(logger, "La cantidad de pokemones %s en esa posicion es: %d", appeared->pokemon, (buscarPorNombre(appeared->pokemon, pokemonesLibres))->cantidad);
+	}
 	return paqueteAppeared;
 }
 

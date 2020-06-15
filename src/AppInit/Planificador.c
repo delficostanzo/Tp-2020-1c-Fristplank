@@ -6,18 +6,14 @@ static bool noHayEntrenadoresEnExec(t_list* entrenadores);
 //pasa el entrenador que esta mas cerca de los pokes libres a ready
 //TODO:aca no estoy segura si esta bien pasarle por parametro la lista de los pokes libres que le manda el Broker?
 void pasarDeNewAReady(t_list* entrenadores, t_list* pokemonesLibres){
-	for(int index=0; index < list_size(entrenadores); index++){
-		Entrenador* entrenador = list_get(entrenadores, index);
-		for(int index=0; index < list_size(pokemonesLibres); index++){
+	for(int index=0; index < list_size(pokemonesLibres); index++){
 			PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
-				//si es el entrenador mas cerca a un pokemon
-				if(entrenadorMasCercanoA(pokemonLibre, entrenadores) == entrenador){
-					entrenador->estado = 2;
-				} else{
-					//su estado no cambia
-				}
-		}
+			Entrenador* entrenador = entrenadorMasCercanoA(pokemonLibre, entrenadores);
+			entrenador->estado = 2;
+			entrenador->pokemonYObjetivo->pokemon = pokemonLibre;
+			list_remove(pokemonesLibres, pokemonLibre);
 	}
+
 }
 //solo se puede pasar un entrenador a estado EXEC si no hay ninguno en estado EXEC
 //TODO: falta la condicion de que se quieren mover y atrapar (1) o mover e intercambiar (2)
@@ -33,7 +29,6 @@ void pasarDeReadyAExec(t_list* entrenadores){
 			// su estado no cambia
 		}
 	}
-
 }
 
 //chequeo que no hay entrenadores en exec
