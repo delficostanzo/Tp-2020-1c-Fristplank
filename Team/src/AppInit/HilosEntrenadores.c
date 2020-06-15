@@ -37,6 +37,7 @@ void funcionesDelEntrenador(void* entrenador){
 			// para que se pase a estado EXEC, se hace por fifo, primero se verifica que ningun entrenador este en EXEC
 			break;
 		case EXEC:
+			cumplirObjetivo(entrenador);
 			// aca hay 3 codiciones: moverse y atrapar en el mapa, intercambiar y mover
 			break;
 		case BLOCK:
@@ -48,6 +49,26 @@ void funcionesDelEntrenador(void* entrenador){
 			break;
 		}
 	}
+
+void cumplirObjetivo(Entrenador* entrenador){
+	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
+	ObjetivoEnExec mision = movimientoEnExec->objetivo;
+
+	switch(mision){
+		case MOVERyATRAPAR:
+			atrapar(movimientoEnExec->pokemonNecesitado);
+			break;
+		case MOVEReINTERCAMBIAR:
+			Entrenador* entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(movimientoEnExec->pokemonNecesitado, movimientoEnExec->pokemonAIntercambiar);
+			intercambiarPokemonesCon(entrenadorDeIntercambio);
+
+	//cambiar de estado  => planificador
+}
+
+void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio){
+	//TODO
+}
+
 //
 //	if(no hay ninguno ejecutando){
 //		lock();
