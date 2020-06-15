@@ -104,7 +104,6 @@ void* escucharColaAppearedPokemonGameBoy(){
 
 		pthread_mutex_lock(&mutexObjetivosGlobales);
 		pthread_mutex_lock(&mutexPokemonesLibres);
-		quickLog("esta por recibir el appeared del gameboy");
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy, objetivosGlobales, pokemonesLibres);
 		pthread_mutex_unlock(&mutexObjetivosGlobales);
 		pthread_mutex_unlock(&mutexPokemonesLibres);
@@ -130,7 +129,7 @@ void* escucharColaAppearedPokemon(){
 void* escucharColaCaughtPokemon(){
 
 	while(1){
-		quickLog("Esperando mensajes");
+		quickLog("Esperando mensajes de Caught");
 		t_paquete* paqueteNuevo = recibirCaught(suscripcionCaught);
 		if(paqueteNuevo != NULL){
 			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);

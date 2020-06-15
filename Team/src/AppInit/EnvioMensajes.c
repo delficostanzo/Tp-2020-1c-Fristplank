@@ -73,13 +73,15 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared, t_list* pokemonesGloba
 //	free(appeared);
 //	free(paqueteAppeared->buffer);
 //	free(paqueteAppeared);
-	log_info(logger, "Aparecieron nuevos pokemones libres");
-	log_info(logger, "------Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
+	log_info(logger, "Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);;
+	log_info(logger, "Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
+	log_info(logger, "La cantidad de pokemones %s en esa posicion es: %d", appeared->pokemon, (buscarPorNombre(appeared->pokemon, pokemonesLibres))->cantidad);
 	return paqueteAppeared;
 }
 
 //si tengo ese pokemon como objetivo lo agregego en la lista de pokemones libres
 void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoPoke, t_list* pokemonesGlobales, t_list* pokemonesLibres){
+	t_log* logger = iniciar_logger();
 	//si ese pokemon lo tengo como objetivo
 	if(buscarPorNombre(nombreNuevoPoke, pokemonesGlobales) != NULL) {
 		//ya tengo uno de esos pokes libres en el mapa y esta en la misma posicion
@@ -93,6 +95,10 @@ void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevo
 			setNombreTo(pokemonNuevo, nombreNuevoPoke);
 			setCantidadTo(pokemonNuevo, 1);
 			list_add(pokemonesLibres, pokemonNuevo);
+
+
+			Entrenador* entrenadorMasCercano = entrenadorMasCercanoA(pokemonNuevo, entrenadores);
+			log_info(logger, "El entranador mas cercano a este nuevo pokemon esta en la posicion (%d, %d)", entrenadorMasCercano->posicion->posicionX, entrenadorMasCercano->posicion->posicionY);
 		}
 	}
 }
