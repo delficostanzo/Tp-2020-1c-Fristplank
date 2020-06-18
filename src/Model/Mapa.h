@@ -13,6 +13,7 @@
 #include "Trainer.h"
 
 
+
 char* IP_BROKER;
 int PUERTO_BROKER;
 int puertoTeam;
@@ -25,6 +26,9 @@ int suscripcionCaught;
 int suscripcionLocalized;
 int socketGet;
 int socketCatch;
+int socketIdGet;
+int socketIdCatch;
+
 
 int socketACKAppeared;
 int socketACKCaught;
@@ -44,6 +48,7 @@ t_list* objetivosGlobales;
 t_list* pokemonesLibres;
 
 
-Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores);
+
+int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);
 
 #endif /* SRC_MODEL_MAPA_H_ */

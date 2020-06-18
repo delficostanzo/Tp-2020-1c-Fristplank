@@ -38,7 +38,9 @@ void* generarSocketsConBroker() {
 	suscripcionCaught = crearSocket();
 	suscripcionLocalized = crearSocket();
 	socketGet = crearSocket();
+	socketIdGet = crearSocket();
 	socketCatch = crearSocket();
+	socketIdCatch = crearSocket();
 
 	socketACKAppeared = crearSocket();
 	socketACKCaught = crearSocket();
@@ -93,6 +95,11 @@ void* generarSocketsConBroker() {
 	}
 	if (conectarA(socketCatch, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("Ya se conecto a la cola de catch para poder enviarle mensajes");
+
+		//el envio lo hace cada entrenador!
+//		pthread_mutex_lock(&mutexEntrenadorEsperando);
+//		enviarCatchDesde(entrenadorEsperando, socketCatch);
+//		pthread_mutex_unlock(&mutexEntrenadorEsperando);
 	}
 
 	return 0;

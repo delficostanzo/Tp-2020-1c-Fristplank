@@ -2,19 +2,23 @@
 #include "Planificador.h"
 
 static bool noHayEntrenadoresEnExec(t_list* entrenadores);
+typedef bool(*erasedTypeFilter)(void*);
 
 //pasa el entrenador que esta mas cerca de los pokes libres a ready
-//TODO:aca no estoy segura si esta bien pasarle por parametro la lista de los pokes libres que le manda el Broker?
 void pasarDeNewAReady(t_list* entrenadores, t_list* pokemonesLibres){
-	for(int index=0; index < list_size(pokemonesLibres); index++){
-			PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
-			Entrenador* entrenador = entrenadorMasCercanoA(pokemonLibre, entrenadores);
-			entrenador->estado = 2;
-			entrenador->pokemonYObjetivo->pokemon = pokemonLibre;
-			list_remove(pokemonesLibres, pokemonLibre);
+	int tieneEstadoNewODormido(Entrenador* entrenador) {
+		return entrenador->estado==1 || (entrenador->estado==4 && entrenador->motivo==2);
 	}
-
+	t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
+	for(int index=0; index < list_size(pokemonesLibres); index++){
+		PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
+		Entrenador* entrenador = entrenadorMasCercanoA(pokemonLibre, entrenadoresPosibles);
+		entrenador->estado = 2;
+		entrenador->movimientoEnExec->pokemonNecesitado = pokemonLibre;
+		list_remove(pokemonesLibres, pokemonLibre);
+	}
 }
+
 //solo se puede pasar un entrenador a estado EXEC si no hay ninguno en estado EXEC
 //TODO: falta la condicion de que se quieren mover y atrapar (1) o mover e intercambiar (2)
 // el Team deberia settear los objetivos de los entrenadores segun sus pokemones, si de la lista con los pokes libres
@@ -57,5 +61,10 @@ void pasarDeBlockAReady(t_list* entrenadores, t_list* pokemonesLibres){
 				}
 		}
 	}
+}
+
+void pasarDeExecABlockEsperando(Entrenador* entrenador) {
+	entrenador->estado = 4;
+	entrenador->motivo = 1;
 }
 

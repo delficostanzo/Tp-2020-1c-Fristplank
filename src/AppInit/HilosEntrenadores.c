@@ -4,6 +4,8 @@
 
 void crearHiloParaEntrenador(Entrenador* entrenador);
 void funcionesDelEntrenador(Data entrenador);
+void moverAReady(Entrenador* entrenador);
+void cumplirObjetivo(Entrenador* entrenador);
 
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
 
@@ -29,9 +31,11 @@ void funcionesDelEntrenador(void* entrenador){
 	while(1){
 		//cuando quiero cambiar de estado, dentro de la lista de entrenadores debo fijarme cual es el que tiene enum en ese estado
 		Entrenador* unEntrenador = entrenador;
+		//mutex para cada estado?
 		switch(unEntrenador->estado){
 		case NEW:
 			//se odena por distancia mas corta (el entrenador mas cerca de ese poke) y se pasa a ready
+			moverAReady(entrenador);
 			break;
 		case READY:
 			// para que se pase a estado EXEC, se hace por fifo, primero se verifica que ningun entrenador este en EXEC
@@ -53,16 +57,28 @@ void funcionesDelEntrenador(void* entrenador){
 void cumplirObjetivo(Entrenador* entrenador){
 	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
 	ObjetivoEnExec mision = movimientoEnExec->objetivo;
+	Entrenador* entrenadorDeIntercambio;
 
 	switch(mision){
 		case MOVERyATRAPAR:
-			atrapar(movimientoEnExec->pokemonNecesitado);
+			//se mueve hasta ese pokemon, manda el catch de ese pokemon,
+			//se guarda el id del catch que va a esperar como id correlativo en el caught y se cambia de estado
+			atrapar(entrenador, movimientoEnExec->pokemonNecesitado);
 			break;
 		case MOVEReINTERCAMBIAR:
-			Entrenador* entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(movimientoEnExec->pokemonNecesitado, movimientoEnExec->pokemonAIntercambiar);
+			//se pasan invertidos los pokemones porque este pokemon necesitado es de un entrenador que pasaria como innecesario de OTRO entrenador
+			entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(movimientoEnExec->pokemonNecesitado, movimientoEnExec->pokemonAIntercambiar);
 			intercambiarPokemonesCon(entrenadorDeIntercambio);
+			break;
+	}
+}
 
-	//cambiar de estado  => planificador
+void moverAReady(Entrenador* entrenador) {
+	pthread_mutex_lock(&mutexEntrenadores);
+	pthread_mutex_lock(&mutexPokemonesLibres);
+	pasarDeNewAReady(entrenadores, pokemonesLibres);
+	pthread_mutex_unlock(&mutexEntrenadores);
+	pthread_mutex_unlock(&mutexPokemonesLibres);
 }
 
 void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio){

@@ -1,5 +1,8 @@
 #include "Trainer.h"
 
+static Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado);
+static int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
+
 //inicializa y devuelve un trainer nuevo. Es el new, al estilo Java. ESTADO NEW
 Entrenador* newEntrenador() {
 	return malloc(sizeof(Entrenador));
@@ -39,6 +42,17 @@ t_posicion* newPosicion() {
 }
 
 
+
+void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
+	int distanciaHastaPokemon = distanciaEntre(&(pokemon->posicion), entrenador->posicion);
+	entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
+	entrenador->posicion = &(pokemon->posicion);
+	//el socket ya esta conectado con el broker en Conexion
+	enviarCatchDesde(entrenador, socketCatch);
+	pasarDeExecABlockEsperando(entrenador);
+}
+
+
 /////////////INTERCAMBIO////////////////
 //se busca al entrenador que necesite el que yo tengo de mas y tenga el que yo necesito
 //si no lo encuentra devuelve NULL
@@ -73,6 +87,22 @@ int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesari
 
 	return nombrePokemonAIntercambiar == nombrePokemonInnecesario && nombrePokemonNecesitado == nombrePokemonDado;
 }
+
+
+Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores) {
+	typedef bool(*erasedTypeSort)(void*, void*);
+
+	bool estaMasCerca(Entrenador* entrenador1, Entrenador* entrenador2) {
+		int distanciaEntrenador1 = distanciaEntre(entrenador1->posicion, &(pokemon->posicion));
+		int distanciaEntrenador2 = distanciaEntre(entrenador2->posicion, &(pokemon->posicion));
+		return distanciaEntrenador1 <= distanciaEntrenador2;
+
+	}
+
+	list_sort(entrenadores, (erasedTypeSort)estaMasCerca);
+	return list_get(entrenadores, 0);
+}
+
 
 
 
