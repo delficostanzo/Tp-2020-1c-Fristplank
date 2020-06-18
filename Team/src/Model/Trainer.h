@@ -51,7 +51,7 @@ void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
 void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon);
 t_posicion* newPosicion();
 Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores);
-
+Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado);
 void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 
 

@@ -1,7 +1,9 @@
 #include "Trainer.h"
 
-static Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado);
 static int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
+
+
+typedef bool(*erasedTypeFilter)(void*);
 
 //inicializa y devuelve un trainer nuevo. Es el new, al estilo Java. ESTADO NEW
 Entrenador* newEntrenador() {
@@ -64,7 +66,7 @@ Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario
 	}
 	//si hay otro entrenador en deadlock
 	if(list_is_empty(entrenadoresPosibles) != 1){
-		t_list* entrenadoresQueCumplen = list_filter(entrenadoresPosibles, entrenadorCumpleCondicion);
+		t_list* entrenadoresQueCumplen = list_filter(entrenadoresPosibles, (erasedTypeFilter) entrenadorCumpleCondicion);
 		if(list_is_empty(entrenadoresQueCumplen) != 1) {
 			//agarra el primero que cumpla si al menos hay 1
 			return list_get(entrenadoresQueCumplen, 0);
