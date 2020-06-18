@@ -29,7 +29,7 @@ void procesarBrokerNewPokemon(int socket, char* argv[]){
 }
 
 void procesarGameCardNewPokemon(int socket, char* argv[]){
-	log_debug(logger, "Mensaje a enviar a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], (int) argv[4], (int) argv[5], (int) argv[6]);
+	log_debug(logger, "Mensaje a enviar a GameCard | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", (char*) argv[3], atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
 	new_pokemon->lengthOfPokemon = strlen(argv[3]);
@@ -41,7 +41,7 @@ void procesarGameCardNewPokemon(int socket, char* argv[]){
 	new_pokemon->posicion->posicionY = atoi(argv[5]);
 
 	enviar_new_pokemon(new_pokemon, socket, atoi(argv[7]), -1);
-	log_info(logger, "Mensaje enviado a GameCard | ID del Mensaje: %d | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", argv[7], new_pokemon->pokemon, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
+	log_info(logger, "Mensaje enviado a GameCard | ID del Mensaje: %d | Pokemon: %s - Posicion X: %d - Posicion Y: %d - Cantidad: %d", atoi(argv[7]), new_pokemon->pokemon, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
 
 	free(new_pokemon->posicion);
 	free(new_pokemon);

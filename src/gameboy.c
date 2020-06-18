@@ -17,13 +17,13 @@ int main(int argc, char* argv[]) {
 /*	DONE ./gameboy BROKER NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
  * ejemplo: ./GameBoy BROKER NEW_POKEMON pikachu 3 7 2
  *
- * DONE ./gameboy BROKER APPEARED_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
+ * DONE ./gameboy BROKER APPEARED_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE_CORRELATIVO]
  * ejemplo:
  *
  * DONE ./gameboy BROKER CATCH_POKEMON [POKEMON] [POSX] [POSY]
  * ejemplo:
  *
- * DONE ./gameboy BROKER CAUGHT_POKEMON [ID_MENSAJE] [OK/FAIL]
+ * DONE ./gameboy BROKER CAUGHT_POKEMON [ID_MENSAJE_CORRELATIVO] [OK/FAIL]
  * ejemplo:
  *
  * DONE ./gameboy BROKER GET_POKEMON [POKEMON]
@@ -33,13 +33,13 @@ int main(int argc, char* argv[]) {
  * ejemplo:
  * 			./GameBoy TEAM APPEARED_POKEMON Pikachu 5 3
  *
- * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
+ * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD] [ID_MENSAJE] //TODO
  * ejemplo:
  *
  * DONE ./gameboy GAMECARD CATCH_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
  * ejemplo:
  *
- * DONE ./gameboy GAMECARD GET_POKEMON [POKEMON]
+ * DONE ./gameboy GAMECARD GET_POKEMON [POKEMON] [ID_MENSAJE] //TODO
  * ejemplo:
  *
  * DONE ./gameboy SUSCRIPTOR [COLA_DE_MENSAJES] [TIEMPO]
