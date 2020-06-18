@@ -7,7 +7,7 @@
 
 #include"procesar.h"
 
-void* procesarNewPokemon(void*args){
+void procesarNewPokemon(void* args){
 
 	t_new_pokemon* arguments = (t_new_pokemon*) args;
 
@@ -21,16 +21,22 @@ void* procesarNewPokemon(void*args){
 	//	En caso de no existir se debe agregar al final del archivo una nueva línea indicando la cantidad de pokémon pasadas.
 
 	t_config* metadata = config_create(filePath);
-	char** arrayDeBlocks = config_get_array_value("BLOCKS");
-	int sizeArchivo = config_get_int_value("SIZE");
+	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
+	int sizeArchivo = config_get_int_value(metadata, "SIZE");
 
 	char* contenidoActual = string_new();
 
 	if (arrayDeBlocks[0] != NULL){ //hay cosas
-		contenidoActual = getDatosDeBlocks(arrayDeBlocks, sizeArchivo);
+		string_append(&contenidoActual, getDatosDeBlocks(arrayDeBlocks, sizeArchivo));
+		//buscar posicion
+			//si esta, aumentarla en 1
+			//si no esta, agregarla
+		//guardar
 	}
 	else{ //no hay bloques yet
-
+		//pedir bloque
+		//agregar linea
+		//guardar
 	}
 
 	/* Archivos pokemon:
@@ -41,10 +47,12 @@ void* procesarNewPokemon(void*args){
 		 */
 
 	char* posicionPlana = string_new();
-	string_append(string_from_format("%d-%d", arguments->posicion->posicionX, arguments->posicion->posicionY));
+	string_append(&posicionPlana, string_from_format("%d-%d", arguments->posicion->posicionX, arguments->posicion->posicionY));
 
 	//	Cerrar el archivo -> OPEN=N. DONE
 	cambiarACerrado(filePath);
+	config_destroy(metadata);
+	free(filePath);
 
 	//	Conectarse al Broker y enviar el mensaje a la Cola de Mensajes APPEARED_POKEMON con los los datos:
 	//	ID del mensaje recibido.
@@ -52,10 +60,9 @@ void* procesarNewPokemon(void*args){
 	//	Posición del mapa.
 	//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
 
-	return NULL;
 }
 
-void* procesarCatchPokemon(void){
+void procesarCatchPokemon(void){
 //	Este mensaje cumplirá la función de indicar si es posible capturar un Pokemon y capturarlo en tal caso. Para esto se recibirán los siguientes parámetros:
 //	ID del mensaje recibido.
 //	Pokemon a atrapar.
@@ -71,10 +78,9 @@ void* procesarCatchPokemon(void){
 //	ID del mensaje recibido originalmente.
 //	Resultado.
 //	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
-	return NULL;
 }
 
-void* procesarGetPokemon(void){
+void procesarGetPokemon(void){
 //	Este mensaje cumplirá la función de obtener todas las posiciones y su cantidad de un Pokémon específico. Para esto recibirá:
 //	El identificador del mensaje recibido.
 //	Pokémon a devolver.
@@ -89,5 +95,4 @@ void* procesarGetPokemon(void){
 //	El Pokémon solicitado.
 //	La lista de posiciones y la cantidad de cada una de ellas en el mapa.
 //	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
-	return NULL;
 }

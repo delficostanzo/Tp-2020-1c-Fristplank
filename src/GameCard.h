@@ -29,18 +29,44 @@
 #include"archivos.h"
 #include"bitmap.h"
 
+static const char* COLAS_STRING[] = {
+		"ERROR",
+		"NEW_POKEMON",
+		"APPEARED_POKEMON",
+		"CATCH_POKEMON",
+		"CAUGHT_POKEMON",
+		"GET_POKEMON",
+		"LOCALIZED_POKEMON",
+		"RESPUESTA_ID",
+		"ACK",
+		"GAMEBOYSUSCRIBE"
+};
+
+static const char* ID_PROCESO[] = {
+		"IDERROR",
+		"BROKER",
+		"TEAM",
+		"GAMEBOY",
+		"GAMECARD"
+};
+
 int BLOCK_SIZE;
 int BLOCKS;
 
 int TIEMPO_DE_REINTENTO_CONEXION;
 int TIEMPO_DE_REINTENTO_OPERACION;
+int TIEMPO_RETARDO_OPERACION;
 char* PUNTO_MONTAJE_TALLGRASS;
 char* PATH_BITMAP;
 char* PATH_FILES;
 char* PATH_BLOCKS;
-
 char* IP_BROKER;
 char* PUERTO_BROKER;
+char* IP_GAMECARD;
+char* PUERTO_GAMECARD;
+
+char* configPath;
+
 t_log* logger;
 t_config* config;
 t_bitarray* bitarray;
@@ -65,5 +91,6 @@ void init_semaforos(void);
 void init_bitmap(void);
 void init_estructura_files_blocks(void);
 void init_bloques(void);
+void finalizar_gamecard(void);
 
 #endif /* GAMECARD_H_ */

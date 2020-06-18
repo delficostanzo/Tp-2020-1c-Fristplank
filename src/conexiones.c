@@ -17,6 +17,7 @@ void* generarSocketsConBroker() {
 	int puertoBrokerInt = atoi(PUERTO_BROKER);
 	while (conectarA(socketBroker, IP_BROKER, puertoBrokerInt) != 1) {
 		log_debug(logger, "Intentando conexión a Broker...");
+		sleep(TIEMPO_DE_REINTENTO_CONEXION);
 	}
 
 	id_proceso idProceso;
@@ -77,11 +78,11 @@ void* generarSocketsConBroker() {
 	return 0;
 }
 
-void* escucharGameBoy(){
+void escucharGameBoy(){
 	log_debug(logger, "<> START: Comienzo a escuchar GameBoy <>");
 	socketListenerGameBoy = crearSocket();
-	int puertoBrokerInt = atoi(PUERTO_BROKER);
-	if(escuchaEn(socketListenerGameBoy, puertoBrokerInt)){
+	int puertoGamecardInt = atoi(PUERTO_GAMECARD);
+	if(escuchaEn(socketListenerGameBoy, puertoGamecardInt)){
 				log_debug(logger, "Escuchando conexiones del GameBoy");
 	}
 
@@ -89,27 +90,55 @@ void* escucharGameBoy(){
 		int socketGameBoy = aceptarConexion(socketListenerGameBoy);
 
 		id_proceso idProcesoConectado;
-		idProcesoConectado = iniciarHandshake(socket, GAMECARD);
-		log_info(logger, "Me conecté con GameBoy");
+		idProcesoConectado = iniciarHandshake(socketGameBoy, GAMECARD);
+		log_info(logger, "Me conecté con %s", ID_PROCESO[idProcesoConectado]);
 
 		t_paquete* paqueteNuevo = recibir_mensaje(socketGameBoy);
 
+
+//		puts(new_pokemon->pokemon);
+//		log_debug(logger, new_pokemon->pokemon);
+
+		log_debug(logger, "======= Nuevo mensaje recibido =======");
+		log_info(logger, "Tipo de mensaje: %s", COLAS_STRING[paqueteNuevo->codigo_operacion]);
+		log_info(logger, "ID del mensaje: %d", paqueteNuevo->ID);
+		log_info(logger, "ID correlativo del mensaje: %d", paqueteNuevo->ID_CORRELATIVO);
+		log_debug(logger,"Tamaño de payload: %d", paqueteNuevo->buffer->size);
+//
 		switch(paqueteNuevo->codigo_operacion){
-			case NEW_POKEMON:
-				//TODO iniciar hilo para procesarlo
+			case NEW_POKEMON:;
+				t_new_pokemon* new_pokemon = paqueteNuevo->buffer->stream;
+//					log_info(logger, "Mensaje NEW_POKEMON recibido.");
+////					pthread_t hiloProcesarNewPokemon;
+////					pthread_create(&hiloProcesarNewPokemon, NULL, procesarNewPokemon, (void*) paqueteNuevo->buffer->stream);
+////					pthread_detach(hiloProcesarNewPokemon);
+
+				//TODO: AHORA QUE NO ME ROMPE, SEGUIR CON LA LOGICA
+				log_info(logger, new_pokemon->pokemon);
+
+				free(new_pokemon->posicion);
+				free(new_pokemon->pokemon);
+				free(new_pokemon);
 				break;
-			case CATCH_POKEMON:
-				//TODO iniciar hilo para procesarlo
-				break;
-			case GET_POKEMON:
-				//TODO iniciar hilo para procesarlo
-				break;
+//			case CATCH_POKEMON:
+//				log_info(logger, "Mensaje CATCH_POKEMON recibido.");
+//				//TODO iniciar hilo para procesarlo
+//				break;
+//			case GET_POKEMON:
+//				log_info(logger, "Mensaje GET_POKEMON recibido.");
+//				//TODO iniciar hilo para procesarlo
+//				break;
 			default:
 				log_info(logger, "Tipo de mensaje invalido.");
 		}
+
+		free(paqueteNuevo->buffer);
+		free(paqueteNuevo);
+		close(socketGameBoy);
 	}
 
-	return 0;
+	close(socketListenerGameBoy);
+
 }
 
 void* escucharColaNewPokemon(){

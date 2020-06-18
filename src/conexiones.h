@@ -17,7 +17,7 @@ typedef struct{
 }t_par_de_sockets;
 
 void* generarSocketsConBroker(void);
-void* escucharGameBoy(void);
+void escucharGameBoy(void);
 
 void* escucharColaNewPokemon(void);
 void* escucharColaCatchPokemon(void);

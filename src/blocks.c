@@ -28,16 +28,16 @@ char* getDatosDeBlocks(char** arrayDeBlocks, int size){
 			fread(&contenidoDeBloqueActual, 1, size, blockActual);
 			string_append(contenidoDeArchivo, contenidoDeBloqueActual);
 			free(contenidoDeBloqueActual);
+			fclose(blockActual);
 		}
-
 		else{
 			char* contenidoDeBloqueActual = malloc(BLOCK_SIZE);
 			fread(&contenidoDeBloqueActual, 1, BLOCK_SIZE, blockActual);
 			string_append(contenidoDeArchivo, contenidoDeBloqueActual);
 			sizeRestante -= BLOCK_SIZE;
 			free(contenidoDeBloqueActual);
+			fclose(blockActual);
 		}
 	}
-
 	return contenidoDeArchivo;
 }

@@ -11,7 +11,6 @@ int checkingOpenFile(char* filePath){
 
 	t_config* configFile = config_create (filePath);
 	char* openFile = config_get_string_value(configFile, "OPEN");
-	config_destroy(configFile);
 
 	if (strcmp("Y",openFile) == 0){
 		//ARCHIVO ABIERTO
@@ -23,6 +22,8 @@ int checkingOpenFile(char* filePath){
 		free(openFile);
 		return 0;
 	}
+
+	config_destroy(configFile);
 }
 
 void cambiarAAbierto(char* filePath){
