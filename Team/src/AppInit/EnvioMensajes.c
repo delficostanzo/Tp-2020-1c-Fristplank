@@ -107,14 +107,28 @@ void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevo
 
 //////////CATCH-CAUGHT/////////////
 // cuando un entrenador manda este mensaje, ese poke ya no deberia estar en la lista de pokes libres
-//void enviarCatchDesde(, int socketGet){
-//	quickLog("Esta enviando los get por cada pokemon objetivo necesario");
-//	for(int index=0; index<list_size(objetivosGlobales);index++){
-//		t_catch_pokemon* getPoke = crearEstructuraGetDesde(list_get(objetivosGlobales, index));
-//		enviar_get_pokemon(getPoke, socketGet, -1, -1);
-//		//recibirIdGet(socketGet);
-//	}
-//}
+void enviarCatchDesde(Entrenador* entrenadorEsperando, int socketGet){
+	quickLog("Esta enviando los catch por cada pokemon que esta por ser atrapado");
+	t_list* pokemonesPorAtrapar = entrenadorEsperando->movimientoEnExec->pokemonNecesitado;
+	t_catch_pokemon* catchPoke = crearEstructuraCatchDesde(list_get(pokemonesPorAtrapar, index));
+	enviar_catch_pokemon(catchPoke, socketCatch, -1, -1);
+	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
+	//para saber saber que respuesta de caught es de el
+	recibirIdCatch(socketIdCatch, entrenadorEsperando);
+}
+
+void recibirIdCatch(int socketIdCatch, Entrenador* entrenador) {
+	t_paquete* paqueteIdRecibido = recibir_mensaje(socketIdCatch);
+	t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
+	agregarComoIdCorrelativoCaught(idCatch->idCorrelativo);
+	entrenador->idCorrelativoDeEspera = idCatch->idCorrelativo;
+}
+
+void agregarComoIdCorrelativoCaught(int idCorrelativo){
+	//lista de ids correlativos globales que se mandaron
+	//recien se agregan cuando recibo la respuesta del broker
+	list_add(idsCorrelativosCaught, &idCorrelativo);
+}
 
 t_paquete* recibirCaught(int socketCaught){
 	t_paquete* paqueteCaught = recibir_mensaje(socketCaught);

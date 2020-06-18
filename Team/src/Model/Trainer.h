@@ -5,6 +5,8 @@
 #include "utils.h"
 #include "../AppInit/LogFunctions.h"
 #include "Pokemon.h"
+#include "../AppInit/EnvioMensajes.h"
+
 
 typedef enum{
 	MOVERyATRAPAR = 1,
@@ -40,6 +42,7 @@ typedef struct {
 	Estado estado;
 	pthread_t hiloEntrenador;
 	int ciclosCPUConsumido;
+	int idCorrelativoDeEspera; //
 	//pthread_mutex o contador, despues vemo
 }Entrenador;
 
@@ -47,5 +50,10 @@ Entrenador* newEntrenador();
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
 void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon);
 t_posicion* newPosicion();
+Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores);
+
+void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
+
+
 
 #endif /* SRC_MODEL_TRAINER_H_ */

@@ -37,14 +37,16 @@ int main(void) {
 	idProcesoConectado = iniciarHandshake(teamSocket, BROKER);
 	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoConectado);
 
-	int suscripcionAppeared, suscripcionCaught, suscripcionLocalized, socketGet, socketCatch;
+	int suscripcionAppeared, suscripcionCaught, suscripcionLocalized, socketGet, socketIdGet, socketCatch, socketIdCatch;
 	switch(idProcesoConectado) {
 	case TEAM:
 		suscripcionAppeared = aceptarConexion(conexion);
 		suscripcionCaught = aceptarConexion(conexion);
 		suscripcionLocalized = aceptarConexion(conexion);
 		socketGet = aceptarConexion(conexion);
+		socketIdGet = aceptarConexion(conexion);
 		socketCatch = aceptarConexion(conexion);
+		socketIdCatch = aceptarConexion(conexion);
 
 		liberar_conexion(teamSocket);
 		log_info(logger, "Team se suscribio a 3 colas");
