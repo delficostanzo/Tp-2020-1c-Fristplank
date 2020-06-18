@@ -68,3 +68,36 @@ void pasarDeExecABlockEsperando(Entrenador* entrenador) {
 	entrenador->motivo = 1;
 }
 
+
+
+void cumplirObjetivo(Entrenador* entrenador){
+	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
+	ObjetivoEnExec mision = movimientoEnExec->objetivo;
+	Entrenador* entrenadorDeIntercambio;
+
+	switch(mision){
+		case MOVERyATRAPAR:
+			//se mueve hasta ese pokemon, manda el catch de ese pokemon,
+			//se guarda el id del catch que va a esperar como id correlativo en el caught y se cambia de estado
+			atrapar(entrenador, movimientoEnExec->pokemonNecesitado);
+			break;
+		case MOVEReINTERCAMBIAR:
+			//se pasan invertidos los pokemones porque este pokemon necesitado es de un entrenador que pasaria como innecesario de OTRO entrenador
+			entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(movimientoEnExec->pokemonNecesitado, movimientoEnExec->pokemonAIntercambiar);
+			intercambiarPokemonesCon(entrenadorDeIntercambio);
+			break;
+	}
+}
+
+void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio){
+	//TODO
+}
+
+void moverAReady(Entrenador* entrenador) {
+	pthread_mutex_lock(&mutexEntrenadores);
+	pthread_mutex_lock(&mutexPokemonesLibres);
+	pasarDeNewAReady(entrenadores, pokemonesLibres);
+	pthread_mutex_unlock(&mutexEntrenadores);
+	pthread_mutex_unlock(&mutexPokemonesLibres);
+}
+

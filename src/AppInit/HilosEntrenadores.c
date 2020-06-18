@@ -35,13 +35,13 @@ void funcionesDelEntrenador(void* entrenador){
 		switch(unEntrenador->estado){
 		case NEW:
 			//se odena por distancia mas corta (el entrenador mas cerca de ese poke) y se pasa a ready
-			moverAReady(entrenador);
+			moverAReady(unEntrenador);
 			break;
 		case READY:
 			// para que se pase a estado EXEC, se hace por fifo, primero se verifica que ningun entrenador este en EXEC
 			break;
 		case EXEC:
-			cumplirObjetivo(entrenador);
+			cumplirObjetivo(unEntrenador);
 			// aca hay 3 codiciones: moverse y atrapar en el mapa, intercambiar y mover
 			break;
 		case BLOCK:
@@ -54,36 +54,6 @@ void funcionesDelEntrenador(void* entrenador){
 		}
 	}
 
-void cumplirObjetivo(Entrenador* entrenador){
-	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
-	ObjetivoEnExec mision = movimientoEnExec->objetivo;
-	Entrenador* entrenadorDeIntercambio;
-
-	switch(mision){
-		case MOVERyATRAPAR:
-			//se mueve hasta ese pokemon, manda el catch de ese pokemon,
-			//se guarda el id del catch que va a esperar como id correlativo en el caught y se cambia de estado
-			atrapar(entrenador, movimientoEnExec->pokemonNecesitado);
-			break;
-		case MOVEReINTERCAMBIAR:
-			//se pasan invertidos los pokemones porque este pokemon necesitado es de un entrenador que pasaria como innecesario de OTRO entrenador
-			entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(movimientoEnExec->pokemonNecesitado, movimientoEnExec->pokemonAIntercambiar);
-			intercambiarPokemonesCon(entrenadorDeIntercambio);
-			break;
-	}
-}
-
-void moverAReady(Entrenador* entrenador) {
-	pthread_mutex_lock(&mutexEntrenadores);
-	pthread_mutex_lock(&mutexPokemonesLibres);
-	pasarDeNewAReady(entrenadores, pokemonesLibres);
-	pthread_mutex_unlock(&mutexEntrenadores);
-	pthread_mutex_unlock(&mutexPokemonesLibres);
-}
-
-void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio){
-	//TODO
-}
 
 //
 //	if(no hay ninguno ejecutando){
