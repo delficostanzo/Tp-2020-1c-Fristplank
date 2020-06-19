@@ -201,7 +201,6 @@ t_list* getTotalAtrapadosDesde(t_list* entrenadores) {
 
 	t_list* voids = list_map(pokemonesAtrapados, (erasedTypeMap)agregarAUnaNuevaListaConcat);
 
-
 	list_destroy(pokemonesAtrapados);
 	list_destroy(voids);
 	return atrapadosAgrupados;
@@ -212,6 +211,8 @@ t_list* getObjetivosGlobalesDesde(t_list* pokemonesObjetivos, t_list* pokemonesA
 	typedef void*(*erasedTypeMap)(void*);
 	typedef bool(*erasedTypeFilter)(void*);
 
+
+	quickLog("Llega aca");
 	//el pokemon restado serian los pokemones objetivos, que se va a agregar con la cantidad restada si ya se atrapo
 	PokemonEnElMapa* restarCantidadQueFalta(PokemonEnElMapa* pokemonRestado) {
 

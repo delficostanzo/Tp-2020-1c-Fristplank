@@ -3,6 +3,8 @@
 
 static void agregarPosicionSiLoNecesita(char* nombrePokemon, t_posicion posicion, t_list* pokemonesGlobales, t_list* pokemonesLibres);
 static void agregarComoIdCorrelativoLocalized(int idCorrelativo);
+static void agregarComoIdCorrelativoCaught(int idCorrelativo);
+static void recibirIdCatch(int socketIdCatch, Entrenador* entrenador);
 static int tieneComoIdCorrelativoLocalized(int idBuscado);
 static int tieneComoIdCorrelativoCaught(int idBuscado);
 t_list* idsCorrelativosCaught;
@@ -10,10 +12,12 @@ t_list* idsCorrelativosLocalized;
 
 //////////GET-LOCALIZED//////////////
 void enviarGetDesde(t_list* objetivosGlobales, int socketGet){
+	t_log* logger = iniciar_logger();
 	quickLog("Esta enviando los get por cada pokemon objetivo necesario");
 	for(int index=0; index<list_size(objetivosGlobales);index++){
 		t_get_pokemon* getPoke = crearEstructuraGetDesde(list_get(objetivosGlobales, index));
 		enviar_get_pokemon(getPoke, socketGet, -1, -1);
+		log_info(logger, "Se envio el get para el pokemon &s", getPoke->pokemon);
 		//recibirIdGet(socketGet);
 	}
 }
@@ -109,11 +113,12 @@ void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevo
 // cuando un entrenador manda este mensaje, ese poke ya no deberia estar en la lista de pokes libres
 void enviarCatchDesde(Entrenador* entrenadorEsperando, int socketGet){
 	quickLog("Esta enviando los catch por cada pokemon que esta por ser atrapado");
-	t_list* pokemonesPorAtrapar = entrenadorEsperando->movimientoEnExec->pokemonNecesitado;
-	t_catch_pokemon* catchPoke = crearEstructuraCatchDesde(list_get(pokemonesPorAtrapar, index));
+	PokemonEnElMapa* pokemonPorAtrapar = entrenadorEsperando->movimientoEnExec->pokemonNecesitado;
+	t_catch_pokemon* catchPoke = crearEstructuraCatchDesde(pokemonPorAtrapar);
 	enviar_catch_pokemon(catchPoke, socketCatch, -1, -1);
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
 	//para saber saber que respuesta de caught es de el
+	quickLog("Esta esperando recibir el id de su catch enviado");
 	recibirIdCatch(socketIdCatch, entrenadorEsperando);
 }
 
