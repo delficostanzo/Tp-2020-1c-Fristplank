@@ -8,7 +8,6 @@ int main(int argc, char *argv[]) {
 
 	t_config* config = leerConfigDesde("src/team.config");
 	//obtiene la lista de entrenadores desde el config
-	quickLog("Se arrancan a cargar los entrenadores");
 	entrenadores = getEntrenadoresDesde("src/team.config");
 	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
@@ -19,7 +18,9 @@ int main(int argc, char *argv[]) {
 
 	Entrenador* entrenador3 = list_get(entrenadores, 2);
 	pasarAExec(entrenador3);
-	log_info(logger, "El entrenador 3 paso a estar en exec para atrapar a %s", entrenador3->movimientoEnExec->pokemonNecesitado);
+	log_info(logger, "El entrenador 3 paso a estar en exec para atrapar a %s", entrenador3->movimientoEnExec->pokemonNecesitado->nombre);
+
+
 
 
 	IP_BROKER = config_get_string_value(config, "IP_BROKER");
@@ -34,6 +35,9 @@ int main(int argc, char *argv[]) {
 	log_info(logger, "La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
 	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
 	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
+
+	//pruebo envio de get
+	crearEstructuraGetDesde(list_get(objetivosGlobales, 0));
 
 	pthread_mutex_init(&mutexEntrenadores, NULL);
 	pthread_mutex_init(&mutexObjetivosTotales, NULL);

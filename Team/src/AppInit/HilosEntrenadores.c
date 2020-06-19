@@ -30,6 +30,9 @@ void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
 void funcionesDelEntrenador(Entrenador* unEntrenador){
 	t_log* logger = iniciar_logger();
 
+	while(1){
+	log_info(logger, "El entrenador en la posicion (%d, %d) ya empezo a ejecutarse", unEntrenador->posicion->posicionX, unEntrenador->posicion->posicionY);
+	log_info(logger, "Y esta en el estado %d", unEntrenador->estado);
 
 		//cuando quiero cambiar de estado, dentro de la lista de entrenadores debo fijarme cual es el que tiene enum en ese estado
 		//Entrenador* unEntrenador = entrenador;
@@ -37,7 +40,7 @@ void funcionesDelEntrenador(Entrenador* unEntrenador){
 		switch(unEntrenador->estado){
 		case NEW:
 			//se odena por distancia mas corta (el entrenador mas cerca de ese poke) y se pasa a ready
-			moverAReady(unEntrenador);
+			//moverAReady(unEntrenador);
 			break;
 		case READY:
 			// para que se pase a estado EXEC, se hace por fifo, primero se verifica que ningun entrenador este en EXEC
@@ -53,19 +56,12 @@ void funcionesDelEntrenador(Entrenador* unEntrenador){
 			break;
 		case EXIT:
 			//cada vez que entrea un entrenador, se verifica que se cumple el objetivo global
+			verificarSiTodosExit();
 			break;
 		}
 
+	}
 
-
-//
-//	if(no hay ninguno ejecutando){
-//		lock();
-//		entrenador pasa de READY a EXEC
-//		hace lo que tenga en su objetivo (enum de objetivos)
-//		entrenador pasa a estado BLOCK / EXIT / READY
-//		unlock();
-//	}
 
 }
 

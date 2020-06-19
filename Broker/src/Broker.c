@@ -40,6 +40,8 @@ int main(void) {
 	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoConectado);
 
 	int suscripcionAppeared, suscripcionCaught, suscripcionLocalized, socketGet, socketIdGet, socketCatch, socketIdCatch;
+	int socketACKAppeared, socketACKCaught, socketACKLocalized;
+
 	switch(idProcesoConectado) {
 	case TEAM:
 		suscripcionAppeared = aceptarConexion(conexion);
@@ -50,6 +52,10 @@ int main(void) {
 		socketCatch = aceptarConexion(conexion);
 		socketIdCatch = aceptarConexion(conexion);
 
+		socketACKAppeared = aceptarConexion(conexion);
+		socketACKCaught = aceptarConexion(conexion);
+		socketACKLocalized = aceptarConexion(conexion);
+
 		liberar_conexion(teamSocket);
 		log_info(logger, "Team se suscribio a 3 colas");
 		break;
@@ -57,9 +63,9 @@ int main(void) {
 		break;
 	}
 
-//	envioAppearedPrueba1(suscripcionAppeared);
-//	envioAppearedPrueba2(suscripcionAppeared);
-//	envioLocalizedPrueba1(suscripcionLocalized);
+	envioAppearedPrueba1(suscripcionAppeared);
+	envioAppearedPrueba2(suscripcionAppeared);
+	envioLocalizedPrueba1(suscripcionLocalized);
 
 
 	if(recibirCatchDesde(socketCatch)){

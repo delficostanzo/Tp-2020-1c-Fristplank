@@ -4,8 +4,10 @@
 t_get_pokemon* crearEstructuraGetDesde(PokemonEnElMapa* pokemon){
 	t_get_pokemon* getPokemon= malloc(sizeof(t_get_pokemon));
 	char* nombrePoke = pokemon->nombre;
+	int tamanio = strlen(nombrePoke);
 	getPokemon->pokemon = nombrePoke;
-	getPokemon->lengthOfPokemon = strlen(nombrePoke);
+	getPokemon->lengthOfPokemon = tamanio;
+	quickLog("Llega aca");
 	return getPokemon;
 }
 

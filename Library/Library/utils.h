@@ -115,7 +115,7 @@ void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int ID, 
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
 void enviar_ACK(int socket_cliente, int ID, int IDCORRELATIVO);
 void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, int ID, int IDCORRELATIVO);
-
+void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int Id, int IdCorrelativo);
 t_paquete* recibir_mensaje(int socket_cliente);
 
 void eliminar_paquete(t_paquete* paquete);
