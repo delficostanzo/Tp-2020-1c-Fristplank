@@ -7,17 +7,22 @@ static void agregarComoIdCorrelativoCaught(int idCorrelativo);
 static void recibirIdCatch(int socketIdCatch, Entrenador* entrenador);
 static int tieneComoIdCorrelativoLocalized(int idBuscado);
 static int tieneComoIdCorrelativoCaught(int idBuscado);
+static Entrenador* entrenadorQueTieneId(int idCatchQueResponde);
+static void procesarEspera(Entrenador*  entrenador, uint32_t atrapo);
 t_list* idsCorrelativosCaught;
 t_list* idsCorrelativosLocalized;
+
+typedef bool(*erasedTypeFilter)(void*);
 
 //////////GET-LOCALIZED//////////////
 void enviarGetDesde(t_list* objetivosGlobales, int socketGet){
 	t_log* logger = iniciar_logger();
 	quickLog("Esta enviando los get por cada pokemon objetivo necesario");
 	for(int index=0; index<list_size(objetivosGlobales);index++){
-		t_get_pokemon* getPoke = crearEstructuraGetDesde(list_get(objetivosGlobales, index));
+		PokemonEnElMapa* poke = list_get(objetivosGlobales, index);
+		t_get_pokemon* getPoke = crearEstructuraGetDesde(poke);
 		enviar_get_pokemon(getPoke, socketGet, -1, -1);
-		log_info(logger, "Se envio el get para el pokemon &s", getPoke->pokemon);
+		log_info(logger, "Se envio el get para el pokemon %s de tamaño %d", getPoke->pokemon, getPoke->lengthOfPokemon);
 		//recibirIdGet(socketGet);
 	}
 }
@@ -137,9 +142,12 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo){
 
 t_paquete* recibirCaught(int socketCaught){
 	t_paquete* paqueteCaught = recibir_mensaje(socketCaught);
-	//t_caught_pokemon* caught = paqueteCaught->buffer->stream;
 
 	if(tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO) == 1) {
+		pthread_mutex_lock(&mutexEntrenadores);
+		//el entrenador que hizo el catch del caught respondido cambia de estado de acuerdo a la respuesta
+		ejecutarRespuestaCaught(paqueteCaught->ID_CORRELATIVO, paqueteCaught);
+		pthread_mutex_unlock(&mutexEntrenadores);
 		return paqueteCaught;
 	}
 	return NULL;
@@ -158,3 +166,37 @@ int tieneComoIdCorrelativoCaught(int idBuscado) {
 	//me fijo de la lista de idsCorrelativos que mande como catch, si coincide con el id del que recien llego
 	return list_find(idsCorrelativosCaught, (erasedTypeFind)existe) != NULL;
 }
+
+void ejecutarRespuestaCaught(int idCatchQueResponde, t_paquete* paqueteCaught){
+	t_caught_pokemon* caught = paqueteCaught->buffer->stream;
+	Entrenador* entrenador = entrenadorQueTieneId(idCatchQueResponde);
+	procesarEspera(entrenador, caught->ok);
+}
+
+Entrenador* entrenadorQueTieneId(int idCatchQueResponde) {
+	int tieneIdCorrelativo(Entrenador* entrenador) {
+		return entrenador->idCorrelativoDeEspera = idCatchQueResponde;
+	}
+	//ya estaba el mutex al llamar esta funcion o mejor aca??? TODO
+	return list_find(entrenadores, (erasedTypeFilter)tieneIdCorrelativo);
+}
+
+void procesarEspera(Entrenador*  entrenador, uint32_t atrapo){
+	PokemonEnElMapa* pokemonAtrapado = entrenador->movimientoEnExec->pokemonNecesitado;
+	//si lo atrapo
+	if(atrapo){
+		agregarAtrapado(entrenador, pokemonAtrapado);
+		estadoSiAtrapo(entrenador);
+	}
+	//no lo atrapo
+	else {
+		pthread_mutex_lock(&mutexObjetivosGlobales);
+		//lo agrego devuelta a la lista de objetivos globales para que otro entrenador lo atrape
+		setPokemonA(objetivosGlobales, pokemonAtrapado);
+		pthread_mutex_lock(&mutexObjetivosGlobales);
+
+		pasarADormido(entrenador);
+	}
+}
+
+

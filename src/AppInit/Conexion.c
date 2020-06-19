@@ -137,10 +137,10 @@ void* escucharColaCaughtPokemon(){
 
 	while(1){
 		quickLog("Esperando mensajes de Caught");
+		//el entrenador que estaba esperando esa respuesta es ejecutado y pasa al estado segun corresponda
 		t_paquete* paqueteNuevo = recibirCaught(suscripcionCaught);
 		if(paqueteNuevo != NULL){
 			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
-			// avisarle al entrenador si atrapo al poke o no
 		}
 	}
 }

@@ -18,7 +18,7 @@ void pasarDeNewAReady(t_list* entrenadores, t_list* pokemonesLibres){
 		Entrenador* entrenador = entrenadorMasCercanoA(pokemonLibre, entrenadoresPosibles);
 		entrenador->estado = 2;
 		entrenador->movimientoEnExec->pokemonNecesitado = pokemonLibre;
-		list_remove(pokemonesLibres, pokemonLibre);
+		//list_remove(pokemonesLibres, pokemonLibre);
 	}
 }
 
@@ -66,13 +66,6 @@ void pasarDeBlockAReady(t_list* entrenadores, t_list* pokemonesLibres){
 	}
 }
 
-void pasarDeExecABlockEsperando(Entrenador* entrenador) {
-	entrenador->estado = 4;
-	entrenador->motivo = 1;
-}
-
-
-
 void cumplirObjetivo(Entrenador* entrenador){
 	quickLog("Se esta cumpliendo un objetivo");
 	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
@@ -98,11 +91,27 @@ void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio){
 	//TODO
 }
 
-void moverAReady(Entrenador* entrenador) {
+//mientras este en ready va a hacer que se fije entre todos los demas que estan ready y pasar a ready el mas cercano
+void moverAReady() {
+
 	pthread_mutex_lock(&mutexEntrenadores);
 	pthread_mutex_lock(&mutexPokemonesLibres);
+	quickLog("Aca llega?");
 	pasarDeNewAReady(entrenadores, pokemonesLibres);
 	pthread_mutex_unlock(&mutexEntrenadores);
 	pthread_mutex_unlock(&mutexPokemonesLibres);
+}
+
+void verificarSiTodosExit() {
+	int estaEnExec(Entrenador* entrenador) {
+		return entrenador->estado == 5;
+	}
+	pthread_mutex_lock(&mutexEntrenadores);
+	int cumple = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExec);
+	pthread_mutex_unlock(&mutexEntrenadores);
+
+	if(cumple) {
+		//TERMINAR TODO;
+	}
 }
 
