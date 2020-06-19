@@ -85,7 +85,7 @@ typedef struct
 
 typedef struct
 {
-	uint32_t idCorrelativo;
+	int idCorrelativo;
 } t_respuesta_id;
 
 typedef struct

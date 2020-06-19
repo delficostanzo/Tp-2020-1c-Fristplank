@@ -2,7 +2,10 @@
 #include "Planificador.h"
 
 static bool noHayEntrenadoresEnExec(t_list* entrenadores);
+static void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio);
+
 typedef bool(*erasedTypeFilter)(void*);
+
 
 //pasa el entrenador que esta mas cerca de los pokes libres a ready
 void pasarDeNewAReady(t_list* entrenadores, t_list* pokemonesLibres){
@@ -71,6 +74,7 @@ void pasarDeExecABlockEsperando(Entrenador* entrenador) {
 
 
 void cumplirObjetivo(Entrenador* entrenador){
+	quickLog("Se esta cumpliendo un objetivo");
 	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
 	ObjetivoEnExec mision = movimientoEnExec->objetivo;
 	Entrenador* entrenadorDeIntercambio;
@@ -80,6 +84,7 @@ void cumplirObjetivo(Entrenador* entrenador){
 			//se mueve hasta ese pokemon, manda el catch de ese pokemon,
 			//se guarda el id del catch que va a esperar como id correlativo en el caught y se cambia de estado
 			atrapar(entrenador, movimientoEnExec->pokemonNecesitado);
+			quickLog("Se mando el catch de un nuevo pokemon");
 			break;
 		case MOVEReINTERCAMBIAR:
 			//se pasan invertidos los pokemones porque este pokemon necesitado es de un entrenador que pasaria como innecesario de OTRO entrenador

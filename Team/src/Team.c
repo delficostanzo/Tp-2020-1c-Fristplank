@@ -1,9 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "Team.h"
-#include "./Model/Pokemon.h"
-#include "./AppInit/EntrenadoresInit.h"
-#include "./AppInit/HilosEntrenadores.h"
+
 
 int main(int argc, char *argv[]) {
 
@@ -14,6 +11,16 @@ int main(int argc, char *argv[]) {
 	quickLog("Se arrancan a cargar los entrenadores");
 	entrenadores = getEntrenadoresDesde("src/team.config");
 	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
+
+//	Entrenador* entrenadorPrueba = crearEntrenadorEnExec();
+//	list_add(entrenadores, entrenadorPrueba);
+//	log_info(logger, "Se cargo un nuevo entrenador en exec que esta en exec por atrapar al pokemon: %s", entrenadorPrueba->movimientoEnExec->pokemonNecesitado->nombre);
+//	log_info(logger, "El entrenador se encontraba en la posicion (%d, %d)", entrenadorPrueba->posicion->posicionX, entrenadorPrueba->posicion->posicionY);
+
+	Entrenador* entrenador3 = list_get(entrenadores, 2);
+	pasarAExec(entrenador3);
+	log_info(logger, "El entrenador 3 paso a estar en exec para atrapar a %s", entrenador3->movimientoEnExec->pokemonNecesitado);
+
 
 	IP_BROKER = config_get_string_value(config, "IP_BROKER");
 	PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
@@ -36,12 +43,12 @@ int main(int argc, char *argv[]) {
 
 
 	//Lanzar hilo para escuchar a GameBoy
-	pthread_t hiloEscuchaGameBoy;
-	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
+//	pthread_t hiloEscuchaGameBoy;
+//	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
 	//Lanzar hilo para concetarme a Broker
-//	pthread_t hiloConexionBroker;
-//	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
+	pthread_t hiloConexionBroker;
+	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
 //	//los recursos son liberados cuando termina la funcion sin esperar un join
 //	pthread_detach(hiloConexionBroker);
 
@@ -50,7 +57,7 @@ int main(int argc, char *argv[]) {
 //	//recibe los nombres de pokemones encontrados libres con sus posiciones
 //	//y si se necesitan (estan en los objetivos globales) se agregan a la lista de pokemones libres
 	//recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
-	recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
+	//recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
 
 
 	crearHilosDeEntrenadores(entrenadores);

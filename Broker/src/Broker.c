@@ -7,14 +7,16 @@
 static void envioAppearedPrueba1(int socketSuscripcionAppeared);
 static void envioAppearedPrueba2(int socketSuscripcionAppeared);
 static void envioLocalizedPrueba1(int socketSuscripcionLocalized);
+static int recibirCatchDesde(int socketCatch);
+static void enviarIdCatchA(socketIdCatch);
 
 int main(void) {
 	t_log* logger;
 	t_config* config;
 
 	// inicializo el log del Broker
-	logger = iniciar_logger();
 
+	logger = iniciar_logger();
 	// creo y devuelvo un puntero a la estructura t_config
 	config = leer_config();
 
@@ -55,9 +57,14 @@ int main(void) {
 		break;
 	}
 
-	envioAppearedPrueba1(suscripcionAppeared);
-	envioAppearedPrueba2(suscripcionAppeared);
-	envioLocalizedPrueba1(suscripcionLocalized);
+//	envioAppearedPrueba1(suscripcionAppeared);
+//	envioAppearedPrueba2(suscripcionAppeared);
+//	envioLocalizedPrueba1(suscripcionLocalized);
+
+
+	if(recibirCatchDesde(socketCatch)){
+		enviarIdCatchA(socketIdCatch);
+	}
 
 	//loguear mensaje recibido
 	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
@@ -88,8 +95,8 @@ void envioAppearedPrueba2(int socketSuscripcionAppeared) {
 	appearedPrueba->lengthOfPokemon = strlen(appearedPrueba->pokemon);
 
 	appearedPrueba->posicion = malloc(sizeof(t_posicion));
-	appearedPrueba->posicion->posicionX = 5;
-	appearedPrueba->posicion->posicionY = 5;
+	appearedPrueba->posicion->posicionX = 8;
+	appearedPrueba->posicion->posicionY = 8;
 
 	enviar_appeared_pokemon(appearedPrueba, socketSuscripcionAppeared, 1, -1);
 }
@@ -118,6 +125,24 @@ void envioLocalizedPrueba1(int socketSuscripcionLocalized) {
 	localizedPrueba->listaPosiciones = posicionesPrueba;
 
 	enviar_localized_pokemon(localizedPrueba, socketSuscripcionLocalized, 1, -1);
+}
+
+//devuelvo 1 si se recibio el catch de un pokemon del team
+int recibirCatchDesde(int socketCatch) {
+	t_log* logger = iniciar_logger();
+	t_paquete* paqueteCatchRecibido = recibir_mensaje(socketCatch);
+	t_catch_pokemon* catchPoke = paqueteCatchRecibido->buffer->stream;
+
+	log_info(logger, "Se recibio el mensaje catch");
+	return catchPoke != NULL;
+}
+
+void enviarIdCatchA(int socketIdCatch) {
+	t_respuesta_id* idCatch = malloc(sizeof(t_respuesta_id));
+	int id= 1; //el id del mensaje catch que mando el entrenador es 1
+	idCatch->idCorrelativo = id;
+	//se podria pasar por id correlativo ?
+	enviar_respuesta_id(idCatch, socketIdCatch, 1, -1);
 }
 
 

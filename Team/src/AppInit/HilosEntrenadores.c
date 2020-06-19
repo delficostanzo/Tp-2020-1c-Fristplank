@@ -3,7 +3,7 @@
 
 
 void crearHiloParaEntrenador(Entrenador* entrenador);
-void funcionesDelEntrenador(Data entrenador);
+void funcionesDelEntrenador(Entrenador* entrenador);
 void moverAReady(Entrenador* entrenador);
 void cumplirObjetivo(Entrenador* entrenador);
 
@@ -26,11 +26,13 @@ void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
 }
 
 //la funcion funcionesDelEntrenador tendria que estar en el Team.c, lo dejo aca por ahora
-void funcionesDelEntrenador(void* entrenador){
+//ENTRENADOR LLEGA VACIO
+void funcionesDelEntrenador(Entrenador* unEntrenador){
+	t_log* logger = iniciar_logger();
 
-	while(1){
+
 		//cuando quiero cambiar de estado, dentro de la lista de entrenadores debo fijarme cual es el que tiene enum en ese estado
-		Entrenador* unEntrenador = entrenador;
+		//Entrenador* unEntrenador = entrenador;
 		//mutex para cada estado?
 		switch(unEntrenador->estado){
 		case NEW:
@@ -41,6 +43,7 @@ void funcionesDelEntrenador(void* entrenador){
 			// para que se pase a estado EXEC, se hace por fifo, primero se verifica que ningun entrenador este en EXEC
 			break;
 		case EXEC:
+			log_info(logger, "Hay un entrenador en exec que comienza en la posicion: (%d, %d)", unEntrenador->posicion->posicionX, unEntrenador->posicion->posicionY);
 			cumplirObjetivo(unEntrenador);
 			// aca hay 3 codiciones: moverse y atrapar en el mapa, intercambiar y mover
 			break;
@@ -52,7 +55,7 @@ void funcionesDelEntrenador(void* entrenador){
 			//cada vez que entrea un entrenador, se verifica que se cumple el objetivo global
 			break;
 		}
-	}
+
 
 
 //
