@@ -16,11 +16,11 @@ int main(int argc, char *argv[]) {
 //	log_info(logger, "Se cargo un nuevo entrenador en exec que esta en exec por atrapar al pokemon: %s", entrenadorPrueba->movimientoEnExec->pokemonNecesitado->nombre);
 //	log_info(logger, "El entrenador se encontraba en la posicion (%d, %d)", entrenadorPrueba->posicion->posicionX, entrenadorPrueba->posicion->posicionY);
 
-	Entrenador* entrenador3 = list_get(entrenadores, 2);
-	pasarAExec(entrenador3);
-	log_info(logger, "El entrenador 3 paso a estar en exec para atrapar a %s", entrenador3->movimientoEnExec->pokemonNecesitado->nombre);
+	Entrenador* entrenador1 = list_get(entrenadores, 0);
+	pasarAExec(entrenador1);
+	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
 
-
+	pokemonesLibres = list_create();
 
 
 	IP_BROKER = config_get_string_value(config, "IP_BROKER");
@@ -28,7 +28,6 @@ int main(int argc, char *argv[]) {
 
 	puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
 
-	//MUTEX? TODAVIA NO HAY HILOS
 	objetivosTotales = getObjetivosTotalesDesde(entrenadores);
 	objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
 	objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
@@ -36,15 +35,7 @@ int main(int argc, char *argv[]) {
 	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
 	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
 
-	//pruebo envio de get
-	crearEstructuraGetDesde(list_get(objetivosGlobales, 0));
-
-	pthread_mutex_init(&mutexEntrenadores, NULL);
-	pthread_mutex_init(&mutexObjetivosTotales, NULL);
-	pthread_mutex_init(&mutexObjetivosAtrapados, NULL);
-	pthread_mutex_init(&mutexObjetivosGlobales, NULL);
-	pthread_mutex_init(&mutexPokemonesLibres, NULL);
-
+	iniciarVariables();
 
 	//Lanzar hilo para escuchar a GameBoy
 //	pthread_t hiloEscuchaGameBoy;
@@ -56,7 +47,7 @@ int main(int argc, char *argv[]) {
 //	//los recursos son liberados cuando termina la funcion sin esperar un join
 //	pthread_detach(hiloConexionBroker);
 
-	pokemonesLibres = list_create();
+
 //	//verificar que el id como respuesta vuelva a enviarse a traves de ese socket
 //	//recibe los nombres de pokemones encontrados libres con sus posiciones
 //	//y si se necesitan (estan en los objetivos globales) se agregan a la lista de pokemones libres
@@ -81,6 +72,8 @@ int main(int argc, char *argv[]) {
 //	log_info(logger, "El estado del primer entrenador tendria que pasar de new a ready y se muestra : %d", entrenador1->estado);
 //	//
 
+	pthread_join(hiloConexionBroker, NULL);
+	//pthread_join(hiloEscuchaGameBoy, NULL);
 
 	list_destroy_and_destroy_elements(entrenadores, free);
 

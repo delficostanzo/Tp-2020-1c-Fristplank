@@ -93,10 +93,8 @@ void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio){
 
 //mientras este en ready va a hacer que se fije entre todos los demas que estan ready y pasar a ready el mas cercano
 void moverAReady() {
-
 	pthread_mutex_lock(&mutexEntrenadores);
 	pthread_mutex_lock(&mutexPokemonesLibres);
-	quickLog("Aca llega?");
 	pasarDeNewAReady(entrenadores, pokemonesLibres);
 	pthread_mutex_unlock(&mutexEntrenadores);
 	pthread_mutex_unlock(&mutexPokemonesLibres);

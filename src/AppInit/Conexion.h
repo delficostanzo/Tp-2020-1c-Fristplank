@@ -4,6 +4,7 @@
 
 #include "ConfigFunctions.h"
 #include "../Model/Mapa.h"
+#include "EnvioMensajes.h"
 
 //typedef struct{
 //	int socketEscucha;
