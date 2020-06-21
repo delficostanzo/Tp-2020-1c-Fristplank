@@ -8,7 +8,8 @@ static void envioAppearedPrueba1(int socketSuscripcionAppeared);
 static void envioAppearedPrueba2(int socketSuscripcionAppeared);
 static void envioLocalizedPrueba1(int socketSuscripcionLocalized);
 static int recibirCatchDesde(int socketCatch);
-static void enviarIdCatchA(socketIdCatch);
+static void enviarIdCatchA(int socketIdCatch);
+static void enviarCaughtA(int suscripcionCaught);
 
 int main(void) {
 	t_log* logger;
@@ -44,17 +45,23 @@ int main(void) {
 
 	switch(idProcesoConectado) {
 	case TEAM:
-		suscripcionAppeared = aceptarConexion(conexion);
-		suscripcionCaught = aceptarConexion(conexion);
-		suscripcionLocalized = aceptarConexion(conexion);
+		log_info(logger, "Llego a ver que es team");
+
 		socketGet = aceptarConexion(conexion);
 		socketIdGet = aceptarConexion(conexion);
+
 		socketCatch = aceptarConexion(conexion);
 		socketIdCatch = aceptarConexion(conexion);
 
+		suscripcionAppeared = aceptarConexion(conexion);
 		socketACKAppeared = aceptarConexion(conexion);
-		socketACKCaught = aceptarConexion(conexion);
+
+		suscripcionLocalized = aceptarConexion(conexion);
 		socketACKLocalized = aceptarConexion(conexion);
+
+		suscripcionCaught = aceptarConexion(conexion);
+		socketACKCaught = aceptarConexion(conexion);
+
 
 		liberar_conexion(teamSocket);
 		log_info(logger, "Team se suscribio a 3 colas");
@@ -64,13 +71,15 @@ int main(void) {
 	}
 
 	envioAppearedPrueba1(suscripcionAppeared);
-	envioAppearedPrueba2(suscripcionAppeared);
+	//envioAppearedPrueba2(suscripcionAppeared);
 	envioLocalizedPrueba1(suscripcionLocalized);
 
 
 	if(recibirCatchDesde(socketCatch)){
 		enviarIdCatchA(socketIdCatch);
 	}
+
+	enviarCaughtA(suscripcionCaught);
 
 	//loguear mensaje recibido
 	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
@@ -80,6 +89,7 @@ int main(void) {
 }
 
 void envioAppearedPrueba1(int socketSuscripcionAppeared) {
+	t_log* logger = iniciar_logger();
 	char* nombrePoke = "Pikachu";
 
 	t_appeared_pokemon* appearedPrueba = malloc(sizeof(t_appeared_pokemon));
@@ -91,9 +101,11 @@ void envioAppearedPrueba1(int socketSuscripcionAppeared) {
 	appearedPrueba->posicion->posicionY = 2;
 
 	enviar_appeared_pokemon(appearedPrueba, socketSuscripcionAppeared, 1, -1);
+	log_info(logger, "Envio del appeared del Pikachu");
 }
 
 void envioAppearedPrueba2(int socketSuscripcionAppeared) {
+	t_log* logger = iniciar_logger();
 	char* nombrePoke = "Charmander";
 
 	t_appeared_pokemon* appearedPrueba = malloc(sizeof(t_appeared_pokemon));
@@ -101,15 +113,17 @@ void envioAppearedPrueba2(int socketSuscripcionAppeared) {
 	appearedPrueba->lengthOfPokemon = strlen(appearedPrueba->pokemon);
 
 	appearedPrueba->posicion = malloc(sizeof(t_posicion));
-	appearedPrueba->posicion->posicionX = 8;
-	appearedPrueba->posicion->posicionY = 8;
+	appearedPrueba->posicion->posicionX = 6;
+	appearedPrueba->posicion->posicionY = 4;
 
-	enviar_appeared_pokemon(appearedPrueba, socketSuscripcionAppeared, 1, -1);
+	enviar_appeared_pokemon(appearedPrueba, socketSuscripcionAppeared, 8, -1);
+	log_info(logger, "Envio del appeared del Charmander");
 }
 
 
 void envioLocalizedPrueba1(int socketSuscripcionLocalized) {
-	char* nombrePoke = "Delfi";
+	t_log* logger = iniciar_logger();
+	char* nombrePoke = "Pikachu";
 
 	t_localized_pokemon* localizedPrueba = malloc(sizeof(t_localized_pokemon));
 	localizedPrueba->pokemon = nombrePoke;
@@ -131,6 +145,7 @@ void envioLocalizedPrueba1(int socketSuscripcionLocalized) {
 	localizedPrueba->listaPosiciones = posicionesPrueba;
 
 	enviar_localized_pokemon(localizedPrueba, socketSuscripcionLocalized, 1, -1);
+	log_info(logger, "Envio del localized del Pikachu");
 }
 
 //devuelvo 1 si se recibio el catch de un pokemon del team
@@ -139,16 +154,27 @@ int recibirCatchDesde(int socketCatch) {
 	t_paquete* paqueteCatchRecibido = recibir_mensaje(socketCatch);
 	t_catch_pokemon* catchPoke = paqueteCatchRecibido->buffer->stream;
 
-	log_info(logger, "Se recibio el mensaje catch");
+	log_info(logger, "Se recibio el catch | Pokemon: %s - Posicion X: %d - Posicion Y: %d", catchPoke->pokemon, catchPoke->posicion->posicionX, catchPoke->posicion->posicionY);;
+
 	return catchPoke != NULL;
 }
 
 void enviarIdCatchA(int socketIdCatch) {
+	t_log* logger = iniciar_logger();
 	t_respuesta_id* idCatch = malloc(sizeof(t_respuesta_id));
-	int id= 1; //el id del mensaje catch que mando el entrenador es 1
+	int id= 55; //el id del mensaje catch que mando el entrenador
 	idCatch->idCorrelativo = id;
 	//se podria pasar por id correlativo ?
 	enviar_respuesta_id(idCatch, socketIdCatch, 1, -1);
+	log_info(logger, "Se envio el id del catch");
+
+}
+
+void enviarCaughtA(int suscripcionCaught) {
+	t_caught_pokemon* caughtPoke = malloc(sizeof(t_caught_pokemon));
+	uint32_t loAtrapo = 1;
+	caughtPoke->ok = loAtrapo;
+	enviar_caught_pokemon(caughtPoke, suscripcionCaught, 3, 55);
 }
 
 

@@ -4,7 +4,6 @@
 
 void crearHiloParaEntrenador(Entrenador* entrenador);
 void funcionesDelEntrenador(Entrenador* entrenador);
-void moverAReady(Entrenador* entrenador);
 void cumplirObjetivo(Entrenador* entrenador);
 
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
@@ -19,10 +18,11 @@ void crearHilosDeEntrenadores(t_list* entrenadores){
 // esta funcion agarra un entrenador del tipo Entrenador y lo convierte en un hilo (este seria el estado NEW)
 void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
 	typedef void*(*erasedType)(void*);
-	 pthread_t hilo = entrenador->hiloEntrenador;
+	pthread_t hilo = entrenador->hiloEntrenador;
 
 	// pthread_create(el hilo creado, por ahora NULL, la funcion (micromain) donde el hilo hace todas sus tareas, los parametros que usa esa funcion)
 	pthread_create(&hilo, NULL, (erasedType)funcionesDelEntrenador, entrenador);
+	pthread_detach(hilo);
 }
 
 //la funcion funcionesDelEntrenador tendria que estar en el Team.c, lo dejo aca por ahora
@@ -31,8 +31,8 @@ void funcionesDelEntrenador(Entrenador* unEntrenador){
 	t_log* logger = iniciar_logger();
 
 	while(1){
-	log_info(logger, "El entrenador en la posicion (%d, %d) ya empezo a ejecutarse", unEntrenador->posicion->posicionX, unEntrenador->posicion->posicionY);
-	log_info(logger, "Y esta en el estado %d", unEntrenador->estado);
+	//log_info(logger, "El entrenador en la posicion (%d, %d) ya empezo a ejecutarse", unEntrenador->posicion->posicionX, unEntrenador->posicion->posicionY);
+	//log_info(logger, "Y esta en el estado %d", unEntrenador->estado);
 
 		//cuando quiero cambiar de estado, dentro de la lista de entrenadores debo fijarme cual es el que tiene enum en ese estado
 		//Entrenador* unEntrenador = entrenador;
@@ -40,7 +40,7 @@ void funcionesDelEntrenador(Entrenador* unEntrenador){
 		switch(unEntrenador->estado){
 		case NEW:
 			//se odena por distancia mas corta (el entrenador mas cerca de ese poke) y se pasa a ready
-			//moverAReady(unEntrenador);
+			//moverAReady();
 			break;
 		case READY:
 			// para que se pase a estado EXEC, se hace por fifo, primero se verifica que ningun entrenador este en EXEC

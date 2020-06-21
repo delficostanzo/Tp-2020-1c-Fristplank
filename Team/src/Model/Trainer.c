@@ -71,7 +71,7 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 	entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
 	entrenador->posicion = &(pokemon->posicion);
 	//el socket ya esta conectado con el broker en Conexion
-	enviarCatchDesde(entrenador, socketCatch);
+	enviarCatchDesde(entrenador);
 	pasarABlockEsperando(entrenador);
 }
 

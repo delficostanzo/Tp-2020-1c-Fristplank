@@ -5,7 +5,6 @@
 #include "utils.h"
 #include "../AppInit/LogFunctions.h"
 #include "Pokemon.h"
-#include "../AppInit/EnvioMensajes.h"
 
 
 typedef enum{

@@ -10,7 +10,7 @@
 Entrenador* crearEntrenadorEnExec(){
 	Entrenador* entrenadorNuevo = newEntrenador();
 
-	t_posicion* posicionEntrenador = newPokemon();
+	t_posicion* posicionEntrenador = newPosicion();
 	posicionEntrenador->posicionX = 8;
 	posicionEntrenador->posicionY = 7;
 	entrenadorNuevo->posicion = posicionEntrenador;
