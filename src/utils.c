@@ -40,6 +40,7 @@ void leer_configuracionGameCard(void){
 	PUERTO_GAMECARD = config_get_string_value(config, "PUERTO_GAMECARD");
 	PATH_BITMAP = string_from_format("%s/Metadata/Bitmap.bin", PUNTO_MONTAJE_TALLGRASS);
 	PATH_FILES = string_from_format("%s/Files/", PUNTO_MONTAJE_TALLGRASS);
+	PATH_FILES_POKEMONES = string_from_format("%sPokemones/", PATH_FILES);
 	PATH_BLOCKS = string_from_format("%s/Blocks/", PUNTO_MONTAJE_TALLGRASS);
 
 	log_debug(logger, "Config file | IP del Broker: %s", IP_BROKER);
@@ -52,6 +53,7 @@ void leer_configuracionGameCard(void){
 	log_debug(logger, "Config file | Tiempo de retardo de operación: %d", TIEMPO_RETARDO_OPERACION);
 	log_debug(logger, "Config file | Path de Bitmap calculado: %s", PATH_BITMAP);
 	log_debug(logger, "Config file | Path de Files calculado: %s", PATH_FILES);
+	log_debug(logger, "Config file | Path de Pokemones calculado: %s", PATH_FILES_POKEMONES);
 	log_debug(logger, "Config file | Path de Blocks calculado: %s", PATH_BLOCKS);
 	log_debug(logger, "<> END: Leyendo archivo config <>");
 

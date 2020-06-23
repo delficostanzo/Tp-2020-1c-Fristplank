@@ -43,27 +43,33 @@ void cambiarACerrado(char* filePath){
 }
 
 void crearArchivo(char* filePath){
+	char* carpetaPokemon = string_substring_until(filePath, strlen(filePath) - strlen("Metadata.bin"));
+	log_debug(logger, "Se procede a crear la carpeta del metadata: %s", carpetaPokemon);
 
-	FILE* metadata = fopen (filePath, "wb");
+	mkdir(carpetaPokemon, S_IRWXU);
 
-	char* directory = "DIRECTORY=N";
-	char* size = "SIZE=0";
-	char* blocks = "BLOCKS=";
+	FILE* metadata = fopen(filePath,"w+");
+
+	char* directory = "DIRECTORY=N\n";
+	char* size = "SIZE=0\n";
+	char* blocks = "BLOCKS=[]\n";
 	char* open = "OPEN=Y";
 
-	fwrite (&directory, sizeof (directory), 1, metadata);
-	fwrite (&size, sizeof (size), 1, metadata);
-	fwrite (&blocks, sizeof (blocks), 1, metadata);
-	fwrite (&open, sizeof (open), 1, metadata);
+	log_debug(logger, "Se procede a escribir los atributos iniciales");
+	fwrite(directory, strlen(directory), 1, metadata);
+	fwrite(size, strlen(size), 1, metadata);
+	fwrite(blocks, strlen(blocks), 1, metadata);
+	fwrite(open, strlen(open), 1, metadata);
 
-	free(directory);
-	free(open);
+	log_debug(logger, "Se creo el metadata del pokemon.");
+	free(carpetaPokemon);
 	fclose(metadata);
 }
 
 void pedirArchivoParaUso(char* filePath){
 
 	if(access(filePath, F_OK) != -1 ) { // El archivo existe. Se prosigue a verificar si está en uso. DONE
+		log_debug(logger, "Archivo existe.");
 		int abierto = 1;
 
 		while (abierto){
@@ -71,23 +77,17 @@ void pedirArchivoParaUso(char* filePath){
 			abierto = checkingOpenFile(filePath);
 			if (!abierto){ // Está cerrado -> abro y le cambio el OPEN = Y. DONE
 				cambiarAAbierto(filePath);
+				pthread_mutex_unlock(&semaforoOpen);
 			}
-			pthread_mutex_unlock(&semaforoOpen);
-			if (abierto){ //Si está abierto que el hilo duerma. DONE
+			else{ //Si está abierto que el hilo duerma. DONE
+				pthread_mutex_unlock(&semaforoOpen);
 				sleep(TIEMPO_DE_REINTENTO_OPERACION);
 			}
 		}
 	}
 
 	else { //	En caso de no existir se deberá crear. DONE
-
+		log_debug(logger, "Archivo no existe. Se procede a crearlo.");
 		crearArchivo(filePath);
-		/*Ejemplo archivo:
-			DIRECTORY=N -> YA SETEADO
-			SIZE=250
-			BLOCKS=[40,21,82,3]
-			OPEN=Y -> YA SETEADO
-		 *
-		 */
 	}
 }

@@ -8,58 +8,90 @@
 #include"procesar.h"
 
 void procesarNewPokemon(void* args){
+	log_debug(logger, "<> START: procesarNewPokemon <>");
 
-	t_new_pokemon* arguments = (t_new_pokemon*) args;
+	t_new_pokemon* new_pokemon = args;
 
 	char* filePath = string_new();
-	string_append(&filePath, string_from_format("%s/Pokemones/%s/Metadata.bin", PATH_FILES, arguments->pokemon));
+	string_append(&filePath, string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES, new_pokemon->pokemon));
 
+	log_debug(logger, "Pido archivo para el uso. Ruta: %s", filePath);
 	pedirArchivoParaUso(filePath);
+	log_debug(logger, "Obtengo archivo para el uso."); //TODO QUEDE ACA
 
 	//	Verificar si las posiciones ya existen dentro del archivo.
 	//	En caso de existir se deben agregar la cantidad pasada por parámetro a la actual.
 	//	En caso de no existir se debe agregar al final del archivo una nueva línea indicando la cantidad de pokémon pasadas.
+	/* Archivos pokemon:
+			 * 	1-1=10
+				1-5=1
+				3-1=2
+				7-6=1000
+			 */
 
 	t_config* metadata = config_create(filePath);
 	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
 	int sizeArchivo = config_get_int_value(metadata, "SIZE");
 
 	char* contenidoActual = string_new();
+	char* posicionPlana = string_from_format("%d-%d=%d\n", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
 
+	/* HAY BLOQUES
+	 */
 	if (arrayDeBlocks[0] != NULL){ //hay cosas
+		log_debug(logger, "Existen bloques del pokemon.");
 		string_append(&contenidoActual, getDatosDeBlocks(arrayDeBlocks, sizeArchivo));
-		//buscar posicion
-			//si esta, aumentarla en 1
-			//si no esta, agregarla
-		//guardar
-	}
-	else{ //no hay bloques yet
-		//pedir bloque
-		//agregar linea
-		//guardar
-	}
 
-	/* Archivos pokemon:
-		 * 	1-1=10
-			1-5=1
-			3-1=2
-			7-6=1000
+		/* YA ESTA LA POSICION
 		 */
+		if(string_contains(contenidoActual, posicionPlana)){ //SI YA HAY UN POKEMON EN LA POSICION
+			log_debug(logger, "La posicion que indicamos se encuentra en el archivo.");
 
-	char* posicionPlana = string_new();
-	string_append(&posicionPlana, string_from_format("%d-%d", arguments->posicion->posicionX, arguments->posicion->posicionY));
+		}
 
-	//	Cerrar el archivo -> OPEN=N. DONE
+		/* NO ESTA LA POSICION
+		 */
+		else{
+			log_debug(logger, "La posicion que indicamos no se encuentra en el archivo.");
+			string_append(&contenidoActual, posicionPlana);
+		}
+	}
+
+	/* NO HAY BLOQUES
+	 */
+	else{
+		log_debug(logger, "No existen bloques del pokemon.");
+
+		int bloqueAEscribir = solicitarBloque();
+		log_debug(logger, "Obtuvimos el bloque %d.", bloqueAEscribir);
+
+		char* numeroEnString = string_itoa(bloqueAEscribir);
+		char* path = string_from_format("%s%s.bin", PATH_BLOCKS, numeroEnString);
+
+		FILE* bloqueACrear = fopen(path, "r+w");
+		fwrite(&contenidoActual, strlen(contenidoActual), 1, bloqueACrear);
+		fclose(bloqueACrear);
+		log_debug(logger, "Se guarda el contenido en el bloque %s.", numeroEnString);
+
+		char* bloqueEnConfig = string_from_format("[%d]", bloqueAEscribir);
+		config_set_value(metadata, "BLOCKS", bloqueEnConfig);
+		char* sizeEnConfig = string_itoa(strlen(contenidoActual));
+		config_set_value(metadata, "SIZE", sizeEnConfig);
+
+		free(bloqueEnConfig);
+		free(sizeEnConfig);
+		free(numeroEnString);
+		free(path);
+	}
+
 	cambiarACerrado(filePath);
+	config_save(metadata);
 	config_destroy(metadata);
 	free(filePath);
+	free(contenidoActual);
+	free(posicionPlana);
 
-	//	Conectarse al Broker y enviar el mensaje a la Cola de Mensajes APPEARED_POKEMON con los los datos:
-	//	ID del mensaje recibido.
-	//	Pokemon.
-	//	Posición del mapa.
-	//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
-
+	log_debug(logger, "<> END: procesarNewPokemon <>");
 }
 
 void procesarCatchPokemon(void){

@@ -42,7 +42,7 @@ void* generarSocketsConBroker() {
 			log_debug(logger, "Socket de ACK New Pokemon guardado.");
 
 			pthread_t escucharNewPokemon;
-			pthread_create(&escucharNewPokemon, NULL, escucharColaNewPokemon, NULL);
+			pthread_create(&escucharNewPokemon, NULL, (void*) escucharColaNewPokemon, NULL);
 			pthread_detach(escucharNewPokemon);
 		}
 	}
@@ -54,7 +54,7 @@ void* generarSocketsConBroker() {
 			log_debug(logger, "Socket de ACK Catch Pokemon guardado.");
 
 			pthread_t escucharCatchPokemon;
-			pthread_create(&escucharCatchPokemon, NULL, escucharColaCatchPokemon, NULL);
+			pthread_create(&escucharCatchPokemon, NULL, (void*) escucharColaCatchPokemon, NULL);
 			pthread_detach(escucharCatchPokemon);
 		}
 	}
@@ -66,7 +66,7 @@ void* generarSocketsConBroker() {
 			log_debug(logger, "Socket de ACK Catch Pokemon guardado.");
 
 			pthread_t escucharGetPokemon;
-			pthread_create(&escucharGetPokemon, NULL, escucharColaGetPokemon, NULL);
+			pthread_create(&escucharGetPokemon, NULL, (void*) escucharColaGetPokemon, NULL);
 			pthread_detach(escucharGetPokemon);
 		}
 	}
@@ -107,15 +107,21 @@ void escucharGameBoy(){
 //
 		switch(paqueteNuevo->codigo_operacion){
 			case NEW_POKEMON:;
+				log_info(logger, "Mensaje NEW_POKEMON recibido.");
+
 				t_new_pokemon* new_pokemon = paqueteNuevo->buffer->stream;
-//					log_info(logger, "Mensaje NEW_POKEMON recibido.");
-////					pthread_t hiloProcesarNewPokemon;
-////					pthread_create(&hiloProcesarNewPokemon, NULL, procesarNewPokemon, (void*) paqueteNuevo->buffer->stream);
-////					pthread_detach(hiloProcesarNewPokemon);
+				pthread_t hiloProcesarNewPokemon;
+				pthread_create(&hiloProcesarNewPokemon, NULL, (void*) procesarNewPokemon, (void *) new_pokemon);
+				pthread_join(hiloProcesarNewPokemon, NULL);
 
-				//TODO: AHORA QUE NO ME ROMPE, SEGUIR CON LA LOGICA
-				log_info(logger, new_pokemon->pokemon);
+				/* faltan conexiones a broker
+				t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
+				appeared_pokemon->lengthOfPokemon = new_pokemon->lengthOfPokemon;
+				appeared_pokemon->pokemon = new_pokemon->pokemon;
+				appeared_pokemon->posicion = new_pokemon->posicion;
 
+				enviar_appeared_pokemon(appeared_pokemon, socketAppearedPokemon, -1, paqueteNuevo->ID);
+				*/
 				free(new_pokemon->posicion);
 				free(new_pokemon->pokemon);
 				free(new_pokemon);
@@ -152,7 +158,7 @@ void* escucharColaNewPokemon(){
 			enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID);
 
 			pthread_t hiloProcesarNewPokemon;
-			pthread_create(&hiloProcesarNewPokemon, NULL, procesarNewPokemon, (void*) paqueteNuevo->buffer->stream);
+			pthread_create(&hiloProcesarNewPokemon, NULL, (void*) procesarNewPokemon, (void*) paqueteNuevo->buffer->stream);
 			pthread_detach(hiloProcesarNewPokemon);
 		}
 		else{

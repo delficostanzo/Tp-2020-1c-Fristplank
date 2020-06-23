@@ -92,6 +92,7 @@ void init_estructura_files_blocks() {
 	log_debug(logger, "<> START: Creacion de carpetas blocks y files <>");
 	mkdir(PATH_FILES, S_IRWXU);
 	mkdir(PATH_BLOCKS, S_IRWXU);
+	mkdir(PATH_FILES_POKEMONES, S_IRWXU);
 	log_debug(logger, "<> END: Creacion de carpetas blocks y files <>");
 }
 
@@ -127,10 +128,13 @@ void finalizar_gamecard() {
 	free(PUERTO_GAMECARD);
 	free(PATH_BITMAP);
 	free(PATH_FILES);
+	free(PATH_FILES_POKEMONES);
 	free(PATH_BLOCKS);
 
 	free(configPath);
 	config_destroy(config);
+
+	bitarray_destroy(bitarray);
 }
 
 

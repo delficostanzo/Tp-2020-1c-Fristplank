@@ -21,6 +21,10 @@ int checkingOpenFile(char* filePath);
 void cambiarAAbierto(char* filePath);
 void cambiarACerrado(char* filePath);
 void crearArchivo(char* filePath);
+
+/*Pide archivo para uso
+ * si no existe, lo crea
+ */
 void pedirArchivoParaUso(char* filePath);
 
 #endif /* SRC_ARCHIVOS_H_ */
