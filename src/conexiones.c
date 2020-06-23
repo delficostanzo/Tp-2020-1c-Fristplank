@@ -86,7 +86,7 @@ void escucharGameBoy(){
 				log_debug(logger, "Escuchando conexiones del GameBoy");
 	}
 
-	while(1){
+	if(1){
 		int socketGameBoy = aceptarConexion(socketListenerGameBoy);
 
 		id_proceso idProcesoConectado;
