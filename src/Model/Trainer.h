@@ -51,10 +51,11 @@ void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon);
 t_posicion* newPosicion();
 Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores);
 Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado);
-void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
+//void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado);
 void pasarADormido(Entrenador* entrenador);
 void estadoSiAtrapo(Entrenador* entrenador);
-
+void pasarABlockEsperando(Entrenador* entrenador);
+int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);
 
 #endif /* SRC_MODEL_TRAINER_H_ */

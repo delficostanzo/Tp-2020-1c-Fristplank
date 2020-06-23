@@ -3,6 +3,7 @@
 
 static bool noHayEntrenadoresEnExec(t_list* entrenadores);
 static void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio);
+static void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -71,6 +72,7 @@ void cumplirObjetivo(Entrenador* entrenador){
 	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
 	ObjetivoEnExec mision = movimientoEnExec->objetivo;
 	Entrenador* entrenadorDeIntercambio;
+	quickLog("Llega a cargar los datos del objetivo del entrenador en exec");
 
 	switch(mision){
 		case MOVERyATRAPAR:
@@ -113,3 +115,17 @@ void verificarSiTodosExit() {
 	}
 }
 
+void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
+	quickLog("Llega al metodo de atrapar");
+	int distanciaHastaPokemon = distanciaEntre(&(pokemon->posicion), entrenador->posicion);
+	quickLog("Calcula la distancia al pokemon");
+	entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
+	entrenador->posicion = &(pokemon->posicion);
+
+	pasarABlockEsperando(entrenador);
+
+	//el socket ya esta conectado con el broker en Conexion
+	sem_wait(&semaforoCatch);
+	enviarCatchDesde(entrenador);
+	sem_post(&semaforoCatch);
+}
