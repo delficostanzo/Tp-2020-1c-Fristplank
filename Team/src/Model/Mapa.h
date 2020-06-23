@@ -27,7 +27,7 @@ int suscripcionCaught;
 int suscripcionLocalized;
 
 int socketGet;
-int socketIdGet;
+//int socketIdGet;
 
 int socketCatch;
 int socketIdCatch;
@@ -63,10 +63,15 @@ t_list* objetivosAtrapados;
 t_list* objetivosGlobales;
 t_list* pokemonesLibres;
 
+t_list* idsCorrelativosCaught;
+t_list* idsCorrelativosLocalized;
+
 int inicializarIdsCatch;
 int inicializarIdsGet;
+sem_t semaforoCatch;
 
-int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);
+
+
 void iniciarVariables();
 
 #endif /* SRC_MODEL_MAPA_H_ */

@@ -54,10 +54,10 @@ int main(int argc, char *argv[]) {
 	//recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
 	//recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
 
-
+	pthread_mutex_lock(&mutexEntrenadores);
 	crearHilosDeEntrenadores(entrenadores);
 	quickLog("Se crea un hilo por cada entrenador");
-
+	pthread_mutex_unlock(&mutexEntrenadores);
 
 	//probando las funciones del planificador
 //	PokemonEnElMapa* pokemonDePrueba1 = newPokemon();
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
 	pthread_join(hiloConexionBroker, NULL);
 	//pthread_join(hiloEscuchaGameBoy, NULL);
 
-	list_destroy_and_destroy_elements(entrenadores, free);
+	//list_destroy_and_destroy_elements(entrenadores, free);
 
 	return 0;
 }

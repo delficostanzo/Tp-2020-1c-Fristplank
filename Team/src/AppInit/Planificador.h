@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "ConfigFunctions.h"
 #include "../Model/Mapa.h"
+#include "EnvioMensajes.h"
 
 #ifndef SRC_APPINIT_PLANIFICADOR_H_
 #define SRC_APPINIT_PLANIFICADOR_H_

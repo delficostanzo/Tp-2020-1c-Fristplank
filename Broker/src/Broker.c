@@ -10,6 +10,8 @@ static void envioLocalizedPrueba1(int socketSuscripcionLocalized);
 static int recibirCatchDesde(int socketCatch);
 static void enviarIdCatchA(int socketIdCatch);
 static void enviarCaughtA(int suscripcionCaught);
+static void recibirGetDesde(int socketGet);
+static void recibirACK(int socketACKAppeared);
 
 int main(void) {
 	t_log* logger;
@@ -40,7 +42,8 @@ int main(void) {
 	idProcesoConectado = iniciarHandshake(teamSocket, BROKER);
 	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoConectado);
 
-	int suscripcionAppeared, suscripcionCaught, suscripcionLocalized, socketGet, socketIdGet, socketCatch, socketIdCatch;
+	int suscripcionAppeared, suscripcionCaught, suscripcionLocalized, socketGet, socketCatch, socketIdCatch;
+	//int socketIdGet;
 	int socketACKAppeared, socketACKCaught, socketACKLocalized;
 
 	switch(idProcesoConectado) {
@@ -48,16 +51,16 @@ int main(void) {
 		log_info(logger, "Llego a ver que es team");
 
 		socketGet = aceptarConexion(conexion);
-		socketIdGet = aceptarConexion(conexion);
-
-		socketCatch = aceptarConexion(conexion);
-		socketIdCatch = aceptarConexion(conexion);
+		//socketIdGet = aceptarConexion(conexion);
 
 		suscripcionAppeared = aceptarConexion(conexion);
 		socketACKAppeared = aceptarConexion(conexion);
 
-		suscripcionLocalized = aceptarConexion(conexion);
-		socketACKLocalized = aceptarConexion(conexion);
+//		suscripcionLocalized = aceptarConexion(conexion);
+//		socketACKLocalized = aceptarConexion(conexion);
+
+		socketCatch = aceptarConexion(conexion);
+		socketIdCatch = aceptarConexion(conexion);
 
 		suscripcionCaught = aceptarConexion(conexion);
 		socketACKCaught = aceptarConexion(conexion);
@@ -70,21 +73,42 @@ int main(void) {
 		break;
 	}
 
-	envioAppearedPrueba1(suscripcionAppeared);
-	//envioAppearedPrueba2(suscripcionAppeared);
-	envioLocalizedPrueba1(suscripcionLocalized);
+	recibirGetDesde(socketGet);
 
+	envioAppearedPrueba1(suscripcionAppeared);
+	recibirACK(socketACKAppeared);
+
+//	envioLocalizedPrueba1(suscripcionLocalized);
+//	recibirACK(socketACKLocalized);
 
 	if(recibirCatchDesde(socketCatch)){
 		enviarIdCatchA(socketIdCatch);
 	}
 
 	enviarCaughtA(suscripcionCaught);
+	//envioAppearedPrueba2(suscripcionAppeared);
+	recibirACK(socketACKCaught);
 
 	//loguear mensaje recibido
 	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
 
 	//terminar_programa(conexion, logger, config);
+
+}
+
+void recibirGetDesde(int socketGet){
+	t_log* logger = iniciar_logger();
+	t_paquete* paqueteGetRecibido = recibir_mensaje(socketGet);
+	t_get_pokemon* getPoke = paqueteGetRecibido->buffer->stream;
+
+	log_info(logger, "Se recibio el get del Pokemon: %s", getPoke->pokemon);
+}
+
+void recibirACK(int socketACK){
+	t_log* logger = iniciar_logger();
+	t_paquete* paqueteACK = recibir_mensaje(socketACK);
+
+	log_info(logger, "Se recibio el ACK con ID: %d", paqueteACK->ID_CORRELATIVO);
 
 }
 
@@ -154,7 +178,7 @@ int recibirCatchDesde(int socketCatch) {
 	t_paquete* paqueteCatchRecibido = recibir_mensaje(socketCatch);
 	t_catch_pokemon* catchPoke = paqueteCatchRecibido->buffer->stream;
 
-	log_info(logger, "Se recibio el catch | Pokemon: %s - Posicion X: %d - Posicion Y: %d", catchPoke->pokemon, catchPoke->posicion->posicionX, catchPoke->posicion->posicionY);;
+	log_info(logger, "Se recibio el catch | Pokemon: %s - Posicion X: %d - Posicion Y: %d", catchPoke->pokemon, catchPoke->posicion->posicionX, catchPoke->posicion->posicionY);
 
 	return catchPoke != NULL;
 }
@@ -165,7 +189,7 @@ void enviarIdCatchA(int socketIdCatch) {
 	int id= 55; //el id del mensaje catch que mando el entrenador
 	idCatch->idCorrelativo = id;
 	//se podria pasar por id correlativo ?
-	enviar_respuesta_id(idCatch, socketIdCatch, 1, -1);
+	enviar_respuesta_id(idCatch, socketIdCatch, 1, 55);
 	log_info(logger, "Se envio el id del catch");
 
 }
@@ -176,6 +200,11 @@ void enviarCaughtA(int suscripcionCaught) {
 	caughtPoke->ok = loAtrapo;
 	enviar_caught_pokemon(caughtPoke, suscripcionCaught, 3, 55);
 }
+
+
+
+
+
 
 
 t_log* iniciar_logger(void){

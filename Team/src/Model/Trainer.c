@@ -3,7 +3,6 @@
 static int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
 void pasarADeadlock(Entrenador* entrenador);
 void pasarAExit(Entrenador* entrenador);
-void pasarABlockEsperando(Entrenador* entrenador);
 static int sumaCantidades(t_list* pokemones);
 static int tienenLaMismaCantidad(t_list* objetivos, t_list* atrapados);
 static int sonIguales(t_list* objetivos, t_list* atrapados);
@@ -64,16 +63,23 @@ Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores
 	return list_get(entrenadores, 0);
 }
 
+int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2) {
+	int distanciaEnX = posicion1->posicionX - posicion2->posicionX;
+	int distanciaEnY = posicion1->posicionY - posicion2->posicionY;
+	return abs(distanciaEnX) + abs(distanciaEnY);
+}
+
 ////////////ATRAPA///////////////
 
-void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
-	int distanciaHastaPokemon = distanciaEntre(&(pokemon->posicion), entrenador->posicion);
-	entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
-	entrenador->posicion = &(pokemon->posicion);
-	//el socket ya esta conectado con el broker en Conexion
-	enviarCatchDesde(entrenador);
-	pasarABlockEsperando(entrenador);
-}
+//void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
+//	int distanciaHastaPokemon = distanciaEntre(&(pokemon->posicion), entrenador->posicion);
+//	entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
+//	entrenador->posicion = &(pokemon->posicion);
+//	//el socket ya esta conectado con el broker en Conexion
+//	enviarCatchDesde(entrenador);
+//	quickLog("Esta por cambiarle el estado a bloqueado para esperar respuesta");
+//	pasarABlockEsperando(entrenador);
+//}
 
 void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado){
 	setPokemonA(entrenador->pokemonesAtrapados, pokemonAtrapado);
@@ -105,7 +111,7 @@ int sonIguales(t_list* objetivos, t_list* atrapados) {
 	}
 
 	//todos sus objetivos estan en la lista de sus atrapados con la misma cantidad
-	return list_all_satisfy(objetivos, estaEnAtrapados);
+	return list_all_satisfy(objetivos, (erasedTypeFilter) estaEnAtrapados);
 }
 
 int tienenLaMismaCantidad(t_list* objetivos, t_list* atrapados) {
@@ -120,7 +126,7 @@ int sumaCantidades(t_list* pokemones) {
 		return primerCantidad + cantidadPoke;
 	}
 
-	int cantidadFinal = list_fold(pokemones, 0, (erasedTypeFold)(&sumarCantidad));
+	int cantidadFinal = list_fold(pokemones, 0, (erasedTypeFold)(sumarCantidad));
 	return cantidadFinal;
 }
 
@@ -139,8 +145,10 @@ void pasarAExit(Entrenador* entrenador) {
 }
 
 void pasarABlockEsperando(Entrenador* entrenador) {
+	t_log* logger = iniciar_logger();
 	entrenador->estado = 4;
 	entrenador->motivo = 1;
+	log_info(logger, "El estado del entrenador paso a: %d", entrenador->estado);
 }
 
 /////////////INTERCAMBIO////////////////

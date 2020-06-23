@@ -84,7 +84,8 @@ void serializar_localized_pokemon(void** streamAEnviar, int offset, void* stream
 	memcpy(*streamAEnviar + offset, &pokemon->cantidadPosiciones, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 
-	for(int i = 0; i < pokemon->cantidadPosiciones; i++){
+	int cantidad = (int) (pokemon->cantidadPosiciones);
+	for(int i = 0; i < cantidad; i++){
 		t_posicion* posicion = list_get(pokemon->listaPosiciones, i);
 		memcpy(*streamAEnviar + offset, &posicion->posicionX, sizeof(uint32_t));
 		offset += sizeof(uint32_t);

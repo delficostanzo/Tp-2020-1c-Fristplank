@@ -51,6 +51,7 @@ void funcionesDelEntrenador(Entrenador* unEntrenador){
 			// aca hay 3 codiciones: moverse y atrapar en el mapa, intercambiar y mover
 			break;
 		case BLOCK:
+
 			//el entrenador que va a pasar a estado READY es el que tenga la distancia mas cerca al poke
 			//condiciones: esperando respuesta del broker o esperando otro en BLOCK por intercambio de pokes
 			break;

@@ -34,16 +34,16 @@ void* generarSocketsConBroker() {
 	idProceso = responderHandshake(conexionBroker, TEAM);
 
 	socketGet = crearSocket();
-	socketIdGet = crearSocket();
-
-	socketCatch = crearSocket();
-	socketIdCatch = crearSocket();
+	//socketIdGet = crearSocket();
 
 	suscripcionAppeared = crearSocket();
 	socketACKAppeared = crearSocket();
 
-	suscripcionLocalized = crearSocket();
-	socketACKLocalized = crearSocket();
+//	suscripcionLocalized = crearSocket();
+//	socketACKLocalized = crearSocket();
+
+	socketCatch = crearSocket();
+	socketIdCatch = crearSocket();
 
 	suscripcionCaught = crearSocket();
 	socketACKCaught = crearSocket();
@@ -51,8 +51,8 @@ void* generarSocketsConBroker() {
 
 	if (conectarA(socketGet, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("Ya se conecto a la cola de get para poder enviarle mensajes");
-		if (conectarA(socketIdGet, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("Socket de recepcion de ids Get guardado.");
+//		if (conectarA(socketIdGet, IP_BROKER, PUERTO_BROKER)) {
+//			quickLog("Socket de recepcion de ids Get guardado.");
 
 			enviarGetDesde(socketGet);
 
@@ -60,8 +60,30 @@ void* generarSocketsConBroker() {
 	//			pthread_t enviarGet;
 	//			pthread_create(&enviarGet, NULL, enviarAColaGet, NULL);
 	//			pthread_detach(enviarGet);
+		//}
+	}
+
+	if (conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)) {
+		quickLog("Suscripto a la cola de appeared_pokemon");
+		if (conectarA(socketACKAppeared, IP_BROKER, PUERTO_BROKER)) {
+			quickLog("Socket de ACK Appeared Pokemon guardado.");
+
+			pthread_t escucharAppearedPokemon;
+			pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);
+			//pthread_detach(escucharAppearedPokemon);
 		}
 	}
+
+//	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
+//		quickLog("Suscripto a la cola de localized_pokemon");
+//		if (conectarA(socketACKLocalized, IP_BROKER, PUERTO_BROKER)) {
+//			quickLog("Socket de ACK Localized Pokemon guardado.");
+//
+//			pthread_t escucharLocalizedPokemon;
+//			pthread_create(&escucharLocalizedPokemon, NULL, (void*)escucharColaLocalizedPokemon, NULL);
+//			//pthread_detach(escucharLocalizedPokemon);
+//		}
+//	}
 
 	if (conectarA(socketCatch, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("Ya se conecto a la cola de catch para poder enviarle mensajes");
@@ -75,35 +97,13 @@ void* generarSocketsConBroker() {
 		}
 	}
 
-	if (conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de appeared_pokemon");
-		if (conectarA(socketACKAppeared, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("Socket de ACK Appeared Pokemon guardado.");
-
-			pthread_t escucharAppearedPokemon;
-			pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);
-			pthread_detach(escucharAppearedPokemon);
-		}
-	}
-
-	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de localized_pokemon");
-		if (conectarA(socketACKLocalized, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("Socket de ACK Localized Pokemon guardado.");
-
-			pthread_t escucharLocalizedPokemon;
-			pthread_create(&escucharLocalizedPokemon, NULL, (void*)escucharColaLocalizedPokemon, NULL);
-			pthread_detach(escucharLocalizedPokemon);
-		}
-	}
-
-
 	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("Suscripto a la cola de caught_pokemon");
 		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
 			quickLog("Socket de ACK Caught Pokemon guardado.");
 
 			pthread_t escucharCaughtPokemon;
+			quickLog("BOOM");
 			pthread_create(&escucharCaughtPokemon, NULL, (void*)escucharColaCaughtPokemon, NULL);
 			pthread_detach(escucharCaughtPokemon);
 		}
@@ -138,15 +138,15 @@ void* escucharColaAppearedPokemon(){
 
 void* escucharColaCaughtPokemon(){
 
-	while(1){
-		quickLog("Esperando mensajes de Caught");
+	//while(1){
+		//quickLog("Esperando mensajes de Caught");
 		//el entrenador que estaba esperando esa respuesta es ejecutado y pasa al estado segun corresponda
 		t_paquete* paqueteNuevo = recibirCaught(suscripcionCaught);
 		if(paqueteNuevo != NULL){
 			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
 			quickLog("Pudo enviar el ACK del caught");
 		}
-	}
+	//}
 }
 
 void* escucharColaLocalizedPokemon(){

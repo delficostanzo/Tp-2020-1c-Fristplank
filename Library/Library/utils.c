@@ -107,7 +107,7 @@ void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int Id, 
 }
 
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	uint32_t sizeListaPosiciones = localized_pokemon->cantidadPosiciones * (2 * sizeof(uint32_t));
+	int sizeListaPosiciones = localized_pokemon->cantidadPosiciones * (2 * sizeof(uint32_t));
 	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, 1 + localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
