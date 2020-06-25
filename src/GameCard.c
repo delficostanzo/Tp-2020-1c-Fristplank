@@ -17,16 +17,18 @@ int main(void) {
 
 	iniciar_filesystem();
 
-	// EMPIEZO A TESTEAR
-//	int caca = solicitarBloque();
-//	log_debug(logger, "Utilizo el bloque %d", caca);
-//	int caca2 = solicitarBloque();
-//	log_debug(logger, "Utilizo el bloque %d", caca2);
-//	int caac3 = solicitarBloque();
-//	log_debug(logger, "Utilizo el bloque %d", caac3);
-//	int caca4 = solicitarBloque();
-//	log_debug(logger, "Utilizo el bloque %d", caca4);
-//	liberarBloque(1);
+	//TEST
+	/*
+	for(int i = 0; i < 16; i++){
+		int bloque = solicitarBloque();
+		log_info(logger, "<><><>TEST: BLOQUE %d", bloque);
+	}
+
+	liberarBloque(1);
+	log_info(logger, "<><><>TEST: BLOQUE 1 LIBERADO<><><>");
+	liberarBloque(6);
+	log_info(logger, "<><><>TEST: BLOQUE 6 LIBERADO<><><>");
+	*/
 	// TERMINO DE TESTEAR
 
 	//Lanzar hilo para escuchar a GameBoy
@@ -37,7 +39,7 @@ int main(void) {
 //	pthread_t hiloConexionBroker;
 //	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
 
-	//
+//
 	/* SUSCRIBIRSE A LAS COLAS NEW_POKEMON | CATCH_POKEMON | GET_POKEMON */
 
 	/* Al suscribirse a cada una de las colas deberá quedarse a la espera de recibir un mensaje del Broker. Al recibir un mensaje de cualquier hilo se deberá:
@@ -46,7 +48,6 @@ int main(void) {
 	 - Volver a estar a la escucha de nuevos mensajes de la cola de mensajes en cuestión. */
 
 	//terminar_programa(conexion, logger, config);
-
 	pthread_join(hiloEscuchaGameBoy, NULL);
 //	pthread_join(hiloConexionBroker, NULL);
 
@@ -72,18 +73,24 @@ void init_semaforos() {
 void init_bitmap() {
 	log_debug(logger, "<> START: Creacion bitmap <>");
 
-	FILE* bitmapFile = fopen(PATH_BITMAP, "wb");
+	FILE* bitmapFile = fopen(PATH_BITMAP, "w+");
 	int cantidadDeBits = BLOCKS / 8;
+	log_debug(logger, "Archivo Bitmap.bin creado.");
 
-	for (int i = 0; i < cantidadDeBits; i++) {
+	for (int i = 0; i < BLOCKS; i++) {
 		fwrite("0", 1, 1, bitmapFile);
 	}
 	fclose(bitmapFile);
+	log_debug(logger, "Archivo Bitmap.bin escrito.");
 
-	void* buffer = malloc(cantidadDeBits);
-	bitarray = bitarray_create_with_mode(buffer, cantidadDeBits, LSB_FIRST);
+	bufferBitarray = malloc(cantidadDeBits);
+	bitarray = bitarray_create_with_mode(bufferBitarray, cantidadDeBits, LSB_FIRST);
 	log_debug(logger, "El bitmap creado contiene %d bits",
 			bitarray_get_max_bit(bitarray));
+
+	for(int i = 0; i < BLOCKS; i++){
+		bitarray_clean_bit(bitarray, i);
+	}
 
 	log_debug(logger, "<> END: Creacion bitmap <>");
 }
@@ -108,7 +115,7 @@ void init_bloques() {
 		string_append(&path, numeroEnString);
 		string_append(&path, ".bin");
 
-		FILE* bloqueACrear = fopen(path, "w");
+		FILE* bloqueACrear = fopen(path, "wb");
 		fclose(bloqueACrear);
 
 		free(numeroEnString);
@@ -134,7 +141,7 @@ void finalizar_gamecard() {
 	free(configPath);
 	config_destroy(config);
 
+	free(bufferBitarray);
 	bitarray_destroy(bitarray);
 }
-
 

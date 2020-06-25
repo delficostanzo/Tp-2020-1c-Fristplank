@@ -72,6 +72,7 @@ char* configPath;
 t_log* logger;
 t_config* config;
 t_bitarray* bitarray;
+void* bufferBitarray;
 
 pthread_mutex_t semaforoOpen;
 pthread_mutex_t semaforoBitarray;

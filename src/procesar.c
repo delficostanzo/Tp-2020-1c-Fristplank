@@ -29,12 +29,16 @@ void procesarNewPokemon(void* args){
 				7-6=1000
 			 */
 
+	log_debug(logger, "Comienzo a ver que hay en el metadata del pokemon.");
 	t_config* metadata = config_create(filePath);
 	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
 	int sizeArchivo = config_get_int_value(metadata, "SIZE");
+	log_debug(logger, "Termino de ver que hay en el metadata del pokemon.");
 
 	char* contenidoActual = string_new();
-	char* posicionPlana = string_from_format("%d-%d=%d\n", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
+	char* posicionPlana = string_from_format("%d-%d=%d", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
+	log_debug(logger, "Posicion a escribir: %s", posicionPlana);
+	log_debug(logger, "Tamaño de linea: %d", strlen(posicionPlana) + 1);
 
 	/* HAY BLOQUES
 	 */
@@ -46,7 +50,7 @@ void procesarNewPokemon(void* args){
 		 */
 		if(string_contains(contenidoActual, posicionPlana)){ //SI YA HAY UN POKEMON EN LA POSICION
 			log_debug(logger, "La posicion que indicamos se encuentra en el archivo.");
-
+			//TODO ESTA MAL PORQUE ESTOY PIDIENDO QUE ESTE HASTA LA MISMA CANTIDAD
 		}
 
 		/* NO ESTA LA POSICION
@@ -63,24 +67,41 @@ void procesarNewPokemon(void* args){
 		log_debug(logger, "No existen bloques del pokemon.");
 
 		int bloqueAEscribir = solicitarBloque();
-		log_debug(logger, "Obtuvimos el bloque %d.", bloqueAEscribir);
 
+		char* path = string_new();
+		string_append(&path, PATH_BLOCKS);
 		char* numeroEnString = string_itoa(bloqueAEscribir);
-		char* path = string_from_format("%s%s.bin", PATH_BLOCKS, numeroEnString);
+		string_append(&path, numeroEnString);
+		string_append(&path, ".bin");
 
-		FILE* bloqueACrear = fopen(path, "r+w");
-		fwrite(&contenidoActual, strlen(contenidoActual), 1, bloqueACrear);
+		FILE* bloqueACrear = fopen(path, "rb+");
+		fwrite(&posicionPlana, strlen(posicionPlana) + 1, 1, bloqueACrear);
 		fclose(bloqueACrear);
-		log_debug(logger, "Se guarda el contenido en el bloque %s.", numeroEnString);
+		log_debug(logger, "Se guarda el contenido en el bloque %d.", bloqueAEscribir);
+
+		//TEST
+		FILE* bloqueALeer = fopen (path, "rb");
+		fseek(bloqueALeer, 0, SEEK_END);
+		int size = ftell(bloqueALeer);
+		log_debug(logger, "<><> TEST: Indica que el file tiene size: %d <><>", size);
+		fseek(bloqueALeer, 0, SEEK_SET);
+
+		char* leer[size];
+		fread(leer, size - 1, 1, bloqueALeer);
+		leer[size - 1] = '\0';
+		log_debug(logger, "<><> TEST: Contenido: %s <><>", leer);
+
+		close(bloqueALeer);
+		//FIN TEST
 
 		char* bloqueEnConfig = string_from_format("[%d]", bloqueAEscribir);
 		config_set_value(metadata, "BLOCKS", bloqueEnConfig);
-		char* sizeEnConfig = string_itoa(strlen(contenidoActual));
+		char* sizeEnConfig = string_itoa(size);
 		config_set_value(metadata, "SIZE", sizeEnConfig);
 
+		free(numeroEnString);
 		free(bloqueEnConfig);
 		free(sizeEnConfig);
-		free(numeroEnString);
 		free(path);
 	}
 
