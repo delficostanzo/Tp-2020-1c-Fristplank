@@ -41,3 +41,11 @@ char* getDatosDeBlocks(char** arrayDeBlocks, int size){
 	}
 	return contenidoDeArchivo;
 }
+
+char* getPathDeBlock(int bloque){
+	char* path = string_new();
+	string_append(&path, PATH_BLOCKS);
+	char* numeroEnString = string_itoa(bloque);
+	string_append(&path, numeroEnString);
+	string_append(&path, ".bin");
+}
