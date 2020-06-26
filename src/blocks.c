@@ -15,31 +15,47 @@ int getBlockQuantity(char** arrayDeBlocks){
 }
 
 char* getDatosDeBlocks(char** arrayDeBlocks, int size){
+	log_debug(logger, "<> START: getDatosDeBlocks | Size del archivo: %d <>", size);
 	int blockQuantity = getBlockQuantity(arrayDeBlocks);
+	log_debug(logger, "Cantidad de bloques a concatenar: %d", blockQuantity);
 	char* contenidoDeArchivo = string_new();
 	int sizeRestante = size;
 
 	for(int i = 0; i < blockQuantity; i++){
 
-		FILE* blockActual = fopen(string_from_format("%s%s.bin", PATH_BLOCKS, arrayDeBlocks[i]), "r+w");
+		char* path = getPathDeBlock(atoi(arrayDeBlocks[i]));
+		log_debug(logger, "Abriendo el block %s", path);
+		FILE* blockActual = fopen(path, "rb+");
 
 		if(sizeRestante < BLOCK_SIZE){
 			char* contenidoDeBloqueActual = malloc(sizeRestante);
-			fread(&contenidoDeBloqueActual, 1, size, blockActual);
-			string_append(contenidoDeArchivo, contenidoDeBloqueActual);
+			fread(contenidoDeBloqueActual, sizeRestante, 1, blockActual);
+			log_debug(logger, "Contenido del bloque actual: %s", contenidoDeBloqueActual);
+
+			string_append(&contenidoDeArchivo, contenidoDeBloqueActual);
+
 			free(contenidoDeBloqueActual);
 			fclose(blockActual);
 		}
 		else{
+			log_debug(logger, "sizeRestante > BLOCK_SIZE");
 			char* contenidoDeBloqueActual = malloc(BLOCK_SIZE);
-			fread(&contenidoDeBloqueActual, 1, BLOCK_SIZE, blockActual);
-			string_append(contenidoDeArchivo, contenidoDeBloqueActual);
+			fread(contenidoDeBloqueActual, BLOCK_SIZE, 1, blockActual);
+			string_append(&contenidoDeArchivo, contenidoDeBloqueActual);
 			sizeRestante -= BLOCK_SIZE;
 			free(contenidoDeBloqueActual);
 			fclose(blockActual);
 		}
+
+		free(path);
 	}
+	log_debug(logger, "<> END: getDatosDeBlocks <>");
+
 	return contenidoDeArchivo;
+}
+
+void guardarDatosEnBlocks(char** arrayDeBlocks, int size){
+
 }
 
 char* getPathDeBlock(int bloque){

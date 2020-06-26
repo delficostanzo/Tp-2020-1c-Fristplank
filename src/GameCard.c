@@ -115,7 +115,7 @@ void init_bloques() {
 		string_append(&path, numeroEnString);
 		string_append(&path, ".bin");
 
-		FILE* bloqueACrear = fopen(path, "w+");
+		FILE* bloqueACrear = fopen(path, "wb");
 		fclose(bloqueACrear);
 
 		free(numeroEnString);

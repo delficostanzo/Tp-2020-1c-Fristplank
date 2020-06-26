@@ -28,6 +28,7 @@
 #include"utils.h"
 #include"archivos.h"
 #include"bitmap.h"
+#include"blocks.h"
 
 static const char* COLAS_STRING[] = {
 		"ERROR",

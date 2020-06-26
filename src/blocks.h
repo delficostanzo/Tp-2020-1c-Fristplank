@@ -30,5 +30,6 @@
 int getBlockQuantity(char** arrayDeBlocks);
 char* getDatosDeBlocks(char** arrayDeBlocks, int size);
 char* getPathDeBlock(int bloque);
+void guardarDatosEnBlocks(char** arrayDeBlocks, int size);
 
 #endif /* SRC_BLOCKS_H_ */
