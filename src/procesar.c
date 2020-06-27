@@ -39,7 +39,7 @@ void procesarNewPokemon(void* args) {
 
 		char** posicionesActuales = string_split(contenidoActual, "\n");
 
-		bool posicionEncontrada;
+		bool posicionEncontrada = false;
 		for (int i = 0; posicionesActuales[i] != NULL; i++) {
 
 			/* ESTA LA POSICION
@@ -72,9 +72,14 @@ void procesarNewPokemon(void* args) {
 				string_append(&contenidoNuevo, posicionesActuales[i]);
 				//free(posicionesActuales[i]
 			} else {
-				char* posicionAAgregar = string_from_format("%s\n",
-						posicionesActuales[i]);
-				string_append(&contenidoNuevo, posicionAAgregar);
+				if((string_contains(posicionesActuales[i], "=") && string_contains(posicionesActuales[i], "-"))){
+					log_debug(logger, "No encuentro la posicion. Vuelvo a agregar linea como está.");
+					char* posicionAAgregar = string_from_format("%s\n", posicionesActuales[i]);
+					string_append(&contenidoNuevo, posicionAAgregar);
+				}
+				else{
+					log_debug(logger, "Linea basura: %s", posicionesActuales[i]);
+				}
 				//free(posicionAAgregar);
 			}
 		}
@@ -82,6 +87,7 @@ void procesarNewPokemon(void* args) {
 		/* NO ESTA LA POSICION
 		 */
 		if (!posicionEncontrada) {
+			log_debug(logger, "Posicion no encontrada. Se procede a agregarla.");
 			string_append(&contenidoNuevo, posicionPlanaYCantidad);
 		}
 
@@ -89,20 +95,24 @@ void procesarNewPokemon(void* args) {
 		char* sizeEnConfig = string_itoa(sizeNuevo);
 		config_set_value(metadata, "SIZE", sizeEnConfig);
 
-		////////////////////// COMIENZA GUARDADO DE DATOS EN BLOQUES
 
 		log_debug(logger, "Comenzamos a guardar los %d bytes en los bloques.", sizeNuevo);
-		//TODO LLEGA HASTA ACA CUANDO CARGO DOS COSAS DEL MISMO POKEMON 26/06
 
 		/* PASO ARRAY DE BLOQUES A STRING
 		 * PARA PODER AGREGAR NUEVOS
 		 */
 		int cantidadDeBloques = getBlockQuantity(arrayDeBlocks);
+		log_debug(logger, "Cantidad de bloques actuales: %d", cantidadDeBloques);
+
 		char* listaDeBloques = string_new();
 		string_append(&listaDeBloques, "[");
-		int y = 0;
-		while (arrayDeBlocks[y] != NULL) {
-			string_append(&listaDeBloques, arrayDeBlocks[y]);
+
+		for(int i = 0; arrayDeBlocks[i] != NULL; i++) {
+			string_append(&listaDeBloques, arrayDeBlocks[i]);
+
+			if(arrayDeBlocks[i + 1] != NULL){
+				string_append(&listaDeBloques, ",");
+			}
 //			free(arrayDeBlocks[y]);
 		}
 		log_debug(logger, "La lista actual de bloques es %s]", listaDeBloques);
@@ -115,6 +125,7 @@ void procesarNewPokemon(void* args) {
 			char* bloqueNuevo = string_itoa(bloque);
 			cantidadDeBloques++;
 
+			string_append(&listaDeBloques, ",");
 			string_append(&listaDeBloques, bloqueNuevo);
 			free(bloqueNuevo);
 		}
@@ -126,23 +137,14 @@ void procesarNewPokemon(void* args) {
 		char* bloqueEnConfig = listaDeBloques;
 		config_set_value(metadata, "BLOCKS", bloqueEnConfig);
 
+
 		/* TRABAJO CON EL NUEVO ARRAY
 		 * PARA GUARDAR LOS DATOS
 		 */
 		char** nuevoArrayDeBloques = string_get_string_as_array(listaDeBloques);
-		int bytesGuardados = 0;
-		for(int i = 0; i < cantidadDeBloques; i++){
-			char* datosAGuardar = string_substring(contenidoNuevo, bytesGuardados, bytesGuardados + BLOCK_SIZE - 1);
-			char* path = getPathDeBlock(nuevoArrayDeBloques[i]);
 
-			FILE* bloqueACrear = fopen(path, "rb+");
-			fwrite(datosAGuardar, strlen(datosAGuardar), 1, bloqueACrear);
-			fclose(bloqueACrear);
+		guardarDatosEnBlocks(contenidoNuevo, nuevoArrayDeBloques);
 
-			free(path);
-
-			bytesGuardados += BLOCK_SIZE;
-		}
 		log_debug(logger, "Los datos se han guardado correctamente.");
 
 		//LIBERO ARRAY DE BLOQUES
@@ -161,18 +163,22 @@ void procesarNewPokemon(void* args) {
 	 */
 	else {
 		log_debug(logger, "No existen bloques del pokemon.");
+		log_debug(logger, "Se procede a guardar la linea: %s", posicionPlanaYCantidad);
 		int bloqueAEscribir = solicitarBloque();
 		char* path = getPathDeBlock(bloqueAEscribir);
 
-		FILE* bloqueACrear = fopen(path, "rb+");
-		fwrite(posicionPlanaYCantidad, strlen(posicionPlanaYCantidad), 1,
-				bloqueACrear);
+		//posicionPlanaYCantidad = "2-5=10\n"
+
+		FILE* bloqueACrear = fopen(path, "wb+");
+		fwrite(posicionPlanaYCantidad, strlen(posicionPlanaYCantidad), 1, bloqueACrear);
 		fclose(bloqueACrear);
 		log_debug(logger, "Se guarda el contenido en el bloque %d",
 				bloqueAEscribir);
 
 		char* bloqueEnConfig = string_from_format("[%d]", bloqueAEscribir);
+		log_debug(logger, "Bloques en config: %s", bloqueEnConfig);
 		config_set_value(metadata, "BLOCKS", bloqueEnConfig);
+		log_debug(logger, "Size en config: %d", strlen(posicionPlanaYCantidad));
 		char* sizeEnConfig = string_itoa(strlen(posicionPlanaYCantidad));
 		config_set_value(metadata, "SIZE", sizeEnConfig);
 		config_set_value(metadata, "OPEN", "N");
