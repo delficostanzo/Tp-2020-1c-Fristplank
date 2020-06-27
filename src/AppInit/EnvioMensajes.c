@@ -92,6 +92,7 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 //	free(paqueteAppeared);
 	log_info(logger, "Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);;
 
+	destruirLog(logger);
 	return paqueteAppeared;
 }
 
@@ -99,7 +100,6 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoPoke){
 	pthread_mutex_lock(&mutexObjetivosGlobales);
 	pthread_mutex_lock(&mutexPokemonesLibres);
-	pthread_mutex_lock(&mutexEntrenadores);
 
 	t_log* logger = iniciar_logger();
 	//si ese pokemon lo tengo como objetivo
@@ -108,9 +108,6 @@ void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevo
 		if(buscarPorNombre(nombreNuevoPoke, pokemonesLibres) != NULL && sonLaMismaPosicion(buscarPorNombre(nombreNuevoPoke, pokemonesLibres)->posicion, posicionNuevoPoke)) {
 			PokemonEnElMapa* pokeExistente = buscarPorNombre(nombreNuevoPoke, pokemonesLibres);
 			pokeExistente->cantidad ++;
-
-			Entrenador* entrenadorMasCercano = entrenadorMasCercanoA(pokeExistente, entrenadores);
-			log_info(logger, "El entrenador mas cercano a este pokemon que se le aumento la cantidad esta en la posicion (%d, %d)", entrenadorMasCercano->posicion->posicionX, entrenadorMasCercano->posicion->posicionY);
 		} else {
 			//solo lo agrego a la lista
 			PokemonEnElMapa* pokemonNuevo = newPokemon();
@@ -119,9 +116,6 @@ void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevo
 			setCantidadTo(pokemonNuevo, 1);
 			list_add(pokemonesLibres, pokemonNuevo);
 
-
-			Entrenador* entrenadorMasCercano = entrenadorMasCercanoA(pokemonNuevo, entrenadores);
-			log_info(logger, "El entrenador mas cercano a este nuevo pokemon esta en la posicion (%d, %d)", entrenadorMasCercano->posicion->posicionX, entrenadorMasCercano->posicion->posicionY);
 		}
 	}
 
@@ -130,9 +124,9 @@ void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevo
 		log_info(logger, "La cantidad de pokemones %s en esa posicion es: %d",nombreNuevoPoke, (buscarPorNombre(nombreNuevoPoke, pokemonesLibres))->cantidad);
 	}
 
+	destruirLog(logger);
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
 	pthread_mutex_unlock(&mutexPokemonesLibres);
-	pthread_mutex_unlock(&mutexEntrenadores);
 }
 
 
@@ -176,6 +170,7 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo){
 	log_info(logger, "Se registro el id del catch que mando el entrenador como id: %d", idCorrelativo);
 	//TODO
 	log_info(logger, "Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
+	destruirLog(logger);
 }
 
 t_paquete* recibirCaught(int socketCaught){
@@ -249,7 +244,7 @@ void procesarEspera(Entrenador*  entrenador, uint32_t atrapo){
 	}
 
 	log_info(logger, "Luego de recibir la respuesta del caught el entrenador quedo en estado %d", entrenador->estado);
-
+	destruirLog(logger);
 }
 
 

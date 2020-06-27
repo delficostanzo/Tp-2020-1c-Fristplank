@@ -9,6 +9,7 @@ static void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenado
 static void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores);
 static void setEstadoNew(t_list* entrenadores);
+static void setMutex(t_list* entrenadores);
 static t_list* getObjetivosDesde(Entrenador* entrenador);
 static t_list* getAtrapadosDesde(Entrenador* entrenador);
 static void agregarObjetivosA(Entrenador* entrenador, t_list* objetivosDelEntrenador);
@@ -34,6 +35,7 @@ t_list* getEntrenadoresDesde(char* nombreDeArchivo) {
 	setPokemonesObjetivosDesde(configEntrenador, entrenadores);
 	setPokemonesAtrapadosDesde(configEntrenador, entrenadores);
 	setEstadoNew(entrenadores);
+	setMutex(entrenadores);
 
 	return entrenadores;
 }
@@ -128,6 +130,13 @@ void setEstadoNew(t_list* entrenadores){
 	for(int index=0; index < list_size(entrenadores); index++){
 		Entrenador* entrenador = list_get(entrenadores, index);
 		entrenador->estado = 1;
+	}
+}
+
+void setMutex(t_list* entrenadores) {
+	for(int index=0; index < list_size(entrenadores); index++){
+		Entrenador* entrenador = list_get(entrenadores, index);
+		pthread_mutex_init(&(entrenador->mutexEntrenador), NULL);
 	}
 }
 

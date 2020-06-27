@@ -11,11 +11,6 @@ int main(int argc, char *argv[]) {
 	entrenadores = getEntrenadoresDesde("src/team.config");
 	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
-//	Entrenador* entrenadorPrueba = crearEntrenadorEnExec();
-//	list_add(entrenadores, entrenadorPrueba);
-//	log_info(logger, "Se cargo un nuevo entrenador en exec que esta en exec por atrapar al pokemon: %s", entrenadorPrueba->movimientoEnExec->pokemonNecesitado->nombre);
-//	log_info(logger, "El entrenador se encontraba en la posicion (%d, %d)", entrenadorPrueba->posicion->posicionX, entrenadorPrueba->posicion->posicionY);
-
 	Entrenador* entrenador1 = list_get(entrenadores, 0);
 	pasarAExec(entrenador1);
 	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
@@ -44,8 +39,7 @@ int main(int argc, char *argv[]) {
 	//Lanzar hilo para concetarme a Broker
 	pthread_t hiloConexionBroker;
 	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
-//	//los recursos son liberados cuando termina la funcion sin esperar un join
-//	pthread_detach(hiloConexionBroker);
+
 
 
 //	//verificar que el id como respuesta vuelva a enviarse a traves de ese socket
@@ -59,23 +53,13 @@ int main(int argc, char *argv[]) {
 	quickLog("Se crea un hilo por cada entrenador");
 	pthread_mutex_unlock(&mutexEntrenadores);
 
-	//probando las funciones del planificador
-//	PokemonEnElMapa* pokemonDePrueba1 = newPokemon();
-//	t_posicion posicionDePrueba1;
-//	posicionDePrueba1.posicionX = 1;
-//	posicionDePrueba1.posicionY = 1;
-//	setPosicionTo(pokemonDePrueba1, posicionDePrueba1);
-//	setNombreTo(pokemonDePrueba1, "Delficapa");
-//	list_add(pokemonesLibres, pokemonDePrueba1);
-//	pasarDeNewAReady(entrenadores, pokemonesLibres);
-//	Entrenador* entrenador1 = list_get(entrenadores, 0);
-//	log_info(logger, "El estado del primer entrenador tendria que pasar de new a ready y se muestra : %d", entrenador1->estado);
-//	//
 
 	pthread_join(hiloConexionBroker, NULL);
 	//pthread_join(hiloEscuchaGameBoy, NULL);
 
 	//list_destroy_and_destroy_elements(entrenadores, free);
+
+	destruirLog(logger);
 
 	return 0;
 }

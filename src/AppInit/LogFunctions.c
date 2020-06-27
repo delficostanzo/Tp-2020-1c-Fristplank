@@ -23,3 +23,10 @@ t_log* iniciar_logger(void) {
 	}
 	return log;
 }
+
+void destruirLog(t_log* logger) {
+	if (logger != NULL) {
+		log_destroy(logger);
+	}
+}
+

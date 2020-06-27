@@ -66,8 +66,6 @@ t_list* pokemonesLibres;
 t_list* idsCorrelativosCaught;
 t_list* idsCorrelativosLocalized;
 
-int inicializarIdsCatch;
-int inicializarIdsGet;
 sem_t semaforoCatch;
 
 
