@@ -4,7 +4,6 @@
 
 void crearHiloParaEntrenador(Entrenador* entrenador);
 void funcionesDelEntrenador(Entrenador* entrenador);
-void cumplirObjetivo(Entrenador* entrenador);
 
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
 
@@ -30,39 +29,18 @@ void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
 void funcionesDelEntrenador(Entrenador* unEntrenador){
 	t_log* logger = iniciar_logger();
 
-	while(1){
-	//log_info(logger, "El entrenador en la posicion (%d, %d) ya empezo a ejecutarse", unEntrenador->posicion->posicionX, unEntrenador->posicion->posicionY);
-	//log_info(logger, "Y esta en el estado %d", unEntrenador->estado);
-
-		//cuando quiero cambiar de estado, dentro de la lista de entrenadores debo fijarme cual es el que tiene enum en ese estado
-		//Entrenador* unEntrenador = entrenador;
-		//mutex para cada estado?
-		switch(unEntrenador->estado){
-		case NEW:
-			//se odena por distancia mas corta (el entrenador mas cerca de ese poke) y se pasa a ready
-			//moverAReady();
-			break;
-		case READY:
-			// para que se pase a estado EXEC, se hace por fifo, primero se verifica que ningun entrenador este en EXEC
-			break;
-		case EXEC:
-			log_info(logger, "Hay un entrenador en exec que comienza en la posicion: (%d, %d)", unEntrenador->posicion->posicionX, unEntrenador->posicion->posicionY);
-			cumplirObjetivo(unEntrenador);
-			// aca hay 3 codiciones: moverse y atrapar en el mapa, intercambiar y mover
-			break;
-		case BLOCK:
-
-			//el entrenador que va a pasar a estado READY es el que tenga la distancia mas cerca al poke
-			//condiciones: esperando respuesta del broker o esperando otro en BLOCK por intercambio de pokes
-			break;
-		case EXIT:
-			//cada vez que entrea un entrenador, se verifica que se cumple el objetivo global
-			verificarSiTodosExit();
-			break;
-		}
-
+	int noEsteEnExit() {
+		return unEntrenador->estado != 5;
 	}
 
+	//bloqueo esperando que otro me active y me da el objetivo
+	while(noEsteEnExit) {
+		//el unlock de este mutex lo va a hacer el planificador cuando este en exec
+		//el entrenador no se entera
+		pthread_mutex_lock(&unEntrenador->mutexEntrenador);
+		cumplirObjetivo(unEntrenador);
+	}
 
+	destruirLog(logger);
 }
 

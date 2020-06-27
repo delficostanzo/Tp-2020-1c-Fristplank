@@ -126,8 +126,8 @@ int sumaCantidades(t_list* pokemones) {
 		return primerCantidad + cantidadPoke;
 	}
 
-	int cantidadFinal = list_fold(pokemones, 0, (erasedTypeFold)(sumarCantidad));
-	return cantidadFinal;
+	int* cantidadFinal = list_fold(pokemones, 0, (erasedTypeFold)(sumarCantidad));
+	return *cantidadFinal;
 }
 
 void pasarADormido(Entrenador* entrenador) {
@@ -149,6 +149,7 @@ void pasarABlockEsperando(Entrenador* entrenador) {
 	entrenador->estado = 4;
 	entrenador->motivo = 1;
 	log_info(logger, "El estado del entrenador paso a: %d", entrenador->estado);
+	destruirLog(logger);
 }
 
 /////////////INTERCAMBIO////////////////

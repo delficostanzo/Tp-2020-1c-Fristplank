@@ -136,8 +136,10 @@ void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cl
 t_paquete* recibir_mensaje(int socket_cliente) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	while(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) < 1){
+	//sacar while para que no quede en espera activa
+	if(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) < 1){
 		//ESPERO MENSAJE VALIDO
+		//TODO: RECONEXION
 	}
 
 	recv(socket_cliente, &(paquete->ID), sizeof(int), MSG_WAITALL);

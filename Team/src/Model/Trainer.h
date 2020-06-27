@@ -41,8 +41,8 @@ typedef struct {
 	Estado estado;
 	pthread_t hiloEntrenador;
 	int ciclosCPUConsumido;
-	int idCorrelativoDeEspera; //
-	//pthread_mutex o contador, despues vemo
+	int idCorrelativoDeEspera;
+	pthread_mutex_t mutexEntrenador;
 }Entrenador;
 
 Entrenador* newEntrenador();

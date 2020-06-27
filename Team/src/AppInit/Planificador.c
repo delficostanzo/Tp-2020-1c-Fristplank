@@ -8,6 +8,14 @@ static void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 typedef bool(*erasedTypeFilter)(void*);
 
 
+void planificarEntrenadores(){
+	//pasarAReady(entrenadoresPosibles);
+
+}
+
+
+
+
 //pasa el entrenador que esta mas cerca de los pokes libres a ready
 void pasarDeNewAReady(t_list* entrenadores, t_list* pokemonesLibres){
 	int tieneEstadoNewODormido(Entrenador* entrenador) {
