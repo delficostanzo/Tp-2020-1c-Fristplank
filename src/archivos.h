@@ -27,4 +27,6 @@ void crearArchivo(char* filePath);
  */
 void pedirArchivoParaUso(char* filePath);
 
+int checkArchivoExiste(char* filePath);
+
 #endif /* SRC_ARCHIVOS_H_ */

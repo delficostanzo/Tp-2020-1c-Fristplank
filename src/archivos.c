@@ -66,6 +66,18 @@ void crearArchivo(char* filePath){
 	fclose(metadata);
 }
 
+int checkArchivoExiste(char* filePath){
+
+	if(access(filePath, F_OK) != -1 ) { // El archivo existe. Se prosigue a verificar si está en uso. DONE
+		log_debug(logger, "Archivo existe.");
+		return 1;
+	}
+	else{
+		log_debug(logger, "Archivo NO existe.");
+		return 0;
+	}
+}
+
 void pedirArchivoParaUso(char* filePath){
 
 	if(access(filePath, F_OK) != -1 ) { // El archivo existe. Se prosigue a verificar si está en uso. DONE

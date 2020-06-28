@@ -12,7 +12,7 @@
 
 
 void procesarGetPokemon(void);
-void procesarCatchPokemon(void);
+void* procesarCatchPokemon(void* args);
 void procesarNewPokemon(void* args);
 
 #endif /* SRC_PROCESAR_H_ */

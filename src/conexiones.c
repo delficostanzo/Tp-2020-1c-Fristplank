@@ -126,10 +126,34 @@ void escucharGameBoy(){
 				free(new_pokemon->pokemon);
 				free(new_pokemon);
 				break;
-//			case CATCH_POKEMON:
-//				log_info(logger, "Mensaje CATCH_POKEMON recibido.");
+
+			case CATCH_POKEMON:
+				log_info(logger, "Mensaje CATCH_POKEMON recibido.");
 //				//TODO iniciar hilo para procesarlo
-//				break;
+				t_catch_pokemon* catch_pokemon = paqueteNuevo->buffer->stream;
+				pthread_t hiloProcesarCatchPokemon;
+				pthread_create(&hiloProcesarCatchPokemon, NULL, (void*) procesarCatchPokemon, (void *) catch_pokemon);
+
+				void* encontrado = malloc(sizeof(int));
+				pthread_join(hiloProcesarCatchPokemon, encontrado);
+
+				if((int) encontrado){
+					log_debug(logger, "Se encontro el pokemon en esa posicion.");
+				}
+				else{
+					log_debug(logger, "NO se encontro el pokemon en esa posicion.");
+				}
+
+				//	Todo resultado, sea correcto o no, deberá realizarse conectandose al Broker y enviando un mensaje a la Cola de Mensajes CAUGHT_POKEMON indicando:
+				//	ID del mensaje recibido originalmente.
+				//	Resultado.
+				//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
+
+				free(catch_pokemon->posicion);
+				free(catch_pokemon->pokemon);
+				free(catch_pokemon);
+				break;
+
 //			case GET_POKEMON:
 //				log_info(logger, "Mensaje GET_POKEMON recibido.");
 //				//TODO iniciar hilo para procesarlo
@@ -154,12 +178,10 @@ void* escucharColaNewPokemon(){
 		t_paquete* paqueteNuevo = recibir_mensaje(socketNewPokemon);
 
 		if(paqueteNuevo->codigo_operacion == NEW_POKEMON){
+			//TODO iniciar hilo para procesarlo
 
 			enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID);
 
-			pthread_t hiloProcesarNewPokemon;
-			pthread_create(&hiloProcesarNewPokemon, NULL, (void*) procesarNewPokemon, (void*) paqueteNuevo->buffer->stream);
-			pthread_detach(hiloProcesarNewPokemon);
 		}
 		else{
 			log_info(logger, "Tipo de mensaje invalido.");
