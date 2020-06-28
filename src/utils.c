@@ -29,6 +29,7 @@ void leer_configuracionGameCard(void){
 	TIEMPO_DE_REINTENTO_CONEXION = config_get_int_value(config, "TIEMPO_DE_REINTENTO_CONEXION");
 	TIEMPO_DE_REINTENTO_OPERACION = config_get_int_value(config, "TIEMPO_DE_REINTENTO_OPERACION");
 	TIEMPO_RETARDO_OPERACION = config_get_int_value(config, "TIEMPO_RETARDO_OPERACION");
+	ID_UNICO = config_get_int_value(config, "ID_UNICO");
 	// con el root hardcoded
 //	PUNTO_MONTAJE_TALLGRASS = config_get_string_value(config, "PUNTO_MONTAJE_TALLGRASS");
 	char* PUNTO_MONTAJE_TALLGRASS_RELATIVO = config_get_string_value(config, "PUNTO_MONTAJE_TALLGRASS");

@@ -17,27 +17,16 @@ int main(void) {
 
 	iniciar_filesystem();
 
-	//TEST
-	/*
-	for(int i = 0; i < 16; i++){
-		int bloque = solicitarBloque();
-		log_info(logger, "<><><>TEST: BLOQUE %d", bloque);
-	}
-
-	liberarBloque(1);
-	log_info(logger, "<><><>TEST: BLOQUE 1 LIBERADO<><><>");
-	liberarBloque(6);
-	log_info(logger, "<><><>TEST: BLOQUE 6 LIBERADO<><><>");
-	*/
-	// TERMINO DE TESTEAR
-
-	//Lanzar hilo para escuchar a GameBoy
 	pthread_t hiloEscuchaGameBoy;
 	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
-	//Lanzar hilo para concetarme a Broker
-//	pthread_t hiloConexionBroker;
-//	pthread_create(&hiloConexionBroker, NULL, (void*) generarSocketsConBroker, NULL);
+
+	while(!generarSocketsConBroker()){
+		sleep(TIEMPO_DE_REINTENTO_CONEXION);
+	}
+
+	pthread_t hiloEscuchaSockets;
+	pthread_create(&hiloEscuchaSockets, NULL, (void*) lanzarHilosDeEscucha, NULL);
 
 //
 	/* SUSCRIBIRSE A LAS COLAS NEW_POKEMON | CATCH_POKEMON | GET_POKEMON */
@@ -49,7 +38,7 @@ int main(void) {
 
 	//terminar_programa(conexion, logger, config);
 	pthread_join(hiloEscuchaGameBoy, NULL);
-//	pthread_join(hiloConexionBroker, NULL);
+	pthread_join(hiloEscuchaSockets, NULL);
 
 	finalizar_gamecard();
 }
@@ -68,6 +57,7 @@ void init_semaforos() {
 	pthread_mutex_init(&semaforoOpen, NULL);
 	pthread_mutex_init(&semaforoBitarray, NULL);
 	pthread_mutex_init(&semaforoGetDatos, NULL);
+	pthread_mutex_init(&semaforoDesconexion, NULL);
 	log_debug(logger, "<> END: Inicializacion semaforos <>");
 }
 
@@ -130,6 +120,7 @@ void finalizar_gamecard() {
 	pthread_mutex_destroy(&semaforoOpen);
 	pthread_mutex_destroy(&semaforoBitarray);
 	pthread_mutex_destroy(&semaforoGetDatos);
+	pthread_mutex_destroy(&semaforoDesconexion);
 
 	free(PUNTO_MONTAJE_TALLGRASS);
 	free(IP_BROKER);

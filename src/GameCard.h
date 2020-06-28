@@ -51,12 +51,15 @@ static const char* ID_PROCESO[] = {
 		"GAMECARD"
 };
 
+int desconexion;
+
 int BLOCK_SIZE;
 int BLOCKS;
 
 int TIEMPO_DE_REINTENTO_CONEXION;
 int TIEMPO_DE_REINTENTO_OPERACION;
 int TIEMPO_RETARDO_OPERACION;
+int ID_UNICO;
 char* PUNTO_MONTAJE_TALLGRASS;
 char* PATH_BITMAP;
 char* PATH_FILES;
@@ -78,6 +81,7 @@ void* bufferBitarray;
 pthread_mutex_t semaforoOpen;
 pthread_mutex_t semaforoBitarray;
 pthread_mutex_t semaforoGetDatos;
+pthread_mutex_t semaforoDesconexion;
 
 int socketBroker;
 int socketNewPokemon;

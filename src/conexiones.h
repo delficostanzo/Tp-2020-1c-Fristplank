@@ -16,7 +16,8 @@ typedef struct{
 	int socketACK;
 }t_par_de_sockets;
 
-void* generarSocketsConBroker(void);
+int generarSocketsConBroker(void);
+void lanzarHilosDeEscucha(void);
 void escucharGameBoy(void);
 
 void* escucharColaNewPokemon(void);
