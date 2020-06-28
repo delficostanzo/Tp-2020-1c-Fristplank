@@ -37,12 +37,13 @@ void procesarGameCardNewPokemon(int socket, char* argv[]){
 
 
 void procesarGameCardGetPokemon(int socket, char* argv[]){
+
 	t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
 	get_pokemon->lengthOfPokemon = strlen(argv[3]);
 	get_pokemon->pokemon = string_from_format(argv[3]);
 
-	enviar_get_pokemon(get_pokemon, socket, -1, -1);
-	log_info(logger, "Mensaje enviado a GameCard | Pokemon: %s", argv[3]);
+	enviar_get_pokemon(get_pokemon, socket, atoi(argv[4]), -1);
+	log_info(logger, "Mensaje enviado a GameCard | ID del mensaje: %d | Pokemon: %s", atoi(argv[4]), argv[3]);
 }
 
 void procesarBrokerGetPokemon(int socket, char* argv[]){

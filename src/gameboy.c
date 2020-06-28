@@ -33,13 +33,13 @@ int main(int argc, char* argv[]) {
  * ejemplo:
  * 			./GameBoy TEAM APPEARED_POKEMON Pikachu 5 3
  *
- * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD] [ID_MENSAJE] //TODO
+ * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD] [ID_MENSAJE]
  * ejemplo:
  *
  * DONE ./gameboy GAMECARD CATCH_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
  * ejemplo:
  *
- * DONE ./gameboy GAMECARD GET_POKEMON [POKEMON] [ID_MENSAJE] //TODO
+ * DONE ./gameboy GAMECARD GET_POKEMON [POKEMON] [ID_MENSAJE]
  * ejemplo:
  *
  * DONE ./gameboy SUSCRIPTOR [COLA_DE_MENSAJES] [TIEMPO]
