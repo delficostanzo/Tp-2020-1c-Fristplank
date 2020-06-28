@@ -77,6 +77,7 @@ void* bufferBitarray;
 
 pthread_mutex_t semaforoOpen;
 pthread_mutex_t semaforoBitarray;
+pthread_mutex_t semaforoGetDatos;
 
 int socketBroker;
 int socketNewPokemon;

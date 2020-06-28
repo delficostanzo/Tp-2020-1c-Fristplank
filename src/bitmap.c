@@ -8,8 +8,8 @@
 #include"bitmap.h"
 
 int solicitarBloque() {
-	log_debug(logger, "<> START: Solicitar bloque <>");
 	pthread_mutex_lock(&semaforoBitarray);
+	log_debug(logger, "<> START: Solicitar bloque <>");
 
 	int bloqueEncontrado = -1;
 	int cantidadBloques = bitarray_get_max_bit(bitarray);
@@ -29,14 +29,14 @@ int solicitarBloque() {
 	fwrite("1", 1, 1, bitmap);
 	fclose(bitmap);
 
-	pthread_mutex_unlock(&semaforoBitarray);
 	log_debug(logger, "<> END: Solicitar bloque <>");
+	pthread_mutex_unlock(&semaforoBitarray);
+
 	return bloqueEncontrado;
 }
 
 void liberarBloque(int bloqueALiberar){
 	log_debug(logger, "<> START: Liberar bloque <>");
-	pthread_mutex_lock(&semaforoBitarray);
 
 	bitarray_clean_bit(bitarray, bloqueALiberar);
 
@@ -45,6 +45,5 @@ void liberarBloque(int bloqueALiberar){
 	fwrite("0", 1, 1, bitmap);
 	fclose(bitmap);
 
-	pthread_mutex_unlock(&semaforoBitarray);
 	log_debug(logger, "<> END: Liberar bloque <>");
 }

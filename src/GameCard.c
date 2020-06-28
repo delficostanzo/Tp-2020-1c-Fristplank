@@ -67,6 +67,7 @@ void init_semaforos() {
 	log_debug(logger, "<> START: Inicializacion semaforos <>");
 	pthread_mutex_init(&semaforoOpen, NULL);
 	pthread_mutex_init(&semaforoBitarray, NULL);
+	pthread_mutex_init(&semaforoGetDatos, NULL);
 	log_debug(logger, "<> END: Inicializacion semaforos <>");
 }
 
@@ -128,6 +129,8 @@ void finalizar_gamecard() {
 	log_destroy(logger);
 	pthread_mutex_destroy(&semaforoOpen);
 	pthread_mutex_destroy(&semaforoBitarray);
+	pthread_mutex_destroy(&semaforoGetDatos);
+
 	free(PUNTO_MONTAJE_TALLGRASS);
 	free(IP_BROKER);
 	free(PUERTO_BROKER);

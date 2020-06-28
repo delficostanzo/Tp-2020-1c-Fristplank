@@ -144,7 +144,7 @@ void escucharGameBoy(){
 					log_debug(logger, "NO se encontro el pokemon en esa posicion.");
 				}
 
-				free(encontrado);
+//				free(encontrado);
 				//	Todo resultado, sea correcto o no, deberá realizarse conectandose al Broker y enviando un mensaje a la Cola de Mensajes CAUGHT_POKEMON indicando:
 				//	ID del mensaje recibido originalmente.
 				//	Resultado.
@@ -162,11 +162,13 @@ void escucharGameBoy(){
 				pthread_t hiloProcesarGetPokemon;
 				pthread_create(&hiloProcesarGetPokemon, NULL, (void*) procesarGetPokemon, (void *) get_pokemon);
 
-				//TODO TENGO QUE VER PORQUE NO MANDA EL GAMEBOY GET
-
-				//ACA TENGO QUE TENER UNA LISTA
 				void* localized;
-				pthread_join(hiloProcesarGetPokemon, localized);
+				pthread_join(hiloProcesarGetPokemon, &localized);
+				t_localized_pokemon* localized_pokemon = localized;
+
+				log_debug(logger, "TEST: Pokemon a enviar: %s", localized_pokemon->pokemon);
+				log_debug(logger, "TEST: Cantidad a enviar: %d", localized_pokemon->cantidadPosiciones);
+				//enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID);
 				break;
 			default:
 				log_info(logger, "Tipo de mensaje invalido.");
@@ -178,7 +180,6 @@ void escucharGameBoy(){
 	}
 
 	close(socketListenerGameBoy);
-
 }
 
 void* escucharColaNewPokemon(){

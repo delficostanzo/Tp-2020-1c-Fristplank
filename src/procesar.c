@@ -34,7 +34,11 @@ void procesarNewPokemon(void* args) {
 	 */
 	if (arrayDeBlocks[0] != NULL) {
 		log_debug(logger, "Existen bloques del pokemon.");
+
+		pthread_mutex_lock(&semaforoGetDatos);
 		char* contenidoActual = getDatosDeBlocks(arrayDeBlocks, sizeArchivo);
+		pthread_mutex_unlock(&semaforoGetDatos);
+
 		char* contenidoNuevo = string_new();
 
 		char** posicionesActuales = string_split(contenidoActual, "\n");
@@ -109,12 +113,14 @@ void procesarNewPokemon(void* args) {
 
 		for(int i = 0; arrayDeBlocks[i] != NULL; i++) {
 			string_append(&listaDeBloques, arrayDeBlocks[i]);
+			free(arrayDeBlocks[i]);
 
 			if(arrayDeBlocks[i + 1] != NULL){
 				string_append(&listaDeBloques, ",");
 			}
 //			free(arrayDeBlocks[y]);
 		}
+		free(arrayDeBlocks);
 		log_debug(logger, "La lista actual de bloques es %s]", listaDeBloques);
 
 		/* PIDO BLOQUES SI ES NECESARIO
@@ -235,7 +241,11 @@ void* procesarCatchPokemon(void* args) {
 	 */
 	if (arrayDeBlocks[0] != NULL) {
 		log_debug(logger, "Existen bloques del pokemon.");
+
+		pthread_mutex_lock(&semaforoGetDatos);
 		char* contenidoActual = getDatosDeBlocks(arrayDeBlocks, sizeArchivo);
+		pthread_mutex_unlock(&semaforoGetDatos);
+
 		char* contenidoNuevo = string_new();
 
 		char** posicionesActuales = string_split(contenidoActual, "\n");
@@ -336,7 +346,11 @@ void* procesarCatchPokemon(void* args) {
 		for (int i = 0; arrayDeBlocks[i] != NULL; i++) {
 
 			if(bloquesALiberar != 0){ //Si tengo bloques a liberar -> Los libero y no los agrego
+
+				pthread_mutex_lock(&semaforoBitarray);
 				liberarBloque(atoi(arrayDeBlocks[i]));
+				pthread_mutex_unlock(&semaforoBitarray);
+
 				bloquesALiberar--;
 				free(arrayDeBlocks[i]);
 			}
@@ -345,9 +359,11 @@ void* procesarCatchPokemon(void* args) {
 				string_append(&listaDeBloques, arrayDeBlocks[i]);
 				if (arrayDeBlocks[i + 1] != NULL) {
 					string_append(&listaDeBloques, ",");
+					free(arrayDeBlocks[i]);
 				}
 			}
 		}
+		free(arrayDeBlocks);
 
 		string_append(&listaDeBloques, "]");
 		log_debug(logger, "La nueva lista de bloques es %s", listaDeBloques);
@@ -440,7 +456,11 @@ void* procesarGetPokemon(void* args) {
 	 */
 	if (arrayDeBlocks[0] != NULL) {
 		log_debug(logger, "Existen bloques del pokemon.");
+
+		pthread_mutex_lock(&semaforoGetDatos);
 		char* contenidoActual = getDatosDeBlocks(arrayDeBlocks, sizeArchivo);
+		pthread_mutex_unlock(&semaforoGetDatos);
+
 		char** posicionesActuales = string_split(contenidoActual, "\n");
 
 		/*INSTANCIO RESPUESTA
@@ -477,13 +497,10 @@ void* procesarGetPokemon(void* args) {
 
 		localized_pokemon->cantidadPosiciones = posicionesEncontradas;
 
-
-		//LIBERO ARRAY DE BLOQUES
 		for(int i = 0; arrayDeBlocks[i] != NULL; i++){
 			free(arrayDeBlocks[i]);
 		}
 		free(arrayDeBlocks);
-		//TODO ME ROMPE POR ACA
 		free(contenidoActual);
 		config_save(metadata);
 		config_destroy(metadata);
