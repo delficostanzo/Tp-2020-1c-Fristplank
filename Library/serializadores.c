@@ -96,7 +96,9 @@ void serializar_localized_pokemon(void** streamAEnviar, int offset, void* stream
 	memcpy(*streamAEnviar + offset, &pokemon->cantidadPosiciones, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 
-	for(int i = 0; i < pokemon->cantidadPosiciones; i++){
+	int cantidadPosiciones = (int) pokemon->cantidadPosiciones;
+
+	for(int i = 0; i < cantidadPosiciones; i++){
 		t_posicion* posicion = list_get(pokemon->listaPosiciones, i);
 		memcpy(*streamAEnviar + offset, &posicion->posicionX, sizeof(uint32_t));
 		offset += sizeof(uint32_t);
@@ -114,8 +116,8 @@ void serializar_localized_pokemon(void** streamAEnviar, int offset, void* stream
 void serializar_respuesta_id(void** streamAEnviar, int offset, void* streamPayload, int *bytes){
 	t_respuesta_id* pokemon = streamPayload;
 
-	memcpy(*streamAEnviar + offset, &pokemon->idCorrelativo, sizeof(uint32_t));
-	offset += sizeof(uint32_t);
+	memcpy(*streamAEnviar + offset, &pokemon->idCorrelativo, sizeof(int));
+	offset += sizeof(int);
 
 	*bytes = offset;
 }

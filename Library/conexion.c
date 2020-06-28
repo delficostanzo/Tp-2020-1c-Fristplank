@@ -52,31 +52,39 @@ int aceptarConexion(int socketListener) {
 }
 
 //5- el SERVIDOR (origen) inicia el handshake mandandole al destino su id
-id_proceso iniciarHandshake(int socketDestino, id_proceso idProcesoOrigen) {
-	id_proceso idProcesoDestino;
+t_handshake* iniciarHandshake(int socketDestino, t_handshake* handshakeOrigen) {
+	t_handshake* handshakeDestino = malloc(sizeof(t_handshake));
 
-	if(send(socketDestino, &idProcesoOrigen, sizeof(id_proceso), 0) == -1)
+	if(send(socketDestino, &handshakeOrigen->id, sizeof(id_proceso), 0) == -1)
+		return IDERROR;
+	if(send(socketDestino, &handshakeOrigen->idUnico, sizeof(int), 0) == -1)
 		return IDERROR;
 
 	//se queda esperando el responderHandshake del CLIENTE
-	if(recv(socketDestino, &idProcesoDestino, sizeof(id_proceso), 0) == -1)
+	if(recv(socketDestino, &handshakeDestino->id, sizeof(id_proceso), 0) == -1)
+		return IDERROR;
+	if(recv(socketDestino, &handshakeDestino->idUnico, sizeof(int), 0) == -1)
 		return IDERROR;
 
-	return idProcesoDestino;
+	return handshakeDestino;
 }
 
 //6- el CLIENTE responde el handshake del servidor mandandole
-id_proceso responderHandshake(int socketDestino, id_proceso idProcesoOrigen) {
-	id_proceso idProcesoDestino;
+t_handshake* responderHandshake(int socketDestino, t_handshake* handshakeOrigen) {
+	t_handshake* handshakeDestino = malloc(sizeof(t_handshake));
 
 	//espera que el otro proceso inicie el handshake
-	if(recv(socketDestino, &idProcesoDestino, sizeof(id_proceso), 0) == -1)
+	if(recv(socketDestino, &handshakeDestino->id, sizeof(id_proceso), 0) == -1)
+		return IDERROR;
+	if(recv(socketDestino, &handshakeDestino->idUnico, sizeof(int), 0) == -1)
 		return IDERROR;
 
-	if(send(socketDestino, &idProcesoOrigen, sizeof(id_proceso), 0) == -1)
+	if(send(socketDestino, &handshakeOrigen->id, sizeof(id_proceso), 0) == -1)
+		return IDERROR;
+	if(send(socketDestino, &handshakeOrigen->idUnico, sizeof(int), 0) == -1)
 		return IDERROR;
 
-	return idProcesoDestino;
+	return handshakeDestino;
 }
 
 //devuelve el stream completo para que no se corten en el recv
