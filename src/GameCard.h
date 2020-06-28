@@ -81,6 +81,7 @@ void* bufferBitarray;
 pthread_mutex_t semaforoOpen;
 pthread_mutex_t semaforoBitarray;
 pthread_mutex_t semaforoGetDatos;
+pthread_mutex_t semaforoGuardarDatos;
 pthread_mutex_t semaforoDesconexion;
 
 int socketBroker;

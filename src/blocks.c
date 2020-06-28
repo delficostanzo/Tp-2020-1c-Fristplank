@@ -78,17 +78,14 @@ void guardarDatosEnBlocks(char* contenidoNuevo, char** arrayDeBlocks) {
 	for (int i = 0; i < cantidadDeBloques; i++) {
 		log_debug(logger, "Guardando datos en bloque n° %s.", arrayDeBlocks[i]);
 
-		int cuantoEscribir = BLOCK_SIZE
-				- (strlen(contenidoNuevo) - bytesGuardados);
+		int cuantoEscribir = BLOCK_SIZE - (strlen(contenidoNuevo) - bytesGuardados);
 
 		char* datosAGuardar;
 
 		if (cuantoEscribir > 0) {
-			datosAGuardar = string_substring(contenidoNuevo, bytesGuardados,
-					strlen(contenidoNuevo) - bytesGuardados);
+			datosAGuardar = string_substring(contenidoNuevo, bytesGuardados, strlen(contenidoNuevo) - bytesGuardados);
 		} else {
-			datosAGuardar = string_substring(contenidoNuevo, bytesGuardados,
-					BLOCK_SIZE);
+			datosAGuardar = string_substring(contenidoNuevo, bytesGuardados, BLOCK_SIZE);
 		}
 
 		log_debug(logger, "Bytes a guardar: %d", strlen(datosAGuardar));

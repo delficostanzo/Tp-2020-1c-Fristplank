@@ -149,7 +149,9 @@ void procesarNewPokemon(void* args) {
 		 */
 		char** nuevoArrayDeBloques = string_get_string_as_array(listaDeBloques);
 
+		pthread_mutex_lock(&semaforoGuardarDatos);
 		guardarDatosEnBlocks(contenidoNuevo, nuevoArrayDeBloques);
+		pthread_mutex_unlock(&semaforoGuardarDatos);
 
 		log_debug(logger, "Los datos se han guardado correctamente.");
 
@@ -379,7 +381,9 @@ void* procesarCatchPokemon(void* args) {
 		 */
 		char** nuevoArrayDeBloques = string_get_string_as_array(listaDeBloques);
 
+		pthread_mutex_lock(&semaforoGuardarDatos);
 		guardarDatosEnBlocks(contenidoNuevo, nuevoArrayDeBloques);
+		pthread_mutex_unlock(&semaforoGuardarDatos);
 
 		log_debug(logger, "Los datos se han guardado correctamente.");
 
