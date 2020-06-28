@@ -283,10 +283,14 @@ int conectarAModulo(String PUERTO, String IP){
 		log_debug(logger, "Conectando al módulo...");
 	}
 
-	id_proceso idProceso;
-	idProceso = responderHandshake(conexion, GAMEBOY);
-	log_info(logger, "El id del proceso con el que me conecte es: %s", ID_PROCESO[idProceso]);
+	t_handshake* handshake = malloc(sizeof(t_handshake));
+	handshake->id = GAMEBOY;
+	handshake->idUnico = 1;
 
+	t_handshake* handshakeRecibido = responderHandshake(conexion, handshake);
+	log_info(logger, "El id del proceso con el que me conecte es: %s | ID Unico: %d", ID_PROCESO[handshakeRecibido->id], handshakeRecibido->idUnico);
+
+	free(handshake);
 	return conexion;
 }
 
