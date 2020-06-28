@@ -11,7 +11,7 @@
 #include"GameCard.h"
 
 
-void procesarGetPokemon(void);
+void* procesarGetPokemon(void* args);
 void* procesarCatchPokemon(void* args);
 void procesarNewPokemon(void* args);
 

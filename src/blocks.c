@@ -57,15 +57,14 @@ char* getDatosDeBlocks(char** arrayDeBlocks, int size) {
 			offset += BLOCK_SIZE;
 		}
 
-		log_debug(logger, "Contenido del bloque actual: %s",
-				contenidoDeBloqueActual);
+//		log_debug(logger, "Contenido del bloque actual: %s",contenidoDeBloqueActual);
 
 		free(contenidoDeBloqueActual);
 		free(path);
 	}
 
-	log_debug(logger, "Contenido total del archivo:");
-	log_debug(logger, contenidoDeArchivo);
+//	log_debug(logger, "Contenido total del archivo:");
+//	log_debug(logger, contenidoDeArchivo);
 
 	log_debug(logger, "<> END: getDatosDeBlocks <>");
 

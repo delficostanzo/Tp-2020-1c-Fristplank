@@ -152,7 +152,6 @@ void procesarNewPokemon(void* args) {
 			free(nuevoArrayDeBloques[i]);
 		}
 
-		//TODO FREE POSICIONESACTUALES
 		free(contenidoActual);
 		free(contenidoNuevo);
 
@@ -210,7 +209,7 @@ void* procesarCatchPokemon(void* args) {
 	char* filePath = string_new();
 	string_append(&filePath,
 			string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES,
-					catch_pokemon->pokemon)); //todo no se si aca estoy perdiendo memoria
+					catch_pokemon->pokemon));
 
 	if (!checkArchivoExiste(filePath)) {
 		free(filePath);
@@ -394,22 +393,118 @@ void* procesarCatchPokemon(void* args) {
 		}
 	}
 
-	return 0;
+
+	else{
+		config_destroy(metadata);
+		cambiarACerrado(filePath);
+		return 0;
+	}
+
+
 }
 
-void procesarGetPokemon(void) {
-//	Este mensaje cumplirá la función de obtener todas las posiciones y su cantidad de un Pokémon específico. Para esto recibirá:
-//	El identificador del mensaje recibido.
-//	Pokémon a devolver.
-//	Al recibir este mensaje se deberán realizar las siguientes operaciones:
-//	Verificar si el Pokémon existe dentro de nuestro Filesystem. Para esto se deberá buscar dentro del directorio Pokemon si existe el archivo con el nombre de nuestro pokémon. En caso de no existir se deberá informar el mensaje sin posiciones ni cantidades.
-//	Verificar si se puede abrir el archivo (si no hay otro proceso que lo esté abriendo). En caso que el archivo se encuentre abierto se deberá finalizar el hilo y reintentar la operación luego de un tiempo definido por configuración.
-//	Obtener todas las posiciones y cantidades de Pokemon requerido.
-//	Cerrar el archivo.
-//	Conectarse al Broker y enviar el mensaje con todas las posiciones y su cantidad.
-//	En caso que se encuentre por lo menos una posición para el Pokémon solicitado se deberá enviar un mensaje al Broker a la Cola de Mensajes LOCALIZED_POKEMON indicando:
-//	ID del mensaje recibido originalmente.
-//	El Pokémon solicitado.
-//	La lista de posiciones y la cantidad de cada una de ellas en el mapa.
-//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
+void* procesarGetPokemon(void* args) {
+
+	log_debug(logger, "<> START: procesarGetPokemon <>");
+
+	t_get_pokemon* get_pokemon = args;
+
+	/* Si el metadata no existe significa que el Pokemon no existe
+	 * devolvemos 0 para que se informe que no se pudo atrapar
+	 */
+	char* filePath = string_new();
+	string_append(&filePath,
+			string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES,
+					get_pokemon->pokemon));
+
+	if (!checkArchivoExiste(filePath)) {
+		t_localized_pokemon* localized_pokemon = malloc(sizeof(t_localized_pokemon));
+		localized_pokemon->lengthOfPokemon = get_pokemon->lengthOfPokemon;
+		localized_pokemon->pokemon = get_pokemon->pokemon;
+		localized_pokemon->listaPosiciones = list_create();
+		localized_pokemon->cantidadPosiciones = 0;
+
+		free(filePath);
+		return localized_pokemon;
+	}
+
+	log_debug(logger, "Pido archivo para el uso. Ruta: %s", filePath);
+	pedirArchivoParaUso(filePath);
+	log_debug(logger, "Obtengo archivo para el uso.");
+
+	t_config* metadata = config_create(filePath);
+	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
+	int sizeArchivo = config_get_int_value(metadata, "SIZE");
+
+	/* HAY BLOQUES
+	 */
+	if (arrayDeBlocks[0] != NULL) {
+		log_debug(logger, "Existen bloques del pokemon.");
+		char* contenidoActual = getDatosDeBlocks(arrayDeBlocks, sizeArchivo);
+		char** posicionesActuales = string_split(contenidoActual, "\n");
+
+		/*INSTANCIO RESPUESTA
+		 */
+		t_localized_pokemon* localized_pokemon = malloc(sizeof(t_localized_pokemon));
+		localized_pokemon->lengthOfPokemon = get_pokemon->lengthOfPokemon;
+		localized_pokemon->pokemon = get_pokemon->pokemon;
+		localized_pokemon->listaPosiciones = list_create();
+
+		int posicionesEncontradas = 0;
+
+		for (int i = 0; posicionesActuales[i] != NULL; i++) {
+			if(string_contains(posicionesActuales[i], "=") && string_contains(posicionesActuales[i], "-")){
+				char** posicionesSeparadasDeCantidad = string_split(posicionesActuales[i], "=");
+				char** posXposY = string_split(posicionesSeparadasDeCantidad[0], "-");
+				log_debug(logger, "Posicion N°%d: (%s,%s)", i + 1, posXposY[0], posXposY[1]);
+
+				t_posicion* posicion = malloc(sizeof(posicion));
+
+				posicion->posicionX = atoi(posXposY[0]);
+				posicion->posicionY = atoi(posXposY[1]);
+
+				list_add(localized_pokemon->listaPosiciones, posicion);
+				posicionesEncontradas++;
+
+				free(posXposY[0]);
+				free(posXposY[1]);
+				free(posicionesSeparadasDeCantidad[0]);
+				free(posicionesSeparadasDeCantidad[1]);
+			}
+
+			free(posicionesActuales[i]);
+		}
+
+		localized_pokemon->cantidadPosiciones = posicionesEncontradas;
+
+
+		//LIBERO ARRAY DE BLOQUES
+		for(int i = 0; arrayDeBlocks[i] != NULL; i++){
+			free(arrayDeBlocks[i]);
+		}
+		free(arrayDeBlocks);
+		//TODO ME ROMPE POR ACA
+		free(contenidoActual);
+		config_save(metadata);
+		config_destroy(metadata);
+		cambiarACerrado(filePath);
+		free(filePath);
+		return localized_pokemon;
+	}
+
+	else{
+		t_localized_pokemon* localized_pokemon = malloc(sizeof(t_localized_pokemon));
+		localized_pokemon->lengthOfPokemon = get_pokemon->lengthOfPokemon;
+		localized_pokemon->pokemon = get_pokemon->pokemon;
+		localized_pokemon->listaPosiciones = list_create();
+		localized_pokemon->cantidadPosiciones = 0;
+
+		free(arrayDeBlocks);
+
+		config_save(metadata);
+		config_destroy(metadata);
+		cambiarACerrado(filePath);
+		free(filePath);
+		return localized_pokemon;
+	}
 }

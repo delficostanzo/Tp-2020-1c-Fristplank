@@ -134,7 +134,7 @@ void escucharGameBoy(){
 				pthread_t hiloProcesarCatchPokemon;
 				pthread_create(&hiloProcesarCatchPokemon, NULL, (void*) procesarCatchPokemon, (void *) catch_pokemon);
 
-				void* encontrado = malloc(sizeof(int));
+				void* encontrado;
 				pthread_join(hiloProcesarCatchPokemon, encontrado);
 
 				if((int) encontrado){
@@ -144,6 +144,7 @@ void escucharGameBoy(){
 					log_debug(logger, "NO se encontro el pokemon en esa posicion.");
 				}
 
+				free(encontrado);
 				//	Todo resultado, sea correcto o no, deberá realizarse conectandose al Broker y enviando un mensaje a la Cola de Mensajes CAUGHT_POKEMON indicando:
 				//	ID del mensaje recibido originalmente.
 				//	Resultado.
@@ -154,10 +155,19 @@ void escucharGameBoy(){
 				free(catch_pokemon);
 				break;
 
-//			case GET_POKEMON:
-//				log_info(logger, "Mensaje GET_POKEMON recibido.");
-//				//TODO iniciar hilo para procesarlo
-//				break;
+			case GET_POKEMON:
+				log_info(logger, "Mensaje GET_POKEMON recibido.");
+
+				t_get_pokemon* get_pokemon = paqueteNuevo->buffer->stream;
+				pthread_t hiloProcesarGetPokemon;
+				pthread_create(&hiloProcesarGetPokemon, NULL, (void*) procesarGetPokemon, (void *) get_pokemon);
+
+				//TODO TENGO QUE VER PORQUE NO MANDA EL GAMEBOY GET
+
+				//ACA TENGO QUE TENER UNA LISTA
+				void* localized;
+				pthread_join(hiloProcesarGetPokemon, localized);
+				break;
 			default:
 				log_info(logger, "Tipo de mensaje invalido.");
 		}
