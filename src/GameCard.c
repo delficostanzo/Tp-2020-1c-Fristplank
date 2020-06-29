@@ -21,12 +21,12 @@ int main(void) {
 	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
 
-	while(!generarSocketsConBroker()){
-		sleep(TIEMPO_DE_REINTENTO_CONEXION);
-	}
+//	while(!generarSocketsConBroker()){
+//		sleep(TIEMPO_DE_REINTENTO_CONEXION);
+//	}
 
-	pthread_t hiloEscuchaSockets;
-	pthread_create(&hiloEscuchaSockets, NULL, (void*) lanzarHilosDeEscucha, NULL);
+//	pthread_t hiloEscuchaSockets;
+//	pthread_create(&hiloEscuchaSockets, NULL, (void*) lanzarHilosDeEscucha, NULL);
 
 //
 	/* SUSCRIBIRSE A LAS COLAS NEW_POKEMON | CATCH_POKEMON | GET_POKEMON */
@@ -38,7 +38,7 @@ int main(void) {
 
 	//terminar_programa(conexion, logger, config);
 	pthread_join(hiloEscuchaGameBoy, NULL);
-	pthread_join(hiloEscuchaSockets, NULL);
+//	pthread_join(hiloEscuchaSockets, NULL);
 
 	finalizar_gamecard();
 }

@@ -26,6 +26,7 @@ int generarSocketsConBroker() {
 
 	t_handshake* handshakeResponse;
 	handshakeResponse = responderHandshake(socketBroker, handshakePropio);
+	free(handshakePropio);
 	free(handshakeResponse);
 
 	socketNewPokemon = crearSocket();
@@ -117,7 +118,7 @@ void escucharGameBoy(){
 				log_debug(logger, "Escuchando conexiones del GameBoy");
 	}
 
-	while(1){
+	for(int i = 0; i < 9; i++){
 		int socketGameBoy = aceptarConexion(socketListenerGameBoy);
 
 		t_handshake* handshakePropio = malloc(sizeof(t_handshake));
@@ -126,6 +127,9 @@ void escucharGameBoy(){
 
 		t_handshake* handshakeGameboy = iniciarHandshake(socketGameBoy, handshakePropio);
 		log_info(logger, "Me conecté con %s", ID_PROCESO[handshakeGameboy->id]);
+
+		free(handshakePropio);
+		free(handshakeGameboy);
 
 		t_paquete* paqueteNuevo = recibir_mensaje(socketGameBoy);
 

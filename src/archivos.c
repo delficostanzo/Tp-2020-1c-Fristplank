@@ -11,19 +11,18 @@ int checkingOpenFile(char* filePath){
 
 	t_config* configFile = config_create (filePath);
 	char* openFile = config_get_string_value(configFile, "OPEN");
+	int retorno;
 
-	if (strcmp("Y",openFile) == 0){
-		//ARCHIVO ABIERTO
-		free(openFile);
-		return 1;
+	if (strcmp("Y",openFile) == 0){ //ARCHIVO ABIERTO
+		retorno = 1;
 	}
-	else{
-		//ARCHIVO CERRADO
-		free(openFile);
-		return 0;
+	else{ //ARCHIVO CERRADO
+		retorno = 0;
 	}
 
+	free(openFile);
 	config_destroy(configFile);
+	return retorno;
 }
 
 void cambiarAAbierto(char* filePath){

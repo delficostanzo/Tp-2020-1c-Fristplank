@@ -108,5 +108,7 @@ char* getPathDeBlock(int bloque) {
 	char* numeroEnString = string_itoa(bloque);
 	string_append(&path, numeroEnString);
 	string_append(&path, ".bin");
+
+	free(numeroEnString);
 	return path;
 }

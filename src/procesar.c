@@ -13,9 +13,10 @@ void procesarNewPokemon(void* args) {
 	t_new_pokemon* new_pokemon = args;
 
 	char* filePath = string_new();
-	string_append(&filePath,
-			string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES,
-					new_pokemon->pokemon));
+	char* finFilePath = string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES, new_pokemon->pokemon);
+	string_append(&filePath, finFilePath);
+
+	free(finFilePath);
 
 	log_debug(logger, "Pido archivo para el uso. Ruta: %s", filePath);
 	pedirArchivoParaUso(filePath);
@@ -70,23 +71,27 @@ void procesarNewPokemon(void* args) {
 
 				free(punteroAViejo); //FREE LINEA VIEJA
 				free(posicionYCantidad[0]); //FREE POSICION VIEJA
+				free(posicionYCantidad[1]);
+				free(posicionYCantidad);
 				free(punteroACantidadVieja); //FREE CANTIDAD VIEJA
 
 				log_debug(logger, "Linea a guardar: %s", posicionesActuales[i]);
 				string_append(&contenidoNuevo, posicionesActuales[i]);
-				//free(posicionesActuales[i]
 			} else {
 				if((string_contains(posicionesActuales[i], "=") && string_contains(posicionesActuales[i], "-"))){
 					log_debug(logger, "No encuentro la posicion. Vuelvo a agregar linea como está.");
 					char* posicionAAgregar = string_from_format("%s\n", posicionesActuales[i]);
 					string_append(&contenidoNuevo, posicionAAgregar);
+					free(posicionAAgregar);
 				}
 				else{
 					log_debug(logger, "Linea basura: %s", posicionesActuales[i]);
 				}
-				//free(posicionAAgregar);
 			}
+			free(posicionesActuales[i]);
 		}
+
+		free(posicionesActuales);
 
 		/* NO ESTA LA POSICION
 		 */
@@ -118,9 +123,9 @@ void procesarNewPokemon(void* args) {
 			if(arrayDeBlocks[i + 1] != NULL){
 				string_append(&listaDeBloques, ",");
 			}
-//			free(arrayDeBlocks[y]);
 		}
 		free(arrayDeBlocks);
+
 		log_debug(logger, "La lista actual de bloques es %s]", listaDeBloques);
 
 		/* PIDO BLOQUES SI ES NECESARIO
@@ -159,6 +164,7 @@ void procesarNewPokemon(void* args) {
 		for(int i = 0; nuevoArrayDeBloques[i] != NULL; i++){
 			free(nuevoArrayDeBloques[i]);
 		}
+		free(nuevoArrayDeBloques);
 
 		free(contenidoActual);
 		free(contenidoNuevo);
@@ -215,9 +221,9 @@ void* procesarCatchPokemon(void* args) {
 	 * devolvemos 0 para que se informe que no se pudo atrapar
 	 */
 	char* filePath = string_new();
-	string_append(&filePath,
-			string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES,
-					catch_pokemon->pokemon));
+	char* finFilePath = string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES, catch_pokemon->pokemon);
+	string_append(&filePath, finFilePath);
+	free(finFilePath);
 
 	if (!checkArchivoExiste(filePath)) {
 		free(filePath);
