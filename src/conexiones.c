@@ -118,7 +118,7 @@ void escucharGameBoy(){
 				log_debug(logger, "Escuchando conexiones del GameBoy");
 	}
 
-	for(int i = 0; i < 9; i++){
+	while(1){
 		int socketGameBoy = aceptarConexion(socketListenerGameBoy);
 
 		t_handshake* handshakePropio = malloc(sizeof(t_handshake));
