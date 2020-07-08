@@ -81,4 +81,17 @@ t_list* entrenadoresReady(void) {
 	return entrenadoresReady;
 }
 
+Entrenador* entrenadorExec(void) {
+	int estaReady(Entrenador* entrenador) {
+		return entrenador->estado == 3;
+	}
+
+	pthread_mutex_lock(&mutexEntrenadores);
+	//si no encuentra ninguno devuelve una lista vacia
+	Entrenador* entrenadorExec = list_find(entrenadores, (erasedTypeFilter)estaReady);
+	pthread_mutex_unlock(&mutexEntrenadores);
+
+	return entrenadorExec;
+}
+
 

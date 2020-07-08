@@ -110,9 +110,10 @@ void* des_serializar_localized_pokemon(int socket_cliente, int size){
 	recorrerStream += sizeof(uint32_t);
 
 	localized_pokemon->listaPosiciones = list_create();
-	int cantidad = (int) (localized_pokemon->cantidadPosiciones);
 
-	for(int i = 0; i < cantidad; i++){
+	int cantidadPosiciones = (int) localized_pokemon->cantidadPosiciones;
+
+	for(int i = 0; i < cantidadPosiciones; i++){
 		t_posicion* posicion = malloc(sizeof(t_posicion));
 
 		memcpy(&(posicion->posicionX), recorrerStream, sizeof(uint32_t));
@@ -131,8 +132,8 @@ void* des_serializar_respuesta_id(int socket_cliente, int size){
 	void* recorrerStream = stream;
 	t_respuesta_id* respuesta_id = malloc(sizeof(t_respuesta_id));
 
-	memcpy(&(respuesta_id->idCorrelativo), recorrerStream, sizeof(uint32_t));
-	recorrerStream += sizeof(uint32_t);
+	memcpy(&(respuesta_id->idCorrelativo), recorrerStream, sizeof(int));
+	recorrerStream += sizeof(int);
 
 	free(stream);
 	return respuesta_id;

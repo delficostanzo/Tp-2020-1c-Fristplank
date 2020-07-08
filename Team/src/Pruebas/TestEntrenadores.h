@@ -13,6 +13,6 @@
 #include "../Model/Mapa.h"
 
 Entrenador* crearEntrenadorEnExec();
-void pasarAExec(Entrenador* entrenador);
+void pasarAExecEntrenador(Entrenador* entrenador);
 
 #endif /* SRC_PRUEBAS_TESTENTRENADORES_H_ */

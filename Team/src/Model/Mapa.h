@@ -17,6 +17,10 @@ char* IP_BROKER;
 int PUERTO_BROKER;
 int puertoTeam;
 
+int ID_UNICO;
+
+int TIEMPO_RECONEXION;
+
 int conexionGameboy;
 int socketGameBoy;
 
@@ -36,6 +40,7 @@ int socketACKAppeared;
 int socketACKCaught;
 int socketACKLocalized;
 
+t_config* config;
 
 //pthread_mutex_t mutexConexionGameboy;
 //pthread_mutex_t mutexSocketGameBoy;
@@ -67,6 +72,7 @@ t_list* idsCorrelativosCaught;
 t_list* idsCorrelativosLocalized;
 
 sem_t semaforoCatch;
+
 
 
 

@@ -107,13 +107,13 @@ void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int Id, 
 }
 
 void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	int sizeListaPosiciones = localized_pokemon->cantidadPosiciones * (2 * sizeof(uint32_t));
+	uint32_t sizeListaPosiciones = localized_pokemon->cantidadPosiciones * (2 * sizeof(uint32_t));
 	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, 1 + localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
 void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int Id, int IdCorrelativo){
-	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(uint32_t), Id, IdCorrelativo, RESPUESTA_ID);
+	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(int), Id, IdCorrelativo, RESPUESTA_ID);
 	enviar(paquete, socket_cliente);
 }
 
@@ -136,10 +136,10 @@ void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cl
 t_paquete* recibir_mensaje(int socket_cliente) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	//sacar while para que no quede en espera activa
 	if(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) < 1){
-		//ESPERO MENSAJE VALIDO
-		//TODO: RECONEXION
+		//ACA ENTRA SI HAY ERROR
+		free(paquete);
+		return NULL;
 	}
 
 	recv(socket_cliente, &(paquete->ID), sizeof(int), MSG_WAITALL);

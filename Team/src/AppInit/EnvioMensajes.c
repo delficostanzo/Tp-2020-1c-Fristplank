@@ -1,7 +1,7 @@
 
 #include "EnvioMensajes.h"
 
-static void agregarPosicionSiLoNecesita(char* nombrePokemon, t_posicion posicion);
+static void agregarPokemonSiLoNecesita(char* nombrePokemon, t_posicion posicion);
 static void agregarComoIdCorrelativoLocalized(int idCorrelativo);
 static void agregarComoIdCorrelativoCaught(int idCorrelativo);
 static void recibirIdCatch(int socketIdCatch, Entrenador* entrenador);
@@ -51,7 +51,7 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 		//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
 		t_posicion* posicion = list_get(localized->listaPosiciones,index);
 
-		agregarPosicionSiLoNecesita(localized->pokemon, *posicion);
+		agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
 
 	}
 
@@ -82,7 +82,7 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
 
-	agregarPosicionSiLoNecesita(appeared->pokemon, *(appeared->posicion));
+	agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
 
 
 //	free(appeared->pokemon);
@@ -97,16 +97,18 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 }
 
 //si tengo ese pokemon como objetivo lo agregego en la lista de pokemones libres
-void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoPoke){
-	pthread_mutex_lock(&mutexObjetivosGlobales);
-	pthread_mutex_lock(&mutexPokemonesLibres);
+void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoPoke){
 
 	t_log* logger = iniciar_logger();
 	//si ese pokemon lo tengo como objetivo
+	pthread_mutex_lock(&mutexObjetivosGlobales);
 	if(buscarPorNombre(nombreNuevoPoke, objetivosGlobales) != NULL) {
+
 		//ya tengo uno de esos pokes libres en el mapa y esta en la misma posicion
+		pthread_mutex_lock(&mutexPokemonesLibres);
 		if(buscarPorNombre(nombreNuevoPoke, pokemonesLibres) != NULL && sonLaMismaPosicion(buscarPorNombre(nombreNuevoPoke, pokemonesLibres)->posicion, posicionNuevoPoke)) {
 			PokemonEnElMapa* pokeExistente = buscarPorNombre(nombreNuevoPoke, pokemonesLibres);
+
 			pokeExistente->cantidad ++;
 		} else {
 			//solo lo agrego a la lista
@@ -115,18 +117,16 @@ void agregarPosicionSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevo
 			setNombreTo(pokemonNuevo, nombreNuevoPoke);
 			setCantidadTo(pokemonNuevo, 1);
 			list_add(pokemonesLibres, pokemonNuevo);
-
 		}
+		pthread_mutex_unlock(&mutexPokemonesLibres);
 	}
+	pthread_mutex_unlock(&mutexObjetivosGlobales);
 
+	pthread_mutex_lock(&mutexPokemonesLibres);
 	log_info(logger, "Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
-	if(buscarPorNombre(nombreNuevoPoke, objetivosGlobales) != NULL){
-		log_info(logger, "La cantidad de pokemones %s en esa posicion es: %d",nombreNuevoPoke, (buscarPorNombre(nombreNuevoPoke, pokemonesLibres))->cantidad);
-	}
+	pthread_mutex_unlock(&mutexPokemonesLibres);
 
 	destruirLog(logger);
-	pthread_mutex_unlock(&mutexObjetivosGlobales);
-	pthread_mutex_unlock(&mutexPokemonesLibres);
 }
 
 
