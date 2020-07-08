@@ -6,6 +6,15 @@
 
 
 void iniciarVariables(){
+	IP_BROKER = config_get_string_value(config, "IP_BROKER");
+	PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
+
+	puertoTeam = config_get_int_value(config, "PUERTO_TEAM");
+
+	ID_UNICO = config_get_int_value(config, "ID_UNICO");
+
+	TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
+
 //	pthread_mutex_init(&mutexConexionGameboy, NULL);
 //	pthread_mutex_init(&mutexSocketGameBoy, NULL);
 //	pthread_mutex_init(&mutexConexionBroker, NULL);
@@ -29,4 +38,7 @@ void iniciarVariables(){
 
 	idsCorrelativosCaught = list_create();
 	idsCorrelativosLocalized = list_create();
+
+
+
 }

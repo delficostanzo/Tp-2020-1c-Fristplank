@@ -29,16 +29,18 @@ void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
 void funcionesDelEntrenador(Entrenador* unEntrenador){
 	t_log* logger = iniciar_logger();
 
+	pthread_mutex_lock(&(unEntrenador->mutexEntrenador));
+
 	int noEsteEnExit() {
 		return unEntrenador->estado != 5;
 	}
-
 	//bloqueo esperando que otro me active y me da el objetivo
 	while(noEsteEnExit) {
 		//el unlock de este mutex lo va a hacer el planificador cuando este en exec
 		//el entrenador no se entera
-		pthread_mutex_lock(&unEntrenador->mutexEntrenador);
 		cumplirObjetivo(unEntrenador);
+		pthread_mutex_lock(&(unEntrenador->mutexEntrenador));
+
 	}
 
 	destruirLog(logger);

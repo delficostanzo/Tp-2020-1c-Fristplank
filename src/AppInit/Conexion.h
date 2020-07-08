@@ -12,7 +12,8 @@
 //}t_par_de_sockets;
 
 void* escucharGameBoy(void);
-void* generarSocketsConBroker(void);
+int generarSocketsConBroker();
+void crearHilosDeEscucha();
 void* escucharColaAppearedPokemonGameBoy(void);
 void* escucharColaAppearedPokemon(void);
 void* escucharColaCaughtPokemon(void);

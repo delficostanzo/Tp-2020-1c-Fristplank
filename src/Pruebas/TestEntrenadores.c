@@ -43,7 +43,7 @@ Entrenador* crearEntrenadorEnExec(){
 	return entrenadorNuevo;
 }
 
-void pasarAExec(Entrenador* entrenador) {
+void pasarAExecEntrenador(Entrenador* entrenador) {
 
 	t_posicion posicionLibre;
 	posicionLibre.posicionX = 8;
