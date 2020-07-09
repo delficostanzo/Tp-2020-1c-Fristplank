@@ -26,8 +26,9 @@ int main(void) {
 
 	char* IP_BROKER = config_get_string_value(config, "IP_BROKER");
 	int PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
+	log_info(logger, "Lei la IP %s y PUERTO %d", IP_BROKER, PUERTO_BROKER);
 
-	log_info(logger, "Lei la IP %s y PUERTO %d\n", IP_BROKER, PUERTO_BROKER);
+
 
 	//crear conexion, un socket conectado
 	int conexion = crearSocket();
@@ -39,9 +40,19 @@ int main(void) {
 	//se queda bloqueado esperando que los procesos se conecten
 	int teamSocket = aceptarConexion(conexion);
 
-	id_proceso idProcesoConectado;
-	idProcesoConectado = iniciarHandshake(teamSocket, BROKER);
-	log_info(logger, "El id del proceso con el que me conecte es: %d", idProcesoConectado);
+	t_handshake* handshakePropio = malloc(sizeof(t_handshake));
+	handshakePropio->id = BROKER;
+	handshakePropio->idUnico = 1;
+
+
+	t_handshake* handshakeResponse;
+	handshakeResponse = iniciarHandshake(teamSocket, handshakePropio);
+
+	id_proceso idProcesoConectado = handshakeResponse->id;
+	log_info(logger, "El id del proceso con el que me conecte es: %d", handshakeResponse->id);
+
+	free(handshakePropio);
+	free(handshakeResponse);
 
 	int suscripcionAppeared, suscripcionCaught, suscripcionLocalized, socketGet, socketCatch, socketIdCatch;
 	//int socketIdGet, socketACKAppeared;
@@ -74,6 +85,8 @@ int main(void) {
 		break;
 	}
 
+	recibirGetDesde(socketGet);
+	recibirGetDesde(socketGet);
 	recibirGetDesde(socketGet);
 
 	envioAppearedPrueba1(suscripcionAppeared);
@@ -117,10 +130,10 @@ void recibirACK(int socketACK){
 
 void envioAppearedPrueba1(int socketSuscripcionAppeared) {
 	t_log* logger = iniciar_logger();
-	char* nombrePoke = "Pikachu";
+	//char* nombrePoke = "Pikachu";
 
 	t_appeared_pokemon* appearedPrueba = malloc(sizeof(t_appeared_pokemon));
-	appearedPrueba->pokemon = nombrePoke;
+	appearedPrueba->pokemon = string_from_format("Pikachu");
 	appearedPrueba->lengthOfPokemon = strlen(appearedPrueba->pokemon);
 
 	appearedPrueba->posicion = malloc(sizeof(t_posicion));
@@ -134,10 +147,9 @@ void envioAppearedPrueba1(int socketSuscripcionAppeared) {
 
 void envioAppearedPrueba2(int socketSuscripcionAppeared) {
 	t_log* logger = iniciar_logger();
-	char* nombrePoke = "Charmander";
 
 	t_appeared_pokemon* appearedPrueba = malloc(sizeof(t_appeared_pokemon));
-	appearedPrueba->pokemon = nombrePoke;
+	appearedPrueba->pokemon = string_from_format("Charmander");
 	appearedPrueba->lengthOfPokemon = strlen(appearedPrueba->pokemon);
 
 	appearedPrueba->posicion = malloc(sizeof(t_posicion));
@@ -152,10 +164,8 @@ void envioAppearedPrueba2(int socketSuscripcionAppeared) {
 
 void envioLocalizedPrueba1(int socketSuscripcionLocalized) {
 	t_log* logger = iniciar_logger();
-	char* nombrePoke = "Ganger";
-
 	t_localized_pokemon* localizedPrueba = malloc(sizeof(t_localized_pokemon));
-	localizedPrueba->pokemon = nombrePoke;
+	localizedPrueba->pokemon = string_from_format("Ganger");
 	localizedPrueba->lengthOfPokemon = strlen(localizedPrueba->pokemon);
 
 	t_posicion* posicion1 = malloc(sizeof(t_posicion));

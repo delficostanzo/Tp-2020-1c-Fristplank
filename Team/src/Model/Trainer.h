@@ -43,7 +43,13 @@ typedef struct {
 	int ciclosCPUConsumido;
 	int idCorrelativoDeEspera;
 	pthread_mutex_t mutexEntrenador;
+	//pthread_mutex_t mutexEstado;
 }Entrenador;
+
+typedef enum{
+	FIFO = 1,
+	ROUNDROBIN = 2
+}Algoritmo; //NO LO USO ?
 
 Entrenador* newEntrenador();
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
@@ -54,6 +60,7 @@ Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario
 //void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado);
 void pasarADormido(Entrenador* entrenador);
+int noEstaEnExit(Entrenador* entrenador);
 void estadoSiAtrapo(Entrenador* entrenador);
 void pasarABlockEsperando(Entrenador* entrenador);
 int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);

@@ -3,15 +3,18 @@
 
 
 void crearHiloParaEntrenador(Entrenador* entrenador);
-void funcionesDelEntrenador(Entrenador* entrenador);
+void funcionesDelEntrenador(void* entrenador);
 
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
 
 //esta funcion agarra una lista de entrenadores e inicializa cada hilo de las estructuras de los entrenadores
-void crearHilosDeEntrenadores(t_list* entrenadores){
+void crearHilosDeEntrenadores(){
+
+	pthread_mutex_lock(&mutexEntrenadores);
 	for(int index=0; index < list_size(entrenadores); index ++) {
 		crearHiloParaEntrenador(list_get(entrenadores, index));
 	}
+	pthread_mutex_unlock(&mutexEntrenadores);
 }
 
 // esta funcion agarra un entrenador del tipo Entrenador y lo convierte en un hilo (este seria el estado NEW)
@@ -20,29 +23,24 @@ void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
 	pthread_t hilo = entrenador->hiloEntrenador;
 
 	// pthread_create(el hilo creado, por ahora NULL, la funcion (micromain) donde el hilo hace todas sus tareas, los parametros que usa esa funcion)
-	pthread_create(&hilo, NULL, (erasedType)funcionesDelEntrenador, entrenador);
+	pthread_create(&hilo, NULL, (erasedType)funcionesDelEntrenador, (void*)entrenador);
 	pthread_detach(hilo);
 }
 
 //la funcion funcionesDelEntrenador tendria que estar en el Team.c, lo dejo aca por ahora
 //ENTRENADOR LLEGA VACIO
-void funcionesDelEntrenador(Entrenador* unEntrenador){
-	t_log* logger = iniciar_logger();
+void funcionesDelEntrenador(void* unEntrenador){
 
-	pthread_mutex_lock(&(unEntrenador->mutexEntrenador));
+	Entrenador* entrenador = (Entrenador*) unEntrenador;
 
-	int noEsteEnExit() {
-		return unEntrenador->estado != 5;
-	}
 	//bloqueo esperando que otro me active y me da el objetivo
-	while(noEsteEnExit) {
+	while(entrenador->estado != 5) {
 		//el unlock de este mutex lo va a hacer el planificador cuando este en exec
 		//el entrenador no se entera
-		cumplirObjetivo(unEntrenador);
-		pthread_mutex_lock(&(unEntrenador->mutexEntrenador));
-
+		pthread_mutex_lock(&(entrenador->mutexEntrenador));
+		cumplirObjetivo(entrenador);
 	}
 
-	destruirLog(logger);
+	quickLog("un entrenador ya esta en exit");
 }
 

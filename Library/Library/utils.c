@@ -87,7 +87,7 @@ void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int Id, 
 }
 
 void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon(appeared_pokemon, 1 + appeared_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, APPEARED_POKEMON);
+	t_paquete* paquete = crearPaqueteCon((void*) appeared_pokemon, 1 + appeared_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, APPEARED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 

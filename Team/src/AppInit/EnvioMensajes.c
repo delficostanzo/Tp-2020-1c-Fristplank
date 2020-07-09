@@ -24,6 +24,7 @@ void enviarGetDesde(int socketGet){
 
 		//free(getPoke); ->DOUBLE FREE
 	}
+
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
 }
 
@@ -42,6 +43,7 @@ void agregarComoIdCorrelativoLocalized(int idCorrelativo){
 }
 
 t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
+	t_log* logger = iniciar_logger();
 	t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
 	t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
 	//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
@@ -55,6 +57,9 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 
 	}
 
+	log_info(logger, "Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
+
+	destruirLog(logger);
 	return paqueteLocalized;
 }
 
@@ -78,7 +83,7 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 
 	t_log* logger = iniciar_logger();
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
-	quickLog("Lo recibe el appeared");
+	quickLog("Recibe el appeared");
 	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
 
@@ -90,7 +95,7 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 //	free(appeared);
 //	free(paqueteAppeared->buffer);
 //	free(paqueteAppeared);
-	log_info(logger, "Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);;
+	log_info(logger, "Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
 	destruirLog(logger);
 	return paqueteAppeared;
@@ -102,7 +107,9 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 	t_log* logger = iniciar_logger();
 	//si ese pokemon lo tengo como objetivo
 	pthread_mutex_lock(&mutexObjetivosGlobales);
-	if(buscarPorNombre(nombreNuevoPoke, objetivosGlobales) != NULL) {
+	t_list* pokemonesAAtrapar = objetivosGlobales;
+	//en el nombre de los globales hay cualquier cosa
+	if(buscarPorNombre(nombreNuevoPoke, pokemonesAAtrapar) != NULL) {
 
 		//ya tengo uno de esos pokes libres en el mapa y esta en la misma posicion
 		pthread_mutex_lock(&mutexPokemonesLibres);
@@ -238,7 +245,7 @@ void procesarEspera(Entrenador*  entrenador, uint32_t atrapo){
 		pthread_mutex_lock(&mutexObjetivosGlobales);
 		//lo agrego devuelta a la lista de objetivos globales para que otro entrenador lo atrape
 		setPokemonA(objetivosGlobales, pokemonAtrapado);
-		pthread_mutex_lock(&mutexObjetivosGlobales);
+		pthread_mutex_unlock(&mutexObjetivosGlobales);
 
 		pasarADormido(entrenador);
 	}

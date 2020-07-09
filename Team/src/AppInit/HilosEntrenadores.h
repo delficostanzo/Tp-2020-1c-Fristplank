@@ -10,6 +10,6 @@
 
 typedef void* Data;
 
-void crearHilosDeEntrenadores(t_list* entrenadores);
+void crearHilosDeEntrenadores();
 
 #endif /* SRC_APPINIT_HILOSENTRENADORES_H_ */

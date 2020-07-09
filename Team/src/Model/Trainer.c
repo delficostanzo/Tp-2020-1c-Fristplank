@@ -1,6 +1,6 @@
 #include "Trainer.h"
 
-static int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
+int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
 void pasarADeadlock(Entrenador* entrenador);
 void pasarAExit(Entrenador* entrenador);
 static int sumaCantidades(t_list* pokemones);
@@ -144,6 +144,10 @@ void pasarAExit(Entrenador* entrenador) {
 	entrenador->estado = 5;
 }
 
+int noEstaEnExit(Entrenador* entrenador){
+	return entrenador->estado != 5;
+}
+
 void pasarABlockEsperando(Entrenador* entrenador) {
 	t_log* logger = iniciar_logger();
 	entrenador->estado = 4;
@@ -153,24 +157,6 @@ void pasarABlockEsperando(Entrenador* entrenador) {
 }
 
 /////////////INTERCAMBIO////////////////
-//se busca al entrenador que necesite el que yo tengo de mas y tenga el que yo necesito
-//si no lo encuentra devuelve NULL
-Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado) {
-	t_list* entrenadoresPosibles = entrenadoresBloqueadosPorDeadlock();
-
-	int entrenadorCumpleCondicion(Entrenador* entrenador) {
-		return puedeIntercambiar(entrenador, pokemonInnecesario, pokemonNecesitado);
-	}
-	//si hay otro entrenador en deadlock
-	if(list_is_empty(entrenadoresPosibles) != 1){
-		t_list* entrenadoresQueCumplen = list_filter(entrenadoresPosibles, (erasedTypeFilter)entrenadorCumpleCondicion);
-		if(list_is_empty(entrenadoresQueCumplen) != 1) {
-			//agarra el primero que cumpla si al menos hay 1
-			return list_get(entrenadoresQueCumplen, 0);
-		}
-	}
-	return NULL;
-}
 
 int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado){
 	//condicione del entrenador preguntado

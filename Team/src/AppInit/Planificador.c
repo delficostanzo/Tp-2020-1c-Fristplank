@@ -1,43 +1,34 @@
 
 #include "Planificador.h"
 
-static bool noHayEntrenadoresEnExec(t_list* entrenadores);
+//static bool noHayEntrenadoresEnExec(t_list* entrenadores);
 static void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio);
 static void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 static Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre);
+static Entrenador* buscarEntrenadorSegun(char* algoritmo);
+static int noEstanTodosEnExit();
 
 typedef bool(*erasedTypeFilter)(void*);
 
 
 void planificarEntrenadores(){
 
-	typedef void*(*erasedTypeMap)(void*);
-	t_log* logger = iniciar_logger();
 
-	int noEstanEnExit(){
-		int noEstaEnExit(Entrenador* entrenador){
-			return entrenador->estado != 5;
-		}
-		pthread_mutex_lock(&mutexEntrenadores);
-		return list_all_satisfy(entrenadores, (erasedTypeFilter)noEstaEnExit);
-		pthread_mutex_unlock(&mutexEntrenadores);
-	}
-
-	while(noEstanEnExit){ // lista de entrenadores que no estan en exit
-		quickLog("Se pasan todos los entrenadores a Ready");
+	while(noEstanTodosEnExit()){ // lista de entrenadores que no estan en exit
 		// se pasan entrenadores a READY segun su condicion
 		pasarAReady();
 		pasarAExec();
-		log_info(logger, "Ya se cambiaron a ready todos los entrenadores segun condicion");
 
 	}
 
+}
 
-
-	//while(siNoEstanTodosEnExit)
-
-	//pasarAReady(entrenadoresPosibles);
-	Entrenador* entrenadorAEjecutar = entrenadorExec();
+int noEstanTodosEnExit(){
+	typedef bool(*erasedType)(void*);
+	pthread_mutex_lock(&mutexEntrenadores);
+	int noTodosExit = list_any_satisfy(entrenadores, (erasedType)noEstaEnExit);
+	pthread_mutex_unlock(&mutexEntrenadores);
+	return noTodosExit;
 }
 
 //paso a ready los entrenadores que esten mas cerca
@@ -49,32 +40,33 @@ void pasarAReady(){
 		return entrenador->estado==1 || (entrenador->estado==4 && entrenador->motivo==2);
 	}
 	pthread_mutex_lock(&mutexEntrenadores);
-	log_info(logger, "Verifico si hay entrenadores posibles para pasar a ready");
 	t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
 	pthread_mutex_unlock(&mutexEntrenadores);
 
-	pthread_mutex_lock(&mutexPokemonesLibres);
-	//asignamos objetivo al entrenador mas cercano
-	for(int index=0; index < list_size(pokemonesLibres); index++){
+	if(list_is_empty(entrenadoresPosibles) != 1) {
+		pthread_mutex_lock(&mutexPokemonesLibres);
+		//asignamos objetivo al entrenador mas cercano
+		for(int index=0; index < list_size(pokemonesLibres); index++){
 
 
-		PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
-		Entrenador* entrenadorAReady =  asignarObjetivoA(entrenadoresPosibles, pokemonLibre);
-		// cambio de estado al entrenador, pasa a ready
-		entrenadorAReady->estado = 2;
-		// ese poke se saca de la lista de pokes libres porque ya fue asginado
-		// TODO: aca se supone que solo cambia la cantidad en la lista, en el entrenador tiene que quedar como cant 1
-		disminuirCantidadPokemones(pokemonLibre, pokemonesLibres);
+			PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
+			Entrenador* entrenadorAReady =  asignarObjetivoA(entrenadoresPosibles, pokemonLibre);
+			// cambio de estado al entrenador, pasa a ready
+			entrenadorAReady->estado = 2;
+			// ese poke se saca de la lista de pokes libres porque ya fue asginado
+			// TODO: aca se supone que solo cambia la cantidad en la lista, en el entrenador tiene que quedar como cant 1
+			disminuirCantidadPokemones(pokemonLibre, pokemonesLibres);
 
-		pthread_mutex_lock(&mutexObjetivosGlobales);
-		// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
-		disminuirCantidadPokemones(pokemonLibre, objetivosGlobales);
-		pthread_mutex_unlock(&mutexObjetivosGlobales);
+			pthread_mutex_lock(&mutexObjetivosGlobales);
+			// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
+			disminuirCantidadPokemones(pokemonLibre, objetivosGlobales);
+			log_info(logger, "Se paso a ready el entrenador");
+			pthread_mutex_unlock(&mutexObjetivosGlobales);
+
+		}
+		pthread_mutex_unlock(&mutexPokemonesLibres);
 
 	}
-	pthread_mutex_unlock(&mutexPokemonesLibres);
-
-	log_info(logger, "Se paso a ready el entrenador");
 	destruirLog(logger);
 }
 
@@ -82,7 +74,6 @@ Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemo
 	Entrenador* entrenadorAAsignar = entrenadorMasCercanoA(pokemonLibre, entrenadoresAMover);
 	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
 	movimiento->pokemonNecesitado = pokemonLibre;
-	//TODO: me tira error aca y no se porque, sera por el malloc?
 	entrenadorAAsignar->movimientoEnExec = movimiento;
 	entrenadorAAsignar->movimientoEnExec->objetivo = 1;
 
@@ -92,10 +83,12 @@ Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemo
 void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes){
 	typedef bool(*erasedTypeRemove)(void*);
 	PokemonEnElMapa* pokeComoObj = buscarPorNombre(pokemonLibre->nombre, listaPokes);
+	//siempre va a encontrar a ese objetivo porque si estaba libre estaba como obje
 
 	bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj){
 		return pokeComoObj->cantidad == 0;
 	}
+
 
 	// disminuir la cantidad de ese poke libre en los objetivos globales
 	pokeComoObj->cantidad -= 1;
@@ -112,29 +105,41 @@ void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPoke
 
 //solo se puede pasar un entrenador a estado EXEC si no hay ninguno en estado EXEC
 void pasarAExec(){
-	pthread_mutex_lock(&mutexEntrenadores);
-	//FIFO
-	Entrenador* entrenador = list_get(entrenadores, 0);
-	if(noHayEntrenadoresEnExec(entrenadores) == 1){
-			entrenador->estado = 3;
-			pthread_mutex_unlock(&entrenador->mutexEntrenador);
+
+	Entrenador* entrenador = buscarEntrenadorSegun(ALGORITMO);
+
+	if(entrenadorExec() == NULL){
+		entrenador->estado = 3;
+		pthread_mutex_unlock(&(entrenador->mutexEntrenador));
 	}
 
-	pthread_mutex_unlock(&mutexEntrenadores);
+}
+
+Entrenador* buscarEntrenadorSegun(char* algoritmo) {
+	if(strcmp(algoritmo, "FIFO") == 0){
+		//el primer entrenador de los ready es el que esta en indice 0
+		Entrenador* entrenador = list_get(entrenadoresReady(), 0);
+		return entrenador;
+	} else {//ROUND ROBIN
+		//TODO
+		return NULL;
+	}
 }
 
 
-//chequeo que no hay entrenadores en exec
-bool noHayEntrenadoresEnExec(t_list* entrenadores){
-	typedef bool(*erasedType)(void*);
-	t_list* entrenadoresEnReady = entrenadoresReady();
+////chequeo que no hay entrenadores en exec
+//bool noHayEntrenadoresEnExec(t_list* entrenadores){
+//	typedef bool(*erasedType)(void*);
+//	t_list* entrenadoresEnReady = entrenadoresReady();
+//
+//	bool noEstaEnExec(Entrenador* entrenador){
+//		return entrenador->estado != 3;
+//	}
+//	//determino si todos los entrenadores cumplen que no haya ninguno en estado exec
+//	return list_all_satisfy(entrenadoresEnReady, (erasedType)noEstaEnExec);
+//}
 
-	bool noEstaEnExec(Entrenador* entrenador){
-		return entrenador->estado != 3;
-	}
-	//determino si todos los entrenadores cumplen que no haya ninguno en estado exec
-	return list_all_satisfy(entrenadoresEnReady, (erasedType)noEstaEnExec);
-}
+
 ///////EXEC///////////
 
 void cumplirObjetivo(Entrenador* entrenador){
@@ -162,6 +167,27 @@ void cumplirObjetivo(Entrenador* entrenador){
 void intercambiarPokemonesCon(Entrenador* entrenadorDeIntercambio){
 	//TODO
 }
+
+//se busca al entrenador que necesite el que yo tengo de mas y tenga el que yo necesito
+//si no lo encuentra devuelve NULL
+Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado) {
+	t_list* entrenadoresPosibles = entrenadoresBloqueadosPorDeadlock();
+
+	int entrenadorCumpleCondicion(Entrenador* entrenador) {
+		return puedeIntercambiar(entrenador, pokemonInnecesario, pokemonNecesitado);
+	}
+	//si hay otro entrenador en deadlock
+	if(list_is_empty(entrenadoresPosibles) != 1){
+		t_list* entrenadoresQueCumplen = list_filter(entrenadoresPosibles, (erasedTypeFilter)entrenadorCumpleCondicion);
+		if(list_is_empty(entrenadoresQueCumplen) != 1) {
+			//agarra el primero que cumpla si al menos hay 1
+			return list_get(entrenadoresQueCumplen, 0);
+		}
+	}
+	return NULL;
+}
+
+
 
 //mientras este en ready va a hacer que se fije entre todos los demas que estan ready y pasar a ready el mas cercano
 //void moverAReady() {
@@ -192,10 +218,12 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 	entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
 	entrenador->posicion = &(pokemon->posicion);
 
-	pasarABlockEsperando(entrenador);
-
 	//el socket ya esta conectado con el broker en Conexion
 	sem_wait(&semaforoCatch);
 	enviarCatchDesde(entrenador);
 	sem_post(&semaforoCatch);
+
+	pasarABlockEsperando(entrenador);
+	quickLog("Se paso a estado bloqueado esperando respuesta");
+
 }
