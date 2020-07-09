@@ -54,7 +54,6 @@ void pasarAReady(){
 			// cambio de estado al entrenador, pasa a ready
 			entrenadorAReady->estado = 2;
 			// ese poke se saca de la lista de pokes libres porque ya fue asginado
-			// TODO: aca se supone que solo cambia la cantidad en la lista, en el entrenador tiene que quedar como cant 1
 			disminuirCantidadPokemones(pokemonLibre, pokemonesLibres);
 
 			pthread_mutex_lock(&mutexObjetivosGlobales);
@@ -73,7 +72,7 @@ void pasarAReady(){
 Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre){
 	Entrenador* entrenadorAAsignar = entrenadorMasCercanoA(pokemonLibre, entrenadoresAMover);
 	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
-	movimiento->pokemonNecesitado = pokemonLibre;
+	movimiento->pokemonNecesitado = asignarPokemonCopia(pokemonLibre);
 	entrenadorAAsignar->movimientoEnExec = movimiento;
 	entrenadorAAsignar->movimientoEnExec->objetivo = 1;
 
@@ -91,6 +90,7 @@ void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPoke
 
 
 	// disminuir la cantidad de ese poke libre en los objetivos globales
+	//TODO
 	pokeComoObj->cantidad -= 1;
 
 	// (sacarlo si cant = 0)
