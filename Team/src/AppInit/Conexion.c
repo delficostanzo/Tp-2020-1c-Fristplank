@@ -56,7 +56,7 @@ int generarSocketsConBroker() {
 	//socketACKAppeared = crearSocket();
 
 	suscripcionLocalized = crearSocket();
-	socketACKLocalized = crearSocket();
+	//socketACKLocalized = crearSocket();
 
 	socketCatch = crearSocket();
 	socketIdCatch = crearSocket();
@@ -99,12 +99,12 @@ int generarSocketsConBroker() {
 	//ESCUCHA LOCALIZED Y ENVIA EL ACK
 	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("Suscripto a la cola de localized_pokemon");
-		if (conectarA(socketACKLocalized, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("Socket de ACK Localized Pokemon guardado.");
-
-		} else{
-			conexionCorrecta = -1;
-		 }
+//		if (conectarA(socketACKLocalized, IP_BROKER, PUERTO_BROKER)) {
+//			quickLog("Socket de ACK Localized Pokemon guardado.");
+//
+//		} else{
+//			conexionCorrecta = -1;
+//		 }
 
 	} else{
 		conexionCorrecta = -1;
@@ -198,7 +198,7 @@ void* escucharColaLocalizedPokemon(){
 
 		t_paquete* paqueteNuevo = recibirLocalizedYGuardalos(suscripcionLocalized);
 
-		enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
-		quickLog("Pudo enviar el ACK del localized");
+//		enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
+//		quickLog("Pudo enviar el ACK del localized");
 	}
 }

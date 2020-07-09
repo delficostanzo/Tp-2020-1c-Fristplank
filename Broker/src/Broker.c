@@ -55,8 +55,8 @@ int main(void) {
 	free(handshakeResponse);
 
 	int suscripcionAppeared, suscripcionCaught, suscripcionLocalized, socketGet, socketCatch, socketIdCatch;
-	//int socketIdGet, socketACKAppeared;
-	int socketACKCaught, socketACKLocalized;
+	//int socketIdGet, socketACKAppeared, socketACKLocalized;
+	int socketACKCaught;
 
 	switch(idProcesoConectado) {
 	case TEAM:
@@ -69,7 +69,7 @@ int main(void) {
 		//socketACKAppeared = aceptarConexion(conexion);
 
 		suscripcionLocalized = aceptarConexion(conexion);
-		socketACKLocalized = aceptarConexion(conexion);
+		//socketACKLocalized = aceptarConexion(conexion);
 
 		socketCatch = aceptarConexion(conexion);
 		socketIdCatch = aceptarConexion(conexion);
@@ -93,12 +93,13 @@ int main(void) {
 	//recibirACK(socketACKAppeared);
 
 	envioLocalizedPrueba1(suscripcionLocalized);
-	recibirACK(socketACKLocalized);
+	//recibirACK(socketACKLocalized);
 
 	if(recibirCatchDesde(socketCatch)){
 		enviarIdCatchA(socketIdCatch);
 	}
 
+	sleep(5);
 	enviarCaughtA(suscripcionCaught);
 	//envioAppearedPrueba2(suscripcionAppeared);
 	recibirACK(socketACKCaught);
