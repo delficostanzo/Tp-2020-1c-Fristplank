@@ -86,6 +86,7 @@ void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado){
 }
 
 void estadoSiAtrapo(Entrenador* entrenador) {
+	quickLog("El entrenador va a cambiar de estado por atrapar un pokemon");
 	if(sonIguales(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		//ya agarro todos sus pokemones
 		pasarAExit(entrenador);
@@ -95,6 +96,7 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	}
 	else {
 		pasarADormido(entrenador);
+		quickLog("Quedo bloqueado dormido el entrenador");
 	}
 }
 
@@ -103,10 +105,11 @@ int sonIguales(t_list* objetivos, t_list* atrapados) {
 	int estaEnAtrapados(PokemonEnElMapa* objetivo) {
 
 		int esUnoDeLosObje(PokemonEnElMapa* atrapado){
-			return atrapado->nombre == objetivo->nombre;
+			return strcmp(atrapado->nombre, objetivo->nombre) == 0;
 		}
 
 		PokemonEnElMapa* pokemonAtrapado = list_find(atrapados, (erasedTypeFilter)esUnoDeLosObje);
+		//TODO ACA ROMPE
 		return pokemonAtrapado->cantidad == objetivo->cantidad;
 	}
 
