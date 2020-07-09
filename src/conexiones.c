@@ -160,14 +160,14 @@ void escucharGameBoy(){
 
 				enviar_appeared_pokemon(appeared_pokemon, socketAppearedPokemon, -1, paqueteNuevo->ID);
 				*/
-				free(new_pokemon->posicion);
-				free(new_pokemon->pokemon);
+				free(new_pokemon->posicion); //ESTO SACAR CUANDO ENVIE APPEARED
+				free(new_pokemon->pokemon); //ESTO SACAR CUANDO ENVIE APPEARED
 				free(new_pokemon);
 				break;
 
 			case CATCH_POKEMON:
 				log_info(logger, "Mensaje CATCH_POKEMON recibido.");
-//				//TODO iniciar hilo para procesarlo
+
 				t_catch_pokemon* catch_pokemon = paqueteNuevo->buffer->stream;
 				pthread_t hiloProcesarCatchPokemon;
 				pthread_create(&hiloProcesarCatchPokemon, NULL, (void*) procesarCatchPokemon, (void *) catch_pokemon);
@@ -175,7 +175,7 @@ void escucharGameBoy(){
 				void* encontrado;
 				pthread_join(hiloProcesarCatchPokemon, encontrado);
 
-				if((int) encontrado){
+				if(encontrado == 1){
 					log_debug(logger, "Se encontro el pokemon en esa posicion.");
 				}
 				else{
@@ -204,9 +204,9 @@ void escucharGameBoy(){
 				pthread_join(hiloProcesarGetPokemon, &localized);
 				t_localized_pokemon* localized_pokemon = localized;
 
-				log_debug(logger, "TEST: Pokemon a enviar: %s", localized_pokemon->pokemon);
-				log_debug(logger, "TEST: Cantidad a enviar: %d", localized_pokemon->cantidadPosiciones);
 				//enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID);
+				free(get_pokemon);
+
 				break;
 			default:
 				log_info(logger, "Tipo de mensaje invalido.");

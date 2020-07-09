@@ -24,4 +24,6 @@ void* escucharColaNewPokemon(void);
 void* escucharColaCatchPokemon(void);
 void* escucharColaGetPokemon(void);
 
+void reconectarABroker(void);
+
 #endif /* SRC_CONEXIONES_H_ */

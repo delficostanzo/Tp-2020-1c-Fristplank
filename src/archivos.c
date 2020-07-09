@@ -9,36 +9,42 @@
 
 int checkingOpenFile(char* filePath){
 
-	t_config* configFile = config_create (filePath);
+	t_config* configFile = config_create(filePath);
 	char* openFile = config_get_string_value(configFile, "OPEN");
 	int retorno;
 
-	if (strcmp("Y",openFile) == 0){ //ARCHIVO ABIERTO
+	if (strcmp("Y", openFile) == 0){ //ARCHIVO ABIERTO
 		retorno = 1;
 	}
 	else{ //ARCHIVO CERRADO
 		retorno = 0;
 	}
 
+	log_debug(logger, "Antes de destruir config en checkingOpenFile");
 	free(openFile);
 	config_destroy(configFile);
+	log_debug(logger, "Despues de destruir config en checkingOpenFile");
 	return retorno;
 }
 
 void cambiarAAbierto(char* filePath){
-
-	t_config* metadata = config_create(filePath);
-	config_set_value(metadata, "OPEN", "Y");
-	config_save(metadata);
-	config_destroy(metadata);
-
+	log_debug(logger, "Antes de crear config en cambiarAAbierto");
+	log_debug(logger, "path de config: %s", filePath);
+	t_config* metadataArchivoAAbrir = config_create(filePath);
+	log_debug(logger, "Despues de crear config en cambiarAAbierto");
+	config_set_value(metadataArchivoAAbrir, "OPEN", "Y");
+	config_save(metadataArchivoAAbrir);
+	config_destroy(metadataArchivoAAbrir);
 }
 
 void cambiarACerrado(char* filePath){
-	t_config* metadata = config_create(filePath);
-	config_set_value(metadata, "OPEN", "N");
-	config_save(metadata);
-	config_destroy(metadata);
+	log_debug(logger, "Antes de crear config en cambiarACerrado");
+	log_debug(logger, "path de config: %s", filePath);
+	t_config* metadataArchivoACerrar = config_create(filePath);
+	log_debug(logger, "Despues de crear config en cambiarACerrado");
+	config_set_value(metadataArchivoACerrar, "OPEN", "N");
+	config_save(metadataArchivoACerrar);
+	config_destroy(metadataArchivoACerrar);
 }
 
 void crearArchivo(char* filePath){
@@ -88,10 +94,12 @@ void pedirArchivoParaUso(char* filePath){
 			abierto = checkingOpenFile(filePath);
 			if (!abierto){ // Está cerrado -> abro y le cambio el OPEN = Y. DONE
 				cambiarAAbierto(filePath);
+				log_debug(logger, "Se logró abrir el archivo.");
 				pthread_mutex_unlock(&semaforoOpen);
 			}
 			else{ //Si está abierto que el hilo duerma. DONE
 				pthread_mutex_unlock(&semaforoOpen);
+				log_debug(logger, "Archivo abierto. Comienzo a dormir por %d segundos para luego reintentar.", TIEMPO_DE_REINTENTO_OPERACION);
 				sleep(TIEMPO_DE_REINTENTO_OPERACION);
 			}
 		}

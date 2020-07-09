@@ -101,9 +101,6 @@ void procesarNewPokemon(void* args) {
 		}
 
 		int sizeNuevo = strlen(contenidoNuevo);
-		char* sizeEnConfig = string_itoa(sizeNuevo);
-		config_set_value(metadata, "SIZE", sizeEnConfig);
-
 
 		log_debug(logger, "Comenzamos a guardar los %d bytes en los bloques.", sizeNuevo);
 
@@ -130,47 +127,86 @@ void procesarNewPokemon(void* args) {
 
 		/* PIDO BLOQUES SI ES NECESARIO
 		 */
-		while (sizeNuevo > cantidadDeBloques * BLOCK_SIZE) {
+		int noHayBloquesDisponibles = -1;
+		t_list* listaDeBloquesNuevos = list_create();
+
+		while ( (sizeNuevo > cantidadDeBloques * BLOCK_SIZE) && (noHayBloquesDisponibles == -1) ) {
 			log_debug(logger, "Solicitando un bloque más.");
 			int bloque = solicitarBloque();
-			char* bloqueNuevo = string_itoa(bloque);
-			cantidadDeBloques++;
 
-			string_append(&listaDeBloques, ",");
-			string_append(&listaDeBloques, bloqueNuevo);
-			free(bloqueNuevo);
+			if(bloque < 0){
+				log_info(logger, "No hay bloques disponibles para guardar la información.");
+				noHayBloquesDisponibles = 1;
+			}
+
+			else{
+				list_add(listaDeBloquesNuevos, bloque);
+				char* bloqueNuevo = string_itoa(bloque);
+				cantidadDeBloques++;
+
+				string_append(&listaDeBloques, ",");
+				string_append(&listaDeBloques, bloqueNuevo);
+				free(bloqueNuevo);
+			}
 		}
 		string_append(&listaDeBloques, "]");
-		log_debug(logger, "La nueva lista de bloques es %s", listaDeBloques);
-
-		/* SETEO LA NUEVA LISTA DE BLOQUES EN LA CONFIG
-		 */
 		char* bloqueEnConfig = listaDeBloques;
-		config_set_value(metadata, "BLOCKS", bloqueEnConfig);
 
-
-		/* TRABAJO CON EL NUEVO ARRAY
-		 * PARA GUARDAR LOS DATOS
+		/* NO TENGO BLOQUES DISPONIBLES
+		 * LIBERO LOS QUE YA AGARRE
 		 */
-		char** nuevoArrayDeBloques = string_get_string_as_array(listaDeBloques);
+		if (noHayBloquesDisponibles == 1){
+			int cantBloquesADevolver = list_size(listaDeBloquesNuevos);
 
-		pthread_mutex_lock(&semaforoGuardarDatos);
-		guardarDatosEnBlocks(contenidoNuevo, nuevoArrayDeBloques);
-		pthread_mutex_unlock(&semaforoGuardarDatos);
-
-		log_debug(logger, "Los datos se han guardado correctamente.");
-
-		//LIBERO ARRAY DE BLOQUES
-		for(int i = 0; nuevoArrayDeBloques[i] != NULL; i++){
-			free(nuevoArrayDeBloques[i]);
+			for (int i = 0; i < cantBloquesADevolver; i++){
+				int bloqueALiberar = (int) list_get(listaDeBloquesNuevos, i);
+				liberarBloque(bloqueALiberar);
+				list_remove(listaDeBloquesNuevos, i);
+			}
 		}
-		free(nuevoArrayDeBloques);
 
+		/* COMPORTAMIENTO NORMAL
+		 * HAY BLOQUES DISPONIBLES
+		 */
+		else{
+
+			int cantBloquesNuevos = list_size(listaDeBloquesNuevos);
+			for (int i = 0; i < cantBloquesNuevos; i++){
+				list_remove(listaDeBloquesNuevos, i);
+			}
+
+			log_debug(logger, "La nueva lista de bloques es %s", listaDeBloques);
+			/* SETEO LA NUEVA LISTA DE BLOQUES EN LA CONFIG
+			 */
+
+			char* sizeEnConfig = string_itoa(sizeNuevo);
+			config_set_value(metadata, "SIZE", sizeEnConfig);
+			config_set_value(metadata, "BLOCKS", listaDeBloques);
+
+			/* TRABAJO CON EL NUEVO ARRAY
+			 * PARA GUARDAR LOS DATOS
+			 */
+			char** nuevoArrayDeBloques = string_get_string_as_array(listaDeBloques);
+
+			pthread_mutex_lock(&semaforoGuardarDatos);
+			guardarDatosEnBlocks(contenidoNuevo, nuevoArrayDeBloques);
+			pthread_mutex_unlock(&semaforoGuardarDatos);
+
+			log_debug(logger, "Los datos se han guardado correctamente.");
+
+			//LIBERO ARRAY DE BLOQUES
+			for(int i = 0; nuevoArrayDeBloques[i] != NULL; i++){
+				free(nuevoArrayDeBloques[i]);
+			}
+			free(nuevoArrayDeBloques);
+			free(sizeEnConfig);
+		}
+
+
+		list_destroy(listaDeBloquesNuevos);
+		free(bloqueEnConfig);
 		free(contenidoActual);
 		free(contenidoNuevo);
-
-		free(bloqueEnConfig);
-		free(sizeEnConfig);
 	}
 
 	/* NO HAY BLOQUES
@@ -179,26 +215,31 @@ void procesarNewPokemon(void* args) {
 		log_debug(logger, "No existen bloques del pokemon.");
 		log_debug(logger, "Se procede a guardar la linea: %s", posicionPlanaYCantidad);
 		int bloqueAEscribir = solicitarBloque();
-		char* path = getPathDeBlock(bloqueAEscribir);
 
-		//posicionPlanaYCantidad = "2-5=10\n"
+		if(bloqueAEscribir < 0){
+			log_info(logger, "No hay bloques disponibles para guardar la información.");
+		}
 
-		FILE* bloqueACrear = fopen(path, "wb+");
-		fwrite(posicionPlanaYCantidad, strlen(posicionPlanaYCantidad), 1, bloqueACrear);
-		fclose(bloqueACrear);
-		log_debug(logger, "Se guarda el contenido en el bloque %d",
-				bloqueAEscribir);
+		else{
+			char* path = getPathDeBlock(bloqueAEscribir);
 
-		char* bloqueEnConfig = string_from_format("[%d]", bloqueAEscribir);
-		log_debug(logger, "Bloques en config: %s", bloqueEnConfig);
-		config_set_value(metadata, "BLOCKS", bloqueEnConfig);
-		log_debug(logger, "Size en config: %d", strlen(posicionPlanaYCantidad));
-		char* sizeEnConfig = string_itoa(strlen(posicionPlanaYCantidad));
-		config_set_value(metadata, "SIZE", sizeEnConfig);
+			FILE* bloqueACrear = fopen(path, "wb+");
+			fwrite(posicionPlanaYCantidad, strlen(posicionPlanaYCantidad), 1, bloqueACrear);
+			fclose(bloqueACrear);
+			log_debug(logger, "Se guarda el contenido en el bloque %d",
+					bloqueAEscribir);
 
-		free(bloqueEnConfig);
-		free(sizeEnConfig);
-		free(path);
+			char* bloqueEnConfig = string_from_format("[%d]", bloqueAEscribir);
+			log_debug(logger, "Bloques en config: %s", bloqueEnConfig);
+			config_set_value(metadata, "BLOCKS", bloqueEnConfig);
+			log_debug(logger, "Size en config: %d", strlen(posicionPlanaYCantidad));
+			char* sizeEnConfig = string_itoa(strlen(posicionPlanaYCantidad));
+			config_set_value(metadata, "SIZE", sizeEnConfig);
+
+			free(bloqueEnConfig);
+			free(sizeEnConfig);
+			free(path);
+		}
 	}
 
 	config_save(metadata);
