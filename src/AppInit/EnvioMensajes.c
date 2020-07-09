@@ -154,7 +154,6 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	recibirIdCatch(socketIdCatch, entrenadorEsperando);
 	free(catchPoke);
 
-
 }
 
 void recibirIdCatch(int socketIdCatch, Entrenador* entrenador) {
@@ -166,6 +165,7 @@ void recibirIdCatch(int socketIdCatch, Entrenador* entrenador) {
 
 	int idEntrenador = idCatch->idCorrelativo;
 	entrenador->idCorrelativoDeEspera = idEntrenador;
+
 }
 
 void agregarComoIdCorrelativoCaught(int idCorrelativo){
@@ -173,7 +173,7 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo){
 	//lista de ids correlativos globales que se mandaron
 	//recien se agregan cuando recibo la respuesta del broker
 
-	list_add(idsCorrelativosCaught, &idCorrelativo);
+	list_add(idsCorrelativosCaught, idCorrelativo);
 	log_info(logger, "Se registro el id del catch que mando el entrenador como id: %d", idCorrelativo);
 	//TODO
 	log_info(logger, "Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
@@ -196,14 +196,14 @@ t_paquete* recibirCaught(int socketCaught){
 int tieneComoIdCorrelativoCaught(int idBuscado) {
 	typedef bool(*erasedTypeFind)(void*);
 
-	int existe(int* idExistente) {
-		return *idExistente == idBuscado;
+	int existe(int idExistente) {
+		return idExistente == idBuscado;
 	}
 
 	//si la lista no esta vacia
 	if(list_is_empty(idsCorrelativosCaught) != 1) {
 		//me fijo de la lista de idsCorrelativos que mande como catch, si coincide con el id del que recien llego
-		return list_find(idsCorrelativosCaught, (erasedTypeFind)existe) != NULL;
+		return list_any_satisfy(idsCorrelativosCaught, (erasedTypeFind)existe) != NULL;
 	}
 
 	return 0;
