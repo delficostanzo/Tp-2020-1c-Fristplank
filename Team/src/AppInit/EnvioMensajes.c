@@ -3,7 +3,7 @@
 
 static void agregarPokemonSiLoNecesita(char* nombrePokemon, t_posicion posicion);
 static void agregarComoIdCorrelativoLocalized(int idCorrelativo);
-static void agregarComoIdCorrelativoCaught(int idCorrelativo);
+static void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenador);
 static void recibirIdCatch(int socketIdCatch, Entrenador* entrenador);
 //static int tieneComoIdCorrelativoLocalized(int idBuscado);
 static int tieneComoIdCorrelativoCaught(int idBuscado);
@@ -159,32 +159,34 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 void recibirIdCatch(int socketIdCatch, Entrenador* entrenador) {
 	t_paquete* paqueteIdRecibido = recibir_mensaje(socketIdCatch);
 	t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
-	agregarComoIdCorrelativoCaught(idCatch->idCorrelativo);
+	agregarComoIdCorrelativoCaught(idCatch->idCorrelativo, entrenador);
 	quickLog("Se agrego como id en el entrenador necesario");
 
 
-	int idEntrenador = idCatch->idCorrelativo;
-	entrenador->idCorrelativoDeEspera = idEntrenador;
 
 }
 
-void agregarComoIdCorrelativoCaught(int idCorrelativo){
+//no tengo como chequear que ese id sea el mio
+void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenador){
 	t_log* logger = iniciar_logger();
 	//lista de ids correlativos globales que se mandaron
 	//recien se agregan cuando recibo la respuesta del broker
 
+	entrenador->idCorrelativoDeEspera = idCorrelativo;
+
 	list_add(idsCorrelativosCaught, idCorrelativo);
 	log_info(logger, "Se registro el id del catch que mando el entrenador como id: %d", idCorrelativo);
-	//TODO
 	log_info(logger, "Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
 	destruirLog(logger);
 }
 
 t_paquete* recibirCaught(int socketCaught){
 	t_paquete* paqueteCaught = recibir_mensaje(socketCaught);
+	quickLog("Se recibio un caught");
 
 	if(tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO) == 1) {
 		//el entrenador que hizo el catch del caught respondido cambia de estado de acuerdo a la respuesta
+
 		ejecutarRespuestaCaught(paqueteCaught->ID_CORRELATIVO, paqueteCaught);
 		quickLog("El entrenador que esperaba el caught fue procesado");
 		return paqueteCaught;
@@ -194,8 +196,9 @@ t_paquete* recibirCaught(int socketCaught){
 }
 
 int tieneComoIdCorrelativoCaught(int idBuscado) {
-	typedef bool(*erasedTypeFind)(void*);
+	typedef bool(*erasedType)(void*);
 
+	quickLog("Procesando respuesta caught util");
 	int existe(int idExistente) {
 		return idExistente == idBuscado;
 	}
@@ -203,7 +206,7 @@ int tieneComoIdCorrelativoCaught(int idBuscado) {
 	//si la lista no esta vacia
 	if(list_is_empty(idsCorrelativosCaught) != 1) {
 		//me fijo de la lista de idsCorrelativos que mande como catch, si coincide con el id del que recien llego
-		return list_any_satisfy(idsCorrelativosCaught, (erasedTypeFind)existe) != NULL;
+		return list_any_satisfy(idsCorrelativosCaught, (erasedType)existe);
 	}
 
 	return 0;
@@ -238,7 +241,9 @@ void procesarEspera(Entrenador*  entrenador, uint32_t atrapo){
 	//si lo atrapo
 	if(atrapo){
 		agregarAtrapado(entrenador, pokemonAtrapado);
+		quickLog("Se atrapo el pokemon");
 		estadoSiAtrapo(entrenador);
+
 	}
 	//no lo atrapo
 	else {

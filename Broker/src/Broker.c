@@ -101,6 +101,8 @@ int main(void) {
 
 	sleep(5);
 	enviarCaughtA(suscripcionCaught);
+
+	recibirCatchDesde(socketCatch);
 	//envioAppearedPrueba2(suscripcionAppeared);
 	recibirACK(socketACKCaught);
 	destruirLog(logger);
