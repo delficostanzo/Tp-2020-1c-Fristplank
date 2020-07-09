@@ -21,6 +21,8 @@ int ID_UNICO;
 
 int TIEMPO_RECONEXION;
 
+char* ALGORITMO;
+
 int conexionGameboy;
 int socketGameBoy;
 
@@ -71,7 +73,6 @@ t_list* pokemonesLibres;
 t_list* idsCorrelativosCaught;
 t_list* idsCorrelativosLocalized;
 
-sem_t semaforoCatch;
 
 
 

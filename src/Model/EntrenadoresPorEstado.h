@@ -15,6 +15,8 @@
 t_list* entrenadoresBloqueadosPorDeadlock(void);
 t_list* entrenadoresDormidos(void);
 t_list* entrenadoresEsperandoRespuesta(void);
+t_list* entrenadoresReady(void);
+t_list* entrenadoresNew(void);
 Entrenador* entrenadorExec(void);
 
 #endif /* SRC_MODEL_ENTRENADORESPORESTADO_H_ */

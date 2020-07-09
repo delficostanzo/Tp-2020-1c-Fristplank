@@ -45,7 +45,7 @@ t_list* inicializarEntrenadoresHasta(int cantidad) {
 	t_list* entrenadores = list_create();
 
 	for(int contador=0; contador<cantidad; contador++) {
-		Entrenador* entrenador = newEntrenador();
+		Entrenador* entrenador = malloc(sizeof(Entrenador));
 
 		list_add(entrenadores, entrenador);
 	}
@@ -137,6 +137,8 @@ void setMutex(t_list* entrenadores) {
 	for(int index=0; index < list_size(entrenadores); index++){
 		Entrenador* entrenador = list_get(entrenadores, index);
 		pthread_mutex_init(&(entrenador->mutexEntrenador), NULL);
+		//lo dejo en 0 para que no cumpla el objetivo hasta que el planificador le haga el unlock
+		pthread_mutex_lock(&(entrenador->mutexEntrenador));
 	}
 }
 

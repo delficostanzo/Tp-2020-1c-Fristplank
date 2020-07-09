@@ -16,7 +16,7 @@ void* escucharGameBoy(){
 		handshakePropio->idUnico = ID_UNICO;
 
 		t_handshake* handshakeResponse;
-		handshakeResponse = responderHandshake(conexionBroker, handshakePropio);
+		handshakeResponse = iniciarHandshake(socketGameBoy, handshakePropio);
 		free(handshakePropio);
 		free(handshakeResponse);
 
@@ -29,6 +29,8 @@ void* escucharGameBoy(){
 }
 
 int generarSocketsConBroker() {
+
+	t_log* logger = iniciar_logger();
 
 	conexionBroker = crearSocket();
 
@@ -43,6 +45,7 @@ int generarSocketsConBroker() {
 
 	t_handshake* handshakeResponse;
 	handshakeResponse = responderHandshake(conexionBroker, handshakePropio);
+	log_info(logger, "El id del proceso con el que me conecte es: %d", handshakeResponse->id);
 	free(handshakePropio);
 	free(handshakeResponse);
 
@@ -170,7 +173,7 @@ void* escucharColaAppearedPokemon(){
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared);
 
 		//enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
-		quickLog("Pudo enviar el ACK de los appeared");
+		//quickLog("Pudo enviar el ACK de los appeared");
 	}
 }
 

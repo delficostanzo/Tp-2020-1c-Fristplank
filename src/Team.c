@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
 	Entrenador* entrenador1 = list_get(entrenadores, 0);
-	pasarAExecEntrenador(entrenador1);
+	pasarAReadyEntrenador(entrenador1);
 	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
 
 	pokemonesLibres = list_create();
@@ -23,6 +23,7 @@ int main(int argc, char *argv[]) {
 	objetivosTotales = getObjetivosTotalesDesde(entrenadores);
 	objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
 	objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
+	//llegan bien sus nombres
 	log_info(logger, "La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
 	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
 	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
@@ -42,8 +43,6 @@ int main(int argc, char *argv[]) {
 	pthread_create(&hilosEscuchaBroker, NULL, (void*) crearHilosDeEscucha, NULL);
 
 
-	planificarEntrenadores();
-
 
 //	//verificar que el id como respuesta vuelva a enviarse a traves de ese socket
 //	//recibe los nombres de pokemones encontrados libres con sus posiciones
@@ -51,10 +50,9 @@ int main(int argc, char *argv[]) {
 	//recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
 	//recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
 
-	pthread_mutex_lock(&mutexEntrenadores);
-	crearHilosDeEntrenadores(entrenadores);
+
+	crearHilosDeEntrenadores();
 	quickLog("Se crea un hilo por cada entrenador");
-	pthread_mutex_unlock(&mutexEntrenadores);
 
 	planificarEntrenadores();
 

@@ -43,7 +43,7 @@ Entrenador* crearEntrenadorEnExec(){
 	return entrenadorNuevo;
 }
 
-void pasarAExecEntrenador(Entrenador* entrenador) {
+void pasarAReadyEntrenador(Entrenador* entrenador) {
 
 	t_posicion posicionLibre;
 	posicionLibre.posicionX = 8;
@@ -59,5 +59,5 @@ void pasarAExecEntrenador(Entrenador* entrenador) {
 	movimiento->pokemonNecesitado = pokeLibre;
 
 	entrenador->movimientoEnExec = movimiento;
-	entrenador->estado = 3;
+	entrenador->estado = 2;
 }
