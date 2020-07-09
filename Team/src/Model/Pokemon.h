@@ -23,5 +23,7 @@ void setPosicionTo(PokemonEnElMapa* pokemon, t_posicion posicion);
 void setCantidadTo(PokemonEnElMapa* pokemon, int cantidad);
 PokemonEnElMapa* buscarPorNombre(char* nombrePokemon, t_list* pokemones);
 int sonLaMismaPosicion(t_posicion posicion1, t_posicion posicion2);
+PokemonEnElMapa* asignarPokemonCopia(PokemonEnElMapa* pokemonACopiar);
+
 
 #endif /* SRC_MODEL_POKEMON_H_ */

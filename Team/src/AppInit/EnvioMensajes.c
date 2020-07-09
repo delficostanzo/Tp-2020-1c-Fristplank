@@ -131,6 +131,7 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 
 	pthread_mutex_lock(&mutexPokemonesLibres);
 	log_info(logger, "Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
+	t_list* libres = pokemonesLibres;
 	pthread_mutex_unlock(&mutexPokemonesLibres);
 
 	destruirLog(logger);

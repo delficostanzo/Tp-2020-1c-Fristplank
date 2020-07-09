@@ -92,19 +92,22 @@ int main(void) {
 	envioAppearedPrueba1(suscripcionAppeared);
 	//recibirACK(socketACKAppeared);
 
-	envioLocalizedPrueba1(suscripcionLocalized);
+	//envioLocalizedPrueba1(suscripcionLocalized);
 	//recibirACK(socketACKLocalized);
 
 	if(recibirCatchDesde(socketCatch)){
 		enviarIdCatchA(socketIdCatch);
+
+		sleep(5);
+		enviarCaughtA(suscripcionCaught);
+		recibirACK(socketACKCaught);
 	}
 
-	sleep(5);
-	enviarCaughtA(suscripcionCaught);
 
-	recibirCatchDesde(socketCatch);
+
+	//recibirCatchDesde(socketCatch);
 	//envioAppearedPrueba2(suscripcionAppeared);
-	recibirACK(socketACKCaught);
+
 	destruirLog(logger);
 
 	//loguear mensaje recibido

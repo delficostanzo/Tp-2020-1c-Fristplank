@@ -11,9 +11,9 @@ int main(int argc, char *argv[]) {
 	entrenadores = getEntrenadoresDesde("src/team.config");
 	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
-	Entrenador* entrenador1 = list_get(entrenadores, 0);
-	pasarAReadyEntrenador(entrenador1);
-	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
+//	Entrenador* entrenador1 = list_get(entrenadores, 0);
+//	pasarAReadyEntrenador(entrenador1);
+//	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
 
 	pokemonesLibres = list_create();
 
