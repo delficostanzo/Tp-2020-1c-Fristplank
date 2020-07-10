@@ -10,6 +10,7 @@ static void cambiarCantidadEnPokesObj(PokemonEnElMapa* pokeLibre);
 static Entrenador* buscarEntrenadorSegun(char* algoritmo);
 static int noEstanTodosEnExit();
 static bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj);
+static void terminarSiTodosExit();
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -19,7 +20,9 @@ void planificarEntrenadores(){
 	while(noEstanTodosEnExit()){ // lista de entrenadores que no estan en exit
 		// se pasan entrenadores a READY segun su condicion
 		pasarAReadyParaAtrapar();
+		pasarAReadyParaIntercambiar();
 		pasarAExec();
+		terminarSiTodosExit();
 	}
 
 }
@@ -278,15 +281,15 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 		}
 }
 
-void verificarSiTodosExit() {
+void terminarSiTodosExit() {
 	int estaEnExec(Entrenador* entrenador) {
 		return entrenador->estado == 5;
 	}
 	pthread_mutex_lock(&mutexEntrenadores);
-	int cumple = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExec);
+	int todosCumplen = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExec);
 	pthread_mutex_unlock(&mutexEntrenadores);
 
-	if(cumple) {
-		//TERMINAR TODO;
+	if(todosCumplen) {
+		terminarTeam();
 	}
 }
