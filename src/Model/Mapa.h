@@ -43,8 +43,6 @@ t_config* config;
 
 
 pthread_mutex_t mutexEntrenadores;
-pthread_mutex_t mutexObjetivosTotales;
-pthread_mutex_t mutexObjetivosAtrapados;
 pthread_mutex_t mutexObjetivosGlobales;
 pthread_mutex_t mutexPokemonesLibres;
 pthread_mutex_t mutexListaEntrenadoresReady;

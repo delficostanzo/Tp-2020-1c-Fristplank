@@ -29,8 +29,6 @@ void iniciarVariables(){
 
 
 	pthread_mutex_init(&mutexEntrenadores, NULL);
-	pthread_mutex_init(&mutexObjetivosTotales, NULL);
-	pthread_mutex_init(&mutexObjetivosAtrapados, NULL);
 	pthread_mutex_init(&mutexObjetivosGlobales, NULL);
 	pthread_mutex_init(&mutexPokemonesLibres, NULL);
 	pthread_mutex_init(&mutexListaEntrenadoresReady, NULL);
