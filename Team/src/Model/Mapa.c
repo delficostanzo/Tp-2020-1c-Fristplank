@@ -2,9 +2,6 @@
 #include "Mapa.h"
 
 
-
-
-
 void iniciarVariables(){
 	IP_BROKER = config_get_string_value(config, "IP_BROKER");
 	PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");

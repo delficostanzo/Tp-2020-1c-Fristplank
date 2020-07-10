@@ -173,6 +173,8 @@ t_list* getObjetivosTotalesDesde(t_list* entrenadores) {
 	//es una lista de listas
 	objetivosTotales = list_map(entrenadores, (erasedTypeMap)getObjetivosDesde);
 
+	//TODO: consume 1 rafaga de CPU por cada objetivo porque los envia con GET
+
 	t_list* objetivosAgrupados = list_create();
 
 	void agregarAUnaNuevaListaConcat(t_list* objetivosDeUnEntrenador) {
