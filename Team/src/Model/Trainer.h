@@ -30,6 +30,7 @@ typedef struct {
 	PokemonEnElMapa* pokemonNecesitado;
 	PokemonEnElMapa* pokemonAIntercambiar; // cuando el objetivo sea atrapar, este estaria en NULL. Se va a usar cuando es mover e intercambiar(DEADLOCK)
 	ObjetivoEnExec objetivo;
+	int numeroDelEntrenadorIntercambio;
 }MovimientoEnExec;
 
 typedef struct {
@@ -45,6 +46,7 @@ typedef struct {
 	pthread_mutex_t mutexEntrenador;
 	//pthread_mutex_t mutexEstado;
 	int ciclosCPUFaltantesIntercambio;
+	int numeroEntrenador;
 }Entrenador;
 
 typedef enum{
@@ -53,12 +55,14 @@ typedef enum{
 }Algoritmo; //NO LO USO ?
 
 Entrenador* newEntrenador();
+Entrenador* buscarPorNumero(int numero);
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
 void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon);
 t_posicion* newPosicion();
 Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores);
 Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado);
-//void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
+void agregarAListaReady(Entrenador* entrenadorAReady);
+void sacarDeListaReady(Entrenador* entrenadorASacar);
 void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado);
 void pasarADormido(Entrenador* entrenador);
 void pasarADeadlock(Entrenador* entrenador);

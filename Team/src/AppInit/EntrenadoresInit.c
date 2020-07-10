@@ -15,6 +15,7 @@ static t_list* getAtrapadosDesde(Entrenador* entrenador);
 static void agregarObjetivosA(Entrenador* entrenador, t_list* objetivosDelEntrenador);
 static void agregarAtrapadosA(Entrenador* entrenador, t_list* pokemonesAAgregar);
 static int noTieneCantidadNegativa(PokemonEnElMapa* pokemon);
+static void numerarlos(t_list* entrenadores);
 
 //si declaras aca arriba las funciones con un 'static' adelante, es la manera de hacerlas privadas. No alcanza solo con omitirlas en el ".h"
 
@@ -36,6 +37,8 @@ t_list* getEntrenadoresDesde(char* nombreDeArchivo) {
 	setPokemonesAtrapadosDesde(configEntrenador, entrenadores);
 	setEstadoNew(entrenadores);
 	setMutex(entrenadores);
+	numerarlos(entrenadores);
+	setCiclosCPUFaltantesIntercambio(entrenadores);
 
 	return entrenadores;
 }
@@ -141,6 +144,21 @@ void setMutex(t_list* entrenadores) {
 		pthread_mutex_lock(&(entrenador->mutexEntrenador));
 	}
 }
+
+void numerarlos(t_list* entrenadores){
+	for(int index=0; index < list_size(entrenadores); index++){
+		Entrenador* entrenador = list_get(entrenadores, index);
+		entrenador->numeroEntrenador = index + 1;
+	}
+}
+
+void setCiclosCPUFaltantesIntercambio(t_list* entrenadores) {
+	for(int index=0; index < list_size(entrenadores); index++){
+		Entrenador* entrenador = list_get(entrenadores, index);
+		entrenador->ciclosCPUFaltantesIntercambio = 5;
+	}
+}
+
 
 ///////POKEMONES////////
 

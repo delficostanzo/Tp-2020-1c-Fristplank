@@ -58,6 +58,7 @@ pthread_mutex_t mutexObjetivosTotales;
 pthread_mutex_t mutexObjetivosAtrapados;
 pthread_mutex_t mutexObjetivosGlobales;
 pthread_mutex_t mutexPokemonesLibres;
+pthread_mutex_t mutexListaEntrenadoresReady;
 sem_t semaforoCatch;
 
 t_list* entrenadores;
@@ -65,6 +66,7 @@ t_list* objetivosTotales;
 t_list* objetivosAtrapados;
 t_list* objetivosGlobales;
 t_list* pokemonesLibres;
+t_list* listaEntrenadoresReady;
 
 t_list* idsCorrelativosCaught;
 sem_t semaforoCorrelativos;

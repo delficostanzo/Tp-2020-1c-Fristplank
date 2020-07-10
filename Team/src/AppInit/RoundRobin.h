@@ -7,7 +7,6 @@
 #define SRC_APPINIT_ROUNDROBIN_H_
 
 void moverseSegunElQuantum(Entrenador* entrenador, PokemonEnElMapa* pokemon, int distanciaHastaPokemon);
-void moverSiDistanciaMenorAQ(Entrenador* entrenador, int posicionXPoke, int posicionYPoke, int distanciaHastaPokemon);
-
-
+void moverSiDistanciaMayorAQ(Entrenador* entrenador, int posicionXPoke, int posicionYPoke, int distanciaHastaPokemon);
+void pasarAReadyPorQuantum(Entrenador* entrenador);
 #endif /* SRC_APPINIT_ROUNDROBIN_H_ */

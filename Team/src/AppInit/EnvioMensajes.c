@@ -179,7 +179,7 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenador){
 	entrenador->idCorrelativoDeEspera = idCorrelativo;
 
 
-	list_add(idsCorrelativosCaught, idCorrelativo);
+	list_add(idsCorrelativosCaught, (void*) idCorrelativo);
 	sem_post(&semaforoCorrelativos);
 
 	log_info(logger, "Se registro el id del catch que mando el entrenador como id: %d", idCorrelativo);
@@ -224,6 +224,7 @@ int tieneComoIdCorrelativoCaught(int idBuscado) {
 }
 
 void ejecutarRespuestaCaught(int idCatchQueResponde, t_paquete* paqueteCaught){
+	typedef bool(*erasedType)(void*);
 	t_log* logger = iniciar_logger();
 	t_caught_pokemon* caught = paqueteCaught->buffer->stream;
 	//ya sabemos que algun entrenador tiene ese id como correlativo de espera
@@ -231,7 +232,7 @@ void ejecutarRespuestaCaught(int idCatchQueResponde, t_paquete* paqueteCaught){
 	procesarEspera(entrenador, caught->ok);
 	//el remove recibe el indice
 	//list_remove(idsCorrelativosCaught, &idCatchQueResponde);
-	list_remove_by_condition(idsCorrelativosCaught, hayEntrenadorQueTieneId);
+	list_remove_by_condition(idsCorrelativosCaught, (erasedType) hayEntrenadorQueTieneId);
 	log_info(logger, "Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
 	destruirLog(logger);
 }
