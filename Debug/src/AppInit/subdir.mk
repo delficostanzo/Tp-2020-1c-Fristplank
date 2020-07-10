@@ -11,7 +11,8 @@ C_SRCS += \
 ../src/AppInit/EnvioMensajes.c \
 ../src/AppInit/HilosEntrenadores.c \
 ../src/AppInit/LogFunctions.c \
-../src/AppInit/Planificador.c 
+../src/AppInit/Planificador.c \
+../src/AppInit/RoundRobin.c 
 
 OBJS += \
 ./src/AppInit/Conexion.o \
@@ -21,7 +22,8 @@ OBJS += \
 ./src/AppInit/EnvioMensajes.o \
 ./src/AppInit/HilosEntrenadores.o \
 ./src/AppInit/LogFunctions.o \
-./src/AppInit/Planificador.o 
+./src/AppInit/Planificador.o \
+./src/AppInit/RoundRobin.o 
 
 C_DEPS += \
 ./src/AppInit/Conexion.d \
@@ -31,7 +33,8 @@ C_DEPS += \
 ./src/AppInit/EnvioMensajes.d \
 ./src/AppInit/HilosEntrenadores.d \
 ./src/AppInit/LogFunctions.d \
-./src/AppInit/Planificador.d 
+./src/AppInit/Planificador.d \
+./src/AppInit/RoundRobin.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

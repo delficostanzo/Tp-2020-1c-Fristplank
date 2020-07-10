@@ -5,6 +5,8 @@
 void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenadorBloqueado);
 static void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 static Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre);
+static void cambiarCantidadEnPokesLibres(PokemonEnElMapa* pokeLibre);
+static void cambiarCantidadEnPokesObj(PokemonEnElMapa* pokeLibre);
 static Entrenador* buscarEntrenadorSegun(char* algoritmo);
 static int noEstanTodosEnExit();
 static bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj);
@@ -44,29 +46,24 @@ void pasarAReadyParaAtrapar(){
 
 	if(list_is_empty(entrenadoresPosibles) != 1) {
 		pthread_mutex_lock(&mutexPokemonesLibres);
+		int cantidadDePokesLibres = list_size(pokemonesLibres);
+		pthread_mutex_unlock(&mutexPokemonesLibres);
+
 		//asignamos objetivo al entrenador mas cercano
-		for(int index=0; index < list_size(pokemonesLibres); index++){
-
-
+		for(int index=0; index < cantidadDePokesLibres; index++){
 			PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
 			Entrenador* entrenadorAReady =  asignarObjetivoA(entrenadoresPosibles, pokemonLibre);
+
 			// cambio de estado al entrenador, pasa a ready
-			//sem_wait(&semaforoEstados);
 			entrenadorAReady->estado = 2;
-			//sem_post(&semaforoEstados);
 			// ese poke se saca de la lista de pokes libres porque ya fue asginado
-			disminuirCantidadPokemones(pokemonLibre, pokemonesLibres);
-
-			pthread_mutex_lock(&mutexObjetivosGlobales);
+			cambiarCantidadEnPokesLibres(pokemonLibre);
 			// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
-			disminuirCantidadPokemones(pokemonLibre, objetivosGlobales);
+			cambiarCantidadEnPokesObj(pokemonLibre);
 
-			pthread_mutex_unlock(&mutexObjetivosGlobales);
 			log_info(logger, "Se paso a ready el entrenador");
 
 		}
-		pthread_mutex_unlock(&mutexPokemonesLibres);
-
 	}
 	destruirLog(logger);
 }
@@ -79,6 +76,18 @@ Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemo
 	entrenadorAAsignar->movimientoEnExec->objetivo = 1;
 
 	return entrenadorAAsignar;
+}
+
+void cambiarCantidadEnPokesLibres(PokemonEnElMapa* pokeLibre){
+	pthread_mutex_lock(&mutexPokemonesLibres);
+	disminuirCantidadPokemones(pokeLibre, pokemonesLibres);
+	pthread_mutex_unlock(&mutexPokemonesLibres);
+}
+
+void cambiarCantidadEnPokesObj(PokemonEnElMapa* pokeLibre){
+	pthread_mutex_lock(&mutexObjetivosGlobales);
+	disminuirCantidadPokemones(pokeLibre, objetivosGlobales);
+	pthread_mutex_unlock(&mutexObjetivosGlobales);
 }
 
 void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes){
@@ -97,7 +106,6 @@ void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPoke
 bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj){
 	return pokeComoObj->cantidad == 0;
 }
-
 
 
 void pasarAReadyParaIntercambiar(){
@@ -155,8 +163,8 @@ Entrenador* buscarEntrenadorSegun(char* algoritmo) {
 		//el primer entrenador de los ready es el que esta en indice 0
 		Entrenador* entrenador = list_get(entrenadoresReady(), 0);
 		return entrenador;
-	} else {//ROUND ROBIN
-		//TODO
+	} else {//ROUND ROBIN -> se atiende por orden de llegada dejando que ejecute hasta maximo de QUANTUM
+		Entrenador* entrenador = list_get(entrenadoresReady(), 0);
 		return NULL;
 	}
 }
@@ -234,9 +242,15 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 	quickLog("Llega al metodo de atrapar");
 	int distanciaHastaPokemon = distanciaEntre(&(pokemon->posicion), entrenador->posicion);
 	quickLog("Calcula la distancia al pokemon");
-	//TODO ALGORITMO
-	entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
-	entrenador->posicion = &(pokemon->posicion);
+
+	//CONDICIONES SEGUN EL ALGORITMO
+	if(strcmp(ALGORITMO, "FIFO") == 0 || QUANTUM >= distanciaHastaPokemon){
+		entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
+		entrenador->posicion = &(pokemon->posicion);
+	} else{// distancia hasta el poke es menor que el quantum
+		// va a entrar a esta condicion hasta que la distancia se reduzca y sea menor que el quantum
+		moverseSegunElQuantum(entrenador, pokemon, distanciaHastaPokemon);
+	}
 
 	//el socket ya esta conectado con el broker en Conexion
 	sem_wait(&semaforoCatch);
