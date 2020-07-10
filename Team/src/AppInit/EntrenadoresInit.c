@@ -10,6 +10,7 @@ static void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores);
 static void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores);
 static void setEstadoNew(t_list* entrenadores);
 static void setMutex(t_list* entrenadores);
+static void setCiclosCPUFaltantesIntercambio(t_list* entrenadores);
 static t_list* getObjetivosDesde(Entrenador* entrenador);
 static t_list* getAtrapadosDesde(Entrenador* entrenador);
 static void agregarObjetivosA(Entrenador* entrenador, t_list* objetivosDelEntrenador);
