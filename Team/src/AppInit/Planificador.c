@@ -68,6 +68,11 @@ void pasarAReadyParaAtrapar(){
 	destruirLog(logger);
 }
 
+void pasarAReadyPorQuantum(Entrenador* entrenador){
+	// se pasa a ready con el mismo objetivo de atrapar el mismo poke
+	entrenador->estado = 2;
+}
+
 Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre){
 	Entrenador* entrenadorAAsignar = entrenadorMasCercanoA(pokemonLibre, entrenadoresAMover);
 	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
@@ -165,7 +170,7 @@ Entrenador* buscarEntrenadorSegun(char* algoritmo) {
 		return entrenador;
 	} else {//ROUND ROBIN -> se atiende por orden de llegada dejando que ejecute hasta maximo de QUANTUM
 		Entrenador* entrenador = list_get(entrenadoresReady(), 0);
-		return NULL;
+		return entrenador;
 	}
 }
 
@@ -195,7 +200,7 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 	int distanciaHastaBloqueado = distanciaEntre(entrenadorMovido->posicion, entrenadorBloqueado->posicion);
 
 	//si es por fifo o es round robin pero le alcanza el quantum para moverse e intercambiar
-	if((strcmp(ALGORITMO, "FIFO") == 0) || (QUANTUM >= distanciaHastaBloqueado +5)) {
+	if((strcmp(ALGORITMO, "FIFO") == 0) || ((strcmp(ALGORITMO, "RR") == 0) && QUANTUM >= distanciaHastaBloqueado +5)) {
 		entrenadorMovido->posicion = entrenadorBloqueado->posicion;
 		entrenadorMovido->ciclosCPUConsumido += distanciaHastaBloqueado;
 		entrenadorMovido->ciclosCPUConsumido += 5;
@@ -256,6 +261,10 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 	sem_wait(&semaforoCatch);
 	enviarCatchDesde(entrenador);
 	sem_post(&semaforoCatch);
+
+	//cada vez que el entrenador envia un CATCH, consume una rafaga de CPU
+	entrenador->ciclosCPUConsumido += 1;
+
 
 	pasarABlockEsperando(entrenador);
 	quickLog("Se paso a estado bloqueado esperando respuesta");

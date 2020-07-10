@@ -15,6 +15,7 @@ void verificarSiTodosExit();
 void cumplirObjetivo(Entrenador* entrenador);
 //void moverAReady();
 void pasarAReadyParaAtrapar();
+void pasarAReadyPorQuantum(Entrenador* entrenador);
 void pasarAExec();
 void planificarEntrenadores();
 void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes);
