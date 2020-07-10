@@ -44,6 +44,7 @@ typedef struct {
 	int idCorrelativoDeEspera;
 	pthread_mutex_t mutexEntrenador;
 	//pthread_mutex_t mutexEstado;
+	int ciclosCPUFaltantesIntercambio;
 }Entrenador;
 
 typedef enum{
@@ -60,9 +61,12 @@ Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario
 //void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado);
 void pasarADormido(Entrenador* entrenador);
+void pasarADeadlock(Entrenador* entrenador);
 int noEstaEnExit(Entrenador* entrenador);
 void estadoSiAtrapo(Entrenador* entrenador);
 void pasarABlockEsperando(Entrenador* entrenador);
 int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);
+void asignarMovimientoPorDeadlock(Entrenador* entrenador);
+int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
 
 #endif /* SRC_MODEL_TRAINER_H_ */
