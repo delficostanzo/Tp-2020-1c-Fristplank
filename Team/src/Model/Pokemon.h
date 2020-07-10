@@ -22,6 +22,7 @@ void setNombreTo(PokemonEnElMapa* pokemon, char* nombre);
 void setPosicionTo(PokemonEnElMapa* pokemon, t_posicion posicion);
 void setCantidadTo(PokemonEnElMapa* pokemon, int cantidad);
 PokemonEnElMapa* buscarPorNombre(char* nombrePokemon, t_list* pokemones);
+int estaElPokemon(PokemonEnElMapa* pokemon, t_list* listaPokes);
 int sonLaMismaPosicion(t_posicion posicion1, t_posicion posicion2);
 PokemonEnElMapa* asignarPokemonCopia(PokemonEnElMapa* pokemonACopiar);
 

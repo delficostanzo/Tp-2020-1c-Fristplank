@@ -86,7 +86,7 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 
 	t_log* logger = iniciar_logger();
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
-	quickLog("Recibe el appeared");
+	//quickLog("Recibe el appeared");
 	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
 
@@ -152,6 +152,7 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	PokemonEnElMapa* pokemonPorAtrapar = entrenadorEsperando->movimientoEnExec->pokemonNecesitado;
 	t_catch_pokemon* catchPoke = crearEstructuraCatchDesde(pokemonPorAtrapar);
 	enviar_catch_pokemon(catchPoke, socketCatch, -1, -1);
+	entrenadorEsperando->ciclosCPUConsumido += 1;
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
 	//para saber saber que respuesta de caught es de el
 	quickLog("Esta esperando recibir el id de su catch enviado");
@@ -165,8 +166,6 @@ void recibirIdCatch(int socketIdCatch, Entrenador* entrenador) {
 	t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
 	agregarComoIdCorrelativoCaught(idCatch->idCorrelativo, entrenador);
 	quickLog("Se agrego como id en el entrenador necesario");
-
-
 
 }
 

@@ -1,11 +1,12 @@
 #include "Trainer.h"
 
-int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
-void pasarADeadlock(Entrenador* entrenador);
+
 void pasarAExit(Entrenador* entrenador);
 static int sumaCantidades(t_list* pokemones);
 static int tienenLaMismaCantidad(t_list* objetivos, t_list* atrapados);
 static int sonIguales(t_list* objetivos, t_list* atrapados);
+static PokemonEnElMapa* buscarAtrapadoDeMas(Entrenador* entrenador);
+static PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador);
 
 
 typedef bool(*erasedTypeFilter)(void*);
@@ -40,6 +41,7 @@ void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon) {
 		list_add(listaPokemones, nuevoPokemon);
 		}
 }
+
 
 //void setPokemonesAtrapadosA(Entrenador* entrenador, t_list* pokemones) {
 //	entrenador->pokemonesAtrapados = pokemones;
@@ -94,6 +96,7 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	}
 	else if(tienenLaMismaCantidad(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		pasarADeadlock(entrenador);
+		asignarMovimientoPorDeadlock(entrenador);
 	}
 	else {
 		pasarADormido(entrenador);
@@ -195,7 +198,7 @@ void pasarABlockEsperando(Entrenador* entrenador) {
 /////////////INTERCAMBIO////////////////
 
 int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado){
-	//condicione del entrenador preguntado
+	//condicione del entrenador preguntando
 	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
 	char* nombrePokemonAIntercambiar = movimientoEnExec->pokemonAIntercambiar->nombre;
 	char* nombrePokemonNecesitado = movimientoEnExec->pokemonNecesitado->nombre;
@@ -208,8 +211,54 @@ int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesari
 }
 
 
+void asignarMovimientoPorDeadlock(Entrenador* entrenador){
+	PokemonEnElMapa* atrapadoDeMas = buscarAtrapadoDeMas(entrenador);
+	PokemonEnElMapa* objetivoNoCumplido = buscarObjetivosQueFalta(entrenador);
+
+	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
+	movimiento->objetivo = 2;
+	movimiento->pokemonAIntercambiar = asignarPokemonCopia(atrapadoDeMas);
+	movimiento->pokemonNecesitado = asignarPokemonCopia(objetivoNoCumplido);
+	entrenador->movimientoEnExec = movimiento;
+
+}
 
 
+PokemonEnElMapa* buscarAtrapadoDeMas(Entrenador* entrenador){
+	t_list* atrapados = entrenador->pokemonesAtrapados;
+	t_list* objetivos = entrenador->pokemonesObjetivos;
+
+	int noEstaComoObjetivo(PokemonEnElMapa* atrapado) {
+		if(estaElPokemon(atrapado, objetivos)){
+			//tienen el mismo nombre
+			PokemonEnElMapa* atrapado = buscarPorNombre(atrapado->nombre, atrapados);
+			PokemonEnElMapa* objetivo = buscarPorNombre(atrapado->nombre, objetivos);
+			//pero hay uno atrapado de mas
+			return (atrapado->cantidad) > (objetivo->cantidad);
+		}
+		return 0;
+	}
+	//TRAE EL QUE ESTA DE MAS, SOBRA
+	return list_find(atrapados, (erasedTypeFilter) noEstaComoObjetivo);
+}
+
+PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador){
+	t_list* atrapados = entrenador->pokemonesAtrapados;
+	t_list* objetivos = entrenador->pokemonesObjetivos;
+
+	int noEstaComoAtrapado(PokemonEnElMapa* objetivo) {
+		if(estaElPokemon(objetivo, atrapados)){
+			//tienen el mismo nombre
+			PokemonEnElMapa* atrapado = buscarPorNombre(atrapado->nombre, atrapados);
+			PokemonEnElMapa* objetivo = buscarPorNombre(atrapado->nombre, objetivos);
+			//pero hay uno atrapado de mas
+			return (atrapado->cantidad) > (objetivo->cantidad);
+		}
+		return 0;
+	}
+	//TRAE EL QUE FALTA
+	return list_find(objetivos, (erasedTypeFilter) noEstaComoAtrapado);
+}
 
 
 

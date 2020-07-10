@@ -20,6 +20,7 @@ int puertoTeam;
 int ID_UNICO;
 
 int TIEMPO_RECONEXION;
+int QUANTUM;
 
 char* ALGORITMO;
 
