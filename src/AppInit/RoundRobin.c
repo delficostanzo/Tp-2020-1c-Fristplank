@@ -1,6 +1,5 @@
 #include "RoundRobin.h"
 
-static void pasarAReadyPorQuantum(Entrenador* entrenador);
 
 void moverseSegunElQuantum(Entrenador* entrenador, PokemonEnElMapa* pokemon, int distanciaHastaPokemon){
 	int posicionXPoke = pokemon->posicion.posicionX;
@@ -42,7 +41,5 @@ void moverSiDistanciaMenorAQ(Entrenador* entrenador, int posicionXPoke, int posi
 	}
 }
 
-void pasarAReadyPorQuantum(Entrenador* entrenador){
-	entrenador->estado = 2;
-}
+
 
