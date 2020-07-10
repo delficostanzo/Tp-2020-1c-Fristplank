@@ -222,8 +222,6 @@ t_list* getObjetivosGlobalesDesde(t_list* pokemonesObjetivos, t_list* pokemonesA
 	typedef void*(*erasedTypeMap)(void*);
 	typedef bool(*erasedTypeFilter)(void*);
 
-
-	quickLog("Llega aca");
 	//el pokemon restado serian los pokemones objetivos, que se va a agregar con la cantidad restada si ya se atrapo
 	PokemonEnElMapa* restarCantidadQueFalta(PokemonEnElMapa* pokemonRestado) {
 

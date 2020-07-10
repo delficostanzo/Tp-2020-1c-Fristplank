@@ -28,7 +28,6 @@ void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
 }
 
 //la funcion funcionesDelEntrenador tendria que estar en el Team.c, lo dejo aca por ahora
-//ENTRENADOR LLEGA VACIO
 void funcionesDelEntrenador(void* unEntrenador){
 
 	Entrenador* entrenador = (Entrenador*) unEntrenador;

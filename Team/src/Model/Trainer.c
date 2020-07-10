@@ -86,6 +86,7 @@ void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado){
 }
 
 void estadoSiAtrapo(Entrenador* entrenador) {
+	t_log* logger = iniciar_logger();
 	quickLog("El entrenador va a cambiar de estado por atrapar un pokemon");
 	if(sonIguales(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		//ya agarro todos sus pokemones
@@ -97,6 +98,22 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	else {
 		pasarADormido(entrenador);
 		quickLog("Quedo bloqueado dormido el entrenador");
+
+		int cantidadAtrapados;
+		int cantidadObjetivos;
+		if(list_is_empty(entrenador->pokemonesAtrapados)) {
+			cantidadAtrapados = 0;
+		} else {
+			cantidadAtrapados = list_size(entrenador->pokemonesAtrapados);
+		}
+		if(list_is_empty(entrenador->pokemonesObjetivos)) {
+			cantidadObjetivos = 0;
+		} else {
+			cantidadObjetivos = list_size(entrenador->pokemonesAtrapados);
+		}
+
+		log_info(logger, "Tiene %d pokemones atrapados y %d pokemones objetivos por atrapar", cantidadAtrapados, cantidadObjetivos);
+		destruirLog(logger);
 	}
 }
 
@@ -104,13 +121,20 @@ int sonIguales(t_list* objetivos, t_list* atrapados) {
 
 	int estaEnAtrapados(PokemonEnElMapa* objetivo) {
 
-		int esUnoDeLosObje(PokemonEnElMapa* atrapado){
-			return strcmp(atrapado->nombre, objetivo->nombre) == 0;
+		//nunca va a estar vacia porque esta fijandose que hace con el poke nuevo atrapado por el entrenador
+		if(list_is_empty(atrapados)){
+			int esUnoDeLosObje(PokemonEnElMapa* atrapado){
+				return strcmp(atrapado->nombre, objetivo->nombre) == 0;
+			}
+
+			PokemonEnElMapa* pokemonAtrapado = list_find(atrapados, (erasedTypeFilter)esUnoDeLosObje);
+			if(pokemonAtrapado != NULL){
+				return pokemonAtrapado->cantidad == objetivo->cantidad;
+			}
+			return 0;
 		}
 
-		PokemonEnElMapa* pokemonAtrapado = list_find(atrapados, (erasedTypeFilter)esUnoDeLosObje);
-		//TODO ACA ROMPE
-		return pokemonAtrapado->cantidad == objetivo->cantidad;
+		return 0;
 	}
 
 	//todos sus objetivos estan en la lista de sus atrapados con la misma cantidad
@@ -129,8 +153,12 @@ int sumaCantidades(t_list* pokemones) {
 		return primerCantidad + cantidadPoke;
 	}
 
-	int* cantidadFinal = list_fold(pokemones, 0, (erasedTypeFold)(sumarCantidad));
-	return *cantidadFinal;
+	if(list_is_empty(pokemones)) {
+		return 0;
+	}
+
+	int cantidadFinal = list_fold(pokemones, 0, (erasedTypeFold)(sumarCantidad));
+	return cantidadFinal;
 }
 
 void pasarADormido(Entrenador* entrenador) {
@@ -148,13 +176,18 @@ void pasarAExit(Entrenador* entrenador) {
 }
 
 int noEstaEnExit(Entrenador* entrenador){
-	return entrenador->estado != 5;
+	sem_wait(&semaforoEstados);
+	int cumple = entrenador->estado != 5;
+	sem_post(&semaforoEstados);
+	return cumple;
 }
 
 void pasarABlockEsperando(Entrenador* entrenador) {
 	t_log* logger = iniciar_logger();
+	sem_wait(&semaforoEstados);
 	entrenador->estado = 4;
 	entrenador->motivo = 1;
+	sem_post(&semaforoEstados);
 	log_info(logger, "El estado del entrenador paso a: %d", entrenador->estado);
 	destruirLog(logger);
 }

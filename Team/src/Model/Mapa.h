@@ -71,10 +71,11 @@ t_list* objetivosGlobales;
 t_list* pokemonesLibres;
 
 t_list* idsCorrelativosCaught;
+sem_t semaforoCorrelativos;
 t_list* idsCorrelativosLocalized;
 
 
-
+sem_t semaforoEstados;
 
 
 void iniciarVariables();

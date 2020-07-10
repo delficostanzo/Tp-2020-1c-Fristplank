@@ -5,7 +5,7 @@
 #include "utils.h"
 #include "../AppInit/LogFunctions.h"
 #include "Pokemon.h"
-
+#include "Mapa.h"
 
 typedef enum{
 	MOVERyATRAPAR = 1,

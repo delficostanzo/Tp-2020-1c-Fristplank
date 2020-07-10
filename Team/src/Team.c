@@ -15,8 +15,6 @@ int main(int argc, char *argv[]) {
 //	pasarAReadyEntrenador(entrenador1);
 //	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
 
-	pokemonesLibres = list_create();
-
 	iniciarVariables();
 
 

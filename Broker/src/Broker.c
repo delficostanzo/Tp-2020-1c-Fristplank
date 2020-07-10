@@ -92,13 +92,15 @@ int main(void) {
 	envioAppearedPrueba1(suscripcionAppeared);
 	//recibirACK(socketACKAppeared);
 
-	//envioLocalizedPrueba1(suscripcionLocalized);
+	sleep(3);
+	envioLocalizedPrueba1(suscripcionLocalized);
 	//recibirACK(socketACKLocalized);
 
 	if(recibirCatchDesde(socketCatch)){
+		sleep(2);
 		enviarIdCatchA(socketIdCatch);
 
-		sleep(5);
+		sleep(7);
 		enviarCaughtA(suscripcionCaught);
 		recibirACK(socketACKCaught);
 	}
