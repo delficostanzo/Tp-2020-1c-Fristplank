@@ -32,6 +32,9 @@ int noEstanTodosEnExit(){
 	return noTodosExit;
 }
 
+
+///////////READY/////////////////
+
 //paso a ready los entrenadores que esten mas cerca
 void pasarAReadyParaAtrapar(){
 	typedef bool(*erasedTypeFilter)(void*);
@@ -56,6 +59,7 @@ void pasarAReadyParaAtrapar(){
 
 			// cambio de estado al entrenador, pasa a ready
 			entrenadorAReady->estado = 2;
+			agregarAListaReady(entrenadorAReady);
 			// ese poke se saca de la lista de pokes libres porque ya fue asginado
 			cambiarCantidadEnPokesLibres(pokemonLibre);
 			// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
@@ -66,11 +70,6 @@ void pasarAReadyParaAtrapar(){
 		}
 	}
 	destruirLog(logger);
-}
-
-void pasarAReadyPorQuantum(Entrenador* entrenador){
-	// se pasa a ready con el mismo objetivo de atrapar el mismo poke
-	entrenador->estado = 2;
 }
 
 Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre){
@@ -121,7 +120,11 @@ void pasarAReadyParaIntercambiar(){
 		Entrenador* entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(bloqueado->movimientoEnExec->pokemonNecesitado, bloqueado->movimientoEnExec->pokemonAIntercambiar);
 		if(entrenadorDeIntercambio != NULL) {
 			//pasa a ready, sus movimientos ya estan definidos
-			entrenadorDeIntercambio->estado = 3;
+			entrenadorDeIntercambio->estado = 2;
+			//me guardo con que entrenador intercambiar cuando pase a exec y el que esta bloqueado a cual esta esperando
+			entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio = bloqueado->numeroEntrenador;
+			bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio = entrenadorDeIntercambio->numeroEntrenador;
+			agregarAListaReady(entrenadorDeIntercambio);
 		}
 	}
 
@@ -157,6 +160,7 @@ void pasarAExec(){
 	if(entrenadorExec() == NULL){
 		//sem_wait(&semaforoEstados);
 		entrenador->estado = 3;
+		sacarDeListaReady(entrenador);
 		//sem_post(&semaforoEstados);
 		pthread_mutex_unlock(&(entrenador->mutexEntrenador));
 	}
@@ -164,14 +168,9 @@ void pasarAExec(){
 }
 
 Entrenador* buscarEntrenadorSegun(char* algoritmo) {
-	if(strcmp(algoritmo, "FIFO") == 0){
-		//el primer entrenador de los ready es el que esta en indice 0
-		Entrenador* entrenador = list_get(entrenadoresReady(), 0);
-		return entrenador;
-	} else {//ROUND ROBIN -> se atiende por orden de llegada dejando que ejecute hasta maximo de QUANTUM
-		Entrenador* entrenador = list_get(entrenadoresReady(), 0);
-		return entrenador;
-	}
+	//el primer entrenador de los ready es el que esta en indice 0
+	Entrenador* entrenador = list_get(listaEntrenadoresReady, 0);
+	return entrenador;
 }
 
 
@@ -180,7 +179,7 @@ void cumplirObjetivo(Entrenador* entrenador){
 	quickLog("Se esta cumpliendo un objetivo");
 	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
 	ObjetivoEnExec mision = movimientoEnExec->objetivo;
-	Entrenador* entrenadorDeIntercambio;
+	Entrenador* entrenadorDeIntercambioBloqueado;
 	quickLog("Llega a cargar los datos del objetivo del entrenador en exec");
 
 	switch(mision){
@@ -191,7 +190,8 @@ void cumplirObjetivo(Entrenador* entrenador){
 			quickLog("Se mando el catch de un nuevo pokemon");
 			break;
 		case MOVEReINTERCAMBIAR:
-			intercambiarPokemonesCon(entrenador, entrenadorDeIntercambio);
+			entrenadorDeIntercambioBloqueado = buscarPorNumero(entrenador->movimientoEnExec->numeroDelEntrenadorIntercambio);
+			intercambiarPokemonesCon(entrenador, entrenadorDeIntercambioBloqueado);
 			break;
 	}
 }
@@ -200,10 +200,10 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 	int distanciaHastaBloqueado = distanciaEntre(entrenadorMovido->posicion, entrenadorBloqueado->posicion);
 
 	//si es por fifo o es round robin pero le alcanza el quantum para moverse e intercambiar
-	if((strcmp(ALGORITMO, "FIFO") == 0) || ((strcmp(ALGORITMO, "RR") == 0) && QUANTUM >= distanciaHastaBloqueado +5)) {
+	if((strcmp(ALGORITMO, "FIFO") == 0) || ((strcmp(ALGORITMO, "RR") == 0) && QUANTUM >= (distanciaHastaBloqueado + entrenadorMovido->ciclosCPUFaltantesIntercambio))) {
 		entrenadorMovido->posicion = entrenadorBloqueado->posicion;
 		entrenadorMovido->ciclosCPUConsumido += distanciaHastaBloqueado;
-		entrenadorMovido->ciclosCPUConsumido += 5;
+		entrenadorMovido->ciclosCPUConsumido += entrenadorMovido->ciclosCPUFaltantesIntercambio;
 		PokemonEnElMapa* nuevoAtrapadoDelMovido = entrenadorMovido->movimientoEnExec->pokemonNecesitado;
 		PokemonEnElMapa* nuevoAtrapadoDelBloqueado = entrenadorMovido->movimientoEnExec->pokemonAIntercambiar;
 
@@ -230,13 +230,15 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 					entrenadorMovido->posicion = entrenadorBloqueado->posicion;
 					//lo que sobro del quantum
 					int sobrante = QUANTUM - distanciaHastaBloqueado;
-					entrenadorMovido->ciclosCPUConsumido += distanciaHastaBloqueado + (QUANTUM - sobrante);
+					entrenadorMovido->ciclosCPUConsumido += QUANTUM;
 
 					entrenadorMovido->ciclosCPUFaltantesIntercambio = sobrante;
+					//por si en el proximo ready se planifica al bloqueado para que se mueva
+					entrenadorBloqueado->ciclosCPUFaltantesIntercambio = sobrante;
 					pasarADeadlock(entrenadorMovido);
 
 				} else { //
-					//moverseDistanciaMenorAQ(entrenadorMovido, entrenadorBloqueado->posicion->posicionX, entrenadorBloqueado->posicion->posicionY, distanciaHastaBloqueado);
+					moverSiDistanciaMayorAQ(entrenadorMovido, entrenadorBloqueado->posicion->posicionX, entrenadorBloqueado->posicion->posicionY, distanciaHastaBloqueado);
 
 					pasarADeadlock(entrenadorMovido);
 				}
@@ -249,26 +251,31 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 	quickLog("Calcula la distancia al pokemon");
 
 	//CONDICIONES SEGUN EL ALGORITMO
-	if(strcmp(ALGORITMO, "FIFO") == 0 || QUANTUM >= distanciaHastaPokemon){
+	if(strcmp(ALGORITMO, "FIFO") == 0 || QUANTUM > distanciaHastaPokemon){
 		entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
 		entrenador->posicion = &(pokemon->posicion);
-	} else{// distancia hasta el poke es menor que el quantum
-		// va a entrar a esta condicion hasta que la distancia se reduzca y sea menor que el quantum
-		moverseSegunElQuantum(entrenador, pokemon, distanciaHastaPokemon);
-	}
 
-	//el socket ya esta conectado con el broker en Conexion
-	sem_wait(&semaforoCatch);
-	enviarCatchDesde(entrenador);
-	sem_post(&semaforoCatch);
+		//el socket ya esta conectado con el broker en Conexion
+		sem_wait(&semaforoCatch);
+		enviarCatchDesde(entrenador);
+		sem_post(&semaforoCatch);
 
-	//cada vez que el entrenador envia un CATCH, consume una rafaga de CPU
-	entrenador->ciclosCPUConsumido += 1;
+		//cada vez que el entrenador envia un CATCH, consume una rafaga de CPU
+		entrenador->ciclosCPUConsumido += 1;
 
 
-	pasarABlockEsperando(entrenador);
-	quickLog("Se paso a estado bloqueado esperando respuesta");
+		pasarABlockEsperando(entrenador);
+		quickLog("Se paso a estado bloqueado esperando respuesta");
 
+	} else if (QUANTUM == distanciaHastaPokemon){ // se llega a mover hasta el poke pero no le alcanzo el quantum para mandar el catch
+			entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
+			entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
+			pasarAReadyPorQuantum(entrenador);
+	} else { // distancia hasta el poke es mayor que el quantum
+
+			// va a entrar a esta condicion y va avanzar hasta lo que le alcance con el quantum
+			moverseSegunElQuantum(entrenador, pokemon, distanciaHastaPokemon);
+		}
 }
 
 void verificarSiTodosExit() {

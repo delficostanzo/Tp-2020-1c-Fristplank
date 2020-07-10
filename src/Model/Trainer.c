@@ -16,6 +16,19 @@ Entrenador* newEntrenador() {
 	return malloc(sizeof(Entrenador));
 }
 
+Entrenador* buscarPorNumero(int numero) {
+
+	int tieneNumero(Entrenador* entrenador) {
+		return entrenador->numeroEntrenador == numero;
+	}
+
+	Entrenador* entrenadorBuscado;
+	pthread_mutex_lock(&mutexEntrenadores);
+	entrenadorBuscado = list_find(entrenadores, tieneNumero);
+	pthread_mutex_unlock(&mutexEntrenadores);
+	return entrenadorBuscado;
+}
+
 //imaginate esto como setters
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion) {
 	entrenador->posicion = posicion;
@@ -70,6 +83,28 @@ int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2) {
 	int distanciaEnY = posicion1->posicionY - posicion2->posicionY;
 	return abs(distanciaEnX) + abs(distanciaEnY);
 }
+
+//////////READY/////////////
+void agregarAListaReady(Entrenador* entrenadorAReady){
+	pthread_mutex_lock(&mutexListaEntrenadoresReady);
+	//los va agregando al final de la lista
+	list_add(listaEntrenadoresReady, entrenadorAReady);
+	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
+}
+
+void sacarDeListaReady(Entrenador* entrenadorASacar) {
+	int esElEntrenador(Entrenador* entrenador) {
+		return entrenador->numeroEntrenador == entrenadorASacar->numeroEntrenador;
+	}
+
+	//si ese entrenador esta en la lista sacarlo
+	if(list_any_satisfy(listaEntrenadoresReady, (erasedTypeFilter) esElEntrenador)){
+		pthread_mutex_lock(&mutexListaEntrenadoresReady);
+		list_remove_by_condition(listaEntrenadoresReady, (erasedTypeFilter) esElEntrenador);
+		pthread_mutex_unlock(&mutexListaEntrenadoresReady);
+	}
+}
+
 
 ////////////ATRAPA///////////////
 
@@ -165,6 +200,7 @@ int sumaCantidades(t_list* pokemones) {
 }
 
 void pasarADormido(Entrenador* entrenador) {
+
 	entrenador->estado = 4;
 	entrenador->motivo = 2;
 }
