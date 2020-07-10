@@ -40,17 +40,6 @@ int socketACKLocalized;
 
 t_config* config;
 
-//pthread_mutex_t mutexConexionGameboy;
-//pthread_mutex_t mutexSocketGameBoy;
-//pthread_mutex_t mutexConexionBroker;
-//pthread_mutex_t mutexSuscripcionAppeared;
-//pthread_mutex_t mutexSuscripcionCaught;
-//pthread_mutex_t mutexSuscripcionLocalized;
-//pthread_mutex_t mutexSocketGet;
-//pthread_mutex_t mutexSocketCatch;
-//pthread_mutex_t mutexSocketACKAppeared;
-//pthread_mutex_t mutexSocketACKCaught;
-//pthread_mutex_t mutexSocketACKLocalized;
 
 
 pthread_mutex_t mutexEntrenadores;
