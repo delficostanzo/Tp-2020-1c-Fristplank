@@ -9,6 +9,7 @@ static void recibirIdCatch(int socketIdCatch, Entrenador* entrenador);
 static int tieneComoIdCorrelativoCaught(int idBuscado);
 static Entrenador* entrenadorQueTieneId(int idCatchQueResponde);
 static void procesarEspera(Entrenador*  entrenador, uint32_t atrapo);
+static int hayEntrenadorQueTieneId(int idCatchQueResponde);
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -46,6 +47,8 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 	t_log* logger = iniciar_logger();
 	t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
 	t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
+
+	quickLog("Se recibio un localized");
 	//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
 	//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
 	int cantidad = (int) (localized->cantidadPosiciones);
@@ -145,7 +148,7 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 //funcion llamada con un semaforo -> solo 1 puede atrapar a la vez y agregar un id correlativo a la lista a la vez
 void enviarCatchDesde(Entrenador* entrenadorEsperando){
 
-	quickLog("Esta enviando los catch por cada pokemon que esta por ser atrapado");
+	quickLog("Esta enviando el catch de cada pokemon que esta por ser atrapado");
 	PokemonEnElMapa* pokemonPorAtrapar = entrenadorEsperando->movimientoEnExec->pokemonNecesitado;
 	t_catch_pokemon* catchPoke = crearEstructuraCatchDesde(pokemonPorAtrapar);
 	enviar_catch_pokemon(catchPoke, socketCatch, -1, -1);
@@ -173,9 +176,13 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenador){
 	//lista de ids correlativos globales que se mandaron
 	//recien se agregan cuando recibo la respuesta del broker
 
+	sem_wait(&semaforoCorrelativos);
 	entrenador->idCorrelativoDeEspera = idCorrelativo;
 
+
 	list_add(idsCorrelativosCaught, idCorrelativo);
+	sem_post(&semaforoCorrelativos);
+
 	log_info(logger, "Se registro el id del catch que mando el entrenador como id: %d", idCorrelativo);
 	log_info(logger, "Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
 	destruirLog(logger);
@@ -185,7 +192,7 @@ t_paquete* recibirCaught(int socketCaught){
 	t_paquete* paqueteCaught = recibir_mensaje(socketCaught);
 	quickLog("Se recibio un caught");
 
-	if(tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO) == 1) {
+	if(tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO)) {
 		//el entrenador que hizo el catch del caught respondido cambia de estado de acuerdo a la respuesta
 
 		ejecutarRespuestaCaught(paqueteCaught->ID_CORRELATIVO, paqueteCaught);
@@ -199,32 +206,48 @@ t_paquete* recibirCaught(int socketCaught){
 int tieneComoIdCorrelativoCaught(int idBuscado) {
 	typedef bool(*erasedType)(void*);
 
-	quickLog("Procesando respuesta caught util");
+	quickLog("Fijandose si el caught es suyo");
+
 	int existe(int idExistente) {
 		return idExistente == idBuscado;
 	}
 
 	//si la lista no esta vacia
+	sem_wait(&semaforoCorrelativos);
 	if(list_is_empty(idsCorrelativosCaught) != 1) {
 		//me fijo de la lista de idsCorrelativos que mande como catch, si coincide con el id del que recien llego
 		return list_any_satisfy(idsCorrelativosCaught, (erasedType)existe);
 	}
+	sem_post(&semaforoCorrelativos);
+
 
 	return 0;
 }
 
 void ejecutarRespuestaCaught(int idCatchQueResponde, t_paquete* paqueteCaught){
+	t_log* logger = iniciar_logger();
 	t_caught_pokemon* caught = paqueteCaught->buffer->stream;
 	//ya sabemos que algun entrenador tiene ese id como correlativo de espera
 	Entrenador* entrenador = entrenadorQueTieneId(idCatchQueResponde);
 	procesarEspera(entrenador, caught->ok);
 	//el remove recibe el indice
 	//list_remove(idsCorrelativosCaught, &idCatchQueResponde);
+	list_remove_by_condition(idsCorrelativosCaught, hayEntrenadorQueTieneId);
+	log_info(logger, "Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
+	destruirLog(logger);
 }
+
+int hayEntrenadorQueTieneId(int idCatchQueResponde) {
+	Entrenador* entrenador = entrenadorQueTieneId(idCatchQueResponde);
+	return entrenador != NULL;
+}
+
 
 Entrenador* entrenadorQueTieneId(int idCatchQueResponde) {
 	int tieneIdCorrelativo(Entrenador* entrenador) {
+		//sem_wait(&semaforoCorrelativos);
 		return entrenador->idCorrelativoDeEspera == idCatchQueResponde;
+		//sem_post(&semaforoCorrelativos);
 	}
 
 	pthread_mutex_lock(&mutexEntrenadores);

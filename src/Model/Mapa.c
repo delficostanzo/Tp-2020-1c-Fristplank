@@ -39,8 +39,14 @@ void iniciarVariables(){
 	sem_init(&semaforoCatch, 1, 0);
 
 	idsCorrelativosCaught = list_create();
+	sem_init(&semaforoCorrelativos, 1, 1);
 	idsCorrelativosLocalized = list_create();
 
 
+	sem_init(&semaforoEstados, 1, 1);
 
+	pokemonesLibres = list_create();
+
+
+	//llegan bien sus nombres
 }

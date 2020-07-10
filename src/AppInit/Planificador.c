@@ -7,18 +7,17 @@ static void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon);
 static Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre);
 static Entrenador* buscarEntrenadorSegun(char* algoritmo);
 static int noEstanTodosEnExit();
+static bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj);
 
 typedef bool(*erasedTypeFilter)(void*);
 
 
 void planificarEntrenadores(){
 
-
 	while(noEstanTodosEnExit()){ // lista de entrenadores que no estan en exit
 		// se pasan entrenadores a READY segun su condicion
 		pasarAReady();
 		pasarAExec();
-
 	}
 
 }
@@ -52,15 +51,18 @@ void pasarAReady(){
 			PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
 			Entrenador* entrenadorAReady =  asignarObjetivoA(entrenadoresPosibles, pokemonLibre);
 			// cambio de estado al entrenador, pasa a ready
+			//sem_wait(&semaforoEstados);
 			entrenadorAReady->estado = 2;
+			//sem_post(&semaforoEstados);
 			// ese poke se saca de la lista de pokes libres porque ya fue asginado
 			disminuirCantidadPokemones(pokemonLibre, pokemonesLibres);
 
 			pthread_mutex_lock(&mutexObjetivosGlobales);
 			// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
 			disminuirCantidadPokemones(pokemonLibre, objetivosGlobales);
-			log_info(logger, "Se paso a ready el entrenador");
+
 			pthread_mutex_unlock(&mutexObjetivosGlobales);
+			log_info(logger, "Se paso a ready el entrenador");
 
 		}
 		pthread_mutex_unlock(&mutexPokemonesLibres);
@@ -84,11 +86,6 @@ void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPoke
 	PokemonEnElMapa* pokeComoObj = buscarPorNombre(pokemonLibre->nombre, listaPokes);
 	//siempre va a encontrar a ese objetivo porque si estaba libre estaba como obje
 
-	bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj){
-		return pokeComoObj->cantidad == 0;
-	}
-
-
 	// disminuir la cantidad de ese poke libre en los objetivos globales
 	//TODO
 	pokeComoObj->cantidad -= 1;
@@ -98,7 +95,9 @@ void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPoke
 
 }
 
-
+bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj){
+	return pokeComoObj->cantidad == 0;
+}
 
 /////////
 
@@ -109,7 +108,9 @@ void pasarAExec(){
 	Entrenador* entrenador = buscarEntrenadorSegun(ALGORITMO);
 
 	if(entrenadorExec() == NULL){
+		//sem_wait(&semaforoEstados);
 		entrenador->estado = 3;
+		//sem_post(&semaforoEstados);
 		pthread_mutex_unlock(&(entrenador->mutexEntrenador));
 	}
 

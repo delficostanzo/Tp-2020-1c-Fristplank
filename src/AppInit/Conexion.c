@@ -148,7 +148,7 @@ void crearHilosDeEscucha() {
 
 	pthread_t escucharLocalizedPokemon;
 	pthread_create(&escucharLocalizedPokemon, NULL, (void*)escucharColaLocalizedPokemon, NULL);
-	//pthread_detach(escucharLocalizedPokemon);
+	pthread_detach(escucharLocalizedPokemon);
 
 	pthread_t escucharCaughtPokemon;
 	pthread_create(&escucharCaughtPokemon, NULL, (void*)escucharColaCaughtPokemon, NULL);
