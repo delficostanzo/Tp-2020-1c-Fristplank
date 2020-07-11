@@ -32,6 +32,7 @@ void funcionesDelEntrenador(void* unEntrenador){
 
 	Entrenador* entrenador = (Entrenador*) unEntrenador;
 
+	quickLog("$-LLEGA ACA");
 	//bloqueo esperando que otro me active y me da el objetivo
 	while(entrenador->estado != 5) {
 		//el unlock de este mutex lo va a hacer el planificador cuando este en exec
@@ -40,6 +41,6 @@ void funcionesDelEntrenador(void* unEntrenador){
 		cumplirObjetivo(entrenador);
 	}
 
-	quickLog("un entrenador ya esta en exit");
+	quickLog("$-un entrenador ya esta en exit");
 }
 

@@ -9,6 +9,7 @@
 #define SRC_MODEL_CIERRETEAM_H_
 
 #include "Mapa.h"
+#include "Trainer.h"
 
 void terminarTeam();
 

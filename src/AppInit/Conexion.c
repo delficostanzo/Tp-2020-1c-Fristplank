@@ -5,7 +5,7 @@
 void* escucharGameBoy(){
 	conexionGameboy = crearSocket();
 	if(escuchaEn(conexionGameboy, puertoTeam)){
-		quickLog("Escuchando conexiones del GameBoy");
+		quickLog("$-Escuchando conexiones del GameBoy");
 	}
 
 	while(1){
@@ -20,7 +20,7 @@ void* escucharGameBoy(){
 		free(handshakePropio);
 		free(handshakeResponse);
 
-		quickLog("Me conecté con GameBoy");
+		quickLog("$-Me conecté con GameBoy");
 
 		pthread_t escucharAppearedPokemon;
 		pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemonGameBoy, NULL);
@@ -35,7 +35,7 @@ int generarSocketsConBroker() {
 	conexionBroker = crearSocket();
 
 	while ((conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) != 1) {
-		quickLog("Intentando conexión a Broker...");
+		quickLog("$-Intentando conexión a Broker...");
 		sleep(TIEMPO_RECONEXION);
 	}
 
@@ -45,7 +45,7 @@ int generarSocketsConBroker() {
 
 	t_handshake* handshakeResponse;
 	handshakeResponse = responderHandshake(conexionBroker, handshakePropio);
-	log_info(logger, "El id del proceso con el que me conecte es: %d", handshakeResponse->id);
+	log_info(logger, "$-El id del proceso con el que me conecte es: %d", handshakeResponse->id);
 	free(handshakePropio);
 	free(handshakeResponse);
 
@@ -69,13 +69,13 @@ int generarSocketsConBroker() {
 
 	//ENVIA GET Y ESCUCHA EL ID GET
 	if (conectarA(socketGet, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Ya se conecto a la cola de get para poder enviarle mensajes");
+		quickLog("$-Ya se conecto a la cola de get para poder enviarle mensajes");
 //		if (conectarA(socketIdGet, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("Socket de recepcion de ids Get guardado.");
+//			quickLog("$-Socket de recepcion de ids Get guardado.");
 
 			enviarGetDesde(socketGet);
 
-			quickLog("Se envian correctamente los get");
+			quickLog("$-Se envian correctamente los get");
 		//} else{
 //				conexionCorrecta = -1;
 //			}
@@ -86,9 +86,9 @@ int generarSocketsConBroker() {
 
 	//ESCUCHA APPEARED Y ENVIA EL ACK
 	if (conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de appeared_pokemon");
+		quickLog("$-Suscripto a la cola de appeared_pokemon");
 //		if (conectarA(socketACKAppeared, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("Socket de ACK Appeared Pokemon guardado.");
+//			quickLog("$-Socket de ACK Appeared Pokemon guardado.");
 		//} else{
 //			conexionCorrecta = -1;
 //		 }
@@ -98,9 +98,9 @@ int generarSocketsConBroker() {
 
 	//ESCUCHA LOCALIZED Y ENVIA EL ACK
 	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de localized_pokemon");
+		quickLog("$-Suscripto a la cola de localized_pokemon");
 //		if (conectarA(socketACKLocalized, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("Socket de ACK Localized Pokemon guardado.");
+//			quickLog("$-Socket de ACK Localized Pokemon guardado.");
 //
 //		} else{
 //			conexionCorrecta = -1;
@@ -112,9 +112,9 @@ int generarSocketsConBroker() {
 
 	//ENVIA CATCH Y ESCUCHA EL ID CATCH
 	if (conectarA(socketCatch, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Ya se conecto a la cola de catch para poder enviarle mensajes");
+		quickLog("$-Ya se conecto a la cola de catch para poder enviarle mensajes");
 		if (conectarA(socketIdCatch, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("Socket de recepcion de ids Catch guardado.");
+			quickLog("$-Socket de recepcion de ids Catch guardado.");
 			sem_post(&semaforoCatch);
 		//el envio lo hace cada entrenador!
 		} else{
@@ -126,9 +126,9 @@ int generarSocketsConBroker() {
 
 	//ESCUCHA CAUGHT Y ENVIA EL ACK
 	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
-		quickLog("Suscripto a la cola de caught_pokemon");
+		quickLog("$-Suscripto a la cola de caught_pokemon");
 		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("Socket de ACK Caught Pokemon guardado.");
+			quickLog("$-Socket de ACK Caught Pokemon guardado.");
 		} else{
 			conexionCorrecta = -1;
 		 }
@@ -144,7 +144,7 @@ void crearHilosDeEscucha() {
 
 	pthread_t escucharAppearedPokemon;
 	pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);
-	//pthread_detach(escucharLocalizedPokemon);
+	pthread_detach(escucharAppearedPokemon);
 
 	pthread_t escucharLocalizedPokemon;
 	pthread_create(&escucharLocalizedPokemon, NULL, (void*)escucharColaLocalizedPokemon, NULL);
@@ -157,7 +157,7 @@ void crearHilosDeEscucha() {
 
 ////////FUNCIONES DE LOS HILOS DE COLAS A LAS QUE ME SUSCRIBO//////////
 void* escucharColaAppearedPokemonGameBoy(){
-		quickLog("Recibiendo appeared del gameboy");
+		quickLog("$-Recibiendo appeared del gameboy");
 
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy);
 
@@ -168,24 +168,24 @@ void* escucharColaAppearedPokemonGameBoy(){
 void* escucharColaAppearedPokemon(){
 
 	while(1){
-		quickLog("Esperando mensajes de Appeared");
+		quickLog("$-Esperando mensajes de Appeared");
 
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared);
 
 		//enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
-		//quickLog("Pudo enviar el ACK de los appeared");
+		//quickLog("$-Pudo enviar el ACK de los appeared");
 	}
 }
 
 void* escucharColaCaughtPokemon(){
 
 	while(1){
-		//quickLog("Esperando mensajes de Caught");
+		//quickLog("$-Esperando mensajes de Caught");
 		//el entrenador que estaba esperando esa respuesta es ejecutado y pasa al estado segun corresponda
 		t_paquete* paqueteNuevo = recibirCaught(suscripcionCaught);
 		if(paqueteNuevo != NULL){
 			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
-			quickLog("Pudo enviar el ACK del caught");
+			quickLog("$-Pudo enviar el ACK del caught");
 		}
 
 	}
@@ -194,11 +194,11 @@ void* escucharColaCaughtPokemon(){
 void* escucharColaLocalizedPokemon(){
 
 	while(1){
-		quickLog("Esperando mensajes de Localized");
+		quickLog("$-Esperando mensajes de Localized");
 
 		t_paquete* paqueteNuevo = recibirLocalizedYGuardalos(suscripcionLocalized);
 
 //		enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
-//		quickLog("Pudo enviar el ACK del localized");
+//		quickLog("$-Pudo enviar el ACK del localized");
 	}
 }

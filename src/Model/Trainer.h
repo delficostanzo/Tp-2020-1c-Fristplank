@@ -5,7 +5,6 @@
 #include "utils.h"
 #include "../AppInit/LogFunctions.h"
 #include "Pokemon.h"
-#include "Mapa.h"
 
 typedef enum{
 	MOVERyATRAPAR = 1,
@@ -59,6 +58,8 @@ Entrenador* buscarPorNumero(int numero);
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
 void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon);
 t_posicion* newPosicion();
+char* obtenerCharDeMov(ObjetivoEnExec objetivo);
+
 Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores);
 Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado);
 void agregarAListaReady(Entrenador* entrenadorAReady);

@@ -29,18 +29,19 @@ t_list* getEntrenadoresDesde(char* nombreDeArchivo) {
 
 	//esto lo agregamos al archivo de configuracion, ya que podiamos agregar lo que necesitabamos. Sirve para saber cuantos entrenadores hay
 	int cantidadEntrenadores = config_get_int_value(configEntrenador, "CANTIDAD_ENTRENADORES");
-	log_info(logger, string_from_format("Cantidad de entrenadores: %d", cantidadEntrenadores));
+	log_info(logger, string_from_format("$-Cantidad de entrenadores: %d", cantidadEntrenadores));
 	//lista de estructuras entrenador segun la cantidad que haya en config
 	t_list* entrenadores = inicializarEntrenadoresHasta(cantidadEntrenadores);
 
+	numerarlos(entrenadores);
 	setPosicionesEnEntrenadoresDesde(configEntrenador, entrenadores);
 	setPokemonesObjetivosDesde(configEntrenador, entrenadores);
 	setPokemonesAtrapadosDesde(configEntrenador, entrenadores);
 	setEstadoNew(entrenadores);
 	setMutex(entrenadores);
-	numerarlos(entrenadores);
 	setCiclosCPUFaltantesIntercambio(entrenadores);
 
+	destruirLog(logger);
 	return entrenadores;
 }
 
@@ -76,7 +77,7 @@ void setPosicionesEnEntrenadoresDesde(t_config* config, t_list* entrenadores) {
 	}
 
 	list_destroy(posiciones);
-	quickLog("Cargadas las posiciones de los entrenadores");
+	quickLog("$-Cargadas las posiciones de los entrenadores");
 }
 
 void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
@@ -97,11 +98,11 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 
 		agregarObjetivosA(entrenador, objetivosDelEntrenador);
 
-		quickLog(string_from_format("El entrenador %d tiene %d objetivos",index,entrenador->pokemonesObjetivos->elements_count));
+		quickLog(string_from_format("$-El entrenador %d tiene %d objetivos",entrenador->numeroEntrenador,entrenador->pokemonesObjetivos->elements_count));
 	}
 
 	list_destroy(objetivos);
-	quickLog("Cargados los objetivos de los entrenadores");
+	quickLog("$-Cargados los objetivos de los entrenadores");
 
 }
 
@@ -123,17 +124,18 @@ void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores) {
 
 		agregarAtrapadosA(entrenador, atrapadosDelEntrenador);
 
-		quickLog(string_from_format("El entrenador %d tiene %d atrapados",index,entrenador->pokemonesAtrapados->elements_count));
+		quickLog(string_from_format("$-El entrenador %d tiene %d atrapados",entrenador->numeroEntrenador,entrenador->pokemonesAtrapados->elements_count));
 	}
 
 	list_destroy(atrapados);
-	quickLog("Cargados los atrapados de los entrenadores");
+	quickLog("$-Cargados los atrapados de los entrenadores");
 }
 
 void setEstadoNew(t_list* entrenadores){
 	for(int index=0; index < list_size(entrenadores); index++){
 		Entrenador* entrenador = list_get(entrenadores, index);
 		entrenador->estado = 1;
+		log_info(LO, "El entrenador %d arranca en estado new", entrenador->numeroEntrenador);
 	}
 }
 
@@ -205,7 +207,7 @@ t_list* getObjetivosTotalesDesde(t_list* entrenadores) {
 
 	t_list* voids = list_map(objetivosTotales, (erasedTypeMap)agregarAUnaNuevaListaConcat);
 
-	quickLog("Se cargaron los objetivos totales de los entrenadores (atrapados y sin atrapar)");
+	quickLog("$-Se cargaron los objetivos totales de los entrenadores (atrapados y sin atrapar)");
 
 	list_destroy(objetivosTotales);
 	list_destroy(voids);
@@ -261,7 +263,7 @@ t_list* getObjetivosGlobalesDesde(t_list* pokemonesObjetivos, t_list* pokemonesA
 	//diferencia entre la lista de objetivos totales y los atrapados
 	t_list* listaConObjetivosRestados = list_create();
 	listaConObjetivosRestados = list_map(pokemonesObjetivos, (erasedTypeMap)restarCantidadQueFalta);
-	quickLog("Se cargaron todos los objetivos globales");
+	quickLog("$-Se cargaron todos los objetivos globales");
 	return list_filter(listaConObjetivosRestados, (erasedTypeFilter)noTieneCantidadNegativa);
 }
 

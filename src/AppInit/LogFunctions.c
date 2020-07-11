@@ -24,6 +24,16 @@ t_log* iniciar_logger(void) {
 	return log;
 }
 
+t_log* iniciarLogOficial(void) {
+	t_log * log = malloc(sizeof(t_log));
+	log = log_create(LogOficial, "LOG", 1, 0);
+	if (log == NULL) {
+		printf("No pude crear el log oficial \n");
+		exit(1);
+	}
+	return log;
+}
+
 void destruirLog(t_log* logger) {
 	if (logger != NULL) {
 		log_destroy(logger);
