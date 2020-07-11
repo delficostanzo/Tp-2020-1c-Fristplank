@@ -48,5 +48,8 @@ void iniciarVariables(){
 	pokemonesLibres = list_create();
 	listaEntrenadoresReady = list_create();
 
+	sem_init(&semaforoEntrenadorEsperando, 1, 0);
+
+
 	//llegan bien sus nombres
 }

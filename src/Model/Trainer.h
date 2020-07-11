@@ -43,7 +43,7 @@ typedef struct {
 	int ciclosCPUConsumido;
 	int idCorrelativoDeEspera;
 	pthread_mutex_t mutexEntrenador;
-	//pthread_mutex_t mutexEstado;
+	pthread_mutex_t mutexEstado;
 	int ciclosCPUFaltantesIntercambio;
 	int numeroEntrenador;
 }Entrenador;

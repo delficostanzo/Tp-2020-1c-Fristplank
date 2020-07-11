@@ -119,7 +119,7 @@ void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado){
 
 void estadoSiAtrapo(Entrenador* entrenador) {
 	t_log* logger = iniciar_logger();
-	quickLog("El entrenador va a cambiar de estado por atrapar un pokemon");
+	quickLog("$-El entrenador va a cambiar de estado por atrapar un pokemon");
 	if(sonIguales(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		//ya agarro todos sus pokemones
 		pasarAExit(entrenador);
@@ -199,23 +199,30 @@ int sumaCantidades(t_list* pokemones) {
 }
 
 void pasarADormido(Entrenador* entrenador) {
-
+	pthread_mutex_lock(&entrenador->mutexEstado);
 	entrenador->estado = 4;
 	entrenador->motivo = 2;
+	pthread_mutex_unlock(&entrenador->mutexEstado);
 }
 
 void pasarADeadlock(Entrenador* entrenador) {
+	pthread_mutex_lock(&entrenador->mutexEstado);
 	entrenador->estado = 4;
 	entrenador->motivo = 3;
+	pthread_mutex_unlock(&entrenador->mutexEstado);
 }
 
 void pasarAExit(Entrenador* entrenador) {
+	pthread_mutex_lock(&entrenador->mutexEstado);
 	entrenador->estado = 5;
+	pthread_mutex_unlock(&entrenador->mutexEstado);
 }
 
 int noEstaEnExit(Entrenador* entrenador){
 	//sem_wait(&semaforoEstados);
+	pthread_mutex_lock(&entrenador->mutexEstado);
 	int cumple = entrenador->estado != 5;
+	pthread_mutex_unlock(&entrenador->mutexEstado);
 	//sem_post(&semaforoEstados);
 	return cumple;
 }
@@ -223,8 +230,10 @@ int noEstaEnExit(Entrenador* entrenador){
 void pasarABlockEsperando(Entrenador* entrenador) {
 	t_log* logger = iniciar_logger();
 	//sem_wait(&semaforoEstados);
+	pthread_mutex_lock(&entrenador->mutexEstado);
 	entrenador->estado = 4;
 	entrenador->motivo = 1;
+	pthread_mutex_unlock(&entrenador->mutexEstado);
 	//sem_post(&semaforoEstados);
 	log_info(logger, "$-El estado del entrenador paso a: %d", entrenador->estado);
 	destruirLog(logger);

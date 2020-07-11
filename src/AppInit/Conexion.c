@@ -5,7 +5,7 @@
 void* escucharGameBoy(){
 	conexionGameboy = crearSocket();
 	if(escuchaEn(conexionGameboy, puertoTeam)){
-		quickLog("$-Escuchando conexiones del GameBoy");
+		quickLog("$-Escuchando conexiones del G;ameBoy");
 	}
 
 	while(1){
@@ -150,9 +150,13 @@ void crearHilosDeEscucha() {
 	pthread_create(&escucharLocalizedPokemon, NULL, (void*)escucharColaLocalizedPokemon, NULL);
 	pthread_detach(escucharLocalizedPokemon);
 
+//	pthread_t escucharIdsCatchPokemon;
+//	pthread_create(&escucharIdsCatchPokemon, NULL, (void*)escucharColaIdsCatchPokemon, NULL);
+//	pthread_detach(escucharIdsCatchPokemon);
+
 	pthread_t escucharCaughtPokemon;
 	pthread_create(&escucharCaughtPokemon, NULL, (void*)escucharColaCaughtPokemon, NULL);
-	//pthread_detach(escucharCaughtPokemon);
+	pthread_detach(escucharCaughtPokemon);
 }
 
 ////////FUNCIONES DE LOS HILOS DE COLAS A LAS QUE ME SUSCRIBO//////////
@@ -177,6 +181,18 @@ void* escucharColaAppearedPokemon(){
 	}
 }
 
+void* escucharColaIdsCatchPokemon(){
+
+	while(1){
+		quickLog("$-Esperando mensajes de ids catch");
+
+		//recibirIdCatch(socketIdCatch);
+
+		//enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
+		//quickLog("$-Pudo enviar el ACK de los appeared");
+	}
+}
+
 void* escucharColaCaughtPokemon(){
 
 	while(1){
@@ -184,8 +200,8 @@ void* escucharColaCaughtPokemon(){
 		//el entrenador que estaba esperando esa respuesta es ejecutado y pasa al estado segun corresponda
 		t_paquete* paqueteNuevo = recibirCaught(suscripcionCaught);
 		if(paqueteNuevo != NULL){
-			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
-			quickLog("$-Pudo enviar el ACK del caught");
+//			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
+//			quickLog("$-Pudo enviar el ACK del caught");
 		}
 
 	}
