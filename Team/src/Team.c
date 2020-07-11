@@ -6,25 +6,27 @@ int main(int argc, char *argv[]) {
 
 	t_log* logger = iniciar_logger();
 
+
 	config = leerConfigDesde("src/team.config");
+	iniciarVariables();
 	//obtiene la lista de entrenadores desde el config
 	entrenadores = getEntrenadoresDesde("src/team.config");
-	quickLog("Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
+	quickLog("$-Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
 //	Entrenador* entrenador1 = list_get(entrenadores, 0);
 //	pasarAReadyEntrenador(entrenador1);
 //	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
 
-	iniciarVariables();
+
 
 
 	objetivosTotales = getObjetivosTotalesDesde(entrenadores);
 	objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
 	objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
 	//llegan bien sus nombres
-	log_info(logger, "La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
-	log_info(logger, "La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
-	log_info(logger, "La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
+	log_info(logger, "$-La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
+	log_info(logger, "$-La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
+	log_info(logger, "$-La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
 
 
 	//Lanzar hilo para escuchar a GameBoy
@@ -50,7 +52,7 @@ int main(int argc, char *argv[]) {
 
 
 	crearHilosDeEntrenadores();
-	quickLog("Se crea un hilo por cada entrenador");
+	quickLog("$-Se crea un hilo por cada entrenador");
 
 	planificarEntrenadores();
 

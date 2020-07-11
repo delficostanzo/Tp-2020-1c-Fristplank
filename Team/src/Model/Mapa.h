@@ -4,8 +4,7 @@
 #define SRC_MODEL_MAPA_H_
 
 #include "utils.h"
-#include "../AppInit/ConfigFunctions.h"
-
+#include<commons/config.h>
 
 
 char* IP_BROKER;
@@ -23,6 +22,9 @@ int conexionGameboy;
 int socketGameBoy;
 
 int conexionBroker;
+
+char* LogOficial;
+t_log* LO;
 
 int suscripcionAppeared;
 int suscripcionCaught;

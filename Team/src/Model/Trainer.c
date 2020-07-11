@@ -24,7 +24,7 @@ Entrenador* buscarPorNumero(int numero) {
 
 	Entrenador* entrenadorBuscado;
 	pthread_mutex_lock(&mutexEntrenadores);
-	entrenadorBuscado = list_find(entrenadores, tieneNumero);
+	entrenadorBuscado = list_find(entrenadores, (erasedTypeFilter) tieneNumero);
 	pthread_mutex_unlock(&mutexEntrenadores);
 	return entrenadorBuscado;
 }
@@ -33,10 +33,6 @@ Entrenador* buscarPorNumero(int numero) {
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion) {
 	entrenador->posicion = posicion;
 }
-
-//void setPokemonesObjetivosA(Entrenador* entrenador, t_list* pokemones) {
-//	entrenador->pokemonesObjetivos = pokemones;
-//}
 
 //hacer el ADD solo si esa especie no estaba antes en la lista
 void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon) {
@@ -54,11 +50,6 @@ void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon) {
 		list_add(listaPokemones, nuevoPokemon);
 		}
 }
-
-
-//void setPokemonesAtrapadosA(Entrenador* entrenador, t_list* pokemones) {
-//	entrenador->pokemonesAtrapados = pokemones;
-//}
 
 t_posicion* newPosicion() {
 	return malloc(sizeof(t_posicion));
@@ -82,6 +73,20 @@ int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2) {
 	int distanciaEnX = posicion1->posicionX - posicion2->posicionX;
 	int distanciaEnY = posicion1->posicionY - posicion2->posicionY;
 	return abs(distanciaEnX) + abs(distanciaEnY);
+}
+
+/////////////char de enums/////////
+char* obtenerCharDeMov(ObjetivoEnExec objetivo) {
+	char* charObje;
+	switch(objetivo){
+			case MOVERyATRAPAR:
+				charObje = "moverse y atrapar";
+				break;
+			case MOVEReINTERCAMBIAR:
+				charObje = "moverse e intercambiar";
+				break;
+	}
+	return charObje;
 }
 
 //////////READY/////////////
@@ -108,16 +113,6 @@ void sacarDeListaReady(Entrenador* entrenadorASacar) {
 
 ////////////ATRAPA///////////////
 
-//void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
-//	int distanciaHastaPokemon = distanciaEntre(&(pokemon->posicion), entrenador->posicion);
-//	entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
-//	entrenador->posicion = &(pokemon->posicion);
-//	//el socket ya esta conectado con el broker en Conexion
-//	enviarCatchDesde(entrenador);
-//	quickLog("Esta por cambiarle el estado a bloqueado para esperar respuesta");
-//	pasarABlockEsperando(entrenador);
-//}
-
 void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado){
 	setPokemonA(entrenador->pokemonesAtrapados, pokemonAtrapado);
 }
@@ -128,14 +123,18 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	if(sonIguales(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		//ya agarro todos sus pokemones
 		pasarAExit(entrenador);
+		log_info(LO, "El entrenador %d paso a estado exit porque ya tiene atrapados todos sus objetivos", entrenador->numeroEntrenador);
 	}
 	else if(tienenLaMismaCantidad(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		pasarADeadlock(entrenador);
 		asignarMovimientoPorDeadlock(entrenador);
+		log_info(LO, "El entrenador %d paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
 	}
 	else {
 		pasarADormido(entrenador);
-		quickLog("Quedo bloqueado dormido el entrenador");
+		log_info(LO, "El entrenador %d paso a block dormido esperando que le den un pokemon para atrapar", entrenador->numeroEntrenador);
+
+		quickLog("$-Quedo bloqueado dormido el entrenador");
 
 		int cantidadAtrapados;
 		int cantidadObjetivos;
@@ -150,7 +149,7 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 			cantidadObjetivos = list_size(entrenador->pokemonesAtrapados);
 		}
 
-		log_info(logger, "Tiene %d pokemones atrapados y %d pokemones objetivos por atrapar", cantidadAtrapados, cantidadObjetivos);
+		log_info(logger, "$-Tiene %d pokemones atrapados y %d pokemones objetivos por atrapar", cantidadAtrapados, cantidadObjetivos);
 		destruirLog(logger);
 	}
 }
@@ -215,19 +214,19 @@ void pasarAExit(Entrenador* entrenador) {
 }
 
 int noEstaEnExit(Entrenador* entrenador){
-	sem_wait(&semaforoEstados);
+	//sem_wait(&semaforoEstados);
 	int cumple = entrenador->estado != 5;
-	sem_post(&semaforoEstados);
+	//sem_post(&semaforoEstados);
 	return cumple;
 }
 
 void pasarABlockEsperando(Entrenador* entrenador) {
 	t_log* logger = iniciar_logger();
-	sem_wait(&semaforoEstados);
+	//sem_wait(&semaforoEstados);
 	entrenador->estado = 4;
 	entrenador->motivo = 1;
-	sem_post(&semaforoEstados);
-	log_info(logger, "El estado del entrenador paso a: %d", entrenador->estado);
+	//sem_post(&semaforoEstados);
+	log_info(logger, "$-El estado del entrenador paso a: %d", entrenador->estado);
 	destruirLog(logger);
 }
 
@@ -256,7 +255,8 @@ void asignarMovimientoPorDeadlock(Entrenador* entrenador){
 	movimiento->pokemonAIntercambiar = asignarPokemonCopia(atrapadoDeMas);
 	movimiento->pokemonNecesitado = asignarPokemonCopia(objetivoNoCumplido);
 	entrenador->movimientoEnExec = movimiento;
-
+	//lo vuelvo a poner en 5 por si ya venia de un deadlock que le disminuyo esta cantidad
+	entrenador->ciclosCPUFaltantesIntercambio = 5;
 }
 
 
@@ -267,14 +267,13 @@ PokemonEnElMapa* buscarAtrapadoDeMas(Entrenador* entrenador){
 	int noEstaComoObjetivo(PokemonEnElMapa* atrapado) {
 		if(estaElPokemon(atrapado, objetivos)){
 			//tienen el mismo nombre
-			PokemonEnElMapa* atrapado = buscarPorNombre(atrapado->nombre, atrapados);
 			PokemonEnElMapa* objetivo = buscarPorNombre(atrapado->nombre, objetivos);
-			//pero hay uno atrapado de mas
+			//pero hay un atrapado de mas
 			return (atrapado->cantidad) > (objetivo->cantidad);
 		}
-		return 0;
+		return 1;
 	}
-	//TRAE EL QUE ESTA DE MAS, SOBRA
+	//TRAE EL QUE ESTA DE MAS, EL QUE SOBRA
 	return list_find(atrapados, (erasedTypeFilter) noEstaComoObjetivo);
 }
 
@@ -285,14 +284,13 @@ PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador){
 	int noEstaComoAtrapado(PokemonEnElMapa* objetivo) {
 		if(estaElPokemon(objetivo, atrapados)){
 			//tienen el mismo nombre
-			PokemonEnElMapa* atrapado = buscarPorNombre(atrapado->nombre, atrapados);
-			PokemonEnElMapa* objetivo = buscarPorNombre(atrapado->nombre, objetivos);
+			PokemonEnElMapa* atrapado = buscarPorNombre(objetivo->nombre, atrapados);
 			//pero hay uno atrapado de mas
 			return (atrapado->cantidad) > (objetivo->cantidad);
 		}
-		return 0;
+		return 1;
 	}
-	//TRAE EL QUE FALTA
+	//TRAE EL OBJETIVO QUE FALTA
 	return list_find(objetivos, (erasedTypeFilter) noEstaComoAtrapado);
 }
 

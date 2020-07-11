@@ -18,11 +18,11 @@ t_config* leerConfigDesde(char* nombreDeArchivo) {
 	t_log* logger = iniciar_logger();
 
 	if(config == NULL){
-		log_error(logger, "No se pudo abrir el archivo de configuracion '%s'", nombreDeArchivo);
+		log_error(logger, "$-No se pudo abrir el archivo de configuracion '%s'", nombreDeArchivo);
 		exit(1);
 	}
 
-	log_info(logger,"Archivo de configuracion '%s' leido correctamente", nombreDeArchivo);
+	log_info(logger,"$-Archivo de configuracion '%s' leido correctamente", nombreDeArchivo);
 	log_destroy(logger);
 
 	return config;

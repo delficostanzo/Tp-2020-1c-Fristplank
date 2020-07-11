@@ -12,7 +12,7 @@ static void enviarIdCatchA(int socketIdCatch);
 static void enviarIdCatchA2(int socketIdCatch);
 static void enviarCaughtA(int suscripcionCaught);
 static void enviarCaughtA2(int suscripcionCaught);
-static void recibirGetDesde(int socketGet);
+static t_paquete* recibirGetDesde(int socketGet);
 static void recibirACK(int socketACKAppeared);
 static void destruirLog(t_log* logger);
 
@@ -87,16 +87,19 @@ int main(void) {
 		break;
 	}
 
-	recibirGetDesde(socketGet);
-	recibirGetDesde(socketGet);
-	recibirGetDesde(socketGet);
+	t_paquete* paquete1 = recibirGetDesde(socketGet);
+	t_paquete* paquete2 = recibirGetDesde(socketGet);
+	if(recibirGetDesde(socketGet) != NULL) {
+		sleep(5);
+		envioAppearedPrueba1(suscripcionAppeared);
+		//recibirACK(socketACKAppeared);
 
-	envioAppearedPrueba1(suscripcionAppeared);
-	//recibirACK(socketACKAppeared);
+		sleep(3);
+		envioLocalizedPrueba1(suscripcionLocalized);
+		//recibirACK(socketACKLocalized);
+	}
 
-	sleep(3);
-	envioLocalizedPrueba1(suscripcionLocalized);
-	//recibirACK(socketACKLocalized);
+
 
 	if(recibirCatchDesde(socketCatch)){
 		sleep(2);
@@ -128,13 +131,14 @@ int main(void) {
 
 }
 
-void recibirGetDesde(int socketGet){
+t_paquete* recibirGetDesde(int socketGet){
 	t_log* logger = iniciar_logger();
 	t_paquete* paqueteGetRecibido = recibir_mensaje(socketGet);
 	t_get_pokemon* getPoke = paqueteGetRecibido->buffer->stream;
 
 	log_info(logger, "Se recibio el get del Pokemon: %s", getPoke->pokemon);
 	destruirLog(logger);
+	return paqueteGetRecibido;
 }
 
 void recibirACK(int socketACK){

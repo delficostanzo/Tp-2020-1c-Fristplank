@@ -13,7 +13,11 @@ void iniciarVariables(){
 	TIEMPO_RECONEXION = config_get_int_value(config, "TIEMPO_RECONEXION");
 
 	ALGORITMO = config_get_string_value(config, "ALGORITMO_PLANIFICACION");
-	QUANTUM = config_get_string_value(config, "QUANTUM");
+	QUANTUM = config_get_int_value(config, "QUANTUM");
+
+	LogOficial = config_get_string_value(config, "LOG_FILE");
+
+	LO = iniciarLogOficial();
 
 //	pthread_mutex_init(&mutexConexionGameboy, NULL);
 //	pthread_mutex_init(&mutexSocketGameBoy, NULL);

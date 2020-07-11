@@ -10,6 +10,7 @@
 
 #include "utils.h"
 #include "Mapa.h"
+#include "Trainer.h"
 
 
 t_list* entrenadoresBloqueadosPorDeadlock(void);
