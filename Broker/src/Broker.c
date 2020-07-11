@@ -89,7 +89,7 @@ int main(void) {
 
 	t_paquete* paquete1 = recibirGetDesde(socketGet);
 	t_paquete* paquete2 = recibirGetDesde(socketGet);
-	if(recibirGetDesde(socketGet) != NULL) {
+	if(paquete2 != NULL) {
 		sleep(5);
 		envioAppearedPrueba1(suscripcionAppeared);
 		//recibirACK(socketACKAppeared);
@@ -107,11 +107,11 @@ int main(void) {
 
 		sleep(7);
 		enviarCaughtA(suscripcionCaught);
-		recibirACK(socketACKCaught);
+		//recibirACK(socketACKCaught);
 	}
 
 	if(recibirCatchDesde(socketCatch)){
-		sleep(2);
+		sleep(5);
 		enviarIdCatchA2(socketIdCatch);
 
 		sleep(7);
@@ -226,7 +226,7 @@ void enviarIdCatchA(int socketIdCatch) {
 	int id= 55; //el id del mensaje catch que mando el entrenador
 	idCatch->idCorrelativo = id;
 	//se podria pasar por id correlativo ?
-	enviar_respuesta_id(idCatch, socketIdCatch, 1, 55);
+	enviar_respuesta_id(idCatch, socketIdCatch, -1, -1);
 	log_info(logger, "Se envio el id del catch");
 	destruirLog(logger);
 }

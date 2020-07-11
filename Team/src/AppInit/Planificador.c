@@ -30,6 +30,7 @@ void planificarEntrenadores(){
 int noEstanTodosEnExit(){
 	typedef bool(*erasedType)(void*);
 	pthread_mutex_lock(&mutexEntrenadores);
+	t_list* entren = entrenadores;
 	int noTodosExit = list_any_satisfy(entrenadores, (erasedType)noEstaEnExit);
 	pthread_mutex_unlock(&mutexEntrenadores);
 	return noTodosExit;
@@ -44,7 +45,10 @@ void pasarAReadyParaAtrapar(){
 	//t_log* logger = iniciar_logger();
 
 	int tieneEstadoNewODormido(Entrenador* entrenador) {
-		return entrenador->estado==1 || (entrenador->estado==4 && entrenador->motivo==2);
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		int cumple = entrenador->estado==1 || (entrenador->estado==4 && entrenador->motivo==2);
+		pthread_mutex_unlock(&entrenador->mutexEstado);
+		return cumple;
 	}
 	pthread_mutex_lock(&mutexEntrenadores);
 	t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
@@ -58,19 +62,23 @@ void pasarAReadyParaAtrapar(){
 		//asignamos objetivo al entrenador mas cercano
 		for(int index=0; index < cantidadDePokesLibres; index++){
 			PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
-			Entrenador* entrenadorAReady =  asignarObjetivoA(entrenadoresPosibles, pokemonLibre);
+			if(pokemonLibre != NULL){
+				Entrenador* entrenadorAReady =  asignarObjetivoA(entrenadoresPosibles, pokemonLibre);
 
-			// cambio de estado al entrenador, pasa a ready
-			entrenadorAReady->estado = 2;
-			agregarAListaReady(entrenadorAReady);
-			// ese poke se saca de la lista de pokes libres porque ya fue asginado
-			cambiarCantidadEnPokesLibres(pokemonLibre);
-			// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
-			cambiarCantidadEnPokesObj(pokemonLibre);
+				// cambio de estado al entrenador, pasa a ready
+				pthread_mutex_lock(&entrenadorAReady->mutexEstado);
+				entrenadorAReady->estado = 2;
+				pthread_mutex_unlock(&entrenadorAReady->mutexEstado);
+				agregarAListaReady(entrenadorAReady);
+				// ese poke se saca de la lista de pokes libres porque ya fue asginado
+				cambiarCantidadEnPokesLibres(pokemonLibre);
+				// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
+				cambiarCantidadEnPokesObj(pokemonLibre);
 
-			log_info(LO, "El entrenador %d paso a estado ready para atrapar al pokemon %s", entrenadorAReady->numeroEntrenador, pokemonLibre->nombre);
+				log_info(LO, "El entrenador %d paso a estado ready para atrapar al pokemon %s", entrenadorAReady->numeroEntrenador, pokemonLibre->nombre);
 
-			//log_info(logger, "$-Se paso a ready el entrenador");
+			}
+
 
 		}
 	}
@@ -96,7 +104,12 @@ void cambiarCantidadEnPokesLibres(PokemonEnElMapa* pokeLibre){
 void cambiarCantidadEnPokesObj(PokemonEnElMapa* pokeLibre){
 	pthread_mutex_lock(&mutexObjetivosGlobales);
 	disminuirCantidadPokemones(pokeLibre, objetivosGlobales);
+	t_list* objetivos = objetivosGlobales;
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
+	pthread_mutex_lock(&mutexEntrenadores);
+	t_list* entren = entrenadores;
+	pthread_mutex_unlock(&mutexEntrenadores);
+
 }
 
 void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes){
@@ -105,7 +118,10 @@ void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPoke
 	//siempre va a encontrar a ese objetivo porque si estaba libre estaba como obje
 
 	// disminuir la cantidad de ese poke libre en los objetivos globales
-	pokeComoObj->cantidad -= 1;
+	if(pokeComoObj != NULL) {
+		pokeComoObj->cantidad -= 1;
+	}
+
 
 	// (sacarlo si cant = 0)
 	list_remove_by_condition(listaPokes, (erasedTypeRemove)sacarSiCantidadEsCero);
@@ -126,7 +142,9 @@ void pasarAReadyParaIntercambiar(){
 			Entrenador* entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(bloqueado->movimientoEnExec->pokemonNecesitado, bloqueado->movimientoEnExec->pokemonAIntercambiar);
 			if(entrenadorDeIntercambio != NULL) {
 				//pasa a ready, sus movimientos ya estan definidos
+				pthread_mutex_lock(&entrenadorDeIntercambio->mutexEstado);
 				entrenadorDeIntercambio->estado = 2;
+				pthread_mutex_unlock(&entrenadorDeIntercambio->mutexEstado);
 				//me guardo con que entrenador intercambiar cuando pase a exec y el que esta bloqueado a cual esta esperando
 				entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio = bloqueado->numeroEntrenador;
 				bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio = entrenadorDeIntercambio->numeroEntrenador;
@@ -169,7 +187,9 @@ void pasarAExec(){
 	if(entrenadorExec() == NULL && entrenador != NULL){
 		char* charDelMovimiento = obtenerCharDeMov(entrenador->movimientoEnExec->objetivo);
 		//sem_wait(&semaforoEstados);
+		pthread_mutex_lock(&entrenador->mutexEstado);
 		entrenador->estado = 3;
+		pthread_mutex_unlock(&entrenador->mutexEstado);
 		sacarDeListaReady(entrenador);
 		log_info(LO, "El entrenador %d paso a estado exec para %s", entrenador->numeroEntrenador, charDelMovimiento);
 		//sem_post(&semaforoEstados);
@@ -179,12 +199,16 @@ void pasarAExec(){
 }
 
 Entrenador* buscarEntrenadorSegun(char* algoritmo) {
+
 	//el primer entrenador de los ready es el que esta en indice 0
+	pthread_mutex_lock(&mutexListaEntrenadoresReady);
+	t_list* entrenadoresR = listaEntrenadoresReady;
 	if(list_is_empty(listaEntrenadoresReady) != 1) {
 		Entrenador* entrenador = list_get(listaEntrenadoresReady, 0);
+		pthread_mutex_unlock(&mutexListaEntrenadoresReady);
 		return entrenador;
 	}
-
+	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
 	return NULL;
 }
 
@@ -280,10 +304,9 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 		//cada vez que el entrenador envia un CATCH, consume una rafaga de CPU
 		entrenador->ciclosCPUConsumido += 1;
 
-
+		log_info(LO, "El entrenador %d paso a block esperando la respuesta del catch mandado", entrenador->numeroEntrenador);
 		pasarABlockEsperando(entrenador);
 		quickLog("$-Se paso a estado bloqueado esperando respuesta");
-		log_info(LO, "El entrenador %d paso a block esperando la respuesta del catch mandado", entrenador->numeroEntrenador);
 
 
 	} else if (QUANTUM == distanciaHastaPokemon){ // se llega a mover hasta el poke pero no le alcanzo el quantum para mandar el catch

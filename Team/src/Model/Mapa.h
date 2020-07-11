@@ -65,6 +65,9 @@ t_list* idsCorrelativosLocalized;
 sem_t semaforoEstados;
 
 
+sem_t semaforoEntrenadorEsperando;
+
+
 void iniciarVariables();
 
 #endif /* SRC_MODEL_MAPA_H_ */

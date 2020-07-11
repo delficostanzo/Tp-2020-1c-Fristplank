@@ -15,7 +15,7 @@ static t_list* getObjetivosDesde(Entrenador* entrenador);
 static t_list* getAtrapadosDesde(Entrenador* entrenador);
 static void agregarObjetivosA(Entrenador* entrenador, t_list* objetivosDelEntrenador);
 static void agregarAtrapadosA(Entrenador* entrenador, t_list* pokemonesAAgregar);
-static int noTieneCantidadNegativa(PokemonEnElMapa* pokemon);
+static int noTieneCantidadEnCero(PokemonEnElMapa* pokemon);
 static void numerarlos(t_list* entrenadores);
 
 //si declaras aca arriba las funciones con un 'static' adelante, es la manera de hacerlas privadas. No alcanza solo con omitirlas en el ".h"
@@ -145,6 +145,7 @@ void setMutex(t_list* entrenadores) {
 		pthread_mutex_init(&(entrenador->mutexEntrenador), NULL);
 		//lo dejo en 0 para que no cumpla el objetivo hasta que el planificador le haga el unlock
 		pthread_mutex_lock(&(entrenador->mutexEntrenador));
+		pthread_mutex_init(&(entrenador->mutexEstado), NULL);
 	}
 }
 
@@ -247,16 +248,16 @@ t_list* getObjetivosGlobalesDesde(t_list* pokemonesObjetivos, t_list* pokemonesA
 
 	//el pokemon restado serian los pokemones objetivos, que se va a agregar con la cantidad restada si ya se atrapo
 	PokemonEnElMapa* restarCantidadQueFalta(PokemonEnElMapa* pokemonRestado) {
-
+		PokemonEnElMapa* pokemonRestadoAAtrapar = asignarPokemonCopia(pokemonRestado);
 		//si todavia no hay ninguno atrapado o se atraparon pero ninguno coincide con la especie a restar
-		if(list_is_empty(pokemonesAtrapados) == 1 || buscarPorNombre(pokemonRestado->nombre,pokemonesAtrapados) == NULL){
+		if(list_is_empty(pokemonesAtrapados) || buscarPorNombre(pokemonRestado->nombre,pokemonesAtrapados) == NULL){
 			//no le cambia la cantidad, entonces todavia falta por atrapar (queda como objetivo global)
-			return pokemonRestado;
+			return pokemonRestadoAAtrapar;
 		}else {
 			// si coincide con alguno de la lista de pokes atrapados, se resta
 			PokemonEnElMapa* pokemonAtrapado = buscarPorNombre(pokemonRestado->nombre,pokemonesAtrapados);
-			pokemonRestado->cantidad = pokemonRestado->cantidad - pokemonAtrapado->cantidad;
-			return pokemonRestado;
+			pokemonRestadoAAtrapar->cantidad = pokemonRestadoAAtrapar->cantidad - pokemonAtrapado->cantidad;
+			return pokemonRestadoAAtrapar;
 		}
 	}
 
@@ -264,10 +265,10 @@ t_list* getObjetivosGlobalesDesde(t_list* pokemonesObjetivos, t_list* pokemonesA
 	t_list* listaConObjetivosRestados = list_create();
 	listaConObjetivosRestados = list_map(pokemonesObjetivos, (erasedTypeMap)restarCantidadQueFalta);
 	quickLog("$-Se cargaron todos los objetivos globales");
-	return list_filter(listaConObjetivosRestados, (erasedTypeFilter)noTieneCantidadNegativa);
+	return list_filter(listaConObjetivosRestados, (erasedTypeFilter)noTieneCantidadEnCero);
 }
 
-int noTieneCantidadNegativa(PokemonEnElMapa* pokemon){
+int noTieneCantidadEnCero(PokemonEnElMapa* pokemon){
 	return pokemon->cantidad != 0;
 }
 

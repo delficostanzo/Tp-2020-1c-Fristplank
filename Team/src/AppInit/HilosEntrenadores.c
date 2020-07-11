@@ -33,8 +33,12 @@ void funcionesDelEntrenador(void* unEntrenador){
 	Entrenador* entrenador = (Entrenador*) unEntrenador;
 
 	quickLog("$-LLEGA ACA");
+
+	pthread_mutex_lock(&entrenador->mutexEstado);
+	int cumple = entrenador->estado != 5;
+	pthread_mutex_unlock(&entrenador->mutexEstado);
 	//bloqueo esperando que otro me active y me da el objetivo
-	while(entrenador->estado != 5) {
+	while(cumple) {
 		//el unlock de este mutex lo va a hacer el planificador cuando este en exec
 		//el entrenador no se entera
 		pthread_mutex_lock(&(entrenador->mutexEntrenador));

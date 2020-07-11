@@ -16,6 +16,7 @@ int generarSocketsConBroker();
 void crearHilosDeEscucha();
 void* escucharColaAppearedPokemonGameBoy(void);
 void* escucharColaAppearedPokemon(void);
+void* escucharColaIdsCatchPokemon();
 void* escucharColaCaughtPokemon(void);
 void* escucharColaLocalizedPokemon(void);
 

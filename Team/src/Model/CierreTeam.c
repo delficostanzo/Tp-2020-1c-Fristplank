@@ -46,6 +46,7 @@ void terminarTeam() {
 	//ya fueron liberados por cada entrenador
 	list_destroy(objetivosTotales);
 	list_destroy(objetivosAtrapados);
+	//TODO los globales son copias
 	list_destroy(objetivosGlobales);
 	list_destroy(pokemonesLibres);
 
