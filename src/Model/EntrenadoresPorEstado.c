@@ -14,7 +14,10 @@ typedef bool(*erasedTypeFilter)(void*);
 //si no encuentra devuelve una lista vacia
 t_list* entrenadoresBloqueadosPorDeadlock(void) {
 	int suMotivoDeBloqueoEsDeadlock(Entrenador* entrenador) {
-		return entrenador->motivo == 3;
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		int cumple = entrenador->motivo == 3;
+		pthread_mutex_unlock(&entrenador->mutexEstado);
+		return cumple;
 	}
 	t_list* entrenadoresBlock = entrenadoresBloqueados();
 	//si la lista entrenadoresBlock esta vacia devuelve otra lista vacia
@@ -23,7 +26,10 @@ t_list* entrenadoresBloqueadosPorDeadlock(void) {
 
 t_list* entrenadoresDormidos(void) {
 	int suMotivoDeBloqueoEsDormido(Entrenador* entrenador) {
-		return entrenador->motivo == 2;
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		int cumple = entrenador->motivo == 2;
+		pthread_mutex_unlock(&entrenador->mutexEstado);
+		return cumple;
 	}
 
 	t_list* entrenadoresBlock = entrenadoresBloqueados();
@@ -33,7 +39,10 @@ t_list* entrenadoresDormidos(void) {
 
 t_list* entrenadoresEsperandoRespuesta(void) {
 	int suMotivoDeBloqueoEsEspera(Entrenador* entrenador) {
-		return entrenador->motivo == 1;
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		int cumple = entrenador->motivo == 1;
+		pthread_mutex_unlock(&entrenador->mutexEstado);
+		return cumple;
 	}
 
 	t_list* entrenadoresBlock = entrenadoresBloqueados();
@@ -44,7 +53,10 @@ t_list* entrenadoresEsperandoRespuesta(void) {
 //si no encuentra devuelve una lista vacia
 t_list* entrenadoresBloqueados() {
 	int estaBloqueado(Entrenador* entrenador) {
-		return entrenador->estado == 4;
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		int cumple = entrenador->estado == 4;
+		pthread_mutex_unlock(&entrenador->mutexEstado);
+		return cumple;
 	}
 
 	pthread_mutex_lock(&mutexEntrenadores);
@@ -57,7 +69,10 @@ t_list* entrenadoresBloqueados() {
 
 t_list* entrenadoresNew(void) {
 	int esNew(Entrenador* entrenador) {
-		return entrenador->estado == 1;
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		int cumple = entrenador->estado == 1;
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		return cumple;
 	}
 
 	pthread_mutex_lock(&mutexEntrenadores);
@@ -70,7 +85,10 @@ t_list* entrenadoresNew(void) {
 
 t_list* entrenadoresReady(void) {
 	int estaReady(Entrenador* entrenador) {
-		return entrenador->estado == 2;
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		int cumple = entrenador->estado == 2;
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		return cumple;
 	}
 
 	pthread_mutex_lock(&mutexEntrenadores);
@@ -83,8 +101,10 @@ t_list* entrenadoresReady(void) {
 
 Entrenador* entrenadorExec(void) {
 	int estaExec(Entrenador* entrenador) {
-		int estado = entrenador->estado == 3;
-		return estado;
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		int cumple = entrenador->estado == 3;
+		pthread_mutex_unlock(&entrenador->mutexEstado);
+		return cumple;
 	}
 
 	pthread_mutex_lock(&mutexEntrenadores);

@@ -146,7 +146,7 @@ void crearHilosDeEscucha() {
 	pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);
 	pthread_detach(escucharAppearedPokemon);
 
-	pthread_t escucharLocalizedPokemon;
+
 	pthread_create(&escucharLocalizedPokemon, NULL, (void*)escucharColaLocalizedPokemon, NULL);
 	pthread_detach(escucharLocalizedPokemon);
 
@@ -216,5 +216,8 @@ void* escucharColaLocalizedPokemon(){
 
 //		enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
 //		quickLog("$-Pudo enviar el ACK del localized");
+		if(paqueteNuevo == NULL){
+			pthread_exit(escucharLocalizedPokemon);
+		}
 	}
 }
