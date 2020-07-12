@@ -18,16 +18,14 @@ void terminarTeam() {
 
 	//pthread_exit(escucharAppearedPokemon);
 
-	liberar_conexion(socketGet);
-	//liberar_conexion(socketIdGet);
-	liberar_conexion(suscripcionAppeared);
-	//liberar_conexion(socketACKAppeared);
-	liberar_conexion(suscripcionLocalized);
-	//liberar_conexion(socketACKLocalized);
-	liberar_conexion(socketCatch);
-	liberar_conexion(socketIdCatch);
-	liberar_conexion(suscripcionCaught);
-	liberar_conexion(socketACKCaught);
+	liberarConexion(socketGet);
+	//liberarConexion(socketIdGet);
+	liberarConexion(suscripcionAppeared);
+	//liberarConexion(socketACKAppeared);
+	liberarConexion(socketCatch);
+	liberarConexion(socketIdCatch);
+	liberarConexion(suscripcionCaught);
+	liberarConexion(socketACKCaught);
 
 	freeEntrenadores();
 
@@ -51,6 +49,8 @@ void terminarTeam() {
 	list_destroy(pokemonesLibres);
 
 	//freePaquetes();
+	destruirLog(logger);
+	destruirLog(LO);
 
 }
 
@@ -81,5 +81,10 @@ void freeEntrenadores() {
 		pthread_mutex_destroy(&entrenador->mutexEntrenador);
 		pthread_exit(&entrenador->hiloEntrenador);
 		free(entrenador);
+	}
+}
+void liberarConexion(int socket_cliente) {
+	if (close(socket_cliente) == -1) {
+		log_error(logger, "Error al cerrar la conexion");
 	}
 }

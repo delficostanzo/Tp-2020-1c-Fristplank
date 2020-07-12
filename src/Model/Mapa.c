@@ -19,6 +19,7 @@ void iniciarVariables(){
 
 	LO = iniciarLogOficial();
 
+
 //	pthread_mutex_init(&mutexConexionGameboy, NULL);
 //	pthread_mutex_init(&mutexSocketGameBoy, NULL);
 //	pthread_mutex_init(&mutexConexionBroker, NULL);

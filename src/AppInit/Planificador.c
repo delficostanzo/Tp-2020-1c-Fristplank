@@ -42,7 +42,6 @@ int noEstanTodosEnExit(){
 //paso a ready los entrenadores que esten mas cerca
 void pasarAReadyParaAtrapar(){
 	typedef bool(*erasedTypeFilter)(void*);
-	//t_log* logger = iniciar_logger();
 
 	int tieneEstadoNewODormido(Entrenador* entrenador) {
 		pthread_mutex_lock(&entrenador->mutexEstado);

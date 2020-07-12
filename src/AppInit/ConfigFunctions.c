@@ -14,8 +14,6 @@ PokemonEnElMapa* pokemonDesde(char* nombrePokemon);
 //crea un config a partir del nombre de un archivo de configuracion y lo devuelve
 t_config* leerConfigDesde(char* nombreDeArchivo) {
 	t_config* config = config_create(nombreDeArchivo);
-	//t_log* logger = iniciar_log("team");
-	t_log* logger = iniciar_logger();
 
 	if(config == NULL){
 		log_error(logger, "$-No se pudo abrir el archivo de configuracion '%s'", nombreDeArchivo);
@@ -23,7 +21,6 @@ t_config* leerConfigDesde(char* nombreDeArchivo) {
 	}
 
 	log_info(logger,"$-Archivo de configuracion '%s' leido correctamente", nombreDeArchivo);
-	log_destroy(logger);
 
 	return config;
 }

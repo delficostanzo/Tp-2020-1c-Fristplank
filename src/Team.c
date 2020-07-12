@@ -4,8 +4,7 @@
 
 int main(int argc, char *argv[]) {
 
-	t_log* logger = iniciar_logger();
-
+	logger = iniciar_logger();
 
 	config = leerConfigDesde("src/team.config");
 	iniciarVariables();
@@ -61,7 +60,6 @@ int main(int argc, char *argv[]) {
 
 	//list_destroy_and_destroy_elements(entrenadores, free);
 
-	destruirLog(logger);
 
 	return 0;
 }
