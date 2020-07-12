@@ -523,3 +523,38 @@
 [DEBUG] 01:51:01:398 GAMECARD/(13017:13022): <> START: Comienzo a escuchar GameBoy <>
 [DEBUG] 01:51:01:398 GAMECARD/(13017:13022): Escuchando conexiones del GameBoy
 [INFO] 01:51:01:398 GAMECARD/(13017:13022): Esperando conexion de GameBoy
+[INFO] 01:53:10:336 GAMECARD/(13109:13109): Logger iniciado.
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Puerto del Broker: 7342
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Puerto del GameCard: 7215
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): <> END: Leyendo archivo config <>
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Cantidad de bloques: 16
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Intentando conectarme a Broker...
+[INFO] 01:53:10:347 GAMECARD/(13109:13114): Esperando conexion de GameBoy
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Logger iniciado.
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Puerto del Broker: 7342
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Puerto del GameCard: 7215
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Metadata File | Tamaño de bloques expresado en bytes: 64
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Metadata File | Cantidad de bloques: 16
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Intentando conectarme a Broker...
+[INFO] 01:53:49:696 GAMECARD/(13164:13169): Esperando conexion de GameBoy

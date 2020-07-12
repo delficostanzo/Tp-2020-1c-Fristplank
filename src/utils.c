@@ -10,7 +10,7 @@
 t_log* iniciar_logger(void){
 
 	t_log* logger;
-	if((logger = log_create("./gamecard.log", "GAMECARD", 1, log_level_from_string("DEBUG"))) == NULL){
+	if((logger = log_create("./gamecard.log", "GAMECARD", 1, log_level_from_string("INFO"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}
@@ -56,7 +56,7 @@ void leer_configuracionGameCard(void){
 	log_info(logger, "Config file | Path de Files calculado: %s", PATH_FILES);
 	log_info(logger, "Config file | Path de Pokemones calculado: %s", PATH_FILES_POKEMONES);
 	log_info(logger, "Config file | Path de Blocks calculado: %s", PATH_BLOCKS);
-	log_info(logger, "<> END: Leyendo archivo config <>");
+	log_debug(logger, "<> END: Leyendo archivo config <>");
 
 	free(PUNTO_MONTAJE_TALLGRASS_RELATIVO);
 	free(rootPath);
@@ -73,7 +73,7 @@ void leer_metadata(){
 	free(metadataPath);
 
 	log_debug(logger, "<> START: Leyendo Metadata del FileSystem <>");
-	log_info(logger, "Tamaño de bloques expresado en bytes: %d",BLOCK_SIZE);
-	log_info(logger, "Cantidad de bloques: %d", BLOCKS);
+	log_info(logger, "Metadata File | Tamaño de bloques expresado en bytes: %d",BLOCK_SIZE);
+	log_info(logger, "Metadata File | Cantidad de bloques: %d", BLOCKS);
 	log_debug(logger, "<> END: Leyendo Metadata del FileSystem <>");
 }
