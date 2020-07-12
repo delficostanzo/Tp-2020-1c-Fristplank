@@ -288,7 +288,7 @@ void enviarIdCatchA(int socketIdCatch) {
 	int id= 55; //el id del mensaje catch que mando el entrenador
 	idCatch->idCorrelativo = id;
 	//se podria pasar por id correlativo ?
-	enviar_respuesta_id(idCatch, socketIdCatch, -1, -1);
+	enviar_respuesta_id(idCatch, socketIdCatch, -1, 55);
 	log_info(logger, "Se envio el id del catch 55");
 	destruirLog(logger);
 }

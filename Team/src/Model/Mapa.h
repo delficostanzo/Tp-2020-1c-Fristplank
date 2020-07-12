@@ -25,6 +25,7 @@ int conexionBroker;
 
 char* LogOficial;
 t_log* LO;
+t_log* logger;
 
 int suscripcionAppeared;
 int suscripcionCaught;

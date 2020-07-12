@@ -118,7 +118,6 @@ void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado){
 }
 
 void estadoSiAtrapo(Entrenador* entrenador) {
-	t_log* logger = iniciar_logger();
 	quickLog("$-El entrenador va a cambiar de estado por atrapar un pokemon");
 	if(sonIguales(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		//ya agarro todos sus pokemones
@@ -151,7 +150,7 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 		}
 
 		log_info(logger, "$-Tiene %d pokemones atrapados y %d pokemones objetivos por atrapar", cantidadAtrapados, cantidadObjetivos);
-		destruirLog(logger);
+
 	}
 }
 
@@ -229,7 +228,6 @@ int noEstaEnExit(Entrenador* entrenador){
 }
 
 void pasarABlockEsperando(Entrenador* entrenador) {
-	t_log* logger = iniciar_logger();
 	//sem_wait(&semaforoEstados);
 	pthread_mutex_lock(&entrenador->mutexEstado);
 	entrenador->estado = 4;
@@ -237,7 +235,6 @@ void pasarABlockEsperando(Entrenador* entrenador) {
 	pthread_mutex_unlock(&entrenador->mutexEstado);
 	//sem_post(&semaforoEstados);
 	log_info(logger, "$-El estado del entrenador paso a: %d", entrenador->estado);
-	destruirLog(logger);
 }
 
 /////////////INTERCAMBIO////////////////

@@ -22,8 +22,6 @@ static void numerarlos(t_list* entrenadores);
 
 //delego el comportamiento para crear una lista de entrenadores a partir del archivo de configuracion de donde estan
 t_list* getEntrenadoresDesde(char* nombreDeArchivo) {
-	//t_log* logger = iniciar_log("team");
-	t_log* logger = iniciar_logger();
 
 	t_config* configEntrenador = leerConfigDesde(nombreDeArchivo);
 
@@ -41,7 +39,6 @@ t_list* getEntrenadoresDesde(char* nombreDeArchivo) {
 	setMutex(entrenadores);
 	setCiclosCPUFaltantesIntercambio(entrenadores);
 
-	destruirLog(logger);
 	return entrenadores;
 }
 
