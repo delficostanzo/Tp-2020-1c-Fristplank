@@ -12,11 +12,13 @@
  * Guardo sockets envío de APPEARED_POKEMON, CAUGHT_POKEMON, LOCALIZED_POKEMON
  */
 int generarSocketsConBroker() {
-
 	socketBroker = crearSocket();
 	int puertoBrokerInt = atoi(PUERTO_BROKER);
+
+	log_info(logger, "Intentando conectarme a Broker...");
+
 	while (conectarA(socketBroker, IP_BROKER, puertoBrokerInt) != 1) {
-		log_debug(logger, "Intentando conexión a Broker...");
+		log_info(logger, "No se logro conexión a Broker, se reintentará conexión en %d segundos...", TIEMPO_DE_REINTENTO_CONEXION);
 		sleep(TIEMPO_DE_REINTENTO_CONEXION);
 	}
 
@@ -41,8 +43,6 @@ int generarSocketsConBroker() {
 	socketACKCatchPokemon = crearSocket();
 	socketACKGetPokemon = crearSocket();
 
-	int conexionCorrecta = 1;
-
 	if (conectarA(socketNewPokemon, IP_BROKER, puertoBrokerInt)) {
 		log_info(logger,"Suscripto a cola New Pokemon. Lanzando socket de escucha..");
 
@@ -50,11 +50,11 @@ int generarSocketsConBroker() {
 			log_debug(logger, "Socket de ACK New Pokemon guardado.");
 		}
 		else{
-			conexionCorrecta = -1;
+			return -1;
 		}
 	}
 	else{
-		conexionCorrecta = -1;
+		return -1;
 	}
 
 	if (conectarA(socketCatchPokemon, IP_BROKER, puertoBrokerInt)) {
@@ -64,11 +64,11 @@ int generarSocketsConBroker() {
 			log_debug(logger, "Socket de ACK Catch Pokemon guardado.");
 		}
 		else{
-			conexionCorrecta = -1;
+			return -1;
 		}
 	}
 	else{
-		conexionCorrecta = -1;
+		return -1;
 	}
 
 	if (conectarA(socketGetPokemon, IP_BROKER, puertoBrokerInt)) {
@@ -78,36 +78,36 @@ int generarSocketsConBroker() {
 			log_debug(logger, "Socket de ACK Catch Pokemon guardado.");
 		}
 		else{
-			conexionCorrecta = -1;
+			return -1;
 		}
 	}
 	else{
-		conexionCorrecta = -1;
+		return -1;
 	}
 
 	if (conectarA(socketAppearedPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Appeared Pokemon guardado.");}
-	else{conexionCorrecta = -1;}
+	else{return -1;}
 	if (conectarA(socketCaughtPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Caught Pokemon guardado.");}
-	else{conexionCorrecta = -1;}
+	else{return -1;}
 	if (conectarA(socketLocalizedPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Localized Pokemon guardado.");}
-	else{conexionCorrecta = -1;}
+	else{return -1;}
 
-	return conexionCorrecta;
+	return 1;
 }
 
 void lanzarHilosDeEscucha(){
 
-	pthread_t escucharNewPokemon;
+	log_debug(logger, "START: lanzarHilosEscucha");
+	pthread_t escucharNewPokemon, escucharCatchPokemon, escucharGetPokemon;
 	pthread_create(&escucharNewPokemon, NULL, (void*) escucharColaNewPokemon, NULL);
-	pthread_detach(escucharNewPokemon);
-
-	pthread_t escucharCatchPokemon;
 	pthread_create(&escucharCatchPokemon, NULL, (void*) escucharColaCatchPokemon, NULL);
-	pthread_detach(escucharCatchPokemon);
-
-	pthread_t escucharGetPokemon;
 	pthread_create(&escucharGetPokemon, NULL, (void*) escucharColaGetPokemon, NULL);
-	pthread_detach(escucharGetPokemon);
+
+	pthread_join(escucharNewPokemon, NULL);
+	pthread_join(escucharCatchPokemon, NULL);
+	pthread_join(escucharGetPokemon, NULL);
+
+	log_debug(logger, "END: lanzarHilosEscucha");
 }
 
 void escucharGameBoy(){
@@ -115,10 +115,11 @@ void escucharGameBoy(){
 	socketListenerGameBoy = crearSocket();
 	int puertoGamecardInt = atoi(PUERTO_GAMECARD);
 	if(escuchaEn(socketListenerGameBoy, puertoGamecardInt)){
-				log_debug(logger, "Escuchando conexiones del GameBoy");
+				log_debug(logger, "Escuchando conexiones del GameBoy...");
 	}
 
 	while(1){
+		log_info(logger, "Esperando conexion de GameBoy");
 		int socketGameBoy = aceptarConexion(socketListenerGameBoy);
 
 		t_handshake* handshakePropio = malloc(sizeof(t_handshake));
@@ -132,10 +133,6 @@ void escucharGameBoy(){
 		free(handshakeGameboy);
 
 		t_paquete* paqueteNuevo = recibir_mensaje(socketGameBoy);
-
-
-//		puts(new_pokemon->pokemon);
-//		log_debug(logger, new_pokemon->pokemon);
 
 		log_debug(logger, "======= Nuevo mensaje recibido =======");
 		log_info(logger, "Tipo de mensaje: %s", COLAS_STRING[paqueteNuevo->codigo_operacion]);
@@ -152,16 +149,12 @@ void escucharGameBoy(){
 				pthread_create(&hiloProcesarNewPokemon, NULL, (void*) procesarNewPokemon, (void *) new_pokemon);
 				pthread_join(hiloProcesarNewPokemon, NULL);
 
-				/* faltan conexiones a broker
 				t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
 				appeared_pokemon->lengthOfPokemon = new_pokemon->lengthOfPokemon;
 				appeared_pokemon->pokemon = new_pokemon->pokemon;
 				appeared_pokemon->posicion = new_pokemon->posicion;
 
 				enviar_appeared_pokemon(appeared_pokemon, socketAppearedPokemon, -1, paqueteNuevo->ID);
-				*/
-				free(new_pokemon->posicion); //ESTO SACAR CUANDO ENVIE APPEARED
-				free(new_pokemon->pokemon); //ESTO SACAR CUANDO ENVIE APPEARED
 				free(new_pokemon);
 				break;
 
@@ -175,22 +168,23 @@ void escucharGameBoy(){
 				void* encontrado;
 				pthread_join(hiloProcesarCatchPokemon, encontrado);
 
-				if(encontrado == 1){
-					log_debug(logger, "Se encontro el pokemon en esa posicion.");
-				}
-				else{
-					log_debug(logger, "NO se encontro el pokemon en esa posicion.");
-				}
-
-//				free(encontrado);
-				//	Todo resultado, sea correcto o no, deberá realizarse conectandose al Broker y enviando un mensaje a la Cola de Mensajes CAUGHT_POKEMON indicando:
-				//	ID del mensaje recibido originalmente.
-				//	Resultado.
-				//	En caso que no se pueda realizar la conexión con el Broker se debe informar por logs y continuar la ejecución.
-
 				free(catch_pokemon->posicion);
 				free(catch_pokemon->pokemon);
 				free(catch_pokemon);
+
+				t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
+
+				if(encontrado == 1){
+					log_debug(logger, "Se encontro el pokemon en esa posicion.");
+					caught_pokemon->ok = 1;
+				}
+				else{
+					log_debug(logger, "NO se encontro el pokemon en esa posicion.");
+					caught_pokemon->ok = 0;
+				}
+
+				enviar_caught_pokemon(caught_pokemon, socketCaughtPokemon, -1, paqueteNuevo->ID);
+
 				break;
 
 			case GET_POKEMON:
@@ -204,7 +198,7 @@ void escucharGameBoy(){
 				pthread_join(hiloProcesarGetPokemon, &localized);
 				t_localized_pokemon* localized_pokemon = localized;
 
-				//enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID);
+				enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID);
 				free(get_pokemon);
 
 				break;
@@ -237,11 +231,22 @@ void* escucharColaNewPokemon(){
 		else{
 			enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID);
 
-			if (paqueteNuevo->codigo_operacion == NEW_POKEMON) {
-				//TODO iniciar hilo para procesarlo
-			} else {
-				log_info(logger, "Tipo de mensaje invalido.");
-			}
+			log_info(logger, "Mensaje NEW_POKEMON recibido.");
+
+			t_new_pokemon* new_pokemon = paqueteNuevo->buffer->stream;
+			pthread_t hiloProcesarNewPokemon;
+			pthread_create(&hiloProcesarNewPokemon, NULL, (void*) procesarNewPokemon, (void *) new_pokemon);
+			pthread_join(hiloProcesarNewPokemon, NULL);
+
+			t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
+			appeared_pokemon->lengthOfPokemon = new_pokemon->lengthOfPokemon;
+			appeared_pokemon->pokemon = new_pokemon->pokemon;
+			appeared_pokemon->posicion = new_pokemon->posicion;
+
+			enviar_appeared_pokemon(appeared_pokemon, socketAppearedPokemon, -1, paqueteNuevo->ID);
+			free(new_pokemon);
+			free(paqueteNuevo->buffer);
+			free(paqueteNuevo);
 		}
 	}
 }
@@ -261,12 +266,35 @@ void* escucharColaCatchPokemon(){
 
 		else{
 			enviar_ACK(socketACKCatchPokemon, -1, paqueteNuevo->ID);
-			if(paqueteNuevo->codigo_operacion == CATCH_POKEMON){
-				//TODO iniciar hilo para procesarlo
 
-			} else {
-				log_info(logger, "Tipo de mensaje invalido.");
+			log_info(logger, "Mensaje CATCH_POKEMON recibido.");
+
+			t_catch_pokemon* catch_pokemon = paqueteNuevo->buffer->stream;
+			pthread_t hiloProcesarCatchPokemon;
+			pthread_create(&hiloProcesarCatchPokemon, NULL, (void*) procesarCatchPokemon, (void *) catch_pokemon);
+
+			void* encontrado;
+			pthread_join(hiloProcesarCatchPokemon, encontrado);
+
+			free(catch_pokemon->posicion);
+			free(catch_pokemon->pokemon);
+			free(catch_pokemon);
+
+			t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
+
+			if(encontrado == 1){
+				log_debug(logger, "Se encontro el pokemon en esa posicion.");
+				caught_pokemon->ok = 1;
 			}
+			else{
+				log_debug(logger, "NO se encontro el pokemon en esa posicion.");
+				caught_pokemon->ok = 0;
+			}
+
+			enviar_caught_pokemon(caught_pokemon, socketCaughtPokemon, -1, paqueteNuevo->ID);
+
+			free(paqueteNuevo->buffer);
+			free(paqueteNuevo);
 		}
 	}
 }
@@ -286,19 +314,32 @@ void* escucharColaGetPokemon(){
 
 		else {
 			enviar_ACK(socketACKGetPokemon, -1, paqueteNuevo->ID);
-			if (paqueteNuevo->codigo_operacion == GET_POKEMON) {
-				//TODO iniciar hilo para procesarlo
-			} else {
-				log_info(logger, "Tipo de mensaje invalido.");
-			}
+
+			log_info(logger, "Mensaje GET_POKEMON recibido.");
+
+			t_get_pokemon* get_pokemon = paqueteNuevo->buffer->stream;
+			pthread_t hiloProcesarGetPokemon;
+			pthread_create(&hiloProcesarGetPokemon, NULL, (void*) procesarGetPokemon, (void *) get_pokemon);
+
+			void* localized;
+			pthread_join(hiloProcesarGetPokemon, &localized);
+			t_localized_pokemon* localized_pokemon = localized;
+
+			enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID);
+			free(get_pokemon);
+
+			free(paqueteNuevo->buffer);
+			free(paqueteNuevo);
 		}
 	}
 }
 
 void reconectarABroker(){
-	if (desconexion) {
-		while (!generarSocketsConBroker()) {
-			sleep(TIEMPO_DE_REINTENTO_CONEXION);
+	if (desconexion == 1) {
+		int conectado = generarSocketsConBroker();
+
+		while(conectado != 1){
+			conectado = generarSocketsConBroker();
 		}
 		desconexion = 0;
 	}

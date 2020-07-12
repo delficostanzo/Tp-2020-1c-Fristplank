@@ -1,0 +1,560 @@
+[INFO] 01:24:12:689 GAMECARD/(11843:11843): Logger iniciado.
+[DEBUG] 01:24:12:690 GAMECARD/(11843:11843): <> START: Leyendo archivo config <>
+[DEBUG] 01:24:12:691 GAMECARD/(11843:11843): Config file | IP del Broker: 127.0.0.1
+[DEBUG] 01:24:12:691 GAMECARD/(11843:11843): Config file | Puerto del Broker: 6009
+[DEBUG] 01:24:12:691 GAMECARD/(11843:11843): Config file | IP del GameCard: 127.0.0.1
+[DEBUG] 01:24:12:691 GAMECARD/(11843:11843): Config file | Puerto del GameCard: 8754
+[DEBUG] 01:24:12:691 GAMECARD/(11843:11843): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[DEBUG] 01:24:12:692 GAMECARD/(11843:11843): Config file | Tiempo de reintento de conexión al broker: 3600
+[DEBUG] 01:24:12:693 GAMECARD/(11843:11843): Config file | Tiempo de reintento de operación: 5
+[DEBUG] 01:24:12:693 GAMECARD/(11843:11843): Config file | Tiempo de retardo de operación: 10
+[DEBUG] 01:24:12:693 GAMECARD/(11843:11843): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[DEBUG] 01:24:12:693 GAMECARD/(11843:11843): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[DEBUG] 01:24:12:693 GAMECARD/(11843:11843): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[DEBUG] 01:24:12:694 GAMECARD/(11843:11843): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[DEBUG] 01:24:12:694 GAMECARD/(11843:11843): <> END: Leyendo archivo config <>
+[DEBUG] 01:24:12:694 GAMECARD/(11843:11843): <> START: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:24:12:694 GAMECARD/(11843:11843): Tamaño de bloques expresado en bytes: 64
+[DEBUG] 01:24:12:695 GAMECARD/(11843:11843): Cantidad de bloques: 16
+[DEBUG] 01:24:12:695 GAMECARD/(11843:11843): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:24:12:695 GAMECARD/(11843:11843): <> START: Inicializacion semaforos <>
+[DEBUG] 01:24:12:695 GAMECARD/(11843:11843): <> END: Inicializacion semaforos <>
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): <> START: Creacion bitmap <>
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): Archivo Bitmap.bin creado.
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): Archivo Bitmap.bin escrito.
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): El bitmap creado contiene 16 bits
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): <> END: Creacion bitmap <>
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:24:12:696 GAMECARD/(11843:11843): Intentando conexión a Broker...
+[DEBUG] 01:24:12:699 GAMECARD/(11843:11848): <> START: Comienzo a escuchar GameBoy <>
+[DEBUG] 01:24:12:699 GAMECARD/(11843:11848): Escuchando conexiones del GameBoy
+[INFO] 01:25:22:588 GAMECARD/(11928:11928): Logger iniciado.
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> START: Leyendo archivo config <>
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Puerto del Broker: 6009
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Puerto del GameCard: 8754
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Tiempo de reintento de conexión al broker: 3600
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): <> END: Leyendo archivo config <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:25:22:589 GAMECARD/(11928:11928): Cantidad de bloques: 16
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> START: Inicializacion semaforos <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> END: Inicializacion semaforos <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> START: Creacion bitmap <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): Archivo Bitmap.bin creado.
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): Archivo Bitmap.bin escrito.
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): El bitmap creado contiene 16 bits
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> END: Creacion bitmap <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:25:22:589 GAMECARD/(11928:11928): Intentando conexión a Broker...
+[DEBUG] 01:25:22:594 GAMECARD/(11928:11933): <> START: Comienzo a escuchar GameBoy <>
+[INFO] 01:26:04:826 GAMECARD/(11953:11953): Logger iniciado.
+[DEBUG] 01:26:04:826 GAMECARD/(11953:11953): <> START: Leyendo archivo config <>
+[INFO] 01:26:04:829 GAMECARD/(11953:11953): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:26:04:829 GAMECARD/(11953:11953): Config file | Puerto del Broker: 6009
+[INFO] 01:26:04:829 GAMECARD/(11953:11953): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:26:04:830 GAMECARD/(11953:11953): Config file | Puerto del GameCard: 8754
+[INFO] 01:26:04:830 GAMECARD/(11953:11953): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:26:04:830 GAMECARD/(11953:11953): Config file | Tiempo de reintento de conexión al broker: 3600
+[INFO] 01:26:04:830 GAMECARD/(11953:11953): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:26:04:830 GAMECARD/(11953:11953): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:26:04:830 GAMECARD/(11953:11953): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:26:04:830 GAMECARD/(11953:11953): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:26:04:831 GAMECARD/(11953:11953): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:26:04:831 GAMECARD/(11953:11953): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:26:04:831 GAMECARD/(11953:11953): <> END: Leyendo archivo config <>
+[DEBUG] 01:26:04:831 GAMECARD/(11953:11953): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:26:04:834 GAMECARD/(11953:11953): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:26:04:835 GAMECARD/(11953:11953): Cantidad de bloques: 16
+[DEBUG] 01:26:04:835 GAMECARD/(11953:11953): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:26:04:835 GAMECARD/(11953:11953): <> START: Inicializacion semaforos <>
+[DEBUG] 01:26:04:835 GAMECARD/(11953:11953): <> END: Inicializacion semaforos <>
+[DEBUG] 01:26:04:835 GAMECARD/(11953:11953): <> START: Creacion bitmap <>
+[DEBUG] 01:26:04:835 GAMECARD/(11953:11953): Archivo Bitmap.bin creado.
+[DEBUG] 01:26:04:835 GAMECARD/(11953:11953): Archivo Bitmap.bin escrito.
+[DEBUG] 01:26:04:836 GAMECARD/(11953:11953): El bitmap creado contiene 16 bits
+[DEBUG] 01:26:04:843 GAMECARD/(11953:11953): <> END: Creacion bitmap <>
+[DEBUG] 01:26:04:843 GAMECARD/(11953:11953): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:26:04:843 GAMECARD/(11953:11953): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:26:04:846 GAMECARD/(11953:11953): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:26:04:846 GAMECARD/(11953:11953): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:26:04:846 GAMECARD/(11953:11953): Intentando conexión a Broker...
+[DEBUG] 01:26:04:846 GAMECARD/(11953:11958): <> START: Comienzo a escuchar GameBoy <>
+[INFO] 01:28:21:644 GAMECARD/(12072:12072): Logger iniciado.
+[DEBUG] 01:28:21:645 GAMECARD/(12072:12072): <> START: Leyendo archivo config <>
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Puerto del Broker: 6009
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Puerto del GameCard: 8754
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Tiempo de reintento de conexión al broker: 3600
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): <> END: Leyendo archivo config <>
+[DEBUG] 01:28:21:645 GAMECARD/(12072:12072): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:28:21:645 GAMECARD/(12072:12072): Cantidad de bloques: 16
+[DEBUG] 01:28:21:645 GAMECARD/(12072:12072): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): <> START: Inicializacion semaforos <>
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): <> END: Inicializacion semaforos <>
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): <> START: Creacion bitmap <>
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): Archivo Bitmap.bin creado.
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): Archivo Bitmap.bin escrito.
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): El bitmap creado contiene 16 bits
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): <> END: Creacion bitmap <>
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:28:21:646 GAMECARD/(12072:12072): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:28:21:647 GAMECARD/(12072:12072): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:28:21:647 GAMECARD/(12072:12072): Intentando conexión a Broker...
+[DEBUG] 01:28:21:647 GAMECARD/(12072:12073): <> START: Comienzo a escuchar GameBoy <>
+[INFO] 01:28:21:647 GAMECARD/(12072:12073): Esperando conexion de GameBoy
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Logger iniciado.
+[DEBUG] 01:29:10:757 GAMECARD/(12123:12123): <> START: Leyendo archivo config <>
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Puerto del Broker: 6009
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Puerto del GameCard: 8754
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Tiempo de reintento de conexión al broker: 3600
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): <> END: Leyendo archivo config <>
+[DEBUG] 01:29:10:757 GAMECARD/(12123:12123): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:29:10:757 GAMECARD/(12123:12123): Cantidad de bloques: 16
+[DEBUG] 01:29:10:757 GAMECARD/(12123:12123): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:29:10:757 GAMECARD/(12123:12123): <> START: Inicializacion semaforos <>
+[DEBUG] 01:29:10:757 GAMECARD/(12123:12123): <> END: Inicializacion semaforos <>
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12123): <> START: Creacion bitmap <>
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12123): Archivo Bitmap.bin creado.
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12123): Archivo Bitmap.bin escrito.
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12123): El bitmap creado contiene 16 bits
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12123): <> END: Creacion bitmap <>
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12123): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12123): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12123): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12123): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:29:10:758 GAMECARD/(12123:12129): <> START: Comienzo a escuchar GameBoy <>
+[INFO] 01:29:10:758 GAMECARD/(12123:12129): Esperando conexion de GameBoy
+[INFO] 01:30:22:680 GAMECARD/(12224:12224): Logger iniciado.
+[DEBUG] 01:30:22:680 GAMECARD/(12224:12224): <> START: Leyendo archivo config <>
+[INFO] 01:30:22:680 GAMECARD/(12224:12224): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Puerto del Broker: 6009
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Puerto del GameCard: 8754
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Tiempo de reintento de conexión al broker: 3600
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): <> END: Leyendo archivo config <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:30:22:681 GAMECARD/(12224:12224): Cantidad de bloques: 16
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> START: Inicializacion semaforos <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> END: Inicializacion semaforos <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> START: Creacion bitmap <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): Archivo Bitmap.bin creado.
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): Archivo Bitmap.bin escrito.
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): El bitmap creado contiene 16 bits
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> END: Creacion bitmap <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12224): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:30:22:681 GAMECARD/(12224:12229): <> START: Comienzo a escuchar GameBoy <>
+[INFO] 01:30:22:681 GAMECARD/(12224:12229): Esperando conexion de GameBoy
+[INFO] 01:31:02:482 GAMECARD/(12283:12283): Logger iniciado.
+[DEBUG] 01:31:02:495 GAMECARD/(12283:12283): <> START: Leyendo archivo config <>
+[INFO] 01:31:02:495 GAMECARD/(12283:12283): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:31:02:495 GAMECARD/(12283:12283): Config file | Puerto del Broker: 6009
+[INFO] 01:31:02:495 GAMECARD/(12283:12283): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:31:02:495 GAMECARD/(12283:12283): Config file | Puerto del GameCard: 8754
+[INFO] 01:31:02:495 GAMECARD/(12283:12283): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:31:02:495 GAMECARD/(12283:12283): Config file | Tiempo de reintento de conexión al broker: 3600
+[INFO] 01:31:02:495 GAMECARD/(12283:12283): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:31:02:495 GAMECARD/(12283:12283): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:31:02:495 GAMECARD/(12283:12283): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:31:02:496 GAMECARD/(12283:12283): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:31:02:496 GAMECARD/(12283:12283): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:31:02:496 GAMECARD/(12283:12283): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:31:02:496 GAMECARD/(12283:12283): <> END: Leyendo archivo config <>
+[DEBUG] 01:31:02:496 GAMECARD/(12283:12283): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:31:02:496 GAMECARD/(12283:12283): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:31:02:496 GAMECARD/(12283:12283): Cantidad de bloques: 16
+[DEBUG] 01:31:02:496 GAMECARD/(12283:12283): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:31:02:496 GAMECARD/(12283:12283): <> START: Inicializacion semaforos <>
+[DEBUG] 01:31:02:496 GAMECARD/(12283:12283): <> END: Inicializacion semaforos <>
+[DEBUG] 01:31:02:496 GAMECARD/(12283:12283): <> START: Creacion bitmap <>
+[DEBUG] 01:31:02:496 GAMECARD/(12283:12283): Archivo Bitmap.bin creado.
+[DEBUG] 01:31:02:498 GAMECARD/(12283:12283): Archivo Bitmap.bin escrito.
+[DEBUG] 01:31:02:499 GAMECARD/(12283:12283): El bitmap creado contiene 16 bits
+[DEBUG] 01:31:02:499 GAMECARD/(12283:12283): <> END: Creacion bitmap <>
+[DEBUG] 01:31:02:499 GAMECARD/(12283:12283): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:31:02:499 GAMECARD/(12283:12283): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:31:02:499 GAMECARD/(12283:12283): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:31:02:499 GAMECARD/(12283:12283): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:31:02:511 GAMECARD/(12283:12290): START: lanzarHilosEscucha
+[DEBUG] 01:31:02:511 GAMECARD/(12283:12289): <> START: Comienzo a escuchar GameBoy <>
+[INFO] 01:31:02:511 GAMECARD/(12283:12289): Esperando conexion de GameBoy
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Logger iniciado.
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> START: Leyendo archivo config <>
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Puerto del Broker: 6009
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Puerto del GameCard: 8754
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Tiempo de reintento de conexión al broker: 3600
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): <> END: Leyendo archivo config <>
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:41:56:517 GAMECARD/(12601:12601): Cantidad de bloques: 16
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> START: Inicializacion semaforos <>
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> END: Inicializacion semaforos <>
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> START: Creacion bitmap <>
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): Archivo Bitmap.bin creado.
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): Archivo Bitmap.bin escrito.
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): El bitmap creado contiene 16 bits
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> END: Creacion bitmap <>
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:41:56:517 GAMECARD/(12601:12601): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:41:56:518 GAMECARD/(12601:12601): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:41:56:518 GAMECARD/(12601:12601): No se logro conexión a Broker, se reintentará conexión en 3600 segundos...
+[DEBUG] 01:41:56:518 GAMECARD/(12601:12607): <> START: Comienzo a escuchar GameBoy <>
+[INFO] 01:41:56:518 GAMECARD/(12601:12607): Esperando conexion de GameBoy
+[INFO] 01:42:55:170 GAMECARD/(12665:12665): Logger iniciado.
+[DEBUG] 01:42:55:173 GAMECARD/(12665:12665): <> START: Leyendo archivo config <>
+[INFO] 01:42:55:173 GAMECARD/(12665:12665): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:42:55:173 GAMECARD/(12665:12665): Config file | Puerto del Broker: 6009
+[INFO] 01:42:55:173 GAMECARD/(12665:12665): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:42:55:173 GAMECARD/(12665:12665): Config file | Puerto del GameCard: 8754
+[INFO] 01:42:55:173 GAMECARD/(12665:12665): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:42:55:173 GAMECARD/(12665:12665): Config file | Tiempo de reintento de conexión al broker: 10
+[INFO] 01:42:55:173 GAMECARD/(12665:12665): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:42:55:173 GAMECARD/(12665:12665): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:42:55:174 GAMECARD/(12665:12665): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:42:55:174 GAMECARD/(12665:12665): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:42:55:174 GAMECARD/(12665:12665): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:42:55:174 GAMECARD/(12665:12665): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:42:55:174 GAMECARD/(12665:12665): <> END: Leyendo archivo config <>
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:42:55:174 GAMECARD/(12665:12665): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:42:55:174 GAMECARD/(12665:12665): Cantidad de bloques: 16
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> START: Inicializacion semaforos <>
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> END: Inicializacion semaforos <>
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> START: Creacion bitmap <>
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): Archivo Bitmap.bin creado.
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): Archivo Bitmap.bin escrito.
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): El bitmap creado contiene 16 bits
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> END: Creacion bitmap <>
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:42:55:174 GAMECARD/(12665:12665): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:42:55:175 GAMECARD/(12665:12665): No se logro conexión a Broker, se reintentará conexión en 10 segundos...
+[DEBUG] 01:42:55:179 GAMECARD/(12665:12670): <> START: Comienzo a escuchar GameBoy <>
+[INFO] 01:42:55:180 GAMECARD/(12665:12670): Esperando conexion de GameBoy
+[INFO] 01:44:04:319 GAMECARD/(12721:12721): Logger iniciado.
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): <> START: Leyendo archivo config <>
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Puerto del Broker: 6009
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Puerto del GameCard: 8754
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Tiempo de reintento de conexión al broker: 10
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): <> END: Leyendo archivo config <>
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:44:04:321 GAMECARD/(12721:12721): Cantidad de bloques: 16
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): <> START: Inicializacion semaforos <>
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): <> END: Inicializacion semaforos <>
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): <> START: Creacion bitmap <>
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): Archivo Bitmap.bin creado.
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): Archivo Bitmap.bin escrito.
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): El bitmap creado contiene 16 bits
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): <> END: Creacion bitmap <>
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:44:04:321 GAMECARD/(12721:12721): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:44:04:322 GAMECARD/(12721:12721): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:44:04:322 GAMECARD/(12721:12721): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:44:04:322 GAMECARD/(12721:12721): No se logro conexión a Broker, se reintentará conexión en 10 segundos...
+[DEBUG] 01:44:04:322 GAMECARD/(12721:12726): <> START: Comienzo a escuchar GameBoy <>
+[INFO] 01:44:04:322 GAMECARD/(12721:12726): Esperando conexion de GameBoy
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Logger iniciado.
+[DEBUG] 01:44:54:146 GAMECARD/(12773:12773): <> START: Leyendo archivo config <>
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Puerto del Broker: 7342
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Puerto del GameCard: 7342
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Tiempo de reintento de conexión al broker: 10
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): <> END: Leyendo archivo config <>
+[DEBUG] 01:44:54:146 GAMECARD/(12773:12773): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:44:54:146 GAMECARD/(12773:12773): Cantidad de bloques: 16
+[DEBUG] 01:44:54:146 GAMECARD/(12773:12773): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:44:54:146 GAMECARD/(12773:12773): <> START: Inicializacion semaforos <>
+[DEBUG] 01:44:54:146 GAMECARD/(12773:12773): <> END: Inicializacion semaforos <>
+[DEBUG] 01:44:54:146 GAMECARD/(12773:12773): <> START: Creacion bitmap <>
+[DEBUG] 01:44:54:146 GAMECARD/(12773:12773): Archivo Bitmap.bin creado.
+[DEBUG] 01:44:54:147 GAMECARD/(12773:12773): Archivo Bitmap.bin escrito.
+[DEBUG] 01:44:54:147 GAMECARD/(12773:12773): El bitmap creado contiene 16 bits
+[DEBUG] 01:44:54:147 GAMECARD/(12773:12773): <> END: Creacion bitmap <>
+[DEBUG] 01:44:54:147 GAMECARD/(12773:12773): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:44:54:147 GAMECARD/(12773:12773): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:44:54:147 GAMECARD/(12773:12773): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:44:54:147 GAMECARD/(12773:12773): <> END: Creacion de archivos de bloques <>
+[INFO] 01:44:54:147 GAMECARD/(12773:12773): No se logro conexión a Broker, se reintentará conexión en 10 segundos...
+[DEBUG] 01:44:54:147 GAMECARD/(12773:12778): <> START: Comienzo a escuchar GameBoy <>
+[DEBUG] 01:44:54:147 GAMECARD/(12773:12778): Escuchando conexiones del GameBoy
+[INFO] 01:44:54:147 GAMECARD/(12773:12778): Esperando conexion de GameBoy
+[INFO] 01:45:04:148 GAMECARD/(12773:12778): Me conecté con GAMEBOY
+[INFO] 01:45:04:149 GAMECARD/(12773:12773): Suscripto a cola New Pokemon. Lanzando socket de escucha..
+[DEBUG] 01:45:04:149 GAMECARD/(12773:12773): Socket de ACK New Pokemon guardado.
+[INFO] 01:45:04:150 GAMECARD/(12773:12773): Suscripto a cola Catch Pokemon. Lanzando socket de escucha..
+[DEBUG] 01:45:04:150 GAMECARD/(12773:12773): Socket de ACK Catch Pokemon guardado.
+[INFO] 01:45:04:150 GAMECARD/(12773:12773): Suscripto a cola Get Pokemon. Lanzando socket de escucha..
+[DEBUG] 01:45:04:150 GAMECARD/(12773:12773): Socket de ACK Catch Pokemon guardado.
+[DEBUG] 01:45:04:151 GAMECARD/(12773:12773): Socket de Appeared Pokemon guardado.
+[DEBUG] 01:45:04:151 GAMECARD/(12773:12773): Socket de Caught Pokemon guardado.
+[DEBUG] 01:45:04:155 GAMECARD/(12773:12773): Socket de Localized Pokemon guardado.
+[INFO] 01:45:04:156 GAMECARD/(12773:12773): Se logró conectar con Broker. Comenzando a lanzar hilos de escucha.
+[DEBUG] 01:45:04:159 GAMECARD/(12773:12779): START: lanzarHilosEscucha
+[INFO] 01:45:04:160 GAMECARD/(12773:12782): Esperando mensajes GET_POKEMON...
+[INFO] 01:45:04:164 GAMECARD/(12773:12781): Esperando mensajes CATCH_POKEMON...
+[INFO] 01:45:04:165 GAMECARD/(12773:12780): Esperando mensajes NEW_POKEMON...
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Logger iniciado.
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> START: Leyendo archivo config <>
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Puerto del Broker: 7342
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Puerto del GameCard: 7342
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Tiempo de reintento de conexión al broker: 10
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): <> END: Leyendo archivo config <>
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:46:40:4 GAMECARD/(12870:12870): Cantidad de bloques: 16
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> START: Inicializacion semaforos <>
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> END: Inicializacion semaforos <>
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> START: Creacion bitmap <>
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): Archivo Bitmap.bin creado.
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): Archivo Bitmap.bin escrito.
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): El bitmap creado contiene 16 bits
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> END: Creacion bitmap <>
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:46:40:4 GAMECARD/(12870:12870): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:46:40:5 GAMECARD/(12870:12870): <> END: Creacion de archivos de bloques <>
+[INFO] 01:46:40:5 GAMECARD/(12870:12870): No se logro conexión a Broker, se reintentará conexión en 10 segundos...
+[DEBUG] 01:46:40:5 GAMECARD/(12870:12875): <> START: Comienzo a escuchar GameBoy <>
+[DEBUG] 01:46:40:5 GAMECARD/(12870:12875): Escuchando conexiones del GameBoy
+[INFO] 01:46:40:5 GAMECARD/(12870:12875): Esperando conexion de GameBoy
+[INFO] 01:46:55:332 GAMECARD/(12894:12894): Logger iniciado.
+[DEBUG] 01:46:55:334 GAMECARD/(12894:12894): <> START: Leyendo archivo config <>
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Puerto del Broker: 7342
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Puerto del GameCard: 7342
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): <> END: Leyendo archivo config <>
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:46:55:335 GAMECARD/(12894:12894): Cantidad de bloques: 16
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> START: Inicializacion semaforos <>
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> END: Inicializacion semaforos <>
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> START: Creacion bitmap <>
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): Archivo Bitmap.bin creado.
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): Archivo Bitmap.bin escrito.
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): El bitmap creado contiene 16 bits
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> END: Creacion bitmap <>
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:46:55:335 GAMECARD/(12894:12894): <> END: Creacion de archivos de bloques <>
+[INFO] 01:46:55:337 GAMECARD/(12894:12894): No se logro conexión a Broker, se reintentará conexión en 3 segundos...
+[DEBUG] 01:46:55:343 GAMECARD/(12894:12899): <> START: Comienzo a escuchar GameBoy <>
+[DEBUG] 01:46:55:343 GAMECARD/(12894:12899): Escuchando conexiones del GameBoy
+[INFO] 01:46:55:343 GAMECARD/(12894:12899): Esperando conexion de GameBoy
+[INFO] 01:46:58:338 GAMECARD/(12894:12899): Me conecté con GAMEBOY
+[INFO] 01:46:58:339 GAMECARD/(12894:12894): Suscripto a cola New Pokemon. Lanzando socket de escucha..
+[DEBUG] 01:46:58:339 GAMECARD/(12894:12894): Socket de ACK New Pokemon guardado.
+[INFO] 01:46:58:339 GAMECARD/(12894:12894): Suscripto a cola Catch Pokemon. Lanzando socket de escucha..
+[DEBUG] 01:46:58:339 GAMECARD/(12894:12894): Socket de ACK Catch Pokemon guardado.
+[INFO] 01:46:58:339 GAMECARD/(12894:12894): Suscripto a cola Get Pokemon. Lanzando socket de escucha..
+[DEBUG] 01:46:58:339 GAMECARD/(12894:12894): Socket de ACK Catch Pokemon guardado.
+[DEBUG] 01:46:58:339 GAMECARD/(12894:12894): Socket de Appeared Pokemon guardado.
+[DEBUG] 01:46:58:339 GAMECARD/(12894:12894): Socket de Caught Pokemon guardado.
+[DEBUG] 01:46:58:339 GAMECARD/(12894:12894): Socket de Localized Pokemon guardado.
+[INFO] 01:46:58:339 GAMECARD/(12894:12894): Se logró conectar con Broker. Comenzando a lanzar hilos de escucha.
+[DEBUG] 01:46:58:345 GAMECARD/(12894:12900): START: lanzarHilosEscucha
+[INFO] 01:46:58:346 GAMECARD/(12894:12903): Esperando mensajes GET_POKEMON...
+[INFO] 01:46:58:346 GAMECARD/(12894:12902): Esperando mensajes CATCH_POKEMON...
+[INFO] 01:46:58:346 GAMECARD/(12894:12901): Esperando mensajes NEW_POKEMON...
+[INFO] 01:49:57:219 GAMECARD/(12959:12959): Logger iniciado.
+[DEBUG] 01:49:57:222 GAMECARD/(12959:12959): <> START: Leyendo archivo config <>
+[INFO] 01:49:57:222 GAMECARD/(12959:12959): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Puerto del Broker: 7342
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Puerto del GameCard: 7215
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): <> END: Leyendo archivo config <>
+[DEBUG] 01:49:57:227 GAMECARD/(12959:12959): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:49:57:227 GAMECARD/(12959:12959): Cantidad de bloques: 16
+[DEBUG] 01:49:57:227 GAMECARD/(12959:12959): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:49:57:227 GAMECARD/(12959:12959): <> START: Inicializacion semaforos <>
+[DEBUG] 01:49:57:227 GAMECARD/(12959:12959): <> END: Inicializacion semaforos <>
+[DEBUG] 01:49:57:228 GAMECARD/(12959:12959): <> START: Creacion bitmap <>
+[DEBUG] 01:49:57:228 GAMECARD/(12959:12959): Archivo Bitmap.bin creado.
+[DEBUG] 01:49:57:228 GAMECARD/(12959:12959): Archivo Bitmap.bin escrito.
+[DEBUG] 01:49:57:230 GAMECARD/(12959:12959): El bitmap creado contiene 16 bits
+[DEBUG] 01:49:57:230 GAMECARD/(12959:12959): <> END: Creacion bitmap <>
+[DEBUG] 01:49:57:230 GAMECARD/(12959:12959): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:49:57:230 GAMECARD/(12959:12959): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:49:57:230 GAMECARD/(12959:12959): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:49:57:230 GAMECARD/(12959:12959): <> END: Creacion de archivos de bloques <>
+[DEBUG] 01:49:57:234 GAMECARD/(12959:12964): <> START: Comienzo a escuchar GameBoy <>
+[DEBUG] 01:49:57:238 GAMECARD/(12959:12964): Escuchando conexiones del GameBoy
+[INFO] 01:49:57:238 GAMECARD/(12959:12964): Esperando conexion de GameBoy
+[INFO] 01:51:01:394 GAMECARD/(13017:13017): Logger iniciado.
+[DEBUG] 01:51:01:395 GAMECARD/(13017:13017): <> START: Leyendo archivo config <>
+[INFO] 01:51:01:395 GAMECARD/(13017:13017): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:51:01:395 GAMECARD/(13017:13017): Config file | Puerto del Broker: 7342
+[INFO] 01:51:01:395 GAMECARD/(13017:13017): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:51:01:395 GAMECARD/(13017:13017): Config file | Puerto del GameCard: 7215
+[INFO] 01:51:01:395 GAMECARD/(13017:13017): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): <> END: Leyendo archivo config <>
+[DEBUG] 01:51:01:396 GAMECARD/(13017:13017): <> START: Leyendo Metadata del FileSystem <>
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:51:01:396 GAMECARD/(13017:13017): Cantidad de bloques: 16
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): <> END: Leyendo Metadata del FileSystem <>
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): <> START: Inicializacion semaforos <>
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): <> END: Inicializacion semaforos <>
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): <> START: Creacion bitmap <>
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): Archivo Bitmap.bin creado.
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): Archivo Bitmap.bin escrito.
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): El bitmap creado contiene 16 bits
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): <> END: Creacion bitmap <>
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): <> START: Creacion de carpetas blocks y files <>
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): <> END: Creacion de carpetas blocks y files <>
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): <> START: Creacion de archivos de bloques <>
+[DEBUG] 01:51:01:397 GAMECARD/(13017:13017): <> END: Creacion de archivos de bloques <>
+[INFO] 01:51:01:397 GAMECARD/(13017:13017): Intentando conectarme a Broker...
+[DEBUG] 01:51:01:398 GAMECARD/(13017:13022): <> START: Comienzo a escuchar GameBoy <>
+[DEBUG] 01:51:01:398 GAMECARD/(13017:13022): Escuchando conexiones del GameBoy
+[INFO] 01:51:01:398 GAMECARD/(13017:13022): Esperando conexion de GameBoy
+[INFO] 01:53:10:336 GAMECARD/(13109:13109): Logger iniciado.
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Puerto del Broker: 7342
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Puerto del GameCard: 7215
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): <> END: Leyendo archivo config <>
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Tamaño de bloques expresado en bytes: 64
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Cantidad de bloques: 16
+[INFO] 01:53:10:345 GAMECARD/(13109:13109): Intentando conectarme a Broker...
+[INFO] 01:53:10:347 GAMECARD/(13109:13114): Esperando conexion de GameBoy
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Logger iniciado.
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Puerto del Broker: 7342
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Puerto del GameCard: 7215
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Metadata File | Tamaño de bloques expresado en bytes: 64
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Metadata File | Cantidad de bloques: 16
+[INFO] 01:53:49:691 GAMECARD/(13164:13164): Intentando conectarme a Broker...
+[INFO] 01:53:49:696 GAMECARD/(13164:13169): Esperando conexion de GameBoy
