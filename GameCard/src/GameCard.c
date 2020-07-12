@@ -20,25 +20,17 @@ int main(void) {
 	pthread_t hiloEscuchaGameBoy;
 	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
+	int conectado = generarSocketsConBroker();
+	while(conectado == -1){
+		conectado = generarSocketsConBroker();
+	}
 
-//	while(!generarSocketsConBroker()){
-//		sleep(TIEMPO_DE_REINTENTO_CONEXION);
-//	}
+	log_info(logger, "Se logró conectar con Broker. Comenzando a lanzar hilos de escucha.");
+	pthread_t hiloEscuchaSockets;
+	pthread_create(&hiloEscuchaSockets, NULL, (void*) lanzarHilosDeEscucha, NULL);
 
-//	pthread_t hiloEscuchaSockets;
-//	pthread_create(&hiloEscuchaSockets, NULL, (void*) lanzarHilosDeEscucha, NULL);
-
-//
-	/* SUSCRIBIRSE A LAS COLAS NEW_POKEMON | CATCH_POKEMON | GET_POKEMON */
-
-	/* Al suscribirse a cada una de las colas deberá quedarse a la espera de recibir un mensaje del Broker. Al recibir un mensaje de cualquier hilo se deberá:
-	 - Informar al Broker la recepción del mismo (ACK).
-	 - Crear un hilo que atienda dicha solicitud.
-	 - Volver a estar a la escucha de nuevos mensajes de la cola de mensajes en cuestión. */
-
-	//terminar_programa(conexion, logger, config);
 	pthread_join(hiloEscuchaGameBoy, NULL);
-//	pthread_join(hiloEscuchaSockets, NULL);
+	pthread_join(hiloEscuchaSockets, NULL);
 
 	finalizar_gamecard();
 }
