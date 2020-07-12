@@ -114,9 +114,9 @@ int main(void) {
 		sleep(5);
 		enviarIdCatchA2(socketIdCatch);
 
-		sleep(7);
+		sleep(15);
 		enviarCaughtA2(suscripcionCaught);
-		recibirACK(socketACKCaught);
+		//recibirACK(socketACKCaught);
 	}
 
 	//recibirCatchDesde(socketCatch);

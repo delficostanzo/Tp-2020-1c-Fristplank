@@ -4,7 +4,8 @@
 static void agregarPokemonSiLoNecesita(char* nombrePokemon, t_posicion posicion);
 static void agregarComoIdCorrelativoLocalized(int idCorrelativo);
 static void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsperando);
-static void recibirIdCatch(int socketIdCatch, Entrenador* entrenadorEsperando);
+static void recibirIdCatch(Entrenador* entrenadorEsperando);
+static int puedeSeguirRecibiendo();
 
 //static int tieneComoIdCorrelativoLocalized(int idBuscado);
 static int tieneComoIdCorrelativoCaught(int idBuscado);
@@ -45,25 +46,36 @@ void agregarComoIdCorrelativoLocalized(int idCorrelativo){
 
 t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 	t_log* logger = iniciar_logger();
-	t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
-	t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
+	while(puedeSeguirRecibiendo) {
+		t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
+			t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
 
-	quickLog("$-Se recibio un localized");
-	//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
-	//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
-	int cantidad = (int) (localized->cantidadPosiciones);
-	for(int index=0; index<cantidad; index++){
-		//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
-		t_posicion* posicion = list_get(localized->listaPosiciones,index);
+			quickLog("$-Se recibio un localized");
+			//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
+			//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
+			int cantidad = (int) (localized->cantidadPosiciones);
+			for(int index=0; index<cantidad; index++){
+				//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
+				t_posicion* posicion = list_get(localized->listaPosiciones,index);
 
-		agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
+				agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
 
+			}
+
+			log_info(logger, "$-Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
+
+			destruirLog(logger);
+			return paqueteLocalized;
 	}
+	return NULL;
+}
 
-	log_info(logger, "$-Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
-
-	destruirLog(logger);
-	return paqueteLocalized;
+//si ya no hay mas objetivos globales quiere decir que todos fueron encontrados a traves de un localized o un appeared
+int puedeSeguirRecibiendo() {
+	pthread_mutex_lock(&mutexObjetivosGlobales);
+	int cumple = list_is_empty(objetivosGlobales);
+	pthread_mutex_unlock(&mutexObjetivosGlobales);
+	return cumple;
 }
 
 //int tieneComoIdCorrelativoLocalized(int idBuscado) {
@@ -159,16 +171,19 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
 	//para saber saber que respuesta de caught es de el
 	quickLog("$-Esta esperando recibir el id de su catch enviado");
-	recibirIdCatch(socketIdCatch, entrenadorEsperando);
+	recibirIdCatch(entrenadorEsperando);
 
 	//sem_wait(&semaforoEntrenadorEsperando);
 	//esperarRecibirIdCatch(entrenadorEsperando);
 
-	//free(catchPoke); //
+	free(catchPoke); //
 
 }
 
-void recibirIdCatch(int socketIdCatch, Entrenador* entrenadorEsperando) {
+void recibirIdCatch(Entrenador* entrenadorEsperando) {
+//	sem_wait(&semaforoCorrelativos);
+//	t_list* ids = idsCorrelativosCaught;
+//	sem_post(&semaforoCorrelativos);
 	t_paquete* paqueteIdRecibido = recibir_mensaje(socketIdCatch);
 	t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
 
@@ -184,8 +199,9 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsp
 	//lista de ids correlativos globales que se mandaron
 	//recien se agregan cuando recibo la respuesta del broker
 
-
+	pthread_mutex_lock(&entrenadorEsperando->mutexCorrelativo);
 	entrenadorEsperando->idCorrelativoDeEspera = idCorrelativo;
+	pthread_mutex_unlock(&entrenadorEsperando->mutexCorrelativo);
 	//sem_post(&semaforoEntrenadorEsperando);
 
 	sem_wait(&semaforoCorrelativos);
@@ -265,7 +281,9 @@ void ejecutarRespuestaCaught(int idCatchQueResponde, t_paquete* paqueteCaught){
 Entrenador* entrenadorQueTieneId(int idCatchQueResponde) {
 	int tieneIdCorrelativo(Entrenador* entrenador) {
 		//sem_wait(&semaforoCorrelativos);
+		pthread_mutex_lock(&entrenador->mutexCorrelativo);
 		return entrenador->idCorrelativoDeEspera == idCatchQueResponde;
+		pthread_mutex_unlock(&entrenador->mutexCorrelativo);
 		//sem_post(&semaforoCorrelativos);
 	}
 
@@ -298,7 +316,9 @@ void procesarEspera(Entrenador*  entrenador, uint32_t atrapo){
 		pasarADormido(entrenador);
 	}
 
+	pthread_mutex_lock(&entrenador->mutexEstado);
 	log_info(logger, "$-Luego de recibir la respuesta del caught el entrenador quedo en estado %d", entrenador->estado);
+	pthread_mutex_unlock(&entrenador->mutexEstado);
 	destruirLog(logger);
 }
 

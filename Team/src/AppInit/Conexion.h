@@ -11,6 +11,8 @@
 //	int socketACK;
 //}t_par_de_sockets;
 
+pthread_t escucharLocalizedPokemon;
+
 void* escucharGameBoy(void);
 int generarSocketsConBroker();
 void crearHilosDeEscucha();

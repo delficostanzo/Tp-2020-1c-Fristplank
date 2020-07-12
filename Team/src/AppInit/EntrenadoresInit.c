@@ -146,6 +146,7 @@ void setMutex(t_list* entrenadores) {
 		//lo dejo en 0 para que no cumpla el objetivo hasta que el planificador le haga el unlock
 		pthread_mutex_lock(&(entrenador->mutexEntrenador));
 		pthread_mutex_init(&(entrenador->mutexEstado), NULL);
+		pthread_mutex_init(&(entrenador->mutexCorrelativo), NULL);
 	}
 }
 
