@@ -6,12 +6,16 @@
 
 static void envioAppearedPrueba1(int socketSuscripcionAppeared);
 static void envioAppearedPrueba2(int socketSuscripcionAppeared);
+static void envioAppearedPrueba3(int socketSuscripcionAppeared);
 static void envioLocalizedPrueba1(int socketSuscripcionLocalized);
+static void envioLocalizedPrueba2(int socketSuscripcionLocalized);
 static int recibirCatchDesde(int socketCatch);
 static void enviarIdCatchA(int socketIdCatch);
 static void enviarIdCatchA2(int socketIdCatch);
+static void enviarIdCatchA3(int socketIdCatch);
 static void enviarCaughtA(int suscripcionCaught);
 static void enviarCaughtA2(int suscripcionCaught);
+static void enviarCaughtA3(int suscripcionCaught);
 static t_paquete* recibirGetDesde(int socketGet);
 static void recibirACK(int socketACKAppeared);
 static void destruirLog(t_log* logger);
@@ -95,9 +99,12 @@ int main(void) {
 		envioAppearedPrueba1(suscripcionAppeared);
 		//recibirACK(socketACKAppeared);
 
+
 		sleep(3);
 		envioLocalizedPrueba1(suscripcionLocalized);
 		//recibirACK(socketACKLocalized);
+
+		envioAppearedPrueba2(suscripcionAppeared);
 	}
 
 
@@ -120,8 +127,20 @@ int main(void) {
 		//recibirACK(socketACKCaught);
 	}
 
-	//recibirCatchDesde(socketCatch);
-	//envioAppearedPrueba2(suscripcionAppeared);
+	envioLocalizedPrueba2(suscripcionLocalized);
+
+	sleep(5);
+
+	envioAppearedPrueba3(suscripcionAppeared);
+
+	if(recibirCatchDesde(socketCatch)){
+		sleep(2);
+		enviarIdCatchA3(socketIdCatch);
+
+		sleep(7);
+		enviarCaughtA3(suscripcionCaught);
+		//recibirACK(socketACKCaught);
+	}
 
 	destruirLog(logger);
 
@@ -175,11 +194,27 @@ void envioAppearedPrueba2(int socketSuscripcionAppeared) {
 	appearedPrueba->lengthOfPokemon = strlen(appearedPrueba->pokemon);
 
 	appearedPrueba->posicion = malloc(sizeof(t_posicion));
-	appearedPrueba->posicion->posicionX = 6;
-	appearedPrueba->posicion->posicionY = 4;
+	appearedPrueba->posicion->posicionX = 7;
+	appearedPrueba->posicion->posicionY = 7;
 
 	enviar_appeared_pokemon(appearedPrueba, socketSuscripcionAppeared, 8, -1);
 	log_info(logger, "Envio del appeared del Charmander");
+	destruirLog(logger);
+}
+
+void envioAppearedPrueba3(int socketSuscripcionAppeared) {
+	t_log* logger = iniciar_logger();
+
+	t_appeared_pokemon* appearedPrueba = malloc(sizeof(t_appeared_pokemon));
+	appearedPrueba->pokemon = string_from_format("Pikachu");
+	appearedPrueba->lengthOfPokemon = strlen(appearedPrueba->pokemon);
+
+	appearedPrueba->posicion = malloc(sizeof(t_posicion));
+	appearedPrueba->posicion->posicionX = 5;
+	appearedPrueba->posicion->posicionY = 8;
+
+	enviar_appeared_pokemon(appearedPrueba, socketSuscripcionAppeared, 9, -1);
+	log_info(logger, "Envio del appeared del Pikachu");
 	destruirLog(logger);
 }
 
@@ -210,6 +245,32 @@ void envioLocalizedPrueba1(int socketSuscripcionLocalized) {
 	destruirLog(logger);
 }
 
+void envioLocalizedPrueba2(int socketSuscripcionLocalized) {
+	t_log* logger = iniciar_logger();
+	t_localized_pokemon* localizedPrueba = malloc(sizeof(t_localized_pokemon));
+	localizedPrueba->pokemon = string_from_format("Pikachu");
+	localizedPrueba->lengthOfPokemon = strlen(localizedPrueba->pokemon);
+
+	t_posicion* posicion1 = malloc(sizeof(t_posicion));
+	posicion1->posicionX = 1;
+	posicion1->posicionY = 1;
+
+	t_posicion* posicion2 = malloc(sizeof(t_posicion));
+	posicion2->posicionX = 5;
+	posicion2->posicionY = 7;
+
+	t_list* posicionesPrueba = list_create();
+	list_add(posicionesPrueba, posicion1);
+	list_add(posicionesPrueba, posicion2);
+
+	localizedPrueba->cantidadPosiciones = 2;
+	localizedPrueba->listaPosiciones = posicionesPrueba;
+
+	enviar_localized_pokemon(localizedPrueba, socketSuscripcionLocalized, 6, -1);
+	log_info(logger, "Envio del localized del Pikachu");
+	destruirLog(logger);
+}
+
 //devuelvo 1 si se recibio el catch de un pokemon del team
 int recibirCatchDesde(int socketCatch) {
 	t_log* logger = iniciar_logger();
@@ -228,7 +289,7 @@ void enviarIdCatchA(int socketIdCatch) {
 	idCatch->idCorrelativo = id;
 	//se podria pasar por id correlativo ?
 	enviar_respuesta_id(idCatch, socketIdCatch, -1, -1);
-	log_info(logger, "Se envio el id del catch");
+	log_info(logger, "Se envio el id del catch 55");
 	destruirLog(logger);
 }
 
@@ -249,20 +310,40 @@ void enviarIdCatchA2(int socketIdCatch) {
 	idCatch->idCorrelativo = id;
 	//se podria pasar por id correlativo ?
 	enviar_respuesta_id(idCatch, socketIdCatch, 2, 44);
-	log_info(logger, "Se envio el id del catch");
+	log_info(logger, "Se envio el id del catch 44");
 	destruirLog(logger);
 }
 
 void enviarCaughtA2(int suscripcionCaught) {
 	t_log* logger = iniciar_logger();
 	t_caught_pokemon* caughtPoke = malloc(sizeof(t_caught_pokemon));
-	uint32_t loAtrapo = 0;
+	uint32_t loAtrapo = 1;
 	caughtPoke->ok = loAtrapo;
 	enviar_caught_pokemon(caughtPoke, suscripcionCaught, 4, 44);
 	log_info(logger, "Se envio el caught del catch 44");
 	destruirLog(logger);
 }
 
+void enviarIdCatchA3(int socketIdCatch) {
+	t_log* logger = iniciar_logger();
+	t_respuesta_id* idCatch = malloc(sizeof(t_respuesta_id));
+	int id= 33; //el id del mensaje catch que mando el entrenador
+	idCatch->idCorrelativo = id;
+	//se podria pasar por id correlativo ?
+	enviar_respuesta_id(idCatch, socketIdCatch, 3, 33);
+	log_info(logger, "Se envio el id del catch 33");
+	destruirLog(logger);
+}
+
+void enviarCaughtA3(int suscripcionCaught) {
+	t_log* logger = iniciar_logger();
+	t_caught_pokemon* caughtPoke = malloc(sizeof(t_caught_pokemon));
+	uint32_t loAtrapo = 1;
+	caughtPoke->ok = loAtrapo;
+	enviar_caught_pokemon(caughtPoke, suscripcionCaught, 5, 33);
+	log_info(logger, "Se envio el caught del catch 33");
+	destruirLog(logger);
+}
 
 
 
