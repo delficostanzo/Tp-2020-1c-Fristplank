@@ -46,28 +46,28 @@ void agregarComoIdCorrelativoLocalized(int idCorrelativo){
 
 t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 	t_log* logger = iniciar_logger();
-	while(puedeSeguirRecibiendo) {
-		t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
-			t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
+	t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
+	t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
+	while(puedeSeguirRecibiendo()) {
+		log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
 
-			quickLog("$-Se recibio un localized");
-			//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
-			//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
-			int cantidad = (int) (localized->cantidadPosiciones);
-			for(int index=0; index<cantidad; index++){
-				//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
-				t_posicion* posicion = list_get(localized->listaPosiciones,index);
+		quickLog("$-Se recibio un localized");
+		//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
+		//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
+		int cantidad = (int) (localized->cantidadPosiciones);
+		for(int index=0; index<cantidad; index++){
+			//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
+			t_posicion* posicion = list_get(localized->listaPosiciones,index);
 
-				agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
+			agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
 
-			}
+		}
 
-			log_info(LO, "Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
 
-			log_info(logger, "$-Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
+		log_info(logger, "$-Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
 
-			destruirLog(logger);
-			return paqueteLocalized;
+		destruirLog(logger);
+		return paqueteLocalized;
 	}
 	return NULL;
 }
@@ -75,9 +75,10 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 //si ya no hay mas objetivos globales quiere decir que todos fueron encontrados a traves de un localized o un appeared
 int puedeSeguirRecibiendo() {
 	pthread_mutex_lock(&mutexPokemonesRecibidos);
-	int cumple = list_size(pokemonesRecibidos) == cantidadDeEspeciesTotales;
+	t_list* pokesR = pokemonesRecibidos;
+	int cantidadRecibidos = list_size(pokemonesRecibidos);
 	pthread_mutex_unlock(&mutexPokemonesRecibidos);
-	return cumple;
+	return cantidadRecibidos == cantidadDeEspeciesTotales;
 }
 
 //int tieneComoIdCorrelativoLocalized(int idBuscado) {
@@ -106,6 +107,7 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 	if (paqueteAppeared != NULL) {
 		t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
+			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
 			agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
 
@@ -117,7 +119,6 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 		//	free(paqueteAppeared);
 			log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
-			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
 			destruirLog(logger);
 			return paqueteAppeared;
@@ -203,6 +204,8 @@ void recibirIdCatch(Entrenador* entrenador) {
 		t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
 		agregarComoIdCorrelativoCaught(idCatch->idCorrelativo, entrenador);
 		quickLog("$-Se agrego como id en el entrenador necesario");
+		log_info(LO, "Se recibio el Id del Catch del entrenador %d | Id: %d", entrenador->numeroEntrenador, idCatch->idCorrelativo);
+
 	}
 
 

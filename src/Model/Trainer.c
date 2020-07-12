@@ -103,11 +103,11 @@ void sacarDeListaReady(Entrenador* entrenadorASacar) {
 	}
 
 	//si ese entrenador esta en la lista sacarlo
-	if(list_any_satisfy(listaEntrenadoresReady, (erasedTypeFilter) esElEntrenador)){
-		pthread_mutex_lock(&mutexListaEntrenadoresReady);
+	pthread_mutex_lock(&mutexListaEntrenadoresReady);
+	if(list_is_empty(listaEntrenadoresReady) != 1){
 		list_remove_by_condition(listaEntrenadoresReady, (erasedTypeFilter) esElEntrenador);
-		pthread_mutex_unlock(&mutexListaEntrenadoresReady);
 	}
+	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
 }
 
 
