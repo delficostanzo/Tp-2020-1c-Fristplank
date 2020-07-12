@@ -558,3 +558,89 @@
 [INFO] 01:53:49:691 GAMECARD/(13164:13164): Metadata File | Cantidad de bloques: 16
 [INFO] 01:53:49:691 GAMECARD/(13164:13164): Intentando conectarme a Broker...
 [INFO] 01:53:49:696 GAMECARD/(13164:13169): Esperando conexion de GameBoy
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Logger iniciado.
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | IP del Broker: 127.0.0.1
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Puerto del Broker: 7342
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | IP del GameCard: 127.0.0.1
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Puerto del GameCard: 7215
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Punto montaje de TallGrass: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Tiempo de reintento de operación: 5
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Tiempo de retardo de operación: 10
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Path de Bitmap calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Metadata/Bitmap.bin
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Path de Files calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Path de Pokemones calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Files/Pokemones/
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Config file | Path de Blocks calculado: /home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/cokemones/Blocks/
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Metadata File | Tamaño de bloques expresado en bytes: 64
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Metadata File | Cantidad de bloques: 16
+[INFO] 01:59:40:247 GAMECARD/(13377:13377): Intentando conectarme a Broker...
+[INFO] 01:59:40:247 GAMECARD/(13377:13382): Esperando conexion de GameBoy
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Logger iniciado.
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | IP del Broker: 127.0.0.1
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Puerto del Broker: 7342
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | IP del GameCard: 127.0.0.1
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Puerto del GameCard: 7215
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Punto montaje de TallGrass: ../cokemones
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Tiempo de reintento de operación: 5
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Tiempo de retardo de operación: 10
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Path de Bitmap calculado: ../cokemones/Metadata/Bitmap.bin
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Path de Files calculado: ../cokemones/Files/
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Path de Pokemones calculado: ../cokemones/Files/Pokemones/
+[INFO] 03:02:04:186 GAMECARD/(3462:3462): Config file | Path de Blocks calculado: ../cokemones/Blocks/
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Logger iniciado.
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | IP del Broker: 127.0.0.1
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Puerto del Broker: 7342
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | IP del GameCard: 127.0.0.1
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Puerto del GameCard: 7215
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Punto montaje de TallGrass: .../cokemones
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Tiempo de reintento de operación: 5
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Tiempo de retardo de operación: 10
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Path de Bitmap calculado: .../cokemones/Metadata/Bitmap.bin
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Path de Files calculado: .../cokemones/Files/
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Path de Pokemones calculado: .../cokemones/Files/Pokemones/
+[INFO] 03:02:22:390 GAMECARD/(3500:3500): Config file | Path de Blocks calculado: .../cokemones/Blocks/
+[INFO] 03:02:31:248 GAMECARD/(3538:3538): Logger iniciado.
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | IP del Broker: 127.0.0.1
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Puerto del Broker: 7342
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | IP del GameCard: 127.0.0.1
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Puerto del GameCard: 7215
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Punto montaje de TallGrass: ./cokemones
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Tiempo de reintento de operación: 5
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Tiempo de retardo de operación: 10
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Path de Bitmap calculado: ./cokemones/Metadata/Bitmap.bin
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Path de Files calculado: ./cokemones/Files/
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Path de Pokemones calculado: ./cokemones/Files/Pokemones/
+[INFO] 03:02:31:250 GAMECARD/(3538:3538): Config file | Path de Blocks calculado: ./cokemones/Blocks/
+[INFO] 03:02:31:271 GAMECARD/(3538:3538): Metadata File | Tamaño de bloques expresado en bytes: 64
+[INFO] 03:02:31:271 GAMECARD/(3538:3538): Metadata File | Cantidad de bloques: 16
+[INFO] 03:02:31:280 GAMECARD/(3538:3538): Intentando conectarme a Broker...
+[INFO] 03:02:31:280 GAMECARD/(3538:3538): No se logro conexión a Broker, se reintentará conexión en 3 segundos...
+[INFO] 03:02:31:283 GAMECARD/(3538:3543): Esperando conexion de GameBoy
+[INFO] 03:02:53:558 GAMECARD/(3576:3576): Logger iniciado.
+[INFO] 03:03:03:227 GAMECARD/(3612:3612): Logger iniciado.
+[INFO] 03:03:41:166 GAMECARD/(3668:3668): Logger iniciado.
+[INFO] 03:03:48:399 GAMECARD/(3704:3704): Logger iniciado.
+[INFO] 03:03:48:404 GAMECARD/(3704:3704): Config file | IP del Broker: 127.0.0.1
+[INFO] 03:03:48:404 GAMECARD/(3704:3704): Config file | Puerto del Broker: 7342
+[INFO] 03:03:48:404 GAMECARD/(3704:3704): Config file | IP del GameCard: 127.0.0.1
+[INFO] 03:03:48:404 GAMECARD/(3704:3704): Config file | Puerto del GameCard: 7215
+[INFO] 03:03:48:404 GAMECARD/(3704:3704): Config file | Punto montaje de TallGrass: ./cokemones
+[INFO] 03:03:48:404 GAMECARD/(3704:3704): Config file | Tiempo de reintento de conexión al broker: 3
+[INFO] 03:03:48:404 GAMECARD/(3704:3704): Config file | Tiempo de reintento de operación: 5
+[INFO] 03:03:48:404 GAMECARD/(3704:3704): Config file | Tiempo de retardo de operación: 10
+[INFO] 03:03:48:405 GAMECARD/(3704:3704): Config file | Path de Bitmap calculado: ./cokemones/Metadata/Bitmap.bin
+[INFO] 03:03:48:405 GAMECARD/(3704:3704): Config file | Path de Files calculado: ./cokemones/Files/
+[INFO] 03:03:48:405 GAMECARD/(3704:3704): Config file | Path de Pokemones calculado: ./cokemones/Files/Pokemones/
+[INFO] 03:03:48:405 GAMECARD/(3704:3704): Config file | Path de Blocks calculado: ./cokemones/Blocks/
+[INFO] 03:03:48:405 GAMECARD/(3704:3704): Metadata File | Tamaño de bloques expresado en bytes: 64
+[INFO] 03:03:48:405 GAMECARD/(3704:3704): Metadata File | Cantidad de bloques: 16
+[INFO] 03:03:48:405 GAMECARD/(3704:3704): Intentando conectarme a Broker...
+[INFO] 03:03:48:405 GAMECARD/(3704:3704): No se logro conexión a Broker, se reintentará conexión en 3 segundos...
+[INFO] 03:03:48:408 GAMECARD/(3704:3709): Esperando conexion de GameBoy
+[INFO] 03:03:51:406 GAMECARD/(3704:3704): No se logro conexión a Broker, se reintentará conexión en 3 segundos...
+[INFO] 03:03:54:407 GAMECARD/(3704:3704): No se logro conexión a Broker, se reintentará conexión en 3 segundos...
+[INFO] 03:03:57:408 GAMECARD/(3704:3704): No se logro conexión a Broker, se reintentará conexión en 3 segundos...
+[INFO] 03:04:00:408 GAMECARD/(3704:3704): No se logro conexión a Broker, se reintentará conexión en 3 segundos...
