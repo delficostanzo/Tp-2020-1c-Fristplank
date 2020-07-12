@@ -5,7 +5,7 @@
 
 #include "utils.h"
 #include<commons/config.h>
-
+#include "../AppInit/LogFunctions.h"
 
 char* IP_BROKER;
 int PUERTO_BROKER;
@@ -40,6 +40,8 @@ int socketACKAppeared;
 int socketACKCaught;
 int socketACKLocalized;
 
+int cantidadDeEspeciesTotales;
+
 t_config* config;
 
 
@@ -47,6 +49,7 @@ t_config* config;
 pthread_mutex_t mutexEntrenadores;
 pthread_mutex_t mutexObjetivosGlobales;
 pthread_mutex_t mutexPokemonesLibres;
+pthread_mutex_t mutexPokemonesRecibidos;
 pthread_mutex_t mutexListaEntrenadoresReady;
 sem_t semaforoCatch;
 
@@ -55,6 +58,7 @@ t_list* objetivosTotales;
 t_list* objetivosAtrapados;
 t_list* objetivosGlobales;
 t_list* pokemonesLibres;
+t_list* pokemonesRecibidos;
 t_list* listaEntrenadoresReady;
 
 t_list* idsCorrelativosCaught;

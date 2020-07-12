@@ -75,6 +75,7 @@ void pasarAReadyParaAtrapar(){
 				// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
 				cambiarCantidadEnPokesObj(pokemonLibre);
 
+				int cantTotal = cantidadDeEspeciesTotales;
 				log_info(LO, "El entrenador %d paso a estado ready para atrapar al pokemon %s", entrenadorAReady->numeroEntrenador, pokemonLibre->nombre);
 
 			}
