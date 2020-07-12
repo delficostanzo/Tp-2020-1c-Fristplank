@@ -115,7 +115,7 @@ void escucharGameBoy(){
 	socketListenerGameBoy = crearSocket();
 	int puertoGamecardInt = atoi(PUERTO_GAMECARD);
 	if(escuchaEn(socketListenerGameBoy, puertoGamecardInt)){
-				log_debug(logger, "Escuchando conexiones del GameBoy");
+				log_debug(logger, "Escuchando conexiones del GameBoy...");
 	}
 
 	while(1){
