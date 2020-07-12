@@ -18,11 +18,11 @@ int main(int argc, char *argv[]) {
 //	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
 
 
-
-
 	objetivosTotales = getObjetivosTotalesDesde(entrenadores);
 	objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
 	objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
+
+	cantidadDeEspeciesTotales = list_size(objetivosGlobales);
 	//llegan bien sus nombres
 	log_info(logger, "$-La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
 	log_info(logger, "$-La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));

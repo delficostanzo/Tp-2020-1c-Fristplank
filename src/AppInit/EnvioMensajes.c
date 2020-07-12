@@ -72,9 +72,9 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 
 //si ya no hay mas objetivos globales quiere decir que todos fueron encontrados a traves de un localized o un appeared
 int puedeSeguirRecibiendo() {
-	pthread_mutex_lock(&mutexObjetivosGlobales);
-	int cumple = list_is_empty(objetivosGlobales);
-	pthread_mutex_unlock(&mutexObjetivosGlobales);
+	pthread_mutex_lock(&mutexPokemonesRecibidos);
+	int cumple = list_size(pokemonesRecibidos) == cantidadDeEspeciesTotales;
+	pthread_mutex_unlock(&mutexPokemonesRecibidos);
 	return cumple;
 }
 
@@ -141,6 +141,9 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 			setNombreTo(pokemonNuevo, nombreNuevoPoke);
 			setCantidadTo(pokemonNuevo, 1);
 			list_add(pokemonesLibres, pokemonNuevo);
+			pthread_mutex_lock(&mutexPokemonesRecibidos);
+			list_add(pokemonesRecibidos, pokemonNuevo);
+			pthread_mutex_unlock(&mutexPokemonesRecibidos);
 		}
 		pthread_mutex_unlock(&mutexPokemonesLibres);
 	}
@@ -171,7 +174,10 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
 	//para saber saber que respuesta de caught es de el
 	quickLog("$-Esta esperando recibir el id de su catch enviado");
-	recibirIdCatch(entrenadorEsperando);
+	t_paquete* paqueteIdRecibido = recibir_mensaje(socketIdCatch);
+	t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
+	agregarComoIdCorrelativoCaught(idCatch->idCorrelativo, entrenadorEsperando);
+	//recibirIdCatch(entrenadorEsperando);
 
 	//sem_wait(&semaforoEntrenadorEsperando);
 	//esperarRecibirIdCatch(entrenadorEsperando);
@@ -184,11 +190,11 @@ void recibirIdCatch(Entrenador* entrenadorEsperando) {
 //	sem_wait(&semaforoCorrelativos);
 //	t_list* ids = idsCorrelativosCaught;
 //	sem_post(&semaforoCorrelativos);
-	t_paquete* paqueteIdRecibido = recibir_mensaje(socketIdCatch);
-	t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
 
 
-	agregarComoIdCorrelativoCaught(idCatch->idCorrelativo, entrenadorEsperando);
+
+
+
 	quickLog("$-Se agrego como id en el entrenador necesario");
 
 }

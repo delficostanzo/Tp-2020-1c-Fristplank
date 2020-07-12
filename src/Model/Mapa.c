@@ -35,6 +35,7 @@ void iniciarVariables(){
 	pthread_mutex_init(&mutexEntrenadores, NULL);
 	pthread_mutex_init(&mutexObjetivosGlobales, NULL);
 	pthread_mutex_init(&mutexPokemonesLibres, NULL);
+	pthread_mutex_init(&mutexPokemonesRecibidos, NULL);
 	pthread_mutex_init(&mutexListaEntrenadoresReady, NULL);
 	sem_init(&semaforoCatch, 1, 0);
 
@@ -46,6 +47,7 @@ void iniciarVariables(){
 	sem_init(&semaforoEstados, 1, 1);
 
 	pokemonesLibres = list_create();
+	pokemonesRecibidos = list_create();
 	listaEntrenadoresReady = list_create();
 
 	sem_init(&semaforoEntrenadorEsperando, 1, 0);
