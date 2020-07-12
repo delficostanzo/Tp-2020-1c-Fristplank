@@ -188,8 +188,6 @@ void* escucharColaIdsCatchPokemon(){
 
 		//recibirIdCatch(socketIdCatch);
 
-		//enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
-		//quickLog("$-Pudo enviar el ACK de los appeared");
 	}
 }
 
@@ -217,7 +215,7 @@ void* escucharColaLocalizedPokemon(){
 //		enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
 //		quickLog("$-Pudo enviar el ACK del localized");
 		if(paqueteNuevo == NULL){
-			pthread_exit(escucharLocalizedPokemon);
+			pthread_exit(&escucharLocalizedPokemon);
 		}
 	}
 }
