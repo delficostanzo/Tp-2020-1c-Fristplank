@@ -1,82 +1,143 @@
+/*
+ ============================================================================
+ Name        : GameCard.c
+ Author      :
+ Version     :
+ Copyright   : Your copyright notice
+ Description : FileSystem de nuestro sistema
+ ============================================================================
+ */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "GameCard.h"
 
 int main(void) {
-	int conexion;
-	t_log* logger;
-	t_config* config;
 
-	//ejemplo
-	t_caught_pokemon* caughtStruct = malloc(sizeof(t_caught_pokemon));
-	caughtStruct->id_correlativo=1;
-	caughtStruct->ok=true;
-
-	// inicializo el log del Broker
 	logger = iniciar_logger();
+	log_info(logger, "Logger iniciado.");
 
-	// creo y devuelvo un puntero a la estructura t_config
-	config = leer_config();
+	iniciar_filesystem();
 
-	TIEMPO_DE_REINTENTO_CONEXION = config_get_int_value(config, "TIEMPO_DE_REINTENTO_CONEXION");
-	TIEMPO_DE_REINTENTO_OPERACION = config_get_int_value(config, "TIEMPO_DE_REINTENTO_OPERACION");
-	PUNTO_MONTAJE_TALLGRASS = config_get_string_value(config, "PUNTO_MONTAJE_TALLGRASS");
-	IP_BROKER = config_get_string_value(config, "IP_BROKER");
-	PUERTO_BROKER = config_get_string_value(config, "PUERTO_BROKER");
+	pthread_t hiloEscuchaGameBoy;
+	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
-	// faltaria loggear la info de todo el archivo de configuracion, ademas de ip y puerto
-	log_info(logger, "Lei la IP %s y PUERTO %s\n", IP_BROKER, PUERTO_BROKER);
 
-	conexion = crear_conexion(IP_BROKER, PUERTO_BROKER);
+//	while(!generarSocketsConBroker()){
+//		sleep(TIEMPO_DE_REINTENTO_CONEXION);
+//	}
 
-	enviar_caught_pokemon(caughtStruct,conexion);
+//	pthread_t hiloEscuchaSockets;
+//	pthread_create(&hiloEscuchaSockets, NULL, (void*) lanzarHilosDeEscucha, NULL);
 
-	// recibir mensaje
-	//t_paquete* mensaje = recibir_mensaje(conexion); //lo recibimos y la funcion recibir mensaje lo mete en un paquete
+//
+	/* SUSCRIBIRSE A LAS COLAS NEW_POKEMON | CATCH_POKEMON | GET_POKEMON */
 
-	//loguear mensaje recibido
-	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
+	/* Al suscribirse a cada una de las colas deberá quedarse a la espera de recibir un mensaje del Broker. Al recibir un mensaje de cualquier hilo se deberá:
+	 - Informar al Broker la recepción del mismo (ACK).
+	 - Crear un hilo que atienda dicha solicitud.
+	 - Volver a estar a la escucha de nuevos mensajes de la cola de mensajes en cuestión. */
 
-	terminar_programa(conexion, logger, config);
+	//terminar_programa(conexion, logger, config);
+	pthread_join(hiloEscuchaGameBoy, NULL);
+//	pthread_join(hiloEscuchaSockets, NULL);
 
-	free(caughtStruct);
+	finalizar_gamecard();
 }
 
-t_log* iniciar_logger(void){
-	t_log * log = malloc(sizeof(t_log));
-	log = log_create("gamecard.log", "GAMECARD", 1,0);
-	if(log == NULL){
-		printf("No pude crear el logger \n");
-		exit(1);
-	}
-	log_info(log,"Logger Iniciado");
-	return log;
+void iniciar_filesystem() {
+	leer_configuracionGameCard();
+	leer_metadata();
+	init_semaforos();
+	init_bitmap();
+	init_estructura_files_blocks();
+	init_bloques();
 }
 
-t_config* leer_config(void)
-{
-	t_config* config = config_create("src/gamecard.config");
-	t_log* logger = iniciar_logger();
-
-	if(config == NULL){
-		printf("No pude leer la config \n");
-		exit(2);
-	}
-	log_info(logger,"Archivo de configuracion seteado");
-	return config;
+void init_semaforos() {
+	log_debug(logger, "<> START: Inicializacion semaforos <>");
+	pthread_mutex_init(&semaforoOpen, NULL);
+	pthread_mutex_init(&semaforoBitarray, NULL);
+	pthread_mutex_init(&semaforoGetDatos, NULL);
+	pthread_mutex_init(&semaforoGuardarDatos, NULL);
+	pthread_mutex_init(&semaforoDesconexion, NULL);
+	log_debug(logger, "<> END: Inicializacion semaforos <>");
 }
 
-void terminar_programa(int conexion, t_log* logger, t_config* config)
-{
-	if(logger != NULL){
-		log_destroy(logger);
+void init_bitmap() {
+	log_debug(logger, "<> START: Creacion bitmap <>");
+
+	FILE* bitmapFile = fopen(PATH_BITMAP, "w+");
+	int cantidadDeBits = BLOCKS / 8;
+	log_debug(logger, "Archivo Bitmap.bin creado.");
+
+	for (int i = 0; i < BLOCKS; i++) {
+		fwrite("0", 1, 1, bitmapFile);
 	}
-	if(config != NULL){
-		config_destroy(config); //destruye la esctructura de config en memoria, no lo esta eliminando el archivo de config
+	fclose(bitmapFile);
+	log_debug(logger, "Archivo Bitmap.bin escrito.");
+
+	bufferBitarray = malloc(cantidadDeBits);
+	bitarray = bitarray_create_with_mode(bufferBitarray, cantidadDeBits, LSB_FIRST);
+	log_debug(logger, "El bitmap creado contiene %d bits",
+			bitarray_get_max_bit(bitarray));
+
+	for(int i = 0; i < BLOCKS; i++){
+		bitarray_clean_bit(bitarray, i);
 	}
 
-	liberar_conexion(conexion); // esta funcion esta en utils.c
+	log_debug(logger, "<> END: Creacion bitmap <>");
+}
 
+void init_estructura_files_blocks() {
+	log_debug(logger, "<> START: Creacion de carpetas blocks y files <>");
+	mkdir(PATH_FILES, S_IRWXU);
+	mkdir(PATH_BLOCKS, S_IRWXU);
+	mkdir(PATH_FILES_POKEMONES, S_IRWXU);
+	log_debug(logger, "<> END: Creacion de carpetas blocks y files <>");
+}
+
+void init_bloques() {
+	log_debug(logger, "<> START: Creacion de archivos de bloques <>");
+	for (int i = 0; i < BLOCKS; i++) {
+
+		char* path = string_new();
+		string_append(&path, PATH_BLOCKS);
+
+		char* numeroEnString = string_itoa(i);
+
+		string_append(&path, numeroEnString);
+		string_append(&path, ".bin");
+
+		FILE* bloqueACrear = fopen(path, "wb");
+		fclose(bloqueACrear);
+
+		free(numeroEnString);
+		free(path);
+	}
+	log_debug(logger, "<> END: Creacion de archivos de bloques <>");
+}
+
+void finalizar_gamecard() {
+	log_destroy(logger);
+	pthread_mutex_destroy(&semaforoOpen);
+	pthread_mutex_destroy(&semaforoBitarray);
+	pthread_mutex_destroy(&semaforoGetDatos);
+	pthread_mutex_destroy(&semaforoGuardarDatos);
+	pthread_mutex_destroy(&semaforoDesconexion);
+
+	free(PUNTO_MONTAJE_TALLGRASS);
+	free(IP_BROKER);
+	free(PUERTO_BROKER);
+	free(IP_GAMECARD);
+	free(PUERTO_GAMECARD);
+	free(PATH_BITMAP);
+	free(PATH_FILES);
+	free(PATH_FILES_POKEMONES);
+	free(PATH_BLOCKS);
+
+	free(configPath);
+	config_destroy(config);
+
+	free(bufferBitarray);
+	bitarray_destroy(bitarray);
 }
 
