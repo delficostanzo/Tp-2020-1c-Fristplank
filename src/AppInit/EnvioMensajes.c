@@ -307,16 +307,18 @@ char* charResultado(uint32_t ok) {
 
 
 Entrenador* entrenadorQueTieneId(int idCatchQueResponde) {
-	int tieneIdCorrelativo(Entrenador* entrenador) {
+	bool tieneIdCorrelativo(Entrenador* entrenador) {
 		//sem_wait(&semaforoCorrelativos);
 		pthread_mutex_lock(&entrenador->mutexCorrelativo);
-		return entrenador->idCorrelativoDeEspera == idCatchQueResponde;
+		int cumple = entrenador->idCorrelativoDeEspera == idCatchQueResponde;
 		pthread_mutex_unlock(&entrenador->mutexCorrelativo);
+		return cumple;
 		//sem_post(&semaforoCorrelativos);
 	}
 
 	pthread_mutex_lock(&mutexEntrenadores);
-	Entrenador* entrenadorRespondido = list_find(entrenadores, (erasedTypeFilter)tieneIdCorrelativo);
+	Entrenador* entrenadorRespondido = list_find(entrenadores, tieneIdCorrelativo);
+	log_info(LO, "Datos entrenador: %d", entrenadorRespondido->numeroEntrenador);
 	pthread_mutex_unlock(&mutexEntrenadores);
 	quickLog("$-Se encontro el entrenador que esperaba el caught");
 	return entrenadorRespondido;
