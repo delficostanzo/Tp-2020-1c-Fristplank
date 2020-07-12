@@ -20,20 +20,14 @@ t_log* iniciar_logger(void){
 void leer_configuracionGameCard(void){
 	log_debug(logger, "<> START: Leyendo archivo config <>");
 
-	//TODO root hardcoded para correrlo desde terminal, CAMBIAR
-	char* rootPath = string_from_format("/home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard");
-//	configPath = string_from_format ("%s/src/gamecard.config", rootPath);
-//	config = config_create(configPath);
-
-	config = config_create("/home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/GameCard/src/gamecard.config");
+	config = config_create("../src/gamecard.config");
 	TIEMPO_DE_REINTENTO_CONEXION = config_get_int_value(config, "TIEMPO_DE_REINTENTO_CONEXION");
 	TIEMPO_DE_REINTENTO_OPERACION = config_get_int_value(config, "TIEMPO_DE_REINTENTO_OPERACION");
 	TIEMPO_RETARDO_OPERACION = config_get_int_value(config, "TIEMPO_RETARDO_OPERACION");
 	ID_UNICO = config_get_int_value(config, "ID_UNICO");
-	// con el root hardcoded
-//	PUNTO_MONTAJE_TALLGRASS = config_get_string_value(config, "PUNTO_MONTAJE_TALLGRASS");
+
 	char* PUNTO_MONTAJE_TALLGRASS_RELATIVO = config_get_string_value(config, "PUNTO_MONTAJE_TALLGRASS");
-	PUNTO_MONTAJE_TALLGRASS = string_from_format("%s%s", rootPath, PUNTO_MONTAJE_TALLGRASS_RELATIVO);
+	PUNTO_MONTAJE_TALLGRASS = string_from_format("..%s", PUNTO_MONTAJE_TALLGRASS_RELATIVO);
 
 	IP_BROKER = config_get_string_value(config, "IP_BROKER");
 	PUERTO_BROKER = config_get_string_value(config, "PUERTO_BROKER");
@@ -59,7 +53,6 @@ void leer_configuracionGameCard(void){
 	log_debug(logger, "<> END: Leyendo archivo config <>");
 
 	free(PUNTO_MONTAJE_TALLGRASS_RELATIVO);
-	free(rootPath);
 }
 
 void leer_metadata(){
