@@ -56,7 +56,7 @@ void leer_configuracionGameCard(void){
 }
 
 void leer_metadata(){
-	//TODO Si lo corro en Ubuntu no voy a poder tener escritorio
+
 	char* metadataPath = string_from_format("%s/Metadata/Metadata.bin", PUNTO_MONTAJE_TALLGRASS);
 	t_config* configMetadata = config_create(metadataPath);
 	BLOCK_SIZE = config_get_int_value(configMetadata, "BLOCK_SIZE");
