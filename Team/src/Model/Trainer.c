@@ -125,9 +125,9 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 		log_info(LO, "El entrenador %d paso a estado exit porque ya tiene atrapados todos sus objetivos", entrenador->numeroEntrenador);
 	}
 	else if(tienenLaMismaCantidad(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
+		asignarMovimientoPorDeadlock(entrenador);
 		pasarADeadlock(entrenador);
 		log_info(LO, "El entrenador %d paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
-		asignarMovimientoPorDeadlock(entrenador);
 		log_info(LO, "Inicio del algoritmo de deteccion de deadlock (comienza a buscar con quien intercambiar)", entrenador->numeroEntrenador);
 	}
 	else {
@@ -239,18 +239,17 @@ void pasarABlockEsperando(Entrenador* entrenador) {
 
 /////////////INTERCAMBIO////////////////
 
-int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado){
-	//condicione del entrenador preguntando
-	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
-	char* nombrePokemonAIntercambiar = movimientoEnExec->pokemonAIntercambiar->nombre;
-	char* nombrePokemonNecesitado = movimientoEnExec->pokemonNecesitado->nombre;
-
-	//condiciones del entrenador que cumple la condicion
-	char* nombrePokemonInnecesario = pokemonInnecesario->nombre;
-	char* nombrePokemonDado = pokemonDado->nombre;
-
-	return nombrePokemonAIntercambiar == nombrePokemonInnecesario && nombrePokemonNecesitado == nombrePokemonDado;
-}
+//int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonDado){
+//	//condicione del entrenador preguntando
+//	MovimientoEnExec* movimientoEnExec = entrenador->movimientoEnExec;
+//	char* nombrePokemonAIntercambiar = movimientoEnExec->pokemonAIntercambiar->nombre;
+//	char* nombrePokemonNecesitado = movimientoEnExec->pokemonNecesitado->nombre;
+//
+//	//condiciones del entrenador que cumple la condicion
+//	char* nombrePokemonDado = pokemonDado->nombre;
+//
+//	return strcmp(nombrePokemonNecesitado, nombrePokemonDado) == 0;
+//}
 
 
 void asignarMovimientoPorDeadlock(Entrenador* entrenador){
@@ -293,7 +292,7 @@ PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador){
 			//tienen el mismo nombre
 			PokemonEnElMapa* atrapado = buscarPorNombre(objetivo->nombre, atrapados);
 			//pero hay uno atrapado de mas
-			return (atrapado->cantidad) > (objetivo->cantidad);
+			return (atrapado->cantidad) < (objetivo->cantidad);
 		}
 		return 1;
 	}

@@ -13,9 +13,13 @@ static int recibirCatchDesde(int socketCatch);
 static void enviarIdCatchA(int socketIdCatch);
 static void enviarIdCatchA2(int socketIdCatch);
 static void enviarIdCatchA3(int socketIdCatch);
+static void enviarIdCatchA4(int socketIdCatch);
+static void enviarIdCatchA5(int socketIdCatch);
 static void enviarCaughtA(int suscripcionCaught);
 static void enviarCaughtA2(int suscripcionCaught);
 static void enviarCaughtA3(int suscripcionCaught);
+static void enviarCaughtA4(int suscripcionCaught);
+static void enviarCaughtA5(int suscripcionCaught);
 static t_paquete* recibirGetDesde(int socketGet);
 static void recibirACK(int socketACKAppeared);
 static void destruirLog(t_log* logger);
@@ -139,6 +143,24 @@ int main(void) {
 
 		sleep(7);
 		enviarCaughtA3(suscripcionCaught);
+		//recibirACK(socketACKCaught);
+	}
+
+	if(recibirCatchDesde(socketCatch)){
+		sleep(2);
+		enviarIdCatchA4(socketIdCatch);
+
+		sleep(7);
+		enviarCaughtA4(suscripcionCaught);
+		//recibirACK(socketACKCaught);
+	}
+
+	if(recibirCatchDesde(socketCatch)){
+		sleep(2);
+		enviarIdCatchA5(socketIdCatch);
+
+		sleep(7);
+		enviarCaughtA5(suscripcionCaught);
 		//recibirACK(socketACKCaught);
 	}
 
@@ -345,6 +367,50 @@ void enviarCaughtA3(int suscripcionCaught) {
 	destruirLog(logger);
 }
 
+
+
+void enviarIdCatchA4(int socketIdCatch) {
+	t_log* logger = iniciar_logger();
+	t_respuesta_id* idCatch = malloc(sizeof(t_respuesta_id));
+	int id= 22; //el id del mensaje catch que mando el entrenador
+	idCatch->idCorrelativo = id;
+	//se podria pasar por id correlativo ?
+	enviar_respuesta_id(idCatch, socketIdCatch, 2, 22);
+	log_info(logger, "Se envio el id del catch 22");
+	destruirLog(logger);
+}
+
+void enviarCaughtA4(int suscripcionCaught) {
+	t_log* logger = iniciar_logger();
+	t_caught_pokemon* caughtPoke = malloc(sizeof(t_caught_pokemon));
+	uint32_t loAtrapo = 1;
+	caughtPoke->ok = loAtrapo;
+	enviar_caught_pokemon(caughtPoke, suscripcionCaught, 1, 22);
+	log_info(logger, "Se envio el caught del catch 22");
+	destruirLog(logger);
+}
+
+
+void enviarIdCatchA5(int socketIdCatch) {
+	t_log* logger = iniciar_logger();
+	t_respuesta_id* idCatch = malloc(sizeof(t_respuesta_id));
+	int id= 11; //el id del mensaje catch que mando el entrenador
+	idCatch->idCorrelativo = id;
+	//se podria pasar por id correlativo ?
+	enviar_respuesta_id(idCatch, socketIdCatch, 1, 11);
+	log_info(logger, "Se envio el id del catch 11");
+	destruirLog(logger);
+}
+
+void enviarCaughtA5(int suscripcionCaught) {
+	t_log* logger = iniciar_logger();
+	t_caught_pokemon* caughtPoke = malloc(sizeof(t_caught_pokemon));
+	uint32_t loAtrapo = 1;
+	caughtPoke->ok = loAtrapo;
+	enviar_caught_pokemon(caughtPoke, suscripcionCaught, 6, 11);
+	log_info(logger, "Se envio el caught del catch 11");
+	destruirLog(logger);
+}
 
 
 

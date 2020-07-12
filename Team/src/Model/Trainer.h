@@ -62,7 +62,7 @@ t_posicion* newPosicion();
 char* obtenerCharDeMov(ObjetivoEnExec objetivo);
 
 Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores);
-Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado);
+Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario);
 void agregarAListaReady(Entrenador* entrenadorAReady);
 void sacarDeListaReady(Entrenador* entrenadorASacar);
 void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado);

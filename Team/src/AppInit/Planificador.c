@@ -142,7 +142,7 @@ void pasarAReadyParaIntercambiar(){
 		for(int index = 0; index < list_size(entrenadoresDeadlock); index++) {
 			Entrenador* bloqueado = list_get(entrenadoresDeadlock, index);
 			//se pasan invertidos los pokemones porque este pokemon necesitado es de un entrenador que pasaria como innecesario de OTRO entrenador
-			Entrenador* entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(bloqueado->movimientoEnExec->pokemonNecesitado, bloqueado->movimientoEnExec->pokemonAIntercambiar);
+			Entrenador* entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(bloqueado->movimientoEnExec->pokemonNecesitado);
 			if(entrenadorDeIntercambio != NULL) {
 				//pasa a ready, sus movimientos ya estan definidos
 				pthread_mutex_lock(&entrenadorDeIntercambio->mutexEstado);
@@ -161,20 +161,21 @@ void pasarAReadyParaIntercambiar(){
 
 //se busca al entrenador que necesite el que yo tengo de mas y tenga el que yo necesito
 //si no lo encuentra devuelve NULL
-Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonNecesitado) {
+Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonNecesitado) {
 	t_list* entrenadoresPosibles = entrenadoresBloqueadosPorDeadlock();
 
 	int entrenadorCumpleCondicion(Entrenador* entrenador) {
-		return puedeIntercambiar(entrenador, pokemonInnecesario, pokemonNecesitado);
+		char* nombrePokemonIntercambiado = entrenador->movimientoEnExec->pokemonAIntercambiar->nombre;
+
+		return strcmp(nombrePokemonIntercambiado, pokemonNecesitado->nombre) == 0;
 	}
+
 	//si hay otro entrenador en deadlock
-	if(list_is_empty(entrenadoresPosibles) != 1){
-		pthread_mutex_lock(&mutexEntrenadores);
-		Entrenador* entrenadorQueCumplen = list_find(entrenadoresPosibles, (erasedTypeFilter)entrenadorCumpleCondicion);
-		pthread_mutex_unlock(&mutexEntrenadores);
-		return entrenadorQueCumplen;
-	}
-	return NULL;
+	pthread_mutex_lock(&mutexEntrenadores);
+	Entrenador* entrenadorQueCumplen = list_find(entrenadoresPosibles, (erasedTypeFilter)entrenadorCumpleCondicion);
+	pthread_mutex_unlock(&mutexEntrenadores);
+	return entrenadorQueCumplen;
+
 }
 
 
@@ -258,8 +259,8 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 		PokemonEnElMapa* nuevoAtrapadoDelBloqueado = entrenadorMovido->movimientoEnExec->pokemonAIntercambiar;
 
 		//agrego en el que se mueve el pokemon que tenia el que se queda quieto
-		setPokemonA(entrenadorMovido->pokemonesAtrapados, nuevoAtrapadoDelBloqueado);
-		//y le saco el qe el tenia de mas (el que se quedo quieto)
+		setPokemonA(entrenadorMovido->pokemonesAtrapados, nuevoAtrapadoDelMovido);
+		//y le saco el que el tenia de mas (el que se quedo quieto)
 		disminuirCantidadPokemones(nuevoAtrapadoDelBloqueado, entrenadorMovido->pokemonesAtrapados);
 
 		//agrego en el que se quedo quieto el pokemon que tenia el otro
