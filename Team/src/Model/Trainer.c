@@ -127,8 +127,9 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	}
 	else if(tienenLaMismaCantidad(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		pasarADeadlock(entrenador);
-		asignarMovimientoPorDeadlock(entrenador);
 		log_info(LO, "El entrenador %d paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
+		asignarMovimientoPorDeadlock(entrenador);
+		log_info(LO, "Inicio del algoritmo de deteccion de deadlock (comienza a buscar con quien intercambiar)", entrenador->numeroEntrenador);
 	}
 	else {
 		pasarADormido(entrenador);

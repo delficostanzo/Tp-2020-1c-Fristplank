@@ -25,6 +25,8 @@ void moverSiDistanciaMayorAQ(Entrenador* entrenador, int posicionXPoke, int posi
 			//la x del poke y del entrenador son iguales
 			entrenador->posicion->posicionX = posicionXPoke;
 			entrenador->ciclosCPUConsumido += QUANTUM;
+			log_info(LO, "El entrenador %d se movio a la posicion (%d, %d)", entrenador->numeroEntrenador, entrenador->posicion->posicionX, entrenador->posicion->posicionY);
+
 			pasarAReadyPorQuantum(entrenador);
 
 		} else if(distanciaEnXAbs > QUANTUM) { //no le alcanza el quantum para moverse todo el x
@@ -35,6 +37,8 @@ void moverSiDistanciaMayorAQ(Entrenador* entrenador, int posicionXPoke, int posi
 				entrenador->posicion->posicionX += QUANTUM; //va hacia la izquierda => disminuye
 				entrenador->ciclosCPUConsumido += QUANTUM;
 			}
+			log_info(LO, "El entrenador %d se movio a la posicion (%d, %d)", entrenador->numeroEntrenador, entrenador->posicion->posicionX, entrenador->posicion->posicionY);
+
 			pasarAReadyPorQuantum(entrenador);
 
 		} else{//distanciaXAbs < Q => se mueve lo que llegue en x y lo que le sobre en y
@@ -54,6 +58,8 @@ void moverSiDistanciaMayorAQ(Entrenador* entrenador, int posicionXPoke, int posi
 				entrenador->posicion->posicionY += quantumQueMeSobra;
 				entrenador->ciclosCPUConsumido += quantumQueMeSobra;
 			}
+			log_info(LO, "El entrenador %d se movio a la posicion (%d, %d)", entrenador->numeroEntrenador, entrenador->posicion->posicionX, entrenador->posicion->posicionY);
+
 			pasarAReadyPorQuantum(entrenador);
 		}
 	}

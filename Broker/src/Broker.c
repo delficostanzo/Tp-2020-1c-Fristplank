@@ -89,7 +89,8 @@ int main(void) {
 
 	t_paquete* paquete1 = recibirGetDesde(socketGet);
 	t_paquete* paquete2 = recibirGetDesde(socketGet);
-	if(paquete2 != NULL) {
+	t_paquete* paquete3 = recibirGetDesde(socketGet);
+	if(paquete3 != NULL) {
 		sleep(5);
 		envioAppearedPrueba1(suscripcionAppeared);
 		//recibirACK(socketACKAppeared);

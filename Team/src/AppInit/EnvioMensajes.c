@@ -4,9 +4,9 @@
 static void agregarPokemonSiLoNecesita(char* nombrePokemon, t_posicion posicion);
 static void agregarComoIdCorrelativoLocalized(int idCorrelativo);
 static void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsperando);
-static void recibirIdCatch(Entrenador* entrenadorEsperando);
+static void recibirIdCatch(Entrenador* entrenador);
 static int puedeSeguirRecibiendo();
-
+static char* charResultado(uint32_t ok);
 //static int tieneComoIdCorrelativoLocalized(int idBuscado);
 static int tieneComoIdCorrelativoCaught(int idBuscado);
 static Entrenador* entrenadorQueTieneId(int idCatchQueResponde);
@@ -62,6 +62,8 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 
 			}
 
+			log_info(LO, "Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
+
 			log_info(logger, "$-Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
 
 			destruirLog(logger);
@@ -101,21 +103,28 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 	t_log* logger = iniciar_logger();
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
 	//quickLog("Recibe el appeared");
-	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
+	if (paqueteAppeared != NULL) {
+		t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
 
-	agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
+			agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
 
 
-//	free(appeared->pokemon);
-//	free(appeared->posicion);
-//	free(appeared);
-//	free(paqueteAppeared->buffer);
-//	free(paqueteAppeared);
-	log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+		//	free(appeared->pokemon);
+		//	free(appeared->posicion);
+		//	free(appeared);
+		//	free(paqueteAppeared->buffer);
+		//	free(paqueteAppeared);
+			log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
-	destruirLog(logger);
-	return paqueteAppeared;
+			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+
+			destruirLog(logger);
+			return paqueteAppeared;
+	}
+
+	return NULL;
+
 }
 
 //si tengo ese pokemon como objetivo lo agregego en la lista de pokemones libres
@@ -174,10 +183,8 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
 	//para saber saber que respuesta de caught es de el
 	quickLog("$-Esta esperando recibir el id de su catch enviado");
-	t_paquete* paqueteIdRecibido = recibir_mensaje(socketIdCatch);
-	t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
-	agregarComoIdCorrelativoCaught(idCatch->idCorrelativo, entrenadorEsperando);
-	//recibirIdCatch(entrenadorEsperando);
+
+	recibirIdCatch(entrenadorEsperando);
 
 	//sem_wait(&semaforoEntrenadorEsperando);
 	//esperarRecibirIdCatch(entrenadorEsperando);
@@ -186,16 +193,18 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 
 }
 
-void recibirIdCatch(Entrenador* entrenadorEsperando) {
-//	sem_wait(&semaforoCorrelativos);
-//	t_list* ids = idsCorrelativosCaught;
-//	sem_post(&semaforoCorrelativos);
+void recibirIdCatch(Entrenador* entrenador) {
+	sem_wait(&semaforoCorrelativos);
+	t_list* ids = idsCorrelativosCaught;
+	sem_post(&semaforoCorrelativos);
 
+	if(socketIdCatch != NULL){
+		t_paquete* paqueteIdRecibido = recibir_mensaje(socketIdCatch);
+		t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
+		agregarComoIdCorrelativoCaught(idCatch->idCorrelativo, entrenador);
+		quickLog("$-Se agrego como id en el entrenador necesario");
+	}
 
-
-
-
-	quickLog("$-Se agrego como id en el entrenador necesario");
 
 }
 
@@ -247,17 +256,17 @@ int tieneComoIdCorrelativoCaught(int idBuscado) {
 	int existe(int idExistente) {
 		return idExistente == idBuscado;
 	}
+	int cumple = 0;
 
 	//si la lista no esta vacia
 	sem_wait(&semaforoCorrelativos);
 	if(list_is_empty(idsCorrelativosCaught) != 1) {
 		//me fijo de la lista de idsCorrelativos que mande como catch, si coincide con el id del que recien llego
-		return list_any_satisfy(idsCorrelativosCaught, (erasedType)existe);
+		cumple = list_any_satisfy(idsCorrelativosCaught, (erasedType)existe);
 	}
 	sem_post(&semaforoCorrelativos);
 
-
-	return 0;
+	return cumple;
 }
 
 void ejecutarRespuestaCaught(int idCatchQueResponde, t_paquete* paqueteCaught){
@@ -265,22 +274,36 @@ void ejecutarRespuestaCaught(int idCatchQueResponde, t_paquete* paqueteCaught){
 	t_log* logger = iniciar_logger();
 	t_caught_pokemon* caught = paqueteCaught->buffer->stream;
 
-	int hayEntrenadorQueTieneId() {
-		Entrenador* entrenador = entrenadorQueTieneId(idCatchQueResponde);
-		return entrenador != NULL;
+	int idQueResponde(int id) {
+		//Entrenador* entrenador = entrenadorQueTieneId(idCatchQueResponde);
+
+		return id == idCatchQueResponde;
 	}
+
+	char* charCaught = charResultado(caught->ok);
+	log_info(LO, "Se recibio el Caught | Resultado: %s", charCaught);
 
 	//ya sabemos que algun entrenador tiene ese id como correlativo de espera
 	Entrenador* entrenador = entrenadorQueTieneId(idCatchQueResponde);
 	procesarEspera(entrenador, caught->ok);
 
 	sem_wait(&semaforoCorrelativos);
-	list_remove_by_condition(idsCorrelativosCaught, (erasedType) hayEntrenadorQueTieneId);
+	list_remove_by_condition(idsCorrelativosCaught, (erasedType) idQueResponde);
 	log_info(logger, "$-Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
 	sem_post(&semaforoCorrelativos);
 
 
 	destruirLog(logger);
+}
+
+char* charResultado(uint32_t ok) {
+	char* resultado;
+	if(ok == 1) {
+		resultado = "TRUE";
+	} else {
+		resultado = "FALSE";
+	}
+	return resultado;
 }
 
 
