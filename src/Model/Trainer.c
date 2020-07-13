@@ -128,7 +128,6 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 		asignarMovimientoPorDeadlock(entrenador);
 		pasarADeadlock(entrenador);
 		log_info(LO, "El entrenador %d paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
-		log_info(LO, "Inicio del algoritmo de deteccion de deadlock (comienza a buscar con quien intercambiar)", entrenador->numeroEntrenador);
 	}
 	else {
 		pasarADormido(entrenador);
@@ -159,7 +158,7 @@ int sonIguales(t_list* objetivos, t_list* atrapados) {
 	int estaEnAtrapados(PokemonEnElMapa* objetivo) {
 
 		//nunca va a estar vacia porque esta fijandose que hace con el poke nuevo atrapado por el entrenador
-		if(list_is_empty(atrapados)){
+		if(list_is_empty(atrapados) != 1){
 			int esUnoDeLosObje(PokemonEnElMapa* atrapado){
 				return strcmp(atrapado->nombre, objetivo->nombre) == 0;
 			}
@@ -253,13 +252,15 @@ void pasarABlockEsperando(Entrenador* entrenador) {
 
 
 void asignarMovimientoPorDeadlock(Entrenador* entrenador){
-	PokemonEnElMapa* atrapadoDeMas = buscarAtrapadoDeMas(entrenador);
-	PokemonEnElMapa* objetivoNoCumplido = buscarObjetivosQueFalta(entrenador);
+	PokemonEnElMapa* atrapadoDeMas = asignarPokemonCopia(buscarAtrapadoDeMas(entrenador));
+	PokemonEnElMapa* objetivoNoCumplido = asignarPokemonCopia(buscarObjetivosQueFalta(entrenador));
 
+	atrapadoDeMas->cantidad = 1;
+	objetivoNoCumplido->cantidad = 1;
 	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
 	movimiento->objetivo = 2;
-	movimiento->pokemonAIntercambiar = asignarPokemonCopia(atrapadoDeMas);
-	movimiento->pokemonNecesitado = asignarPokemonCopia(objetivoNoCumplido);
+	movimiento->pokemonAIntercambiar = atrapadoDeMas;
+	movimiento->pokemonNecesitado = objetivoNoCumplido;
 	entrenador->movimientoEnExec = movimiento;
 	//lo vuelvo a poner en 5 por si ya venia de un deadlock que le disminuyo esta cantidad
 	entrenador->ciclosCPUFaltantesIntercambio = 5;

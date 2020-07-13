@@ -43,6 +43,9 @@ int socketACKLocalized;
 
 int cantidadDeEspeciesTotales;
 
+int CC;
+int cantidadDeadlocks;
+
 t_config* config;
 
 

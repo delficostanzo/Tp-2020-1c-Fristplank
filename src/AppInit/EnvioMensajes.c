@@ -183,19 +183,20 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
 	//para saber que respuesta de caught es de el
 	quickLog("$-Esta esperando recibir el id de su catch enviado");
+	recibirIdCatch(entrenadorEsperando);
 
 	// en el caso que la conexion con el broker muera, el entrenador atrapo el pokemon
 	//TODO: lo que no estoy segura es si tambien hay que considerar el pokemon atrapado ponele si
 	//la conexion muere cuando esta esperando el caught tambien
-	if((conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) != 1){
-		quickLog("$-Intentando conexión a Broker...");
-		log_info(LO, "Se corto la conexion con el Broker. Por default, el entrenador atrapo al pokemon");
-		//agrego el pokemon atrapado y cambio al entrenador de estado
-		agregarAtrapado(entrenadorEsperando, pokemonPorAtrapar);
-		estadoSiAtrapo(entrenadorEsperando);
-	}else{// caso contario, recibe el id correctamente
-		recibirIdCatch(entrenadorEsperando);
-	}
+//	if((conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) != 1){
+//		quickLog("$-Intentando conexión a Broker...");
+//		log_info(LO, "Se corto la conexion con el Broker. Por default, el entrenador atrapo al pokemon");
+//		//agrego el pokemon atrapado y cambio al entrenador de estado
+//		agregarAtrapado(entrenadorEsperando, pokemonPorAtrapar);
+//		estadoSiAtrapo(entrenadorEsperando);
+//	}else{// caso contario, recibe el id correctamente
+//		recibirIdCatch(entrenadorEsperando);
+//	}
 
 }
 
@@ -216,6 +217,7 @@ void recibirIdCatch(Entrenador* entrenador) {
 		free(paqueteIdRecibido->buffer);
 		free(paqueteIdRecibido);
 	} else {
+		//si se corto la conexion
 		agregarComoIdCorrelativoCaught(-1, entrenador);
 		free(paqueteIdRecibido);
 	}
@@ -232,30 +234,52 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsp
 	pthread_mutex_unlock(&entrenadorEsperando->mutexCorrelativo);
 	//sem_post(&semaforoEntrenadorEsperando);
 
-	sem_wait(&semaforoCorrelativos);
-	list_add(idsCorrelativosCaught, (void*) idCorrelativo);
-	log_info(logger, "$-Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
-	sem_post(&semaforoCorrelativos);
+	if(idCorrelativo == -1) {
+		log_info(LO, "Se corto la conexion con el Broker. Por default, el entrenador atrapo al pokemon");
+		//agrego el pokemon atrapado y cambio al entrenador de estado
+		agregarAtrapado(entrenadorEsperando, entrenadorEsperando->movimientoEnExec->pokemonNecesitado);
+		estadoSiAtrapo(entrenadorEsperando);
+	} else {
 
-	log_info(logger, "$-Se registro el id del catch que mando el entrenador %d como id: %d", entrenadorEsperando->numeroEntrenador, idCorrelativo);
+		sem_wait(&semaforoCorrelativos);
+		list_add(idsCorrelativosCaught, (void*) idCorrelativo);
+		log_info(logger, "$-Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
+		sem_post(&semaforoCorrelativos);
 
+		log_info(logger, "$-Se registro el id del catch que mando el entrenador %d como id: %d", entrenadorEsperando->numeroEntrenador, idCorrelativo);
+	}
 }
 
 t_paquete* recibirCaught(int socketCaught){
 	t_paquete* paqueteCaught = recibir_mensaje(socketCaught);
-	t_caught_pokemon* caught = paqueteCaught->buffer->stream;
-	log_info(logger, "$-Se recibio un caught con id %d, la respuesta es %d", paqueteCaught->ID, caught->ok);
 
 	sem_wait(&semaforoCorrelativos);
 	int noVacio = list_is_empty(idsCorrelativosCaught) != 1;
 	sem_post(&semaforoCorrelativos);
 
-	if(noVacio && tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO)) {
-		//el entrenador que hizo el catch del caught respondido cambia de estado de acuerdo a la respuesta
+	if(paqueteCaught != NULL){
+		t_caught_pokemon* caught = paqueteCaught->buffer->stream;
+		log_info(logger, "$-Se recibio un caught con id %d, la respuesta es %d", paqueteCaught->ID, caught->ok);
 
-		ejecutarRespuestaCaught(paqueteCaught->ID_CORRELATIVO, paqueteCaught);
-		quickLog("$-El entrenador que esperaba el caught fue procesado");
-		return paqueteCaught;
+
+
+		if(noVacio && tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO)) {
+			//el entrenador que hizo el catch del caught respondido cambia de estado de acuerdo a la respuesta
+
+			ejecutarRespuestaCaught(paqueteCaught->ID_CORRELATIVO, paqueteCaught);
+			quickLog("$-El entrenador que esperaba el caught fue procesado");
+			return paqueteCaught;
+		}
+	} else if (noVacio){ //se corto la conexion al escuchar respuestas caught
+		//tomo todas las respuestas que faltaban como true
+		log_info(LO, "Se corto la conexion con el Broker. Por default, los entrenadores esperando respuesta atrapan al pokemon");
+		for(int index = 0; index < list_size(entrenadoresEsperandoRespuesta()); index ++) {
+			Entrenador* entrenadorEsperando = list_get(entrenadoresEsperandoRespuesta(), index);
+			//agrego el pokemon atrapado y cambio al entrenador de estado
+			agregarAtrapado(entrenadorEsperando, entrenadorEsperando->movimientoEnExec->pokemonNecesitado);
+			estadoSiAtrapo(entrenadorEsperando);
+		}
+
 	}
 
 	return NULL;
@@ -293,11 +317,13 @@ void ejecutarRespuestaCaught(int idCatchQueResponde, t_paquete* paqueteCaught){
 	}
 
 	char* charCaught = charResultado(caught->ok);
-	log_info(LO, "Se recibio el Caught | Resultado: %s", charCaught);
+
 
 	//ya sabemos que algun entrenador tiene ese id como correlativo de espera
 	Entrenador* entrenador = entrenadorQueTieneId(idCatchQueResponde);
+	log_info(LO, "Se recibio el Caught del catch con id %d | Resultado: %s", idCatchQueResponde, charCaught);
 	procesarEspera(entrenador, caught->ok);
+
 
 	sem_wait(&semaforoCorrelativos);
 	list_remove_by_condition(idsCorrelativosCaught, (erasedType) idQueResponde);
@@ -319,6 +345,7 @@ char* charResultado(uint32_t ok) {
 
 
 Entrenador* entrenadorQueTieneId(int idCatchQueResponde) {
+	typedef bool(*erasedType)(void*);
 	bool tieneIdCorrelativo(Entrenador* entrenador) {
 		//sem_wait(&semaforoCorrelativos);
 		pthread_mutex_lock(&entrenador->mutexCorrelativo);
@@ -329,8 +356,7 @@ Entrenador* entrenadorQueTieneId(int idCatchQueResponde) {
 	}
 
 	pthread_mutex_lock(&mutexEntrenadores);
-	Entrenador* entrenadorRespondido = list_find(entrenadores, tieneIdCorrelativo);
-	log_info(LO, "Datos entrenador: %d", entrenadorRespondido->numeroEntrenador);
+	Entrenador* entrenadorRespondido = list_find(entrenadores, (erasedType)tieneIdCorrelativo);
 	pthread_mutex_unlock(&mutexEntrenadores);
 	quickLog("$-Se encontro el entrenador que esperaba el caught");
 	return entrenadorRespondido;

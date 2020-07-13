@@ -3,8 +3,7 @@
 #define SRC_APPINIT_ENVIOMENSAJES_H_
 
 #include "CreacionEstructurasMsj.h"
-#include "../Model/Mapa.h"
-#include "../Model/Trainer.h"
+#include "../Model/EntrenadoresPorEstado.h"
 
 Entrenador* entrenadorQueEspera;
 

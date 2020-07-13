@@ -11,6 +11,8 @@ static Entrenador* buscarEntrenadorSegun(char* algoritmo);
 static int noEstanTodosEnExit();
 static bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj);
 static void terminarSiTodosExit();
+static void logearResultadosEntrenadores();
+static int ciclosTotales();
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -30,7 +32,6 @@ void planificarEntrenadores(){
 int noEstanTodosEnExit(){
 	typedef bool(*erasedType)(void*);
 	pthread_mutex_lock(&mutexEntrenadores);
-	t_list* entren = entrenadores;
 	int noTodosExit = list_any_satisfy(entrenadores, (erasedType)noEstaEnExit);
 	pthread_mutex_unlock(&mutexEntrenadores);
 	return noTodosExit;
@@ -139,6 +140,8 @@ bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj){
 void pasarAReadyParaIntercambiar(){
 	t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
 	if(list_size(entrenadoresDeadlock) >= 2) {
+		log_info(LO, "Inicio del algoritmo de deteccion de deadlock (comienza a buscar con quien intercambiar)");
+
 		for(int index = 0; index < list_size(entrenadoresDeadlock); index++) {
 			Entrenador* bloqueado = list_get(entrenadoresDeadlock, index);
 			//se pasan invertidos los pokemones porque este pokemon necesitado es de un entrenador que pasaria como innecesario de OTRO entrenador
@@ -173,6 +176,7 @@ Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonNecesitado)
 	//si hay otro entrenador en deadlock
 	pthread_mutex_lock(&mutexEntrenadores);
 	Entrenador* entrenadorQueCumplen = list_find(entrenadoresPosibles, (erasedTypeFilter)entrenadorCumpleCondicion);
+	//no lo encuentra
 	pthread_mutex_unlock(&mutexEntrenadores);
 	return entrenadorQueCumplen;
 
@@ -191,6 +195,7 @@ void pasarAExec(){
 
 	//si no hay ningun entrenador en exec y quedan entrenadores en ready
 	if(entrenadorExec() == NULL && entrenador != NULL){
+		CC ++;
 		char* charDelMovimiento = obtenerCharDeMov(entrenador->movimientoEnExec->objetivo);
 		//sem_wait(&semaforoEstados);
 		pthread_mutex_lock(&entrenador->mutexEstado);
@@ -252,10 +257,10 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 	if((strcmp(ALGORITMO, "FIFO") == 0) || ((strcmp(ALGORITMO, "RR") == 0) && QUANTUM >= (distanciaHastaBloqueado + entrenadorMovido->ciclosCPUFaltantesIntercambio))) {
 		entrenadorMovido->posicion = entrenadorBloqueado->posicion;
 		log_info(LO, "El entrenador %d se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
-
+		cantidadDeadlocks ++;
 		entrenadorMovido->ciclosCPUConsumido += distanciaHastaBloqueado;
 		entrenadorMovido->ciclosCPUConsumido += entrenadorMovido->ciclosCPUFaltantesIntercambio;
-		PokemonEnElMapa* nuevoAtrapadoDelMovido = entrenadorMovido->movimientoEnExec->pokemonNecesitado;
+		PokemonEnElMapa* nuevoAtrapadoDelMovido = entrenadorBloqueado->movimientoEnExec->pokemonAIntercambiar;
 		PokemonEnElMapa* nuevoAtrapadoDelBloqueado = entrenadorMovido->movimientoEnExec->pokemonAIntercambiar;
 
 		//agrego en el que se mueve el pokemon que tenia el que se queda quieto
@@ -343,6 +348,7 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 }
 
 void terminarSiTodosExit() {
+
 	int estaEnExec(Entrenador* entrenador) {
 		return entrenador->estado == 5;
 	}
@@ -350,7 +356,34 @@ void terminarSiTodosExit() {
 	int todosCumplen = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExec);
 	pthread_mutex_unlock(&mutexEntrenadores);
 
+
 	if(todosCumplen) {
-		terminarTeam();
+		int cantidadCPUTotal = ciclosTotales();
+		log_info(LO, "Todos lo entrenadores estan en exit, el Team cumplio su objetivo");
+		log_info(LO, "El total de ciclos de CPU  consumidos por el team fue de : %d", cantidadCPUTotal);
+		log_info(LO, "La cantidad de cambios de contexto fue: %d", CC);
+		log_info(LO, "La cantidad de deadlocks fue: %d", cantidadDeadlocks);
+		logearResultadosEntrenadores();
+		//terminarTeam();
 	}
+}
+
+void logearResultadosEntrenadores(){
+	pthread_mutex_lock(&mutexEntrenadores);
+	for(int index = 0; index < list_size(entrenadores); index++) {
+		Entrenador* entrenador = list_get(entrenadores, index);
+		log_info(LO, "El entrenador %d consumio %d ciclos de CPU", entrenador->numeroEntrenador, entrenador->ciclosCPUConsumido);
+	}
+	pthread_mutex_unlock(&mutexEntrenadores);
+}
+
+int ciclosTotales() {
+	int total;
+	pthread_mutex_lock(&mutexEntrenadores);
+	for(int index = 0; index < list_size(entrenadores); index++) {
+		Entrenador* entrenador = list_get(entrenadores, index);
+		total += entrenador->ciclosCPUConsumido;
+	}
+	pthread_mutex_unlock(&mutexEntrenadores);
+	return total;
 }
