@@ -49,6 +49,7 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 	t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
 	t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
 	while(puedeSeguirRecibiendo()) {
+		//TODO: Hacer list_iterate para poder mostrar por consola la lista de posiciones que recibe localized
 		log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
 
 		quickLog("$-Se recibio un localized");
@@ -180,10 +181,21 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	enviar_catch_pokemon(catchPoke, socketCatch, -1, -1);
 	entrenadorEsperando->ciclosCPUConsumido += 1;
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
-	//para saber saber que respuesta de caught es de el
+	//para saber que respuesta de caught es de el
 	quickLog("$-Esta esperando recibir el id de su catch enviado");
 
-	recibirIdCatch(entrenadorEsperando);
+	// en el caso que la conexion con el broker muera, el entrenador atrapo el pokemon
+	//TODO: lo que no estoy segura es si tambien hay que considerar el pokemon atrapado ponele si
+	//la conexion muere cuando esta esperando el caught tambien
+	if((conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) != 1){
+		quickLog("$-Intentando conexión a Broker...");
+		log_info(LO, "Se corto la conexion con el Broker. Por default, el entrenador atrapo al pokemon");
+		//agrego el pokemon atrapado y cambio al entrenador de estado
+		agregarAtrapado(entrenadorEsperando, pokemonPorAtrapar);
+		estadoSiAtrapo(entrenadorEsperando);
+	}else{// caso contario, recibe el id correctamente
+		recibirIdCatch(entrenadorEsperando);
+	}
 
 }
 

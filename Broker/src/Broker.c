@@ -87,8 +87,8 @@ int main(void) {
 		suscripcionCaught = aceptarConexion(conexion);
 		socketACKCaught = aceptarConexion(conexion);
 
+		//liberar_conexion(teamSocket);
 
-		liberar_conexion(teamSocket);
 		log_info(logger, "Team se suscribio a 3 colas");
 		break;
 	default:
@@ -168,7 +168,6 @@ int main(void) {
 
 	//loguear mensaje recibido
 	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
-
 	//terminar_programa(conexion, logger, config);
 
 }
@@ -411,7 +410,6 @@ void enviarCaughtA5(int suscripcionCaught) {
 	log_info(logger, "Se envio el caught del catch 11");
 	destruirLog(logger);
 }
-
 
 
 t_log* iniciar_logger(void){

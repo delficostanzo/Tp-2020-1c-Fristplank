@@ -37,7 +37,6 @@ int generarSocketsConBroker() {
 		quickLog("$-Intentando conexión a Broker...");
 		log_info(LO, "Se corto la conexion con el Broker, se reintentara en %d segundos", TIEMPO_RECONEXION);
 		sleep(TIEMPO_RECONEXION);
-		//agregar log necesario
 	}
 
 	t_handshake* handshakePropio = malloc(sizeof(t_handshake));
