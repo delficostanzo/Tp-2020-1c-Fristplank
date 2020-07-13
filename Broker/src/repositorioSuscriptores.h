@@ -8,7 +8,7 @@
 #ifndef SRC_REPOSITORIOSUSCRIPTORES_H_
 #define SRC_REPOSITORIOSUSCRIPTORES_H_
 
-#include "Broker.h"
+#include "variables.h"
 
 typedef struct{
 	int id;
