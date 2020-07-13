@@ -10,7 +10,7 @@
 t_log* iniciar_logger(void){
 
 	t_log* logger;
-	if((logger = log_create("./gamecard.log", "GAMECARD", 1, log_level_from_string("INFO"))) == NULL){
+	if((logger = log_create("./gamecard.log", "GAMECARD", 1, log_level_from_string("DEBUG"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}

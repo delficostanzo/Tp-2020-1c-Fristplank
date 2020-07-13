@@ -113,6 +113,7 @@ int main(void) {
 		cola[5].mensajes = list_create();
 		pthread_mutex_unlock(&mutexColas);
 	}
+
 	t_log* iniciar_logger(void) {
 			t_log * log = malloc(sizeof(t_log));
 			log = log_create("broker.log", "BROKER", 1, LOG_LEVEL_DEBUG);

@@ -66,3 +66,1943 @@
 [INFO] 22:24:18:15 BROKER/(5436:5436): Mensaje copiado al stream
 [INFO] 22:24:18:15 BROKER/(5436:5436): Insercion del tamaño en bytes al int apuntado
 [INFO] 22:24:18:15 BROKER/(5436:5436): Serializacion del paquete
+[INFO] 18:06:11:87 BROKER/(4513:4513): Logger Iniciado
+[INFO] 18:06:11:90 BROKER/(4513:4513): Archivo de configuracion seteado
+[INFO] 18:06:11:90 BROKER/(4513:4513): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:06:11:90 BROKER/(4513:4513): Inicializando Memoria Cache
+[INFO] 18:06:11:90 BROKER/(4513:4513): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:06:11:94 BROKER/(4513:4514): Escuchando conexiones al Broker
+[INFO] 18:06:13:309 BROKER/(4513:4520): El ID del proceso con el que me conecte es: GAMEBOY
+[INFO] 18:08:18:517 BROKER/(4613:4613): Logger Iniciado
+[INFO] 18:08:18:517 BROKER/(4613:4613): Archivo de configuracion seteado
+[INFO] 18:08:18:517 BROKER/(4613:4613): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:08:18:517 BROKER/(4613:4613): Inicializando Memoria Cache
+[INFO] 18:08:18:517 BROKER/(4613:4613): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:08:18:517 BROKER/(4613:4618): Escuchando conexiones al Broker
+[INFO] 18:08:20:311 BROKER/(4613:4620): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 18:08:20:311 BROKER/(4613:4620): Se suscribió con éxito el proceso a la cola GET
+[INFO] 18:08:20:311 BROKER/(4613:4620): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 18:08:20:311 BROKER/(4613:4620): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 18:08:20:311 BROKER/(4613:4620): START: enviar_mensajes_cacheados
+[DEBUG] 18:08:20:312 BROKER/(4613:4620): END: enviar_mensajes_cacheados
+[DEBUG] 18:08:20:312 BROKER/(4613:4620): START: enviar_mensajes_cacheados
+[DEBUG] 18:08:20:312 BROKER/(4613:4620): END: enviar_mensajes_cacheados
+[DEBUG] 18:08:20:312 BROKER/(4613:4620): START: enviar_mensajes_cacheados
+[DEBUG] 18:08:20:312 BROKER/(4613:4620): END: enviar_mensajes_cacheados
+[INFO] 18:08:20:312 BROKER/(4613:4620): GameCard se suscribio a 3 colas
+[INFO] 18:11:23:241 BROKER/(4717:4717): Logger Iniciado
+[INFO] 18:11:23:241 BROKER/(4717:4717): Archivo de configuracion seteado
+[INFO] 18:11:23:241 BROKER/(4717:4717): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:11:23:241 BROKER/(4717:4717): Inicializando Memoria Cache
+[INFO] 18:11:23:241 BROKER/(4717:4717): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:11:23:242 BROKER/(4717:4722): Escuchando conexiones al Broker
+[INFO] 18:11:26:558 BROKER/(4717:4726): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 18:11:26:558 BROKER/(4717:4726): Se suscribió con éxito el proceso a la cola GET
+[INFO] 18:11:26:558 BROKER/(4717:4726): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 18:11:26:558 BROKER/(4717:4726): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 18:11:26:558 BROKER/(4717:4726): START: enviar_mensajes_cacheados
+[DEBUG] 18:11:26:558 BROKER/(4717:4726): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:11:26:558 BROKER/(4717:4726): END: enviar_mensajes_cacheados
+[DEBUG] 18:11:26:558 BROKER/(4717:4726): START: enviar_mensajes_cacheados
+[DEBUG] 18:11:26:558 BROKER/(4717:4726): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:11:26:558 BROKER/(4717:4726): END: enviar_mensajes_cacheados
+[DEBUG] 18:11:26:558 BROKER/(4717:4726): START: enviar_mensajes_cacheados
+[DEBUG] 18:11:26:558 BROKER/(4717:4726): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:11:26:558 BROKER/(4717:4726): END: enviar_mensajes_cacheados
+[INFO] 18:11:26:558 BROKER/(4717:4726): GameCard se suscribio a 3 colas
+[INFO] 18:12:33:712 BROKER/(4802:4802): Logger Iniciado
+[INFO] 18:12:33:712 BROKER/(4802:4802): Archivo de configuracion seteado
+[INFO] 18:12:33:712 BROKER/(4802:4802): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:12:33:712 BROKER/(4802:4802): Inicializando Memoria Cache
+[INFO] 18:12:33:712 BROKER/(4802:4802): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:12:33:712 BROKER/(4802:4807): Escuchando conexiones al Broker
+[INFO] 18:12:35:766 BROKER/(4802:4811): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 18:12:35:766 BROKER/(4802:4811): Se suscribió con éxito el proceso a la cola GET
+[INFO] 18:12:35:766 BROKER/(4802:4811): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 18:12:35:766 BROKER/(4802:4811): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 18:12:35:766 BROKER/(4802:4811): START: enviar_mensajes_cacheados
+[DEBUG] 18:12:35:766 BROKER/(4802:4811): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:12:35:766 BROKER/(4802:4811): END: enviar_mensajes_cacheados
+[DEBUG] 18:12:35:766 BROKER/(4802:4811): START: enviar_mensajes_cacheados
+[DEBUG] 18:12:35:766 BROKER/(4802:4811): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:12:35:766 BROKER/(4802:4811): END: enviar_mensajes_cacheados
+[DEBUG] 18:12:35:766 BROKER/(4802:4811): START: enviar_mensajes_cacheados
+[DEBUG] 18:12:35:766 BROKER/(4802:4811): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:12:35:766 BROKER/(4802:4811): END: enviar_mensajes_cacheados
+[INFO] 18:12:35:766 BROKER/(4802:4811): GameCard se suscribio a 3 colas
+[INFO] 18:15:31:188 BROKER/(4890:4890): Logger Iniciado
+[INFO] 18:15:31:188 BROKER/(4890:4890): Archivo de configuracion seteado
+[INFO] 18:15:31:188 BROKER/(4890:4890): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:15:31:188 BROKER/(4890:4890): Inicializando Memoria Cache
+[INFO] 18:15:31:188 BROKER/(4890:4890): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:15:31:188 BROKER/(4890:4895): Escuchando conexiones al Broker
+[INFO] 18:15:32:144 BROKER/(4890:4899): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 18:15:32:144 BROKER/(4890:4899): Se suscribió con éxito el proceso a la cola GET
+[INFO] 18:15:32:144 BROKER/(4890:4899): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 18:15:32:145 BROKER/(4890:4899): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 18:15:32:145 BROKER/(4890:4899): START: enviar_mensajes_cacheados
+[DEBUG] 18:15:32:145 BROKER/(4890:4899): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:15:32:145 BROKER/(4890:4899): END: enviar_mensajes_cacheados
+[DEBUG] 18:15:32:145 BROKER/(4890:4899): START: enviar_mensajes_cacheados
+[DEBUG] 18:15:32:145 BROKER/(4890:4899): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:15:32:145 BROKER/(4890:4899): END: enviar_mensajes_cacheados
+[DEBUG] 18:15:32:145 BROKER/(4890:4899): START: enviar_mensajes_cacheados
+[DEBUG] 18:15:32:145 BROKER/(4890:4899): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:15:32:145 BROKER/(4890:4899): END: enviar_mensajes_cacheados
+[INFO] 18:15:32:145 BROKER/(4890:4899): GameCard se suscribio a 3 colas
+[DEBUG] 18:15:32:145 BROKER/(4890:4911): START: escucharSocketMensajesACachear
+[DEBUG] 18:15:32:146 BROKER/(4890:4912): START: escucharSocketMensajesACachear
+[DEBUG] 18:15:32:146 BROKER/(4890:4913): START: escucharSocketMensajesACachear
+[DEBUG] 18:15:32:146 BROKER/(4890:4914): START: escucharSocketACK
+[DEBUG] 18:15:32:146 BROKER/(4890:4915): START: escucharSocketACK
+[DEBUG] 18:15:32:146 BROKER/(4890:4916): START: escucharSocketACK
+[INFO] 18:16:44:815 BROKER/(4890:4903): El ID del proceso con el que me conecte es: NEW
+[INFO] 18:16:44:815 BROKER/(4890:4907): El ID del proceso con el que me conecte es: GET
+[INFO] 18:16:44:815 BROKER/(4890:4904): El ID del proceso con el que me conecte es: GET
+[INFO] 18:21:07:535 BROKER/(5088:5088): Logger Iniciado
+[INFO] 18:21:07:537 BROKER/(5088:5088): Archivo de configuracion seteado
+[INFO] 18:21:07:537 BROKER/(5088:5088): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:21:07:537 BROKER/(5088:5088): Inicializando Memoria Cache
+[INFO] 18:21:07:537 BROKER/(5088:5088): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:21:07:538 BROKER/(5088:5093): Escuchando conexiones al Broker
+[INFO] 18:21:09:263 BROKER/(5088:5097): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 18:21:09:263 BROKER/(5088:5097): Se suscribió con éxito el proceso a la cola GET
+[INFO] 18:21:09:263 BROKER/(5088:5097): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 18:21:09:263 BROKER/(5088:5097): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 18:21:09:263 BROKER/(5088:5097): START: enviar_mensajes_cacheados
+[DEBUG] 18:21:09:263 BROKER/(5088:5097): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:21:09:263 BROKER/(5088:5097): END: enviar_mensajes_cacheados
+[DEBUG] 18:21:09:263 BROKER/(5088:5097): START: enviar_mensajes_cacheados
+[DEBUG] 18:21:09:263 BROKER/(5088:5097): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:21:09:263 BROKER/(5088:5097): END: enviar_mensajes_cacheados
+[DEBUG] 18:21:09:263 BROKER/(5088:5097): START: enviar_mensajes_cacheados
+[DEBUG] 18:21:09:263 BROKER/(5088:5097): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:21:09:263 BROKER/(5088:5097): END: enviar_mensajes_cacheados
+[INFO] 18:21:09:263 BROKER/(5088:5097): GameCard se suscribio a 3 colas
+[DEBUG] 18:21:09:264 BROKER/(5088:5108): START: escucharSocketMensajesACachear
+[DEBUG] 18:21:09:264 BROKER/(5088:5109): START: escucharSocketMensajesACachear
+[DEBUG] 18:21:09:264 BROKER/(5088:5110): START: escucharSocketMensajesACachear
+[DEBUG] 18:21:09:264 BROKER/(5088:5111): START: escucharSocketACK
+[DEBUG] 18:21:09:264 BROKER/(5088:5112): START: escucharSocketACK
+[DEBUG] 18:21:09:264 BROKER/(5088:5113): START: escucharSocketACK
+[INFO] 18:21:17:291 BROKER/(5088:5101): El ID del proceso con el que me conecte es: NEW
+[INFO] 18:21:17:292 BROKER/(5088:5105): El ID del proceso con el que me conecte es: GET
+[INFO] 18:21:17:292 BROKER/(5088:5103): El ID del proceso con el que me conecte es: GET
+[INFO] 18:25:22:999 BROKER/(5208:5208): Logger Iniciado
+[INFO] 18:25:22:999 BROKER/(5208:5208): Archivo de configuracion seteado
+[INFO] 18:25:22:999 BROKER/(5208:5208): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:25:22:999 BROKER/(5208:5208): Inicializando Memoria Cache
+[INFO] 18:25:22:999 BROKER/(5208:5208): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:25:22:999 BROKER/(5208:5213): Escuchando conexiones al Broker
+[INFO] 18:25:24:939 BROKER/(5208:5217): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 18:25:24:939 BROKER/(5208:5217): Se suscribió con éxito el proceso a la cola GET
+[INFO] 18:25:24:939 BROKER/(5208:5217): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 18:25:24:939 BROKER/(5208:5217): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 18:25:24:939 BROKER/(5208:5217): START: enviar_mensajes_cacheados
+[DEBUG] 18:25:24:939 BROKER/(5208:5217): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:25:24:939 BROKER/(5208:5217): END: enviar_mensajes_cacheados
+[DEBUG] 18:25:24:939 BROKER/(5208:5217): START: enviar_mensajes_cacheados
+[DEBUG] 18:25:24:939 BROKER/(5208:5217): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:25:24:939 BROKER/(5208:5217): END: enviar_mensajes_cacheados
+[DEBUG] 18:25:24:939 BROKER/(5208:5217): START: enviar_mensajes_cacheados
+[DEBUG] 18:25:24:939 BROKER/(5208:5217): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:25:24:939 BROKER/(5208:5217): END: enviar_mensajes_cacheados
+[INFO] 18:25:24:939 BROKER/(5208:5217): GameCard se suscribio a 3 colas
+[DEBUG] 18:25:24:940 BROKER/(5208:5229): START: escucharSocketMensajesACachear
+[DEBUG] 18:25:24:940 BROKER/(5208:5230): START: escucharSocketMensajesACachear
+[DEBUG] 18:25:24:940 BROKER/(5208:5231): START: escucharSocketMensajesACachear
+[DEBUG] 18:25:24:940 BROKER/(5208:5232): START: escucharSocketACK
+[DEBUG] 18:25:24:940 BROKER/(5208:5229): Esperando mensajes...
+[DEBUG] 18:25:24:940 BROKER/(5208:5233): START: escucharSocketACK
+[DEBUG] 18:25:24:940 BROKER/(5208:5234): START: escucharSocketACK
+[DEBUG] 18:25:24:940 BROKER/(5208:5229): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:25:24:940 BROKER/(5208:5229): END: escucharSocketMensajesACachear
+[DEBUG] 18:25:24:940 BROKER/(5208:5232): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:25:24:940 BROKER/(5208:5232): START: escucharSocketACK
+[DEBUG] 18:25:24:940 BROKER/(5208:5231): Esperando mensajes...
+[DEBUG] 18:25:24:940 BROKER/(5208:5231): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:25:24:940 BROKER/(5208:5231): END: escucharSocketMensajesACachear
+[DEBUG] 18:25:24:940 BROKER/(5208:5233): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:25:24:940 BROKER/(5208:5233): START: escucharSocketACK
+[DEBUG] 18:25:24:940 BROKER/(5208:5234): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:25:24:940 BROKER/(5208:5234): START: escucharSocketACK
+[DEBUG] 18:25:24:941 BROKER/(5208:5230): Esperando mensajes...
+[DEBUG] 18:25:24:941 BROKER/(5208:5230): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:25:24:941 BROKER/(5208:5230): END: escucharSocketMensajesACachear
+[INFO] 18:42:27:117 BROKER/(6264:6264): Logger Iniciado
+[INFO] 18:42:27:125 BROKER/(6264:6264): Archivo de configuracion seteado
+[INFO] 18:42:27:125 BROKER/(6264:6264): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:42:27:125 BROKER/(6264:6264): Inicializando Memoria Cache
+[INFO] 18:42:27:125 BROKER/(6264:6264): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:42:27:134 BROKER/(6264:6269): Escuchando conexiones al Broker
+[INFO] 18:42:29:92 BROKER/(6264:6273): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 18:42:29:93 BROKER/(6264:6273): Se suscribió con éxito el proceso a la cola GET
+[INFO] 18:42:29:93 BROKER/(6264:6273): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 18:42:29:93 BROKER/(6264:6273): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 18:42:29:93 BROKER/(6264:6273): START: enviar_mensajes_cacheados
+[DEBUG] 18:42:29:93 BROKER/(6264:6273): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:42:29:93 BROKER/(6264:6273): END: enviar_mensajes_cacheados
+[DEBUG] 18:42:29:93 BROKER/(6264:6273): START: enviar_mensajes_cacheados
+[DEBUG] 18:42:29:93 BROKER/(6264:6273): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:42:29:93 BROKER/(6264:6273): END: enviar_mensajes_cacheados
+[DEBUG] 18:42:29:93 BROKER/(6264:6273): START: enviar_mensajes_cacheados
+[DEBUG] 18:42:29:93 BROKER/(6264:6273): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:42:29:93 BROKER/(6264:6273): END: enviar_mensajes_cacheados
+[INFO] 18:42:29:93 BROKER/(6264:6273): GameCard se suscribio a 3 colas
+[DEBUG] 18:42:29:94 BROKER/(6264:6285): START: escucharSocketMensajesACachear
+[DEBUG] 18:42:29:94 BROKER/(6264:6286): START: escucharSocketMensajesACachear
+[DEBUG] 18:42:29:94 BROKER/(6264:6287): START: escucharSocketMensajesACachear
+[DEBUG] 18:42:29:94 BROKER/(6264:6288): START: escucharSocketACK
+[DEBUG] 18:42:29:94 BROKER/(6264:6285): Esperando mensajes...
+[DEBUG] 18:42:29:94 BROKER/(6264:6289): START: escucharSocketACK
+[DEBUG] 18:42:29:94 BROKER/(6264:6290): START: escucharSocketACK
+[DEBUG] 18:42:29:94 BROKER/(6264:6285): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:42:29:94 BROKER/(6264:6285): END: escucharSocketMensajesACachear
+[DEBUG] 18:42:29:94 BROKER/(6264:6286): Esperando mensajes...
+[DEBUG] 18:42:29:94 BROKER/(6264:6286): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:42:29:94 BROKER/(6264:6286): END: escucharSocketMensajesACachear
+[DEBUG] 18:42:29:94 BROKER/(6264:6287): Esperando mensajes...
+[DEBUG] 18:42:29:94 BROKER/(6264:6289): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:42:29:95 BROKER/(6264:6289): START: escucharSocketACK
+[DEBUG] 18:42:29:95 BROKER/(6264:6290): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:42:29:95 BROKER/(6264:6290): START: escucharSocketACK
+[INFO] 18:46:40:394 BROKER/(6448:6448): Logger Iniciado
+[INFO] 18:46:40:394 BROKER/(6448:6448): Archivo de configuracion seteado
+[INFO] 18:46:40:394 BROKER/(6448:6448): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:46:40:395 BROKER/(6448:6448): Inicializando Memoria Cache
+[INFO] 18:46:40:395 BROKER/(6448:6448): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:46:40:396 BROKER/(6448:6454): Escuchando conexiones al Broker
+[INFO] 18:46:41:506 BROKER/(6448:6460): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 18:46:41:507 BROKER/(6448:6460): Se suscribió con éxito el proceso a la cola GET
+[INFO] 18:46:41:507 BROKER/(6448:6460): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 18:46:41:507 BROKER/(6448:6460): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 18:46:41:507 BROKER/(6448:6460): START: enviar_mensajes_cacheados
+[DEBUG] 18:46:41:507 BROKER/(6448:6460): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:46:41:507 BROKER/(6448:6460): END: enviar_mensajes_cacheados
+[DEBUG] 18:46:41:507 BROKER/(6448:6460): START: enviar_mensajes_cacheados
+[DEBUG] 18:46:41:507 BROKER/(6448:6460): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:46:41:507 BROKER/(6448:6460): END: enviar_mensajes_cacheados
+[DEBUG] 18:46:41:507 BROKER/(6448:6460): START: enviar_mensajes_cacheados
+[DEBUG] 18:46:41:507 BROKER/(6448:6460): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:46:41:507 BROKER/(6448:6460): END: enviar_mensajes_cacheados
+[INFO] 18:46:41:507 BROKER/(6448:6460): GameCard se suscribio a 3 colas
+[DEBUG] 18:46:41:510 BROKER/(6448:6472): START: escucharSocketMensajesACachear
+[DEBUG] 18:46:41:510 BROKER/(6448:6473): START: escucharSocketMensajesACachear
+[DEBUG] 18:46:41:510 BROKER/(6448:6474): START: escucharSocketMensajesACachear
+[DEBUG] 18:46:41:510 BROKER/(6448:6475): START: escucharSocketACK
+[DEBUG] 18:46:41:510 BROKER/(6448:6476): START: escucharSocketACK
+[DEBUG] 18:46:41:510 BROKER/(6448:6477): START: escucharSocketACK
+[DEBUG] 18:46:41:510 BROKER/(6448:6472): Esperando mensajes...
+[DEBUG] 18:46:41:510 BROKER/(6448:6472): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:46:41:510 BROKER/(6448:6472): END: escucharSocketMensajesACachear
+[DEBUG] 18:46:41:510 BROKER/(6448:6475): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:46:41:511 BROKER/(6448:6475): START: escucharSocketACK
+[DEBUG] 18:46:41:511 BROKER/(6448:6477): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:46:41:511 BROKER/(6448:6477): START: escucharSocketACK
+[DEBUG] 18:46:41:511 BROKER/(6448:6476): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:46:41:511 BROKER/(6448:6476): START: escucharSocketACK
+[DEBUG] 18:46:41:511 BROKER/(6448:6474): Esperando mensajes...
+[DEBUG] 18:46:41:511 BROKER/(6448:6474): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:46:41:511 BROKER/(6448:6474): END: escucharSocketMensajesACachear
+[DEBUG] 18:46:41:513 BROKER/(6448:6473): Esperando mensajes...
+[DEBUG] 18:46:41:513 BROKER/(6448:6473): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:46:41:513 BROKER/(6448:6473): END: escucharSocketMensajesACachear
+[INFO] 18:48:45:308 BROKER/(6627:6627): Logger Iniciado
+[INFO] 18:48:45:308 BROKER/(6627:6627): Archivo de configuracion seteado
+[INFO] 18:48:45:308 BROKER/(6627:6627): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:48:45:308 BROKER/(6627:6627): Inicializando Memoria Cache
+[INFO] 18:48:45:308 BROKER/(6627:6627): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:51:05:304 BROKER/(6924:6924): Logger Iniciado
+[INFO] 18:51:05:304 BROKER/(6924:6924): Archivo de configuracion seteado
+[INFO] 18:51:05:304 BROKER/(6924:6924): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:51:05:304 BROKER/(6924:6924): Inicializando Memoria Cache
+[INFO] 18:51:05:304 BROKER/(6924:6924): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 18:51:05:305 BROKER/(6924:6929): Escuchando conexiones al Broker
+[INFO] 18:51:05:410 BROKER/(6924:6930): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 18:51:05:410 BROKER/(6924:6930): Se suscribió con éxito el proceso a la cola GET
+[INFO] 18:51:05:410 BROKER/(6924:6930): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 18:51:05:410 BROKER/(6924:6930): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 18:51:05:411 BROKER/(6924:6930): START: enviar_mensajes_cacheados
+[DEBUG] 18:51:05:411 BROKER/(6924:6930): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:51:05:414 BROKER/(6924:6930): END: enviar_mensajes_cacheados
+[DEBUG] 18:51:05:414 BROKER/(6924:6930): START: enviar_mensajes_cacheados
+[DEBUG] 18:51:05:414 BROKER/(6924:6930): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:51:05:414 BROKER/(6924:6930): END: enviar_mensajes_cacheados
+[DEBUG] 18:51:05:414 BROKER/(6924:6930): START: enviar_mensajes_cacheados
+[DEBUG] 18:51:05:414 BROKER/(6924:6930): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 18:51:05:414 BROKER/(6924:6930): END: enviar_mensajes_cacheados
+[INFO] 18:51:05:415 BROKER/(6924:6930): GameCard se suscribio a 3 colas
+[DEBUG] 18:51:05:422 BROKER/(6924:6942): START: escucharSocketMensajesACachear
+[DEBUG] 18:51:05:422 BROKER/(6924:6943): START: escucharSocketMensajesACachear
+[DEBUG] 18:51:05:422 BROKER/(6924:6944): START: escucharSocketMensajesACachear
+[DEBUG] 18:51:05:422 BROKER/(6924:6945): START: escucharSocketACK
+[DEBUG] 18:51:05:422 BROKER/(6924:6946): START: escucharSocketACK
+[DEBUG] 18:51:05:422 BROKER/(6924:6947): START: escucharSocketACK
+[DEBUG] 18:51:05:425 BROKER/(6924:6942): Esperando mensajes...
+[DEBUG] 18:51:05:425 BROKER/(6924:6942): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:51:05:425 BROKER/(6924:6942): END: escucharSocketMensajesACachear
+[DEBUG] 18:51:05:425 BROKER/(6924:6945): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:51:05:425 BROKER/(6924:6945): START: escucharSocketACK
+[DEBUG] 18:51:05:425 BROKER/(6924:6947): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:51:05:425 BROKER/(6924:6947): START: escucharSocketACK
+[DEBUG] 18:51:05:425 BROKER/(6924:6946): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:51:05:425 BROKER/(6924:6944): Esperando mensajes...
+[DEBUG] 18:51:05:426 BROKER/(6924:6944): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:51:05:426 BROKER/(6924:6944): END: escucharSocketMensajesACachear
+[DEBUG] 18:51:05:426 BROKER/(6924:6946): START: escucharSocketACK
+[DEBUG] 18:51:05:426 BROKER/(6924:6943): Esperando mensajes...
+[DEBUG] 18:51:05:426 BROKER/(6924:6943): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 18:51:05:426 BROKER/(6924:6943): END: escucharSocketMensajesACachear
+[INFO] 18:51:30:56 BROKER/(6972:6972): Logger Iniciado
+[INFO] 18:51:30:56 BROKER/(6972:6972): Archivo de configuracion seteado
+[INFO] 18:51:30:56 BROKER/(6972:6972): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 18:51:30:56 BROKER/(6972:6972): Inicializando Memoria Cache
+[INFO] 18:51:30:56 BROKER/(6972:6972): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 19:06:07:940 BROKER/(7534:7534): Logger Iniciado
+[INFO] 19:06:07:940 BROKER/(7534:7534): Archivo de configuracion seteado
+[INFO] 19:06:07:940 BROKER/(7534:7534): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 19:06:07:940 BROKER/(7534:7534): Inicializando Memoria Cache
+[INFO] 19:06:07:940 BROKER/(7534:7534): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 19:06:07:940 BROKER/(7534:7534): Lanzo hilo para atender clientes
+[INFO] 19:06:07:941 BROKER/(7534:7535): Escuchando conexiones al Broker
+[INFO] 19:07:32:434 BROKER/(7579:7579): Logger Iniciado
+[INFO] 19:07:32:434 BROKER/(7579:7579): Archivo de configuracion seteado
+[INFO] 19:07:32:434 BROKER/(7579:7579): Lei la IP 127.0.0.1 y PUERTO 6855
+
+[INFO] 19:07:32:434 BROKER/(7579:7579): Inicializando Memoria Cache
+[INFO] 19:07:32:434 BROKER/(7579:7579): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 19:07:32:434 BROKER/(7579:7579): Lanzo hilo para atender clientes
+[INFO] 19:07:32:435 BROKER/(7579:7584): Escuchando conexiones al Broker
+[INFO] 19:09:26:679 BROKER/(7627:7627): Logger Iniciado
+[INFO] 19:09:26:679 BROKER/(7627:7627): Archivo de configuracion seteado
+[INFO] 19:09:26:679 BROKER/(7627:7627): Lei la IP 127.0.0.1 y PUERTO 7325
+
+[INFO] 19:09:26:679 BROKER/(7627:7627): Inicializando Memoria Cache
+[INFO] 19:09:26:679 BROKER/(7627:7627): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 19:09:26:679 BROKER/(7627:7627): Lanzo hilo para atender clientes
+[INFO] 19:09:26:679 BROKER/(7627:7632): Escuchando conexiones al Broker
+[INFO] 19:09:28:578 BROKER/(7627:7636): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 19:09:28:580 BROKER/(7627:7636): Se suscribió con éxito el proceso a la cola GET
+[INFO] 19:09:28:580 BROKER/(7627:7636): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 19:09:28:580 BROKER/(7627:7636): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 19:09:28:580 BROKER/(7627:7636): START: enviar_mensajes_cacheados
+[DEBUG] 19:09:28:580 BROKER/(7627:7636): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:09:28:581 BROKER/(7627:7636): END: enviar_mensajes_cacheados
+[DEBUG] 19:09:28:581 BROKER/(7627:7636): START: enviar_mensajes_cacheados
+[DEBUG] 19:09:28:581 BROKER/(7627:7636): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:09:28:581 BROKER/(7627:7636): END: enviar_mensajes_cacheados
+[DEBUG] 19:09:28:581 BROKER/(7627:7636): START: enviar_mensajes_cacheados
+[DEBUG] 19:09:28:581 BROKER/(7627:7636): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:09:28:581 BROKER/(7627:7636): END: enviar_mensajes_cacheados
+[INFO] 19:09:28:581 BROKER/(7627:7636): GameCard se suscribio a 3 colas
+[DEBUG] 19:09:28:586 BROKER/(7627:7648): START: escucharSocketMensajesACachear
+[DEBUG] 19:09:28:586 BROKER/(7627:7648): Esperando mensajes...
+[DEBUG] 19:09:28:587 BROKER/(7627:7649): START: escucharSocketMensajesACachear
+[DEBUG] 19:09:28:587 BROKER/(7627:7650): START: escucharSocketMensajesACachear
+[DEBUG] 19:09:28:587 BROKER/(7627:7648): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:09:28:587 BROKER/(7627:7651): START: escucharSocketACK
+[DEBUG] 19:09:28:587 BROKER/(7627:7652): START: escucharSocketACK
+[DEBUG] 19:09:28:587 BROKER/(7627:7648): END: escucharSocketMensajesACachear
+[DEBUG] 19:09:28:587 BROKER/(7627:7653): START: escucharSocketACK
+[DEBUG] 19:09:28:587 BROKER/(7627:7649): Esperando mensajes...
+[DEBUG] 19:09:28:589 BROKER/(7627:7649): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:09:28:589 BROKER/(7627:7649): END: escucharSocketMensajesACachear
+[DEBUG] 19:09:28:590 BROKER/(7627:7652): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:09:28:590 BROKER/(7627:7652): START: escucharSocketACK
+[DEBUG] 19:09:28:590 BROKER/(7627:7653): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:09:28:590 BROKER/(7627:7653): START: escucharSocketACK
+[DEBUG] 19:09:28:590 BROKER/(7627:7651): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:09:28:590 BROKER/(7627:7651): START: escucharSocketACK
+[DEBUG] 19:09:28:590 BROKER/(7627:7650): Esperando mensajes...
+[DEBUG] 19:09:28:590 BROKER/(7627:7650): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:09:28:590 BROKER/(7627:7650): END: escucharSocketMensajesACachear
+[INFO] 19:11:07:882 BROKER/(7714:7714): Logger Iniciado
+[INFO] 19:11:07:885 BROKER/(7714:7714): Archivo de configuracion seteado
+[INFO] 19:11:07:886 BROKER/(7714:7714): Lei la IP 127.0.0.1 y PUERTO 7325
+
+[INFO] 19:11:07:886 BROKER/(7714:7714): Inicializando Memoria Cache
+[INFO] 19:11:07:886 BROKER/(7714:7714): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 19:11:07:886 BROKER/(7714:7714): Lanzo hilo para atender clientes
+[INFO] 19:11:07:887 BROKER/(7714:7720): Escuchando conexiones al Broker
+[INFO] 19:11:09:843 BROKER/(7714:7724): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 19:11:09:843 BROKER/(7714:7724): Se suscribió con éxito el proceso a la cola GET
+[INFO] 19:11:09:843 BROKER/(7714:7724): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 19:11:09:843 BROKER/(7714:7724): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 19:11:09:843 BROKER/(7714:7724): START: enviar_mensajes_cacheados
+[DEBUG] 19:11:09:844 BROKER/(7714:7724): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:11:09:844 BROKER/(7714:7724): END: enviar_mensajes_cacheados
+[DEBUG] 19:11:09:844 BROKER/(7714:7724): START: enviar_mensajes_cacheados
+[DEBUG] 19:11:09:844 BROKER/(7714:7724): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:11:09:844 BROKER/(7714:7724): END: enviar_mensajes_cacheados
+[DEBUG] 19:11:09:844 BROKER/(7714:7724): START: enviar_mensajes_cacheados
+[DEBUG] 19:11:09:844 BROKER/(7714:7724): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:11:09:844 BROKER/(7714:7724): END: enviar_mensajes_cacheados
+[INFO] 19:11:09:844 BROKER/(7714:7724): GameCard se suscribio a 3 colas
+[DEBUG] 19:11:09:844 BROKER/(7714:7736): START: escucharSocketMensajesACachear
+[DEBUG] 19:11:09:844 BROKER/(7714:7737): START: escucharSocketMensajesACachear
+[DEBUG] 19:11:09:844 BROKER/(7714:7738): START: escucharSocketMensajesACachear
+[DEBUG] 19:11:09:844 BROKER/(7714:7739): START: escucharSocketACK
+[DEBUG] 19:11:09:845 BROKER/(7714:7736): Esperando mensajes...
+[DEBUG] 19:11:09:845 BROKER/(7714:7740): START: escucharSocketACK
+[DEBUG] 19:11:09:845 BROKER/(7714:7741): START: escucharSocketACK
+[DEBUG] 19:11:09:845 BROKER/(7714:7736): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:11:09:845 BROKER/(7714:7736): END: escucharSocketMensajesACachear
+[DEBUG] 19:11:09:845 BROKER/(7714:7739): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:11:09:845 BROKER/(7714:7739): START: escucharSocketACK
+[DEBUG] 19:11:09:845 BROKER/(7714:7738): Esperando mensajes...
+[DEBUG] 19:11:09:845 BROKER/(7714:7738): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:11:09:845 BROKER/(7714:7738): END: escucharSocketMensajesACachear
+[DEBUG] 19:11:09:845 BROKER/(7714:7737): Esperando mensajes...
+[DEBUG] 19:11:09:845 BROKER/(7714:7737): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:11:09:845 BROKER/(7714:7737): END: escucharSocketMensajesACachear
+[DEBUG] 19:11:09:849 BROKER/(7714:7741): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:11:09:849 BROKER/(7714:7741): START: escucharSocketACK
+[DEBUG] 19:11:09:849 BROKER/(7714:7740): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:11:09:849 BROKER/(7714:7740): START: escucharSocketACK
+[INFO] 19:17:14:446 BROKER/(7900:7900): Logger Iniciado
+[INFO] 19:17:14:446 BROKER/(7900:7900): Archivo de configuracion seteado
+[INFO] 19:17:14:446 BROKER/(7900:7900): Lei la IP 127.0.0.1 y PUERTO 7325
+
+[INFO] 19:17:14:446 BROKER/(7900:7900): Inicializando Memoria Cache
+[INFO] 19:17:14:446 BROKER/(7900:7900): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 19:17:14:447 BROKER/(7900:7900): Lanzo hilo para atender clientes
+[INFO] 19:17:14:450 BROKER/(7900:7905): Escuchando conexiones al Broker
+[INFO] 19:17:16:67 BROKER/(7900:7909): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): VALUE LUEGO DE ACEPTAR CONEXION: -1
+[INFO] 19:17:16:67 BROKER/(7900:7909): Se suscribió con éxito el proceso a la cola GET
+[INFO] 19:17:16:67 BROKER/(7900:7909): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 19:17:16:67 BROKER/(7900:7909): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): VALUE ENTRANDO A lanzarHiloEscucha: -1
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): VALUE LUEGO DE A crear_args_socket_escucha: -1
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): VALUE ENTRANDO A lanzarHiloEscucha: -1
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): VALUE LUEGO DE A crear_args_socket_escucha: -1
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): VALUE ENTRANDO A lanzarHiloEscucha: -1
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): VALUE LUEGO DE A crear_args_socket_escucha: -1
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): START: enviar_mensajes_cacheados
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): END: enviar_mensajes_cacheados
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): START: enviar_mensajes_cacheados
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): END: enviar_mensajes_cacheados
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): START: enviar_mensajes_cacheados
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:17:16:67 BROKER/(7900:7909): END: enviar_mensajes_cacheados
+[INFO] 19:17:16:67 BROKER/(7900:7909): GameCard se suscribio a 3 colas
+[DEBUG] 19:17:16:68 BROKER/(7900:7921): START: escucharSocketMensajesACachear
+[DEBUG] 19:17:16:68 BROKER/(7900:7921): Esperando mensajes...
+[DEBUG] 19:17:16:68 BROKER/(7900:7921): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:17:16:68 BROKER/(7900:7922): START: escucharSocketMensajesACachear
+[DEBUG] 19:17:16:68 BROKER/(7900:7921): END: escucharSocketMensajesACachear
+[DEBUG] 19:17:16:68 BROKER/(7900:7922): Esperando mensajes...
+[DEBUG] 19:17:16:68 BROKER/(7900:7922): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:17:16:68 BROKER/(7900:7923): START: escucharSocketMensajesACachear
+[DEBUG] 19:17:16:68 BROKER/(7900:7924): START: escucharSocketACK
+[DEBUG] 19:17:16:68 BROKER/(7900:7925): START: escucharSocketACK
+[DEBUG] 19:17:16:68 BROKER/(7900:7922): END: escucharSocketMensajesACachear
+[DEBUG] 19:17:16:68 BROKER/(7900:7926): START: escucharSocketACK
+[DEBUG] 19:17:16:68 BROKER/(7900:7925): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:17:16:68 BROKER/(7900:7925): START: escucharSocketACK
+[DEBUG] 19:17:16:68 BROKER/(7900:7926): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:17:16:68 BROKER/(7900:7926): START: escucharSocketACK
+[DEBUG] 19:17:16:69 BROKER/(7900:7924): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:17:16:69 BROKER/(7900:7924): START: escucharSocketACK
+[DEBUG] 19:17:16:70 BROKER/(7900:7923): Esperando mensajes...
+[DEBUG] 19:17:16:70 BROKER/(7900:7923): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:17:16:70 BROKER/(7900:7923): END: escucharSocketMensajesACachear
+[INFO] 19:20:00:226 BROKER/(8041:8041): Logger Iniciado
+[INFO] 19:20:00:227 BROKER/(8041:8041): Archivo de configuracion seteado
+[INFO] 19:20:00:227 BROKER/(8041:8041): Lei la IP 127.0.0.1 y PUERTO 7325
+
+[INFO] 19:20:00:227 BROKER/(8041:8041): Inicializando Memoria Cache
+[INFO] 19:20:00:227 BROKER/(8041:8041): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 19:20:00:229 BROKER/(8041:8041): Lanzo hilo para atender clientes
+[INFO] 19:20:32:206 BROKER/(8447:8447): Logger Iniciado
+[INFO] 19:20:32:206 BROKER/(8447:8447): Archivo de configuracion seteado
+[INFO] 19:20:32:206 BROKER/(8447:8447): Lei la IP 127.0.0.1 y PUERTO 6849
+
+[INFO] 19:20:32:206 BROKER/(8447:8447): Inicializando Memoria Cache
+[INFO] 19:20:32:206 BROKER/(8447:8447): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 19:20:32:206 BROKER/(8447:8447): Lanzo hilo para atender clientes
+[INFO] 19:20:32:208 BROKER/(8447:8452): Escuchando conexiones al Broker
+[INFO] 19:20:34:972 BROKER/(8447:8456): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): VALUE LUEGO DE ACEPTAR CONEXION: -1
+[INFO] 19:20:34:972 BROKER/(8447:8456): Se suscribió con éxito el proceso a la cola GET
+[INFO] 19:20:34:972 BROKER/(8447:8456): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 19:20:34:972 BROKER/(8447:8456): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): VALUE ENTRANDO A lanzarHiloEscucha: -1
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): VALUE LUEGO DE A crear_args_socket_escucha: -1
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): VALUE ENTRANDO A lanzarHiloEscucha: -1
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): VALUE LUEGO DE A crear_args_socket_escucha: -1
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): VALUE ENTRANDO A lanzarHiloEscucha: -1
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): VALUE LUEGO DE A crear_args_socket_escucha: -1
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): START: enviar_mensajes_cacheados
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): END: enviar_mensajes_cacheados
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): START: enviar_mensajes_cacheados
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): END: enviar_mensajes_cacheados
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): START: enviar_mensajes_cacheados
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:20:34:972 BROKER/(8447:8456): END: enviar_mensajes_cacheados
+[INFO] 19:20:34:973 BROKER/(8447:8456): GameCard se suscribio a 3 colas
+[DEBUG] 19:20:34:973 BROKER/(8447:8467): START: escucharSocketMensajesACachear
+[DEBUG] 19:20:34:973 BROKER/(8447:8467): Esperando mensajes...
+[DEBUG] 19:20:34:973 BROKER/(8447:8468): START: escucharSocketMensajesACachear
+[DEBUG] 19:20:34:974 BROKER/(8447:8467): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:20:34:974 BROKER/(8447:8467): END: escucharSocketMensajesACachear
+[DEBUG] 19:20:34:974 BROKER/(8447:8469): START: escucharSocketMensajesACachear
+[DEBUG] 19:20:34:974 BROKER/(8447:8470): START: escucharSocketACK
+[DEBUG] 19:20:34:974 BROKER/(8447:8472): START: escucharSocketACK
+[DEBUG] 19:20:34:974 BROKER/(8447:8469): Esperando mensajes...
+[DEBUG] 19:20:34:974 BROKER/(8447:8469): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:20:34:974 BROKER/(8447:8469): END: escucharSocketMensajesACachear
+[DEBUG] 19:20:34:974 BROKER/(8447:8471): START: escucharSocketACK
+[DEBUG] 19:20:34:974 BROKER/(8447:8468): Esperando mensajes...
+[DEBUG] 19:20:34:974 BROKER/(8447:8468): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:20:34:974 BROKER/(8447:8468): END: escucharSocketMensajesACachear
+[DEBUG] 19:20:34:974 BROKER/(8447:8471): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:20:34:974 BROKER/(8447:8471): START: escucharSocketACK
+[DEBUG] 19:20:34:974 BROKER/(8447:8470): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:20:34:974 BROKER/(8447:8470): START: escucharSocketACK
+[DEBUG] 19:20:34:974 BROKER/(8447:8472): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:20:34:975 BROKER/(8447:8472): START: escucharSocketACK
+[INFO] 19:23:45:792 BROKER/(8591:8591): Logger Iniciado
+[INFO] 19:23:45:797 BROKER/(8591:8591): Archivo de configuracion seteado
+[INFO] 19:23:45:797 BROKER/(8591:8591): Lei la IP 127.0.0.1 y PUERTO 6849
+
+[INFO] 19:23:45:797 BROKER/(8591:8591): Inicializando Memoria Cache
+[INFO] 19:23:45:797 BROKER/(8591:8591): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 19:23:45:797 BROKER/(8591:8591): Lanzo hilo para atender clientes
+[INFO] 19:23:45:797 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:798 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:798 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:798 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:798 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:798 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:799 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:800 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:800 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:800 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:800 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:800 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:800 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:800 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:801 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:802 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:802 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:802 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:802 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:802 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:802 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:23:45:802 BROKER/(8591:8596): No esta escuchando
+[INFO] 19:25:55:503 BROKER/(8749:8749): Logger Iniciado
+[INFO] 19:25:55:503 BROKER/(8749:8749): Archivo de configuracion seteado
+[INFO] 19:25:55:503 BROKER/(8749:8749): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 19:25:55:503 BROKER/(8749:8749): Inicializando Memoria Cache
+[INFO] 19:25:55:503 BROKER/(8749:8749): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 19:25:55:510 BROKER/(8749:8755): Escuchando conexiones al Broker
+[INFO] 19:25:58:685 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:686 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:686 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:686 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:686 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:686 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:687 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:687 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:687 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:687 BROKER/(8749:8755): No esta escuchando
+[INFO] 19:25:58:687 BROKER/(8749:8759): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 19:25:58:687 BROKER/(8749:8759): VALUE LUEGO DE ACEPTAR CONEXION: -1
+[INFO] 19:25:58:687 BROKER/(8749:8759): Se suscribió con éxito el proceso a la cola GET
+[INFO] 19:25:58:687 BROKER/(8749:8759): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 19:25:58:687 BROKER/(8749:8759): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 19:25:58:687 BROKER/(8749:8759): START: enviar_mensajes_cacheados
+[DEBUG] 19:25:58:687 BROKER/(8749:8759): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:25:58:687 BROKER/(8749:8759): END: enviar_mensajes_cacheados
+[DEBUG] 19:25:58:688 BROKER/(8749:8759): START: enviar_mensajes_cacheados
+[DEBUG] 19:25:58:688 BROKER/(8749:8759): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:25:58:688 BROKER/(8749:8759): END: enviar_mensajes_cacheados
+[DEBUG] 19:25:58:688 BROKER/(8749:8759): START: enviar_mensajes_cacheados
+[DEBUG] 19:25:58:688 BROKER/(8749:8759): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 19:25:58:688 BROKER/(8749:8759): END: enviar_mensajes_cacheados
+[INFO] 19:25:58:688 BROKER/(8749:8759): GameCard se suscribio a 3 colas
+[DEBUG] 19:25:58:689 BROKER/(8749:8770): START: escucharSocketMensajesACachear
+[DEBUG] 19:25:58:689 BROKER/(8749:8771): START: escucharSocketMensajesACachear
+[DEBUG] 19:25:58:689 BROKER/(8749:8772): START: escucharSocketMensajesACachear
+[DEBUG] 19:25:58:689 BROKER/(8749:8773): START: escucharSocketACK
+[DEBUG] 19:25:58:689 BROKER/(8749:8774): START: escucharSocketACK
+[DEBUG] 19:25:58:689 BROKER/(8749:8775): START: escucharSocketACK
+[DEBUG] 19:25:58:689 BROKER/(8749:8770): Esperando mensajes...
+[DEBUG] 19:25:58:689 BROKER/(8749:8770): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:25:58:689 BROKER/(8749:8770): END: escucharSocketMensajesACachear
+[DEBUG] 19:25:58:689 BROKER/(8749:8773): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:25:58:689 BROKER/(8749:8773): START: escucharSocketACK
+[DEBUG] 19:25:58:689 BROKER/(8749:8774): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:25:58:689 BROKER/(8749:8774): START: escucharSocketACK
+[DEBUG] 19:25:58:689 BROKER/(8749:8772): Esperando mensajes...
+[DEBUG] 19:25:58:689 BROKER/(8749:8772): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:25:58:689 BROKER/(8749:8772): END: escucharSocketMensajesACachear
+[DEBUG] 19:25:58:691 BROKER/(8749:8775): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:25:58:691 BROKER/(8749:8775): START: escucharSocketACK
+[DEBUG] 19:25:58:691 BROKER/(8749:8771): Esperando mensajes...
+[DEBUG] 19:25:58:691 BROKER/(8749:8771): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 19:25:58:691 BROKER/(8749:8771): END: escucharSocketMensajesACachear
+[INFO] 20:18:34:11 BROKER/(9829:9829): Logger Iniciado
+[INFO] 20:18:34:12 BROKER/(9829:9829): Archivo de configuracion seteado
+[INFO] 20:18:34:13 BROKER/(9829:9829): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 20:18:34:13 BROKER/(9829:9829): Inicializando Memoria Cache
+[INFO] 20:18:34:13 BROKER/(9829:9829): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 20:18:34:15 BROKER/(9829:9834): Escuchando conexiones al Broker
+[INFO] 20:18:37:969 BROKER/(9829:9840): El ID del proceso con el que me conecte es: GAMECARD
+[INFO] 20:23:49:688 BROKER/(9963:9963): Logger Iniciado
+[INFO] 20:23:49:688 BROKER/(9963:9963): Archivo de configuracion seteado
+[INFO] 20:23:49:688 BROKER/(9963:9963): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 20:23:49:688 BROKER/(9963:9963): Inicializando Memoria Cache
+[INFO] 20:23:49:688 BROKER/(9963:9963): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 20:23:49:691 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:691 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:693 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:693 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:703 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:704 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:705 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:706 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:706 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:706 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:706 BROKER/(9963:9968): 4
+[DEBUG] 20:23:49:706 BROKER/(9963:9968): 4
+[INFO] 20:24:17:865 BROKER/(10107:10107): Logger Iniciado
+[INFO] 20:24:17:869 BROKER/(10107:10107): Archivo de configuracion seteado
+[INFO] 20:24:17:869 BROKER/(10107:10107): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 20:24:17:869 BROKER/(10107:10107): Inicializando Memoria Cache
+[INFO] 20:24:17:869 BROKER/(10107:10107): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 20:24:17:873 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:873 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:873 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:873 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:873 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:874 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[DEBUG] 20:24:17:875 BROKER/(10107:10112): 4
+[INFO] 20:24:35:77 BROKER/(10158:10158): Logger Iniciado
+[INFO] 20:24:35:82 BROKER/(10158:10158): Archivo de configuracion seteado
+[INFO] 20:24:35:82 BROKER/(10158:10158): Lei la IP 127.0.0.1 y PUERTO 6847
+
+[INFO] 20:24:35:82 BROKER/(10158:10158): Inicializando Memoria Cache
+[INFO] 20:24:35:82 BROKER/(10158:10158): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 20:24:35:85 BROKER/(10158:10163): Escuchando conexiones al Broker
+[DEBUG] 20:24:38:496 BROKER/(10158:10163): 4
+[DEBUG] 20:24:38:499 BROKER/(10158:10163): 4
+[DEBUG] 20:24:38:499 BROKER/(10158:10163): 4
+[DEBUG] 20:24:38:499 BROKER/(10158:10163): 4
+[DEBUG] 20:24:38:499 BROKER/(10158:10163): 4
+[DEBUG] 20:24:38:499 BROKER/(10158:10163): 4
+[DEBUG] 20:24:38:500 BROKER/(10158:10163): 4
+[DEBUG] 20:24:38:500 BROKER/(10158:10163): 4
+[DEBUG] 20:24:38:500 BROKER/(10158:10163): 4
+[DEBUG] 20:24:38:500 BROKER/(10158:10163): 4
+[INFO] 20:24:38:500 BROKER/(10158:10167): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 20:24:38:500 BROKER/(10158:10167): 4
+[INFO] 20:26:13:403 BROKER/(10254:10254): Logger Iniciado
+[INFO] 20:26:13:406 BROKER/(10254:10254): Archivo de configuracion seteado
+[INFO] 20:26:13:406 BROKER/(10254:10254): Lei la IP 127.0.0.1 y PUERTO 6847
+
+[INFO] 20:26:13:406 BROKER/(10254:10254): Inicializando Memoria Cache
+[INFO] 20:26:13:406 BROKER/(10254:10254): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 20:26:13:413 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:414 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:415 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:416 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:416 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:416 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:416 BROKER/(10254:10265): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:416 BROKER/(10254:10266): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10267): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10264): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10268): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10269): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10270): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10263): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10271): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10272): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10273): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:416 BROKER/(10254:10274): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10275): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:416 BROKER/(10254:10276): START: atenderCliente
+[DEBUG] 20:26:13:416 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:416 BROKER/(10254:10262): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10277): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10278): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:417 BROKER/(10254:10279): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:417 BROKER/(10254:10280): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:417 BROKER/(10254:10281): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10282): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:417 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:417 BROKER/(10254:10283): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10284): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10261): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:417 BROKER/(10254:10285): START: atenderCliente
+[DEBUG] 20:26:13:417 BROKER/(10254:10259): 4
+[DEBUG] 20:26:13:417 BROKER/(10254:10286): START: atenderCliente
+[INFO] 20:29:08:153 BROKER/(10423:10423): Logger Iniciado
+[INFO] 20:29:08:161 BROKER/(10423:10423): Archivo de configuracion seteado
+[INFO] 20:29:08:162 BROKER/(10423:10423): Lei la IP 127.0.0.1 y PUERTO 6847
+
+[INFO] 20:29:08:162 BROKER/(10423:10423): Inicializando Memoria Cache
+[INFO] 20:29:08:162 BROKER/(10423:10423): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 20:29:08:162 BROKER/(10423:10428): Escuchando conexiones al Broker
+[DEBUG] 20:29:09:700 BROKER/(10423:10428): 4 - 0
+[DEBUG] 20:29:09:703 BROKER/(10423:10429): START: atenderCliente
+[DEBUG] 20:29:09:703 BROKER/(10423:10428): 4 - 1
+[DEBUG] 20:29:09:705 BROKER/(10423:10428): 4 - 2
+[DEBUG] 20:29:09:706 BROKER/(10423:10428): 4 - 3
+[DEBUG] 20:29:09:706 BROKER/(10423:10428): 4 - 4
+[DEBUG] 20:29:09:706 BROKER/(10423:10428): 4 - 5
+[DEBUG] 20:29:09:706 BROKER/(10423:10428): 4 - 6
+[DEBUG] 20:29:09:706 BROKER/(10423:10428): 4 - 7
+[DEBUG] 20:29:09:707 BROKER/(10423:10428): 4 - 8
+[DEBUG] 20:29:09:707 BROKER/(10423:10428): 4 - 9
+[INFO] 20:29:09:710 BROKER/(10423:10429): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 20:29:09:710 BROKER/(10423:10429): 4
+[DEBUG] 20:29:09:711 BROKER/(10423:10432): START: atenderCliente
+[DEBUG] 20:29:09:711 BROKER/(10423:10433): START: atenderCliente
+[DEBUG] 20:29:09:711 BROKER/(10423:10437): START: atenderCliente
+[DEBUG] 20:29:09:711 BROKER/(10423:10434): START: atenderCliente
+[DEBUG] 20:29:09:711 BROKER/(10423:10435): START: atenderCliente
+[DEBUG] 20:29:09:711 BROKER/(10423:10436): START: atenderCliente
+[DEBUG] 20:29:09:712 BROKER/(10423:10438): START: atenderCliente
+[DEBUG] 20:29:09:712 BROKER/(10423:10439): START: atenderCliente
+[DEBUG] 20:29:09:712 BROKER/(10423:10430): START: atenderCliente
+[INFO] 20:29:34:80 BROKER/(10423:10432): El ID del proceso con el que me conecte es: NEW
+[INFO] 20:29:34:80 BROKER/(10423:10436): El ID del proceso con el que me conecte es: GET
+[INFO] 20:29:34:80 BROKER/(10423:10438): El ID del proceso con el que me conecte es: GET
+[INFO] 20:32:40:661 BROKER/(10517:10517): Logger Iniciado
+[INFO] 20:32:40:664 BROKER/(10517:10517): Archivo de configuracion seteado
+[INFO] 20:32:40:666 BROKER/(10517:10517): Lei la IP 127.0.0.1 y PUERTO 6847
+
+[INFO] 20:32:40:666 BROKER/(10517:10517): Inicializando Memoria Cache
+[INFO] 20:32:40:666 BROKER/(10517:10517): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 20:32:40:668 BROKER/(10517:10522): Escuchando conexiones al Broker
+[DEBUG] 20:32:43:604 BROKER/(10517:10526): START: atenderCliente
+[INFO] 20:32:43:605 BROKER/(10517:10526): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 20:32:43:605 BROKER/(10517:10526): 4
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): VALUE LUEGO DE ACEPTAR CONEXION: 6
+[INFO] 20:32:43:606 BROKER/(10517:10526): Se suscribió con éxito el proceso a la cola GET
+[INFO] 20:32:43:606 BROKER/(10517:10526): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 20:32:43:606 BROKER/(10517:10526): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): START: enviar_mensajes_cacheados
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): END: enviar_mensajes_cacheados
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): START: enviar_mensajes_cacheados
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): END: enviar_mensajes_cacheados
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): START: enviar_mensajes_cacheados
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:32:43:606 BROKER/(10517:10526): END: enviar_mensajes_cacheados
+[INFO] 20:32:43:606 BROKER/(10517:10526): GameCard se suscribio a 3 colas
+[DEBUG] 20:32:43:607 BROKER/(10517:10532): START: escucharSocketACK
+[DEBUG] 20:32:43:608 BROKER/(10517:10533): START: escucharSocketACK
+[DEBUG] 20:32:43:608 BROKER/(10517:10534): START: escucharSocketACK
+[DEBUG] 20:32:43:613 BROKER/(10517:10531): START: escucharSocketMensajesACachear
+[DEBUG] 20:32:43:613 BROKER/(10517:10531): Esperando mensajes...
+[DEBUG] 20:32:43:613 BROKER/(10517:10530): START: escucharSocketMensajesACachear
+[DEBUG] 20:32:43:614 BROKER/(10517:10530): Esperando mensajes...
+[DEBUG] 20:32:43:614 BROKER/(10517:10529): START: escucharSocketMensajesACachear
+[DEBUG] 20:32:43:614 BROKER/(10517:10529): Esperando mensajes...
+[INFO] 20:39:31:238 BROKER/(10703:10703): Logger Iniciado
+[INFO] 20:39:31:242 BROKER/(10703:10703): Archivo de configuracion seteado
+[INFO] 20:39:31:242 BROKER/(10703:10703): Lei la IP 127.0.0.1 y PUERTO 6847
+
+[INFO] 20:39:31:242 BROKER/(10703:10703): Inicializando Memoria Cache
+[INFO] 20:39:31:242 BROKER/(10703:10703): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 20:39:31:245 BROKER/(10703:10708): Escuchando conexiones al Broker
+[DEBUG] 20:39:33:547 BROKER/(10703:10712): START: atenderCliente
+[INFO] 20:39:33:548 BROKER/(10703:10712): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 20:39:33:550 BROKER/(10703:10712): 4
+[DEBUG] 20:39:33:550 BROKER/(10703:10712): VALUE LUEGO DE ACEPTAR CONEXION: 0
+[DEBUG] 20:39:33:550 BROKER/(10703:10712): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 20:39:33:550 BROKER/(10703:10712): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 20:39:33:550 BROKER/(10703:10712): Se suscribió con éxito el proceso a la cola GET
+[INFO] 20:39:33:550 BROKER/(10703:10712): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 20:39:33:550 BROKER/(10703:10712): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 20:39:33:550 BROKER/(10703:10712): START: enviar_mensajes_cacheados
+[DEBUG] 20:39:33:550 BROKER/(10703:10712): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:39:33:550 BROKER/(10703:10712): END: enviar_mensajes_cacheados
+[DEBUG] 20:39:33:551 BROKER/(10703:10712): START: enviar_mensajes_cacheados
+[DEBUG] 20:39:33:551 BROKER/(10703:10712): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:39:33:551 BROKER/(10703:10712): END: enviar_mensajes_cacheados
+[DEBUG] 20:39:33:551 BROKER/(10703:10712): START: enviar_mensajes_cacheados
+[DEBUG] 20:39:33:554 BROKER/(10703:10712): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:39:33:554 BROKER/(10703:10712): END: enviar_mensajes_cacheados
+[INFO] 20:39:33:554 BROKER/(10703:10712): GameCard se suscribio a 3 colas
+[DEBUG] 20:39:33:554 BROKER/(10703:10718): START: escucharSocketACK
+[DEBUG] 20:39:33:554 BROKER/(10703:10719): START: escucharSocketACK
+[DEBUG] 20:39:33:554 BROKER/(10703:10720): START: escucharSocketACK
+[DEBUG] 20:39:33:555 BROKER/(10703:10717): START: escucharSocketMensajesACachear
+[DEBUG] 20:39:33:555 BROKER/(10703:10717): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 20:39:33:555 BROKER/(10703:10717): Esperando mensajes...
+[DEBUG] 20:39:33:555 BROKER/(10703:10716): START: escucharSocketMensajesACachear
+[DEBUG] 20:39:33:555 BROKER/(10703:10716): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 20:39:33:555 BROKER/(10703:10716): Esperando mensajes...
+[DEBUG] 20:39:33:555 BROKER/(10703:10715): START: escucharSocketMensajesACachear
+[DEBUG] 20:39:33:555 BROKER/(10703:10715): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 20:39:33:557 BROKER/(10703:10715): Esperando mensajes...
+[INFO] 20:40:38:46 BROKER/(10769:10769): Logger Iniciado
+[INFO] 20:40:38:50 BROKER/(10769:10769): Archivo de configuracion seteado
+[INFO] 20:40:38:50 BROKER/(10769:10769): Lei la IP 127.0.0.1 y PUERTO 6847
+
+[INFO] 20:40:38:50 BROKER/(10769:10769): Inicializando Memoria Cache
+[INFO] 20:40:38:50 BROKER/(10769:10769): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 20:40:38:57 BROKER/(10769:10775): START: atenderCliente
+[INFO] 20:40:49:949 BROKER/(10799:10799): Logger Iniciado
+[INFO] 20:40:49:953 BROKER/(10799:10799): Archivo de configuracion seteado
+[INFO] 20:40:49:953 BROKER/(10799:10799): Lei la IP 127.0.0.1 y PUERTO 6847
+
+[INFO] 20:40:49:953 BROKER/(10799:10799): Inicializando Memoria Cache
+[INFO] 20:40:49:953 BROKER/(10799:10799): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 20:40:49:960 BROKER/(10799:10805): START: atenderCliente
+[INFO] 20:41:11:438 BROKER/(10819:10819): Logger Iniciado
+[INFO] 20:41:11:448 BROKER/(10819:10819): Archivo de configuracion seteado
+[INFO] 20:41:11:448 BROKER/(10819:10819): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 20:41:11:448 BROKER/(10819:10819): Inicializando Memoria Cache
+[INFO] 20:41:11:448 BROKER/(10819:10819): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 20:41:11:448 BROKER/(10819:10824): Escuchando conexiones al Broker
+[DEBUG] 20:41:14:516 BROKER/(10819:10828): START: atenderCliente
+[INFO] 20:41:14:517 BROKER/(10819:10828): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 20:41:14:517 BROKER/(10819:10828): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 20:41:14:517 BROKER/(10819:10828): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 20:41:14:517 BROKER/(10819:10828): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 20:41:14:517 BROKER/(10819:10828): Se suscribió con éxito el proceso a la cola GET
+[INFO] 20:41:14:517 BROKER/(10819:10828): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 20:41:14:517 BROKER/(10819:10828): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 20:41:14:518 BROKER/(10819:10828): START: enviar_mensajes_cacheados
+[DEBUG] 20:41:14:518 BROKER/(10819:10828): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:41:14:518 BROKER/(10819:10828): END: enviar_mensajes_cacheados
+[DEBUG] 20:41:14:518 BROKER/(10819:10828): START: enviar_mensajes_cacheados
+[DEBUG] 20:41:14:518 BROKER/(10819:10828): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:41:14:518 BROKER/(10819:10828): END: enviar_mensajes_cacheados
+[DEBUG] 20:41:14:518 BROKER/(10819:10828): START: enviar_mensajes_cacheados
+[DEBUG] 20:41:14:518 BROKER/(10819:10828): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:41:14:518 BROKER/(10819:10828): END: enviar_mensajes_cacheados
+[INFO] 20:41:14:518 BROKER/(10819:10828): GameCard se suscribio a 3 colas
+[DEBUG] 20:41:14:518 BROKER/(10819:10834): START: escucharSocketACK
+[DEBUG] 20:41:14:518 BROKER/(10819:10835): START: escucharSocketACK
+[DEBUG] 20:41:14:519 BROKER/(10819:10836): START: escucharSocketACK
+[DEBUG] 20:41:14:519 BROKER/(10819:10833): START: escucharSocketMensajesACachear
+[DEBUG] 20:41:14:519 BROKER/(10819:10833): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 20:41:14:519 BROKER/(10819:10833): Esperando mensajes...
+[DEBUG] 20:41:14:519 BROKER/(10819:10832): START: escucharSocketMensajesACachear
+[DEBUG] 20:41:14:520 BROKER/(10819:10832): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 20:41:14:520 BROKER/(10819:10832): Esperando mensajes...
+[DEBUG] 20:41:14:520 BROKER/(10819:10831): START: escucharSocketMensajesACachear
+[DEBUG] 20:41:14:520 BROKER/(10819:10831): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 20:41:14:520 BROKER/(10819:10831): Esperando mensajes...
+[INFO] 20:45:18:494 BROKER/(10968:10968): Logger Iniciado
+[INFO] 20:45:18:495 BROKER/(10968:10968): Archivo de configuracion seteado
+[INFO] 20:45:18:495 BROKER/(10968:10968): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 20:45:18:495 BROKER/(10968:10968): Inicializando Memoria Cache
+[INFO] 20:45:18:495 BROKER/(10968:10968): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 20:45:18:499 BROKER/(10968:10974): Escuchando conexiones al Broker
+[DEBUG] 20:45:18:499 BROKER/(10968:10974): Esperando conexiones.
+[DEBUG] 20:45:20:915 BROKER/(10968:10978): START: atenderCliente
+[INFO] 20:45:20:916 BROKER/(10968:10978): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 20:45:20:916 BROKER/(10968:10978): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 20:45:20:916 BROKER/(10968:10978): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 20:45:20:916 BROKER/(10968:10978): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 20:45:20:916 BROKER/(10968:10978): Se suscribió con éxito el proceso a la cola GET
+[INFO] 20:45:20:916 BROKER/(10968:10978): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 20:45:20:916 BROKER/(10968:10978): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 20:45:20:917 BROKER/(10968:10978): START: enviar_mensajes_cacheados
+[DEBUG] 20:45:20:917 BROKER/(10968:10978): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:45:20:917 BROKER/(10968:10978): END: enviar_mensajes_cacheados
+[DEBUG] 20:45:20:917 BROKER/(10968:10978): START: enviar_mensajes_cacheados
+[DEBUG] 20:45:20:917 BROKER/(10968:10978): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:45:20:917 BROKER/(10968:10978): END: enviar_mensajes_cacheados
+[DEBUG] 20:45:20:917 BROKER/(10968:10978): START: enviar_mensajes_cacheados
+[DEBUG] 20:45:20:917 BROKER/(10968:10978): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:45:20:917 BROKER/(10968:10978): END: enviar_mensajes_cacheados
+[INFO] 20:45:20:917 BROKER/(10968:10978): GameCard se suscribio a 3 colas
+[DEBUG] 20:45:20:917 BROKER/(10968:10984): START: escucharSocketACK
+[DEBUG] 20:45:20:917 BROKER/(10968:10985): START: escucharSocketACK
+[DEBUG] 20:45:20:917 BROKER/(10968:10983): START: escucharSocketACK
+[DEBUG] 20:45:20:917 BROKER/(10968:10982): START: escucharSocketMensajesACachear
+[DEBUG] 20:45:20:918 BROKER/(10968:10982): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 20:45:20:918 BROKER/(10968:10982): Esperando mensajes...
+[DEBUG] 20:45:20:918 BROKER/(10968:10981): START: escucharSocketMensajesACachear
+[DEBUG] 20:45:20:918 BROKER/(10968:10981): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 20:45:20:918 BROKER/(10968:10981): Esperando mensajes...
+[DEBUG] 20:45:20:918 BROKER/(10968:10980): START: escucharSocketMensajesACachear
+[DEBUG] 20:45:20:918 BROKER/(10968:10980): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 20:45:20:918 BROKER/(10968:10980): Esperando mensajes...
+[DEBUG] 20:45:23:915 BROKER/(10968:10974): Esperando conexiones.
+[INFO] 20:47:50:973 BROKER/(11077:11077): Logger Iniciado
+[INFO] 20:47:50:980 BROKER/(11077:11077): Archivo de configuracion seteado
+[INFO] 20:47:50:980 BROKER/(11077:11077): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 20:47:50:980 BROKER/(11077:11077): Inicializando Memoria Cache
+[INFO] 20:47:50:980 BROKER/(11077:11077): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 20:47:50:984 BROKER/(11077:11082): Escuchando conexiones al Broker
+[DEBUG] 20:47:50:984 BROKER/(11077:11082): Esperando conexiones.
+[DEBUG] 20:47:55:375 BROKER/(11077:11086): START: atenderCliente
+[INFO] 20:47:55:376 BROKER/(11077:11086): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 20:47:55:376 BROKER/(11077:11086): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 20:47:55:376 BROKER/(11077:11086): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 20:47:55:376 BROKER/(11077:11086): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 20:47:55:376 BROKER/(11077:11086): Se suscribió con éxito el proceso a la cola GET
+[INFO] 20:47:55:376 BROKER/(11077:11086): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 20:47:55:376 BROKER/(11077:11086): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 20:47:55:376 BROKER/(11077:11086): START: enviar_mensajes_cacheados
+[DEBUG] 20:47:55:376 BROKER/(11077:11086): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:47:55:377 BROKER/(11077:11086): END: enviar_mensajes_cacheados
+[DEBUG] 20:47:55:377 BROKER/(11077:11086): START: enviar_mensajes_cacheados
+[DEBUG] 20:47:55:377 BROKER/(11077:11086): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:47:55:377 BROKER/(11077:11086): END: enviar_mensajes_cacheados
+[DEBUG] 20:47:55:377 BROKER/(11077:11086): START: enviar_mensajes_cacheados
+[DEBUG] 20:47:55:377 BROKER/(11077:11086): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 20:47:55:377 BROKER/(11077:11086): END: enviar_mensajes_cacheados
+[INFO] 20:47:55:377 BROKER/(11077:11086): GameCard se suscribio a 3 colas
+[DEBUG] 20:47:55:377 BROKER/(11077:11092): START: escucharSocketACK
+[DEBUG] 20:47:55:377 BROKER/(11077:11093): START: escucharSocketACK
+[DEBUG] 20:47:55:377 BROKER/(11077:11091): START: escucharSocketACK
+[DEBUG] 20:47:55:377 BROKER/(11077:11090): START: escucharSocketMensajesACachear
+[DEBUG] 20:47:55:377 BROKER/(11077:11090): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 20:47:55:377 BROKER/(11077:11090): Esperando mensajes...
+[DEBUG] 20:47:55:378 BROKER/(11077:11089): START: escucharSocketMensajesACachear
+[DEBUG] 20:47:55:378 BROKER/(11077:11089): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 20:47:55:378 BROKER/(11077:11089): Esperando mensajes...
+[DEBUG] 20:47:55:378 BROKER/(11077:11088): START: escucharSocketMensajesACachear
+[DEBUG] 20:47:55:378 BROKER/(11077:11088): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 20:47:55:378 BROKER/(11077:11088): Esperando mensajes...
+[DEBUG] 20:47:58:375 BROKER/(11077:11082): Esperando conexiones.
+[INFO] 21:00:37:623 BROKER/(11684:11684): Logger Iniciado
+[INFO] 21:00:37:636 BROKER/(11684:11684): Archivo de configuracion seteado
+[INFO] 21:00:37:636 BROKER/(11684:11684): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 21:00:37:637 BROKER/(11684:11684): Inicializando Memoria Cache
+[INFO] 21:00:37:637 BROKER/(11684:11684): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 21:00:37:639 BROKER/(11684:11689): Escuchando conexiones al Broker
+[DEBUG] 21:00:37:639 BROKER/(11684:11689): Esperando conexiones.
+[DEBUG] 21:00:39:593 BROKER/(11684:11693): START: atenderCliente
+[INFO] 21:00:39:594 BROKER/(11684:11693): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 21:00:39:594 BROKER/(11684:11693): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 21:00:39:594 BROKER/(11684:11693): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 21:00:39:594 BROKER/(11684:11693): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 21:00:39:594 BROKER/(11684:11693): Se suscribió con éxito el proceso a la cola GET
+[INFO] 21:00:39:594 BROKER/(11684:11693): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 21:00:39:594 BROKER/(11684:11693): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 21:00:39:595 BROKER/(11684:11693): START: enviar_mensajes_cacheados
+[DEBUG] 21:00:39:595 BROKER/(11684:11693): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:00:39:595 BROKER/(11684:11693): END: enviar_mensajes_cacheados
+[DEBUG] 21:00:39:595 BROKER/(11684:11693): START: enviar_mensajes_cacheados
+[DEBUG] 21:00:39:595 BROKER/(11684:11693): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:00:39:595 BROKER/(11684:11693): END: enviar_mensajes_cacheados
+[DEBUG] 21:00:39:595 BROKER/(11684:11693): START: enviar_mensajes_cacheados
+[DEBUG] 21:00:39:595 BROKER/(11684:11693): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:00:39:595 BROKER/(11684:11693): END: enviar_mensajes_cacheados
+[INFO] 21:00:39:595 BROKER/(11684:11693): GameCard se suscribio a 3 colas
+[DEBUG] 21:00:39:595 BROKER/(11684:11699): START: escucharSocketACK
+[DEBUG] 21:00:39:595 BROKER/(11684:11700): START: escucharSocketACK
+[DEBUG] 21:00:39:595 BROKER/(11684:11698): START: escucharSocketACK
+[DEBUG] 21:00:39:595 BROKER/(11684:11697): START: escucharSocketMensajesACachear
+[DEBUG] 21:00:39:596 BROKER/(11684:11697): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 21:00:39:596 BROKER/(11684:11697): Esperando mensajes...
+[DEBUG] 21:00:39:596 BROKER/(11684:11696): START: escucharSocketMensajesACachear
+[DEBUG] 21:00:39:596 BROKER/(11684:11696): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 21:00:39:596 BROKER/(11684:11696): Esperando mensajes...
+[DEBUG] 21:00:39:596 BROKER/(11684:11695): START: escucharSocketMensajesACachear
+[DEBUG] 21:00:39:596 BROKER/(11684:11695): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 21:00:39:596 BROKER/(11684:11695): Esperando mensajes...
+[DEBUG] 21:00:42:592 BROKER/(11684:11689): Esperando conexiones.
+[INFO] 21:06:16:983 BROKER/(11999:11999): Logger Iniciado
+[INFO] 21:06:16:986 BROKER/(11999:11999): Archivo de configuracion seteado
+[INFO] 21:06:16:987 BROKER/(11999:11999): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 21:06:16:987 BROKER/(11999:11999): Inicializando Memoria Cache
+[INFO] 21:06:16:989 BROKER/(11999:11999): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 21:06:16:994 BROKER/(11999:12004): Escuchando conexiones al Broker
+[DEBUG] 21:06:16:994 BROKER/(11999:12004): Esperando conexiones.
+[DEBUG] 21:06:20:210 BROKER/(11999:12008): START: atenderCliente
+[INFO] 21:06:20:213 BROKER/(11999:12008): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 21:06:20:214 BROKER/(11999:12008): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 21:06:20:214 BROKER/(11999:12008): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 21:06:20:214 BROKER/(11999:12008): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 21:06:20:214 BROKER/(11999:12008): Se suscribió con éxito el proceso a la cola GET
+[INFO] 21:06:20:214 BROKER/(11999:12008): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 21:06:20:214 BROKER/(11999:12008): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 21:06:20:214 BROKER/(11999:12008): START: enviar_mensajes_cacheados
+[DEBUG] 21:06:20:215 BROKER/(11999:12008): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:06:20:215 BROKER/(11999:12008): END: enviar_mensajes_cacheados
+[DEBUG] 21:06:20:222 BROKER/(11999:12008): START: enviar_mensajes_cacheados
+[DEBUG] 21:06:20:222 BROKER/(11999:12008): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:06:20:222 BROKER/(11999:12008): END: enviar_mensajes_cacheados
+[DEBUG] 21:06:20:222 BROKER/(11999:12008): START: enviar_mensajes_cacheados
+[DEBUG] 21:06:20:222 BROKER/(11999:12008): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:06:20:222 BROKER/(11999:12008): END: enviar_mensajes_cacheados
+[INFO] 21:06:20:222 BROKER/(11999:12008): GameCard se suscribio a 3 colas
+[DEBUG] 21:06:20:223 BROKER/(11999:12014): START: escucharSocketACK
+[DEBUG] 21:06:20:223 BROKER/(11999:12015): START: escucharSocketACK
+[DEBUG] 21:06:20:223 BROKER/(11999:12016): START: escucharSocketACK
+[DEBUG] 21:06:20:223 BROKER/(11999:12013): START: escucharSocketMensajesACachear
+[DEBUG] 21:06:20:224 BROKER/(11999:12013): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 21:06:20:224 BROKER/(11999:12013): Esperando mensajes...
+[DEBUG] 21:06:20:224 BROKER/(11999:12012): START: escucharSocketMensajesACachear
+[DEBUG] 21:06:20:224 BROKER/(11999:12012): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 21:06:20:224 BROKER/(11999:12012): Esperando mensajes...
+[DEBUG] 21:06:20:224 BROKER/(11999:12011): START: escucharSocketMensajesACachear
+[DEBUG] 21:06:20:224 BROKER/(11999:12011): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 21:06:20:224 BROKER/(11999:12011): Esperando mensajes...
+[DEBUG] 21:06:23:210 BROKER/(11999:12004): Esperando conexiones.
+[INFO] 21:09:44:826 BROKER/(12110:12110): Logger Iniciado
+[INFO] 21:09:44:826 BROKER/(12110:12110): Archivo de configuracion seteado
+[INFO] 21:09:44:826 BROKER/(12110:12110): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 21:09:44:826 BROKER/(12110:12110): Inicializando Memoria Cache
+[INFO] 21:09:44:826 BROKER/(12110:12110): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 21:09:44:830 BROKER/(12110:12115): Escuchando conexiones al Broker
+[DEBUG] 21:09:44:831 BROKER/(12110:12115): Esperando conexiones.
+[DEBUG] 21:09:46:576 BROKER/(12110:12119): START: atenderCliente
+[INFO] 21:09:46:577 BROKER/(12110:12119): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 21:09:46:577 BROKER/(12110:12119): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 21:09:46:577 BROKER/(12110:12119): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 21:09:46:577 BROKER/(12110:12119): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 21:09:46:577 BROKER/(12110:12119): Se suscribió con éxito el proceso a la cola GET
+[INFO] 21:09:46:577 BROKER/(12110:12119): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 21:09:46:577 BROKER/(12110:12119): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 21:09:46:580 BROKER/(12110:12119): START: enviar_mensajes_cacheados
+[DEBUG] 21:09:46:580 BROKER/(12110:12119): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:09:46:581 BROKER/(12110:12119): END: enviar_mensajes_cacheados
+[DEBUG] 21:09:46:581 BROKER/(12110:12119): START: enviar_mensajes_cacheados
+[DEBUG] 21:09:46:585 BROKER/(12110:12119): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:09:46:586 BROKER/(12110:12119): END: enviar_mensajes_cacheados
+[DEBUG] 21:09:46:586 BROKER/(12110:12119): START: enviar_mensajes_cacheados
+[DEBUG] 21:09:46:586 BROKER/(12110:12119): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:09:46:586 BROKER/(12110:12119): END: enviar_mensajes_cacheados
+[INFO] 21:09:46:586 BROKER/(12110:12119): GameCard se suscribio a 3 colas
+[DEBUG] 21:09:46:587 BROKER/(12110:12125): START: escucharSocketACK
+[DEBUG] 21:09:46:587 BROKER/(12110:12126): START: escucharSocketACK
+[DEBUG] 21:09:46:587 BROKER/(12110:12124): START: escucharSocketACK
+[DEBUG] 21:09:46:587 BROKER/(12110:12123): START: escucharSocketMensajesACachear
+[DEBUG] 21:09:46:587 BROKER/(12110:12123): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 21:09:46:587 BROKER/(12110:12123): Esperando mensajes...
+[DEBUG] 21:09:46:588 BROKER/(12110:12122): START: escucharSocketMensajesACachear
+[DEBUG] 21:09:46:588 BROKER/(12110:12122): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 21:09:46:588 BROKER/(12110:12122): Esperando mensajes...
+[DEBUG] 21:09:46:588 BROKER/(12110:12121): START: escucharSocketMensajesACachear
+[DEBUG] 21:09:46:588 BROKER/(12110:12121): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 21:09:46:588 BROKER/(12110:12121): Esperando mensajes...
+[INFO] 21:12:54:507 BROKER/(12227:12227): Logger Iniciado
+[INFO] 21:12:54:510 BROKER/(12227:12227): Archivo de configuracion seteado
+[INFO] 21:12:54:510 BROKER/(12227:12227): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 21:12:54:510 BROKER/(12227:12227): Inicializando Memoria Cache
+[INFO] 21:12:54:510 BROKER/(12227:12227): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 21:12:54:510 BROKER/(12227:12232): Escuchando conexiones al Broker
+[DEBUG] 21:12:54:510 BROKER/(12227:12232): Esperando conexiones.
+[DEBUG] 21:12:58:85 BROKER/(12227:12237): START: atenderCliente
+[INFO] 21:12:58:96 BROKER/(12227:12237): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 21:12:58:96 BROKER/(12227:12237): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 21:12:58:97 BROKER/(12227:12237): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 21:12:58:97 BROKER/(12227:12237): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 21:12:58:97 BROKER/(12227:12237): Se suscribió con éxito el proceso a la cola GET
+[INFO] 21:12:58:97 BROKER/(12227:12237): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 21:12:58:97 BROKER/(12227:12237): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 21:12:58:97 BROKER/(12227:12237): START: enviar_mensajes_cacheados
+[DEBUG] 21:12:58:97 BROKER/(12227:12237): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:12:58:97 BROKER/(12227:12237): END: enviar_mensajes_cacheados
+[DEBUG] 21:12:58:97 BROKER/(12227:12237): START: enviar_mensajes_cacheados
+[DEBUG] 21:12:58:98 BROKER/(12227:12237): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:12:58:101 BROKER/(12227:12237): END: enviar_mensajes_cacheados
+[DEBUG] 21:12:58:101 BROKER/(12227:12237): START: enviar_mensajes_cacheados
+[DEBUG] 21:12:58:101 BROKER/(12227:12237): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:12:58:101 BROKER/(12227:12237): END: enviar_mensajes_cacheados
+[INFO] 21:12:58:101 BROKER/(12227:12237): GameCard se suscribio a 3 colas
+[DEBUG] 21:12:58:102 BROKER/(12227:12242): START: escucharSocketACK
+[DEBUG] 21:12:58:102 BROKER/(12227:12243): START: escucharSocketACK
+[DEBUG] 21:12:58:102 BROKER/(12227:12244): START: escucharSocketACK
+[DEBUG] 21:12:58:102 BROKER/(12227:12241): START: escucharSocketMensajesACachear
+[DEBUG] 21:12:58:102 BROKER/(12227:12241): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 21:12:58:103 BROKER/(12227:12241): Esperando mensajes...
+[DEBUG] 21:12:58:107 BROKER/(12227:12240): START: escucharSocketMensajesACachear
+[DEBUG] 21:12:58:107 BROKER/(12227:12240): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 21:12:58:107 BROKER/(12227:12240): Esperando mensajes...
+[DEBUG] 21:12:58:107 BROKER/(12227:12239): START: escucharSocketMensajesACachear
+[DEBUG] 21:12:58:107 BROKER/(12227:12239): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 21:12:58:108 BROKER/(12227:12239): Esperando mensajes...
+[INFO] 21:21:37:373 BROKER/(12595:12595): Logger Iniciado
+[INFO] 21:21:37:382 BROKER/(12595:12595): Archivo de configuracion seteado
+[INFO] 21:21:37:382 BROKER/(12595:12595): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 21:21:37:382 BROKER/(12595:12595): Inicializando Memoria Cache
+[INFO] 21:21:37:382 BROKER/(12595:12595): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 21:21:37:386 BROKER/(12595:12601): Escuchando conexiones al Broker
+[DEBUG] 21:21:37:386 BROKER/(12595:12601): Esperando conexiones.
+[DEBUG] 21:21:48:342 BROKER/(12595:12606): START: atenderCliente
+[INFO] 21:21:48:343 BROKER/(12595:12606): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 21:21:48:343 BROKER/(12595:12606): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 21:21:48:343 BROKER/(12595:12606): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 21:21:48:343 BROKER/(12595:12606): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 21:21:48:343 BROKER/(12595:12606): Se suscribió con éxito el proceso a la cola GET
+[INFO] 21:21:48:343 BROKER/(12595:12606): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 21:21:48:343 BROKER/(12595:12606): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 21:21:48:343 BROKER/(12595:12606): START: enviar_mensajes_cacheados
+[DEBUG] 21:21:48:343 BROKER/(12595:12606): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:21:48:343 BROKER/(12595:12606): END: enviar_mensajes_cacheados
+[DEBUG] 21:21:48:344 BROKER/(12595:12606): START: enviar_mensajes_cacheados
+[DEBUG] 21:21:48:344 BROKER/(12595:12606): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:21:48:344 BROKER/(12595:12606): END: enviar_mensajes_cacheados
+[DEBUG] 21:21:48:344 BROKER/(12595:12606): START: enviar_mensajes_cacheados
+[DEBUG] 21:21:48:344 BROKER/(12595:12606): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:21:48:344 BROKER/(12595:12606): END: enviar_mensajes_cacheados
+[INFO] 21:21:48:344 BROKER/(12595:12606): GameCard se suscribio a 3 colas
+[DEBUG] 21:21:48:344 BROKER/(12595:12612): START: escucharSocketACK
+[DEBUG] 21:21:48:344 BROKER/(12595:12613): START: escucharSocketACK
+[DEBUG] 21:21:48:344 BROKER/(12595:12614): START: escucharSocketACK
+[DEBUG] 21:21:48:344 BROKER/(12595:12611): START: escucharSocketMensajesACachear
+[DEBUG] 21:21:48:345 BROKER/(12595:12611): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 21:21:48:345 BROKER/(12595:12611): Esperando mensajes...
+[DEBUG] 21:21:48:345 BROKER/(12595:12610): START: escucharSocketMensajesACachear
+[DEBUG] 21:21:48:345 BROKER/(12595:12610): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 21:21:48:350 BROKER/(12595:12610): Esperando mensajes...
+[DEBUG] 21:21:48:350 BROKER/(12595:12609): START: escucharSocketMensajesACachear
+[DEBUG] 21:21:48:350 BROKER/(12595:12609): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 21:21:48:350 BROKER/(12595:12609): Esperando mensajes...
+[DEBUG] 21:21:51:342 BROKER/(12595:12601): Esperando conexiones.
+[INFO] 21:28:13:219 BROKER/(12735:12735): Logger Iniciado
+[INFO] 21:28:13:220 BROKER/(12735:12735): Archivo de configuracion seteado
+[INFO] 21:28:13:220 BROKER/(12735:12735): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 21:28:13:221 BROKER/(12735:12735): Inicializando Memoria Cache
+[INFO] 21:28:13:221 BROKER/(12735:12735): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 21:28:13:225 BROKER/(12735:12740): Escuchando conexiones al Broker
+[DEBUG] 21:28:13:225 BROKER/(12735:12740): Esperando conexiones.
+[DEBUG] 21:28:15:232 BROKER/(12735:12744): START: atenderCliente
+[INFO] 21:28:15:233 BROKER/(12735:12744): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 21:28:15:233 BROKER/(12735:12744): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 21:28:15:233 BROKER/(12735:12744): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 21:28:15:233 BROKER/(12735:12744): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 21:28:15:233 BROKER/(12735:12744): Se suscribió con éxito el proceso a la cola GET
+[INFO] 21:28:15:233 BROKER/(12735:12744): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 21:28:15:233 BROKER/(12735:12744): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 21:28:15:234 BROKER/(12735:12744): START: enviar_mensajes_cacheados
+[DEBUG] 21:28:15:234 BROKER/(12735:12744): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:28:15:234 BROKER/(12735:12744): END: enviar_mensajes_cacheados
+[DEBUG] 21:28:15:234 BROKER/(12735:12744): START: enviar_mensajes_cacheados
+[DEBUG] 21:28:15:234 BROKER/(12735:12744): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:28:15:234 BROKER/(12735:12744): END: enviar_mensajes_cacheados
+[DEBUG] 21:28:15:234 BROKER/(12735:12744): START: enviar_mensajes_cacheados
+[DEBUG] 21:28:15:234 BROKER/(12735:12744): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:28:15:234 BROKER/(12735:12744): END: enviar_mensajes_cacheados
+[INFO] 21:28:15:234 BROKER/(12735:12744): GameCard se suscribio a 3 colas
+[DEBUG] 21:28:15:235 BROKER/(12735:12749): START: escucharSocketACK
+[DEBUG] 21:28:15:235 BROKER/(12735:12750): START: escucharSocketACK
+[DEBUG] 21:28:15:235 BROKER/(12735:12751): START: escucharSocketACK
+[DEBUG] 21:28:15:235 BROKER/(12735:12748): START: escucharSocketMensajesACachear
+[DEBUG] 21:28:15:235 BROKER/(12735:12748): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 21:28:15:235 BROKER/(12735:12748): Esperando mensajes...
+[DEBUG] 21:28:15:235 BROKER/(12735:12747): START: escucharSocketMensajesACachear
+[DEBUG] 21:28:15:235 BROKER/(12735:12747): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 21:28:15:235 BROKER/(12735:12747): Esperando mensajes...
+[DEBUG] 21:28:15:235 BROKER/(12735:12746): START: escucharSocketMensajesACachear
+[DEBUG] 21:28:15:236 BROKER/(12735:12746): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 21:28:15:236 BROKER/(12735:12746): Esperando mensajes...
+[INFO] 21:29:20:219 BROKER/(12815:12815): Logger Iniciado
+[INFO] 21:29:20:220 BROKER/(12815:12815): Archivo de configuracion seteado
+[INFO] 21:29:20:220 BROKER/(12815:12815): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 21:29:20:220 BROKER/(12815:12815): Inicializando Memoria Cache
+[INFO] 21:29:20:220 BROKER/(12815:12815): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 21:29:20:220 BROKER/(12815:12820): Esperando conexiones.
+[DEBUG] 21:29:20:220 BROKER/(12815:12821): START: atenderCliente
+[INFO] 21:51:22:774 BROKER/(13321:13321): Logger Iniciado
+[INFO] 21:51:22:780 BROKER/(13321:13321): Archivo de configuracion seteado
+[INFO] 21:51:22:780 BROKER/(13321:13321): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 21:51:22:782 BROKER/(13321:13321): Inicializando Memoria Cache
+[INFO] 21:51:22:783 BROKER/(13321:13321): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 21:51:22:784 BROKER/(13321:13327): Escuchando conexiones al Broker
+[DEBUG] 21:51:22:784 BROKER/(13321:13327): Esperando conexiones.
+[DEBUG] 21:51:28:101 BROKER/(13321:13335): START: atenderCliente
+[INFO] 21:51:28:102 BROKER/(13321:13335): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 21:51:28:102 BROKER/(13321:13335): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 21:51:28:102 BROKER/(13321:13335): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 21:51:28:102 BROKER/(13321:13335): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 21:51:28:102 BROKER/(13321:13335): Se suscribió con éxito el proceso a la cola GET
+[INFO] 21:51:28:102 BROKER/(13321:13335): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 21:51:28:102 BROKER/(13321:13335): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 21:51:28:103 BROKER/(13321:13335): START: enviar_mensajes_cacheados
+[DEBUG] 21:51:28:103 BROKER/(13321:13335): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:51:28:103 BROKER/(13321:13335): END: enviar_mensajes_cacheados
+[DEBUG] 21:51:28:103 BROKER/(13321:13335): START: enviar_mensajes_cacheados
+[DEBUG] 21:51:28:103 BROKER/(13321:13335): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:51:28:103 BROKER/(13321:13335): END: enviar_mensajes_cacheados
+[DEBUG] 21:51:28:103 BROKER/(13321:13335): START: enviar_mensajes_cacheados
+[DEBUG] 21:51:28:103 BROKER/(13321:13335): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 21:51:28:103 BROKER/(13321:13335): END: enviar_mensajes_cacheados
+[INFO] 21:51:28:103 BROKER/(13321:13335): GameCard se suscribio a 3 colas
+[DEBUG] 21:51:28:103 BROKER/(13321:13341): START: escucharSocketACK
+[DEBUG] 21:51:28:104 BROKER/(13321:13342): START: escucharSocketACK
+[DEBUG] 21:51:28:104 BROKER/(13321:13343): START: escucharSocketACK
+[DEBUG] 21:51:28:104 BROKER/(13321:13340): START: escucharSocketMensajesACachear
+[DEBUG] 21:51:28:104 BROKER/(13321:13340): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 21:51:28:104 BROKER/(13321:13340): Esperando mensajes...
+[DEBUG] 21:51:28:104 BROKER/(13321:13339): START: escucharSocketMensajesACachear
+[DEBUG] 21:51:28:104 BROKER/(13321:13339): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 21:51:28:104 BROKER/(13321:13339): Esperando mensajes...
+[DEBUG] 21:51:28:104 BROKER/(13321:13338): START: escucharSocketMensajesACachear
+[DEBUG] 21:51:28:104 BROKER/(13321:13338): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 21:51:28:104 BROKER/(13321:13338): Esperando mensajes...
+[DEBUG] 21:51:31:101 BROKER/(13321:13327): Esperando conexiones.
+[DEBUG] 21:56:04:248 BROKER/(13321:13342): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 21:56:04:248 BROKER/(13321:13343): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 21:56:04:248 BROKER/(13321:13341): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 21:56:04:248 BROKER/(13321:13339): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 21:56:04:248 BROKER/(13321:13340): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 21:56:04:248 BROKER/(13321:13338): Conexión caída, se procede a cerrar el socket.
+[DEBUG] 21:56:04:250 BROKER/(13321:13342): START: escucharSocketACK
+[DEBUG] 21:56:04:251 BROKER/(13321:13340): END: escucharSocketMensajesACachear
+[DEBUG] 21:56:04:251 BROKER/(13321:13339): END: escucharSocketMensajesACachear
+[DEBUG] 21:56:04:252 BROKER/(13321:13338): END: escucharSocketMensajesACachear
+[DEBUG] 21:56:04:253 BROKER/(13321:13341): START: escucharSocketACK
+[DEBUG] 21:56:04:253 BROKER/(13321:13343): START: escucharSocketACK
+[INFO] 22:00:41:496 BROKER/(13434:13434): Logger Iniciado
+[INFO] 22:00:41:498 BROKER/(13434:13434): Archivo de configuracion seteado
+[INFO] 22:00:41:498 BROKER/(13434:13434): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 22:00:41:498 BROKER/(13434:13434): Inicializando Memoria Cache
+[INFO] 22:00:41:498 BROKER/(13434:13434): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 22:00:41:502 BROKER/(13434:13440): Escuchando conexiones al Broker
+[DEBUG] 22:00:41:502 BROKER/(13434:13440): Esperando conexiones.
+[DEBUG] 22:00:43:549 BROKER/(13434:13444): START: atenderCliente
+[INFO] 22:00:43:550 BROKER/(13434:13444): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 22:00:43:550 BROKER/(13434:13444): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 22:00:43:550 BROKER/(13434:13444): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 22:00:43:550 BROKER/(13434:13444): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 22:00:43:550 BROKER/(13434:13444): Se suscribió con éxito el proceso a la cola GET
+[INFO] 22:00:43:550 BROKER/(13434:13444): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 22:00:43:550 BROKER/(13434:13444): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 22:00:43:550 BROKER/(13434:13444): START: enviar_mensajes_cacheados
+[DEBUG] 22:00:43:550 BROKER/(13434:13444): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:00:43:550 BROKER/(13434:13444): END: enviar_mensajes_cacheados
+[DEBUG] 22:00:43:550 BROKER/(13434:13444): START: enviar_mensajes_cacheados
+[DEBUG] 22:00:43:550 BROKER/(13434:13444): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:00:43:552 BROKER/(13434:13444): END: enviar_mensajes_cacheados
+[DEBUG] 22:00:43:552 BROKER/(13434:13444): START: enviar_mensajes_cacheados
+[DEBUG] 22:00:43:552 BROKER/(13434:13444): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:00:43:552 BROKER/(13434:13444): END: enviar_mensajes_cacheados
+[INFO] 22:00:43:553 BROKER/(13434:13444): GameCard se suscribio a 3 colas
+[DEBUG] 22:00:43:553 BROKER/(13434:13450): START: escucharSocketACK
+[DEBUG] 22:00:43:553 BROKER/(13434:13451): START: escucharSocketACK
+[DEBUG] 22:00:43:553 BROKER/(13434:13452): START: escucharSocketACK
+[DEBUG] 22:00:43:553 BROKER/(13434:13449): START: escucharSocketMensajesACachear
+[DEBUG] 22:00:43:553 BROKER/(13434:13449): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 22:00:43:553 BROKER/(13434:13449): Esperando mensajes...
+[DEBUG] 22:00:43:553 BROKER/(13434:13448): START: escucharSocketMensajesACachear
+[DEBUG] 22:00:43:553 BROKER/(13434:13448): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 22:00:43:553 BROKER/(13434:13448): Esperando mensajes...
+[DEBUG] 22:00:43:553 BROKER/(13434:13447): START: escucharSocketMensajesACachear
+[DEBUG] 22:00:43:554 BROKER/(13434:13447): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 22:00:43:554 BROKER/(13434:13447): Esperando mensajes...
+[DEBUG] 22:00:46:549 BROKER/(13434:13440): Esperando conexiones.
+[INFO] 22:06:58:376 BROKER/(13591:13591): Logger Iniciado
+[INFO] 22:06:58:379 BROKER/(13591:13591): Archivo de configuracion seteado
+[INFO] 22:06:58:379 BROKER/(13591:13591): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 22:06:58:379 BROKER/(13591:13591): Inicializando Memoria Cache
+[INFO] 22:06:58:380 BROKER/(13591:13591): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 22:06:58:386 BROKER/(13591:13596): Escuchando conexiones al Broker
+[DEBUG] 22:06:58:386 BROKER/(13591:13596): Esperando conexiones.
+[DEBUG] 22:07:04:400 BROKER/(13591:13600): START: atenderCliente
+[INFO] 22:07:04:401 BROKER/(13591:13600): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 22:07:04:401 BROKER/(13591:13600): Se suscribió con éxito el proceso a la cola GET
+[INFO] 22:07:04:401 BROKER/(13591:13600): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 22:07:04:401 BROKER/(13591:13600): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): START: enviar_mensajes_cacheados
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): END: enviar_mensajes_cacheados
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): START: enviar_mensajes_cacheados
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): END: enviar_mensajes_cacheados
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): START: enviar_mensajes_cacheados
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:07:04:401 BROKER/(13591:13600): END: enviar_mensajes_cacheados
+[INFO] 22:07:04:401 BROKER/(13591:13600): GameCard se suscribio a 3 colas
+[DEBUG] 22:07:04:402 BROKER/(13591:13606): START: escucharSocketACK
+[DEBUG] 22:07:04:402 BROKER/(13591:13607): START: escucharSocketACK
+[DEBUG] 22:07:04:402 BROKER/(13591:13608): START: escucharSocketACK
+[DEBUG] 22:07:04:402 BROKER/(13591:13605): START: escucharSocketMensajesACachear
+[DEBUG] 22:07:04:402 BROKER/(13591:13605): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 22:07:04:402 BROKER/(13591:13605): Esperando mensajes...
+[DEBUG] 22:07:04:402 BROKER/(13591:13604): START: escucharSocketMensajesACachear
+[DEBUG] 22:07:04:402 BROKER/(13591:13604): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 22:07:04:402 BROKER/(13591:13604): Esperando mensajes...
+[DEBUG] 22:07:04:402 BROKER/(13591:13603): START: escucharSocketMensajesACachear
+[DEBUG] 22:07:04:402 BROKER/(13591:13603): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 22:07:04:402 BROKER/(13591:13603): Esperando mensajes...
+[INFO] 22:14:02:55 BROKER/(13736:13736): Logger Iniciado
+[INFO] 22:14:02:57 BROKER/(13736:13736): Archivo de configuracion seteado
+[INFO] 22:14:02:57 BROKER/(13736:13736): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 22:14:02:57 BROKER/(13736:13736): Inicializando Memoria Cache
+[INFO] 22:14:02:58 BROKER/(13736:13736): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 22:14:02:61 BROKER/(13736:13741): Escuchando conexiones al Broker
+[DEBUG] 22:14:02:61 BROKER/(13736:13741): Esperando conexiones.
+[DEBUG] 22:14:32:282 BROKER/(13736:13747): START: atenderCliente
+[INFO] 22:14:32:283 BROKER/(13736:13747): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 22:14:32:283 BROKER/(13736:13747): VALUE LUEGO DE ACEPTAR CONEXION: 12
+[DEBUG] 22:14:32:283 BROKER/(13736:13747): VALUE LUEGO DE ACEPTAR CONEXION: 13
+[DEBUG] 22:14:32:283 BROKER/(13736:13747): VALUE LUEGO DE ACEPTAR CONEXION: 14
+[INFO] 22:14:32:283 BROKER/(13736:13747): Se suscribió con éxito el proceso a la cola GET
+[INFO] 22:14:32:284 BROKER/(13736:13747): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 22:14:32:284 BROKER/(13736:13747): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 22:14:32:284 BROKER/(13736:13747): START: enviar_mensajes_cacheados
+[DEBUG] 22:14:32:284 BROKER/(13736:13747): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:14:32:284 BROKER/(13736:13747): END: enviar_mensajes_cacheados
+[DEBUG] 22:14:32:284 BROKER/(13736:13747): START: enviar_mensajes_cacheados
+[DEBUG] 22:14:32:284 BROKER/(13736:13747): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:14:32:284 BROKER/(13736:13747): END: enviar_mensajes_cacheados
+[DEBUG] 22:14:32:284 BROKER/(13736:13747): START: enviar_mensajes_cacheados
+[DEBUG] 22:14:32:286 BROKER/(13736:13747): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:14:32:286 BROKER/(13736:13747): END: enviar_mensajes_cacheados
+[INFO] 22:14:32:286 BROKER/(13736:13747): GameCard se suscribio a 3 colas
+[DEBUG] 22:14:32:287 BROKER/(13736:13753): START: escucharSocketACK
+[DEBUG] 22:14:32:287 BROKER/(13736:13754): START: escucharSocketACK
+[DEBUG] 22:14:32:287 BROKER/(13736:13755): START: escucharSocketACK
+[DEBUG] 22:14:32:287 BROKER/(13736:13752): START: escucharSocketMensajesACachear
+[DEBUG] 22:14:32:287 BROKER/(13736:13752): VALUE EMPEZANDO escucharSocketMensajesACachear: 13
+[DEBUG] 22:14:32:287 BROKER/(13736:13752): Esperando mensajes...
+[DEBUG] 22:14:32:287 BROKER/(13736:13751): START: escucharSocketMensajesACachear
+[DEBUG] 22:14:32:287 BROKER/(13736:13751): VALUE EMPEZANDO escucharSocketMensajesACachear: 14
+[DEBUG] 22:14:32:287 BROKER/(13736:13751): Esperando mensajes...
+[DEBUG] 22:14:32:287 BROKER/(13736:13750): START: escucharSocketMensajesACachear
+[DEBUG] 22:14:32:287 BROKER/(13736:13750): VALUE EMPEZANDO escucharSocketMensajesACachear: 12
+[DEBUG] 22:14:32:288 BROKER/(13736:13750): Esperando mensajes...
+[DEBUG] 22:14:35:282 BROKER/(13736:13741): Esperando conexiones.
+[INFO] 22:18:19:956 BROKER/(13896:13896): Logger Iniciado
+[INFO] 22:18:19:958 BROKER/(13896:13896): Archivo de configuracion seteado
+[INFO] 22:18:19:958 BROKER/(13896:13896): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 22:18:19:958 BROKER/(13896:13896): Inicializando Memoria Cache
+[INFO] 22:18:19:963 BROKER/(13896:13896): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 22:18:19:970 BROKER/(13896:13902): Escuchando conexiones al Broker
+[DEBUG] 22:18:19:970 BROKER/(13896:13902): Esperando conexiones.
+[DEBUG] 22:18:22:118 BROKER/(13896:13906): START: atenderCliente
+[INFO] 22:18:22:119 BROKER/(13896:13906): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 22:18:22:119 BROKER/(13896:13906): socketNew: 6
+[DEBUG] 22:18:22:119 BROKER/(13896:13906): socketACKNew: 7
+[DEBUG] 22:18:22:119 BROKER/(13896:13906): socketCatch: 8
+[DEBUG] 22:18:22:119 BROKER/(13896:13906): socketACKCatch: 9
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): socketGet: 10
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): socketACKGet: 11
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): socketAppeared: 12
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): socketCaught: 13
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): socketLocalized: 14
+[INFO] 22:18:22:120 BROKER/(13896:13906): Se suscribió con éxito el proceso a la cola GET
+[INFO] 22:18:22:120 BROKER/(13896:13906): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 22:18:22:120 BROKER/(13896:13906): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): START: enviar_mensajes_cacheados
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): END: enviar_mensajes_cacheados
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): START: enviar_mensajes_cacheados
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): END: enviar_mensajes_cacheados
+[DEBUG] 22:18:22:120 BROKER/(13896:13906): START: enviar_mensajes_cacheados
+[DEBUG] 22:18:22:121 BROKER/(13896:13906): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 22:18:22:121 BROKER/(13896:13906): END: enviar_mensajes_cacheados
+[INFO] 22:18:22:121 BROKER/(13896:13906): GameCard se suscribio a 3 colas
+[DEBUG] 22:18:22:121 BROKER/(13896:13912): START: escucharSocketACK
+[DEBUG] 22:18:22:121 BROKER/(13896:13913): START: escucharSocketACK
+[DEBUG] 22:18:22:121 BROKER/(13896:13914): START: escucharSocketACK
+[DEBUG] 22:18:22:121 BROKER/(13896:13911): START: escucharSocketMensajesACachear
+[DEBUG] 22:18:22:122 BROKER/(13896:13911): Esperando mensajes...
+[DEBUG] 22:18:22:122 BROKER/(13896:13910): START: escucharSocketMensajesACachear
+[DEBUG] 22:18:22:122 BROKER/(13896:13910): Esperando mensajes...
+[DEBUG] 22:18:22:122 BROKER/(13896:13909): START: escucharSocketMensajesACachear
+[DEBUG] 22:18:22:122 BROKER/(13896:13909): Esperando mensajes...
+[DEBUG] 22:18:25:118 BROKER/(13896:13902): Esperando conexiones.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     [INFO] 23:01:03:123 BROKER/(3575:3575): Logger Iniciado
+[INFO] 23:01:03:156 BROKER/(3575:3575): Archivo de configuracion seteado
+[INFO] 23:01:03:157 BROKER/(3575:3575): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 23:01:03:157 BROKER/(3575:3575): Inicializando Memoria Cache
+[INFO] 23:01:03:157 BROKER/(3575:3575): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:01:03:157 BROKER/(3575:3580): Escuchando conexiones al Broker
+[DEBUG] 23:01:03:164 BROKER/(3575:3580): Esperando conexiones...
+[DEBUG] 23:02:40:218 BROKER/(3575:3647): START: atenderCliente
+[INFO] 23:02:40:226 BROKER/(3575:3647): El ID del proceso con el que me conecte es: GAMEBOY
+[DEBUG] 23:02:42:215 BROKER/(3575:3580): Esperando conexiones...
+[DEBUG] 23:05:15:293 BROKER/(3575:3745): START: atenderCliente
+[INFO] 23:05:15:296 BROKER/(3575:3745): El ID del proceso con el que me conecte es: GAMEBOY
+[DEBUG] 23:05:17:293 BROKER/(3575:3580): Esperando conexiones...
+[INFO] 23:05:25:200 BROKER/(3779:3779): Logger Iniciado
+[INFO] 23:05:25:206 BROKER/(3779:3779): Archivo de configuracion seteado
+[INFO] 23:05:25:206 BROKER/(3779:3779): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 23:05:25:206 BROKER/(3779:3779): Inicializando Memoria Cache
+[INFO] 23:05:25:206 BROKER/(3779:3779): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:05:25:207 BROKER/(3779:3784): Escuchando conexiones al Broker
+[DEBUG] 23:05:25:207 BROKER/(3779:3784): Esperando conexiones...
+[DEBUG] 23:05:27:853 BROKER/(3779:3787): START: atenderCliente
+[INFO] 23:05:27:856 BROKER/(3779:3787): El ID del proceso con el que me conecte es: GAMEBOY
+[INFO] 23:09:59:75 BROKER/(3903:3903): Logger Iniciado
+[INFO] 23:09:59:92 BROKER/(3903:3903): Archivo de configuracion seteado
+[INFO] 23:09:59:92 BROKER/(3903:3903): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 23:09:59:92 BROKER/(3903:3903): Inicializando Memoria Cache
+[INFO] 23:09:59:92 BROKER/(3903:3903): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:09:59:95 BROKER/(3903:3908): Escuchando conexiones al Broker
+[DEBUG] 23:09:59:95 BROKER/(3903:3908): Esperando conexiones...
+[DEBUG] 23:10:00:488 BROKER/(3903:3911): START: atenderCliente
+[INFO] 23:10:00:490 BROKER/(3903:3911): El ID del proceso con el que me conecte es: GAMEBOY
+[INFO] 23:10:00:490 BROKER/(3903:3911): Recibimos un mensaje de tipo 1
+[INFO] 23:13:05:139 BROKER/(4036:4036): Logger Iniciado
+[INFO] 23:13:05:139 BROKER/(4036:4036): Archivo de configuracion seteado
+[INFO] 23:13:05:139 BROKER/(4036:4036): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 23:13:05:139 BROKER/(4036:4036): Inicializando Memoria Cache
+[INFO] 23:13:05:139 BROKER/(4036:4036): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:13:05:142 BROKER/(4036:4041): Escuchando conexiones al Broker
+[DEBUG] 23:13:05:142 BROKER/(4036:4041): Esperando conexiones...
+[DEBUG] 23:13:06:686 BROKER/(4036:4045): START: atenderCliente
+[INFO] 23:13:06:689 BROKER/(4036:4045): El ID del proceso con el que me conecte es: GAMEBOY
+[INFO] 23:13:06:689 BROKER/(4036:4045): Recibimos un mensaje de tipo 1
+[INFO] 23:13:06:689 BROKER/(4036:4045): MensajeAgregado
+[DEBUG] 23:13:08:686 BROKER/(4036:4041): Esperando conexiones...
+[INFO] 23:15:07:187 BROKER/(4178:4178): Logger Iniciado
+[INFO] 23:15:07:187 BROKER/(4178:4178): Archivo de configuracion seteado
+[INFO] 23:15:07:188 BROKER/(4178:4178): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 23:15:07:188 BROKER/(4178:4178): Inicializando Memoria Cache
+[INFO] 23:15:07:189 BROKER/(4178:4178): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:15:07:189 BROKER/(4178:4183): Escuchando conexiones al Broker
+[DEBUG] 23:15:07:189 BROKER/(4178:4183): Esperando conexiones...
+[DEBUG] 23:15:08:494 BROKER/(4178:4186): START: atenderCliente
+[INFO] 23:15:08:496 BROKER/(4178:4186): El ID del proceso con el que me conecte es: GAMEBOY
+[INFO] 23:15:08:496 BROKER/(4178:4186): Recibimos un mensaje de tipo 1
+[INFO] 23:15:08:496 BROKER/(4178:4186): MensajeAgregado
+[DEBUG] 23:15:08:501 BROKER/(4178:4187): Se procede a mandar el mensaje a los 0 suscriptores de la cola 1.
+[DEBUG] 23:15:10:494 BROKER/(4178:4183): Esperando conexiones...
+[INFO] 23:17:34:614 BROKER/(4263:4263): Logger Iniciado
+[INFO] 23:17:34:616 BROKER/(4263:4263): Archivo de configuracion seteado
+[INFO] 23:17:34:617 BROKER/(4263:4263): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 23:17:34:620 BROKER/(4263:4263): Inicializando Memoria Cache
+[INFO] 23:17:34:620 BROKER/(4263:4263): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:17:34:620 BROKER/(4263:4268): Escuchando conexiones al Broker
+[DEBUG] 23:17:34:620 BROKER/(4263:4268): Esperando conexiones...
+[DEBUG] 23:17:48:994 BROKER/(4263:4304): START: atenderCliente
+[INFO] 23:17:48:995 BROKER/(4263:4304): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 23:17:48:995 BROKER/(4263:4304): socketNew: 6
+[DEBUG] 23:17:48:995 BROKER/(4263:4304): socketACKNew: 7
+[DEBUG] 23:17:48:995 BROKER/(4263:4304): socketCatch: 8
+[DEBUG] 23:17:48:995 BROKER/(4263:4304): socketACKCatch: 9
+[DEBUG] 23:17:48:995 BROKER/(4263:4304): socketGet: 10
+[DEBUG] 23:17:48:995 BROKER/(4263:4304): socketACKGet: 11
+[DEBUG] 23:17:48:995 BROKER/(4263:4304): socketAppeared: 12
+[DEBUG] 23:17:48:995 BROKER/(4263:4304): socketCaught: 13
+[DEBUG] 23:17:48:995 BROKER/(4263:4304): socketLocalized: 14
+[INFO] 23:17:48:995 BROKER/(4263:4304): Se suscribió con éxito el proceso a la cola GET
+[INFO] 23:17:48:995 BROKER/(4263:4304): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 23:17:48:995 BROKER/(4263:4304): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 23:17:48:996 BROKER/(4263:4304): START: enviar_mensajes_cacheados
+[DEBUG] 23:17:48:996 BROKER/(4263:4304): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:17:48:996 BROKER/(4263:4304): END: enviar_mensajes_cacheados
+[DEBUG] 23:17:48:996 BROKER/(4263:4304): START: enviar_mensajes_cacheados
+[DEBUG] 23:17:48:996 BROKER/(4263:4304): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:17:48:996 BROKER/(4263:4304): END: enviar_mensajes_cacheados
+[DEBUG] 23:17:48:996 BROKER/(4263:4304): START: enviar_mensajes_cacheados
+[DEBUG] 23:17:48:996 BROKER/(4263:4304): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:17:48:997 BROKER/(4263:4304): END: enviar_mensajes_cacheados
+[INFO] 23:17:48:998 BROKER/(4263:4304): GameCard se suscribio a 3 colas
+[DEBUG] 23:17:48:998 BROKER/(4263:4310): START: escucharSocketACK
+[DEBUG] 23:17:48:998 BROKER/(4263:4311): START: escucharSocketACK
+[DEBUG] 23:17:48:998 BROKER/(4263:4309): START: escucharSocketACK
+[DEBUG] 23:17:48:998 BROKER/(4263:4308): START: escucharSocketMensajesACachear
+[DEBUG] 23:17:48:998 BROKER/(4263:4308): Esperando mensajes...
+[DEBUG] 23:17:48:999 BROKER/(4263:4307): START: escucharSocketMensajesACachear
+[DEBUG] 23:17:48:999 BROKER/(4263:4307): Esperando mensajes...
+[DEBUG] 23:17:48:999 BROKER/(4263:4306): START: escucharSocketMensajesACachear
+[DEBUG] 23:17:48:999 BROKER/(4263:4306): Esperando mensajes...
+[DEBUG] 23:17:50:994 BROKER/(4263:4268): Esperando conexiones...
+[INFO] 23:25:41:402 BROKER/(4420:4420): Logger Iniciado
+[INFO] 23:25:41:411 BROKER/(4420:4420): Archivo de configuracion seteado
+[INFO] 23:25:41:411 BROKER/(4420:4420): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 23:25:41:411 BROKER/(4420:4420): Inicializando Memoria Cache
+[INFO] 23:25:41:411 BROKER/(4420:4420): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:25:41:411 BROKER/(4420:4426): Escuchando conexiones al Broker
+[DEBUG] 23:25:41:411 BROKER/(4420:4426): Esperando conexiones...
+[DEBUG] 23:25:44:44 BROKER/(4420:4430): START: atenderCliente
+[INFO] 23:25:44:49 BROKER/(4420:4430): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 23:25:44:49 BROKER/(4420:4430): socketNew: 6
+[DEBUG] 23:25:44:49 BROKER/(4420:4430): socketACKNew: 7
+[DEBUG] 23:25:44:49 BROKER/(4420:4430): socketCatch: 8
+[DEBUG] 23:25:44:49 BROKER/(4420:4430): socketACKCatch: 9
+[DEBUG] 23:25:44:49 BROKER/(4420:4430): socketGet: 10
+[DEBUG] 23:25:44:49 BROKER/(4420:4430): socketACKGet: 11
+[DEBUG] 23:25:44:50 BROKER/(4420:4430): socketAppeared: 12
+[DEBUG] 23:25:44:50 BROKER/(4420:4430): socketCaught: 13
+[DEBUG] 23:25:44:50 BROKER/(4420:4430): socketLocalized: 14
+[INFO] 23:25:44:50 BROKER/(4420:4430): Se suscribió con éxito el proceso a la cola GET
+[INFO] 23:25:44:50 BROKER/(4420:4430): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 23:25:44:50 BROKER/(4420:4430): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 23:25:44:50 BROKER/(4420:4430): START: enviar_mensajes_cacheados
+[DEBUG] 23:25:44:51 BROKER/(4420:4430): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:25:44:51 BROKER/(4420:4430): END: enviar_mensajes_cacheados
+[DEBUG] 23:25:44:51 BROKER/(4420:4430): START: enviar_mensajes_cacheados
+[DEBUG] 23:25:44:51 BROKER/(4420:4430): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:25:44:51 BROKER/(4420:4430): END: enviar_mensajes_cacheados
+[DEBUG] 23:25:44:51 BROKER/(4420:4430): START: enviar_mensajes_cacheados
+[DEBUG] 23:25:44:51 BROKER/(4420:4430): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:25:44:51 BROKER/(4420:4430): END: enviar_mensajes_cacheados
+[INFO] 23:25:44:51 BROKER/(4420:4430): GameCard se suscribio a 3 colas
+[DEBUG] 23:25:44:53 BROKER/(4420:4436): START: escucharSocketACK
+[DEBUG] 23:25:44:54 BROKER/(4420:4437): START: escucharSocketACK
+[DEBUG] 23:25:44:54 BROKER/(4420:4438): START: escucharSocketACK
+[DEBUG] 23:25:44:55 BROKER/(4420:4435): START: escucharSocketMensajesACachear
+[DEBUG] 23:25:44:58 BROKER/(4420:4434): START: escucharSocketMensajesACachear
+[DEBUG] 23:25:44:58 BROKER/(4420:4433): START: escucharSocketMensajesACachear
+[DEBUG] 23:25:46:41 BROKER/(4420:4426): Esperando conexiones...
+[DEBUG] 23:25:49:55 BROKER/(4420:4435): Sigue up
+[DEBUG] 23:25:49:55 BROKER/(4420:4435): Esperando mensajes...
+[DEBUG] 23:25:49:59 BROKER/(4420:4434): Sigue up
+[DEBUG] 23:25:49:59 BROKER/(4420:4433): Sigue up
+[DEBUG] 23:25:49:59 BROKER/(4420:4434): Esperando mensajes...
+[DEBUG] 23:25:49:59 BROKER/(4420:4433): Esperando mensajes...
+[INFO] 23:27:01:227 BROKER/(4506:4506): Logger Iniciado
+[INFO] 23:27:01:234 BROKER/(4506:4506): Archivo de configuracion seteado
+[INFO] 23:27:01:234 BROKER/(4506:4506): Lei la IP 127.0.0.1 y PUERTO 7423
+
+[INFO] 23:27:01:234 BROKER/(4506:4506): Inicializando Memoria Cache
+[INFO] 23:27:01:234 BROKER/(4506:4506): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 23:27:01:242 BROKER/(4506:4511): Esperando conexiones...
+[DEBUG] 23:27:01:242 BROKER/(4506:4512): START: atenderCliente
+[INFO] 23:27:20:517 BROKER/(4526:4526): Logger Iniciado
+[INFO] 23:27:20:518 BROKER/(4526:4526): Archivo de configuracion seteado
+[INFO] 23:27:20:519 BROKER/(4526:4526): Lei la IP 127.0.0.1 y PUERTO 7642
+
+[INFO] 23:27:20:519 BROKER/(4526:4526): Inicializando Memoria Cache
+[INFO] 23:27:20:519 BROKER/(4526:4526): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:27:20:521 BROKER/(4526:4531): Escuchando conexiones al Broker
+[DEBUG] 23:27:20:521 BROKER/(4526:4531): Esperando conexiones...
+[DEBUG] 23:27:24:712 BROKER/(4526:4536): START: atenderCliente
+[INFO] 23:27:24:713 BROKER/(4526:4536): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 23:27:24:713 BROKER/(4526:4536): socketNew: 6
+[DEBUG] 23:27:24:713 BROKER/(4526:4536): socketACKNew: 7
+[DEBUG] 23:27:24:713 BROKER/(4526:4536): socketCatch: 8
+[DEBUG] 23:27:24:713 BROKER/(4526:4536): socketACKCatch: 9
+[DEBUG] 23:27:24:713 BROKER/(4526:4536): socketGet: 10
+[DEBUG] 23:27:24:714 BROKER/(4526:4536): socketACKGet: 11
+[DEBUG] 23:27:24:714 BROKER/(4526:4536): socketAppeared: 12
+[DEBUG] 23:27:24:714 BROKER/(4526:4536): socketCaught: 13
+[DEBUG] 23:27:24:714 BROKER/(4526:4536): socketLocalized: 14
+[INFO] 23:27:24:715 BROKER/(4526:4536): Se suscribió con éxito el proceso a la cola GET
+[INFO] 23:27:24:715 BROKER/(4526:4536): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 23:27:24:715 BROKER/(4526:4536): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 23:27:24:715 BROKER/(4526:4536): START: enviar_mensajes_cacheados
+[DEBUG] 23:27:24:715 BROKER/(4526:4536): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:27:24:715 BROKER/(4526:4536): END: enviar_mensajes_cacheados
+[DEBUG] 23:27:24:715 BROKER/(4526:4536): START: enviar_mensajes_cacheados
+[DEBUG] 23:27:24:715 BROKER/(4526:4536): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:27:24:716 BROKER/(4526:4536): END: enviar_mensajes_cacheados
+[DEBUG] 23:27:24:716 BROKER/(4526:4536): START: enviar_mensajes_cacheados
+[DEBUG] 23:27:24:717 BROKER/(4526:4536): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:27:24:717 BROKER/(4526:4536): END: enviar_mensajes_cacheados
+[INFO] 23:27:24:717 BROKER/(4526:4536): GameCard se suscribio a 3 colas
+[DEBUG] 23:27:24:719 BROKER/(4526:4542): START: escucharSocketACK
+[DEBUG] 23:27:24:719 BROKER/(4526:4543): START: escucharSocketACK
+[DEBUG] 23:27:24:719 BROKER/(4526:4544): START: escucharSocketACK
+[DEBUG] 23:27:24:719 BROKER/(4526:4541): START: escucharSocketMensajesACachear
+[DEBUG] 23:27:24:719 BROKER/(4526:4541): Esperando mensajes...
+[DEBUG] 23:27:24:719 BROKER/(4526:4540): START: escucharSocketMensajesACachear
+[DEBUG] 23:27:24:719 BROKER/(4526:4540): Esperando mensajes...
+[DEBUG] 23:27:24:719 BROKER/(4526:4539): START: escucharSocketMensajesACachear
+[DEBUG] 23:27:24:719 BROKER/(4526:4539): Esperando mensajes...
+[DEBUG] 23:27:26:709 BROKER/(4526:4531): Esperando conexiones...
+[INFO] 23:27:47:865 BROKER/(4562:4562): Logger Iniciado
+[INFO] 23:27:47:870 BROKER/(4562:4562): Archivo de configuracion seteado
+[INFO] 23:27:47:870 BROKER/(4562:4562): Lei la IP 127.0.0.1 y PUERTO 7642
+
+[INFO] 23:27:47:870 BROKER/(4562:4562): Inicializando Memoria Cache
+[INFO] 23:27:47:870 BROKER/(4562:4562): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[DEBUG] 23:27:47:874 BROKER/(4562:4567): Esperando conexiones...
+[DEBUG] 23:27:47:878 BROKER/(4562:4568): START: atenderCliente
+[INFO] 23:28:04:815 BROKER/(4584:4584): Logger Iniciado
+[INFO] 23:28:04:818 BROKER/(4584:4584): Archivo de configuracion seteado
+[INFO] 23:28:04:818 BROKER/(4584:4584): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:28:04:818 BROKER/(4584:4584): Inicializando Memoria Cache
+[INFO] 23:28:04:818 BROKER/(4584:4584): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:28:04:822 BROKER/(4584:4589): Escuchando conexiones al Broker
+[DEBUG] 23:28:04:822 BROKER/(4584:4589): Esperando conexiones...
+[DEBUG] 23:28:18:969 BROKER/(4584:4593): START: atenderCliente
+[INFO] 23:28:18:973 BROKER/(4584:4593): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 23:28:18:973 BROKER/(4584:4593): socketNew: 6
+[DEBUG] 23:28:18:973 BROKER/(4584:4593): socketACKNew: 7
+[DEBUG] 23:28:18:974 BROKER/(4584:4593): socketCatch: 8
+[DEBUG] 23:28:18:974 BROKER/(4584:4593): socketACKCatch: 9
+[DEBUG] 23:28:18:974 BROKER/(4584:4593): socketGet: 10
+[DEBUG] 23:28:18:974 BROKER/(4584:4593): socketACKGet: 11
+[DEBUG] 23:28:18:974 BROKER/(4584:4593): socketAppeared: 12
+[DEBUG] 23:28:18:974 BROKER/(4584:4593): socketCaught: 13
+[DEBUG] 23:28:18:974 BROKER/(4584:4593): socketLocalized: 14
+[INFO] 23:28:18:974 BROKER/(4584:4593): Se suscribió con éxito el proceso a la cola GET
+[INFO] 23:28:18:974 BROKER/(4584:4593): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 23:28:18:974 BROKER/(4584:4593): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 23:28:18:975 BROKER/(4584:4593): START: enviar_mensajes_cacheados
+[DEBUG] 23:28:18:976 BROKER/(4584:4593): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:28:18:976 BROKER/(4584:4593): END: enviar_mensajes_cacheados
+[DEBUG] 23:28:18:976 BROKER/(4584:4593): START: enviar_mensajes_cacheados
+[DEBUG] 23:28:18:976 BROKER/(4584:4593): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:28:18:976 BROKER/(4584:4593): END: enviar_mensajes_cacheados
+[DEBUG] 23:28:18:977 BROKER/(4584:4593): START: enviar_mensajes_cacheados
+[DEBUG] 23:28:18:977 BROKER/(4584:4593): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:28:18:977 BROKER/(4584:4593): END: enviar_mensajes_cacheados
+[INFO] 23:28:18:977 BROKER/(4584:4593): GameCard se suscribio a 3 colas
+[DEBUG] 23:28:18:977 BROKER/(4584:4600): START: escucharSocketACK
+[DEBUG] 23:28:18:977 BROKER/(4584:4601): START: escucharSocketACK
+[DEBUG] 23:28:18:978 BROKER/(4584:4599): START: escucharSocketACK
+[DEBUG] 23:28:18:978 BROKER/(4584:4598): START: escucharSocketMensajesACachear
+[DEBUG] 23:28:18:978 BROKER/(4584:4598): Esperando mensajes...
+[DEBUG] 23:28:18:979 BROKER/(4584:4597): START: escucharSocketMensajesACachear
+[DEBUG] 23:28:18:979 BROKER/(4584:4597): Esperando mensajes...
+[DEBUG] 23:28:18:979 BROKER/(4584:4596): START: escucharSocketMensajesACachear
+[DEBUG] 23:28:18:979 BROKER/(4584:4596): Esperando mensajes...
+[DEBUG] 23:28:20:966 BROKER/(4584:4589): Esperando conexiones...
+[INFO] 23:42:22:630 BROKER/(5095:5095): Logger Iniciado
+[INFO] 23:42:22:632 BROKER/(5095:5095): Archivo de configuracion seteado
+[INFO] 23:42:22:632 BROKER/(5095:5095): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:42:22:632 BROKER/(5095:5095): Inicializando Memoria Cache
+[INFO] 23:42:22:632 BROKER/(5095:5095): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:42:22:632 BROKER/(5095:5100): Escuchando conexiones al Broker
+[DEBUG] 23:42:22:632 BROKER/(5095:5100): Esperando conexiones...
+[DEBUG] 23:42:24:851 BROKER/(5095:5105): START: atenderCliente
+[INFO] 23:42:24:852 BROKER/(5095:5105): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): socketNew: 6
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): socketACKNew: 7
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): socketCatch: 8
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): socketACKCatch: 9
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): socketGet: 10
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): socketACKGet: 11
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): socketAppeared: 12
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): socketCaught: 13
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): socketLocalized: 14
+[INFO] 23:42:24:852 BROKER/(5095:5105): Se suscribió con éxito el proceso a la cola GET
+[INFO] 23:42:24:852 BROKER/(5095:5105): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 23:42:24:852 BROKER/(5095:5105): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): START: enviar_mensajes_cacheados
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): END: enviar_mensajes_cacheados
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): START: enviar_mensajes_cacheados
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:42:24:852 BROKER/(5095:5105): END: enviar_mensajes_cacheados
+[DEBUG] 23:42:24:853 BROKER/(5095:5105): START: enviar_mensajes_cacheados
+[DEBUG] 23:42:24:853 BROKER/(5095:5105): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:42:24:853 BROKER/(5095:5105): END: enviar_mensajes_cacheados
+[INFO] 23:42:24:853 BROKER/(5095:5105): GameCard se suscribio a 3 colas
+[DEBUG] 23:42:24:853 BROKER/(5095:5111): START: escucharSocketACK
+[DEBUG] 23:42:24:853 BROKER/(5095:5112): START: escucharSocketACK
+[DEBUG] 23:42:24:853 BROKER/(5095:5113): START: escucharSocketACK
+[DEBUG] 23:42:24:854 BROKER/(5095:5110): START: escucharSocketMensajesACachear
+[DEBUG] 23:42:24:854 BROKER/(5095:5110): Esperando mensajes...
+[DEBUG] 23:42:24:854 BROKER/(5095:5109): START: escucharSocketMensajesACachear
+[DEBUG] 23:42:24:854 BROKER/(5095:5109): Esperando mensajes...
+[DEBUG] 23:42:24:854 BROKER/(5095:5108): START: escucharSocketMensajesACachear
+[DEBUG] 23:42:24:854 BROKER/(5095:5108): Esperando mensajes...
+[DEBUG] 23:42:26:849 BROKER/(5095:5100): Esperando conexiones...
+[INFO] 23:45:28:395 BROKER/(5176:5176): Logger Iniciado
+[INFO] 23:45:28:395 BROKER/(5176:5176): Archivo de configuracion seteado
+[INFO] 23:45:28:395 BROKER/(5176:5176): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:45:28:396 BROKER/(5176:5176): Inicializando Memoria Cache
+[INFO] 23:45:28:396 BROKER/(5176:5176): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:45:28:396 BROKER/(5176:5181): Escuchando conexiones al Broker
+[DEBUG] 23:45:28:396 BROKER/(5176:5181): Esperando conexiones...
+[DEBUG] 23:45:30:938 BROKER/(5176:5185): START: atenderCliente
+[INFO] 23:45:30:939 BROKER/(5176:5185): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 23:45:30:939 BROKER/(5176:5185): socketNew: 6
+[DEBUG] 23:45:30:939 BROKER/(5176:5185): socketACKNew: 7
+[DEBUG] 23:45:30:939 BROKER/(5176:5185): socketCatch: 8
+[DEBUG] 23:45:30:939 BROKER/(5176:5185): socketACKCatch: 9
+[DEBUG] 23:45:30:939 BROKER/(5176:5185): socketGet: 10
+[DEBUG] 23:45:30:939 BROKER/(5176:5185): socketACKGet: 11
+[DEBUG] 23:45:30:939 BROKER/(5176:5185): socketAppeared: 12
+[DEBUG] 23:45:30:939 BROKER/(5176:5185): socketCaught: 13
+[DEBUG] 23:45:30:939 BROKER/(5176:5185): socketLocalized: 14
+[INFO] 23:45:30:939 BROKER/(5176:5185): Se suscribió con éxito el proceso a la cola GET
+[INFO] 23:45:30:939 BROKER/(5176:5185): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 23:45:30:939 BROKER/(5176:5185): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 23:45:30:940 BROKER/(5176:5185): START: enviar_mensajes_cacheados
+[DEBUG] 23:45:30:940 BROKER/(5176:5185): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:45:30:940 BROKER/(5176:5185): END: enviar_mensajes_cacheados
+[DEBUG] 23:45:30:940 BROKER/(5176:5185): START: enviar_mensajes_cacheados
+[DEBUG] 23:45:30:940 BROKER/(5176:5185): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:45:30:946 BROKER/(5176:5185): END: enviar_mensajes_cacheados
+[DEBUG] 23:45:30:946 BROKER/(5176:5185): START: enviar_mensajes_cacheados
+[DEBUG] 23:45:30:946 BROKER/(5176:5185): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:45:30:946 BROKER/(5176:5185): END: enviar_mensajes_cacheados
+[INFO] 23:45:30:946 BROKER/(5176:5185): GameCard se suscribio a 3 colas
+[DEBUG] 23:45:30:947 BROKER/(5176:5191): START: escucharSocketACK
+[DEBUG] 23:45:30:952 BROKER/(5176:5192): START: escucharSocketACK
+[DEBUG] 23:45:30:952 BROKER/(5176:5193): START: escucharSocketACK
+[DEBUG] 23:45:30:953 BROKER/(5176:5190): START: escucharSocketMensajesACachear
+[DEBUG] 23:45:30:953 BROKER/(5176:5190): Socket escuchado: 13
+[DEBUG] 23:45:30:953 BROKER/(5176:5190): Esperando mensajes...
+[DEBUG] 23:45:30:953 BROKER/(5176:5189): START: escucharSocketMensajesACachear
+[DEBUG] 23:45:30:953 BROKER/(5176:5189): Socket escuchado: 14
+[DEBUG] 23:45:30:953 BROKER/(5176:5189): Esperando mensajes...
+[DEBUG] 23:45:30:953 BROKER/(5176:5188): START: escucharSocketMensajesACachear
+[DEBUG] 23:45:30:953 BROKER/(5176:5188): Socket escuchado: 12
+[DEBUG] 23:45:30:953 BROKER/(5176:5188): Esperando mensajes...
+[DEBUG] 23:45:32:935 BROKER/(5176:5181): Esperando conexiones...
+[INFO] 23:47:13:535 BROKER/(5262:5262): Logger Iniciado
+[INFO] 23:47:13:535 BROKER/(5262:5262): Archivo de configuracion seteado
+[INFO] 23:47:13:535 BROKER/(5262:5262): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:47:13:535 BROKER/(5262:5262): Inicializando Memoria Cache
+[INFO] 23:47:13:535 BROKER/(5262:5262): LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS
+[INFO] 23:47:13:545 BROKER/(5262:5267): Escuchando conexiones al Broker
+[DEBUG] 23:47:13:545 BROKER/(5262:5267): Esperando conexiones...
+[DEBUG] 23:47:17:759 BROKER/(5262:5271): START: atenderCliente
+[INFO] 23:47:17:760 BROKER/(5262:5271): El ID del proceso con el que me conecte es: GAMECARD
+[DEBUG] 23:47:17:760 BROKER/(5262:5271): socketNew: 6
+[DEBUG] 23:47:17:760 BROKER/(5262:5271): socketACKNew: 7
+[DEBUG] 23:47:17:760 BROKER/(5262:5271): socketCatch: 8
+[DEBUG] 23:47:17:760 BROKER/(5262:5271): socketACKCatch: 9
+[DEBUG] 23:47:17:760 BROKER/(5262:5271): socketGet: 10
+[DEBUG] 23:47:17:760 BROKER/(5262:5271): socketACKGet: 11
+[DEBUG] 23:47:17:760 BROKER/(5262:5271): socketAppeared: 12
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): socketCaught: 13
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): socketLocalized: 14
+[INFO] 23:47:17:761 BROKER/(5262:5271): Se suscribió con éxito el proceso a la cola GET
+[INFO] 23:47:17:761 BROKER/(5262:5271): Se suscribió con éxito el proceso a la cola CATCH
+[INFO] 23:47:17:761 BROKER/(5262:5271): Se suscribió con éxito el proceso a la cola NEW
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): START: enviar_mensajes_cacheados
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): END: enviar_mensajes_cacheados
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): START: enviar_mensajes_cacheados
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): END: enviar_mensajes_cacheados
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): START: enviar_mensajes_cacheados
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): Cantidad de mensajes cacheados a enviar: 0
+[DEBUG] 23:47:17:761 BROKER/(5262:5271): END: enviar_mensajes_cacheados
+[INFO] 23:47:17:761 BROKER/(5262:5271): GameCard se suscribio a 3 colas
+[DEBUG] 23:47:17:762 BROKER/(5262:5277): START: escucharSocketACK
+[DEBUG] 23:47:17:762 BROKER/(5262:5278): START: escucharSocketACK
+[DEBUG] 23:47:17:762 BROKER/(5262:5279): START: escucharSocketACK
+[DEBUG] 23:47:17:762 BROKER/(5262:5276): START: escucharSocketMensajesACachear
+[DEBUG] 23:47:17:762 BROKER/(5262:5276): Socket escuchado: 13
+[DEBUG] 23:47:17:763 BROKER/(5262:5276): Esperando mensajes...
+[DEBUG] 23:47:17:764 BROKER/(5262:5275): START: escucharSocketMensajesACachear
+[DEBUG] 23:47:17:764 BROKER/(5262:5275): Socket escuchado: 14
+[DEBUG] 23:47:17:764 BROKER/(5262:5275): Esperando mensajes...
+[DEBUG] 23:47:17:764 BROKER/(5262:5274): START: escucharSocketMensajesACachear
+[DEBUG] 23:47:17:764 BROKER/(5262:5274): Socket escuchado: 12
+[DEBUG] 23:47:17:764 BROKER/(5262:5274): Esperando mensajes...
+[DEBUG] 23:47:19:695 BROKER/(5262:5274): Se recibió un mensaje de tipo 2
