@@ -10,7 +10,12 @@
 
 #include"GameCard.h"
 
-void* procesarGetPokemon(void* args);
+typedef struct{
+	t_get_pokemon* get_pokemon;
+	t_localized_pokemon* puntero_a_localized_pokemon;
+}t_argumentos_procesar_get;
+
+void procesarGetPokemon(t_argumentos_procesar_get* args);
 void* procesarCatchPokemon(void* args);
 void procesarNewPokemon(void* args);
 
