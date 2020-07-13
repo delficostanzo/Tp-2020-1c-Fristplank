@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
  * 			./GameBoy TEAM APPEARED_POKEMON Pikachu 5 3
  *
  * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD] [ID_MENSAJE]
- * ejemplo:
+ * ejemplo: ./GameBoy GAMECARD NEW_POKEMON Pikachu 2 6 2 -1
  *
  * DONE ./gameboy GAMECARD CATCH_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
  * ejemplo:
@@ -250,15 +250,12 @@ void recibirEImprimirMensaje(int socketBroker, op_code cola){
 			for(int i = 0; i < localized_pokemon->cantidadPosiciones; i++){
 				t_posicion* posicion = list_get(localized_pokemon->listaPosiciones, i);
 				log_info(logger, "Posicion numero %d: (X,Y) = (%d,%d)", i + 1, posicion->posicionX, posicion->posicionY);
+				free(posicion);
 			}
 
 			list_destroy(localized_pokemon->listaPosiciones);
-
-			//TODO arreglar estos free
-//			puts("antes del free del nombre");
-//			free(localized_pokemon->pokemon);
-//			puts("despues del free del nombre");
-//			free(localized_pokemon);
+			free(localized_pokemon->pokemon);
+			free(localized_pokemon);
 			break;
 		default:
 			log_info(logger, "El tipo de mensaje es incorrecto");
