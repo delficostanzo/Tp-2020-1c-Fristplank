@@ -9,21 +9,12 @@
 #define SRC_CONEXION_H_
 
 #include "Broker.h"
-#include "colas.h"
+#include "repositorioSuscriptores.h"
 
 typedef struct {
-
-	op_code tipoMensaje;
-	int ID;
-	int IDCorrelativo;
-	int posicion;
-	int tamanioMensaje; // con /0
-	int tamanioMensajeEnMemoria; // sin /0
-	t_list * ACKSuscriptores;
-	int flagLRU;
-	char ultimaReferencia;
-//int flagFIFO; id mensaje
-} t_metadata;
+	int* socketNuevo;
+	int* socketOG;
+}argumentos;
 
 typedef struct{
 	int id;
@@ -35,12 +26,6 @@ typedef struct{
 	int* socket;
 	op_code cola;
 }t_args_socket_ACK;
-
-
-typedef struct {
-	int* socketNuevo;
-	int* socketOG;
-}argumentos;
 
 //BORRAR
 int socketNew;
@@ -56,8 +41,8 @@ int socketLocalized;
 
 int conexionCliente;
 int socketCliente;
+
 void * esperarClientes();
-//void atenderCliente(int* cliente);
 void atenderCliente(argumentos* sockets);
 
 void lanzarHiloEscucha(int id, int* socket);

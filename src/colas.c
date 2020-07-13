@@ -8,17 +8,23 @@
 
 
 void agregarMensajeACola(t_paquete * nuevoPaquete) {
+	log_debug(logger, "START: agregarMensajeACola");
 
 	t_metadata * nuevaMeta = malloc(sizeof(t_metadata));
 	nuevaMeta->tipoMensaje = nuevoPaquete->codigo_operacion;
+
 	pthread_mutex_lock(&mutexIdMensaje);
+	log_debug(logger, "Entro al mutex de ID para generarlo");
 	nuevaMeta->ID = crearID();
 	nuevoPaquete->ID = nuevaMeta->ID;
 	pthread_mutex_unlock(&mutexIdMensaje);
+
 	nuevaMeta->IDCorrelativo = nuevoPaquete->ID_CORRELATIVO;
 	nuevaMeta->tamanioMensaje = nuevoPaquete->buffer->size;
 	nuevaMeta->flagLRU = 0;
 	nuevaMeta->posicion = SINPARTICION;
+
+	log_debug(logger, "Procedo a buscar la cola %d", nuevoPaquete->codigo_operacion);
 
 	for (int i = 0; i < 6; i++) {
 		if (cola[i].nombreCola == nuevoPaquete->codigo_operacion) {
@@ -31,20 +37,15 @@ void agregarMensajeACola(t_paquete * nuevoPaquete) {
 			pthread_mutex_unlock(&mutexMemoria);
 			pthread_mutex_unlock(&mutexColas);
 
-			log_info(logger, "Se agregó un nuevo mensaje a la cola %s.",ID_COLA[i]); //LOG OBLIGATORIO (3)
+			log_info(logger, "Se agregó un nuevo mensaje a la cola %s.",ID_COLA[i+1]); //LOG OBLIGATORIO (3)
 		}
 	}
-	free(nuevaMeta);
 }
 
 void agregarSuscriptorACola(int idSuscriptor, op_code tipoCola) {
 
-	int colaIndicada = -1;
-
 	for (int i = 0; i < 6; i++) {
 		if (cola[i].nombreCola == tipoCola) {
-			colaIndicada = i;
-
 			if (!existeSuscriptor(cola[i].suscriptores, idSuscriptor) != 0) {
 				list_add(cola[i].suscriptores, (int*) idSuscriptor);
 				log_info(logger, "Se suscribió con éxito el proceso a la cola %s", ID_COLA[tipoCola]);

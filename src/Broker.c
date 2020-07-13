@@ -29,98 +29,147 @@ int main(void) {
 	pthread_mutex_init(&mutexIdMensaje,NULL);
 
 
-	//crear conexion, un socket conectado
-	//int conexion = crearSocket();
+	/* Prueba
+	 *
 
-	pthread_t threadClientes;
-	pthread_create(&threadClientes, NULL, (void*) esperarClientes, NULL);
-	//sem
-	//pthread_t threadAdministrador;
-	//pthread_create(&threadAdministrador,NULL,(void*)administarColas,NULL);
+	t_paquete* paquete = malloc(sizeof(t_paquete));
+	paquete->codigo_operacion = GET_POKEMON;
+	paquete->ID = -1;
+	paquete->ID_CORRELATIVO = -1;
+	paquete->buffer = malloc(sizeof(t_buffer));
+	paquete->buffer->size = sizeof(uint32_t) + 5;
+	t_get_pokemon* poke = malloc(sizeof(t_get_pokemon));
+	poke->pokemon = string_from_format("Hola");
+	poke->lengthOfPokemon = 4;
+	paquete->buffer->stream = poke;
+	agregarMensajeACola(paquete);
 
-	//loguear mensaje recibido
-	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
-	pthread_join(threadClientes,NULL);
-	//terminar_programa(conexion, logger, config);
+	t_metadata* mensaje = list_get(cola[4].mensajes, 0);
+	t_get_pokemon* asdasd = leerMemoria(mensaje);
+	log_debug(logger, asdasd->pokemon);*/
+
+	uint32_t asd = potenciaDeDosProxima(7);
+	log_debug(logger, "%d", asd);
+
+	int verdad = esPotenciaDeDos(8);
+	log_debug(logger, "%d", verdad);
+
+	verdad = esPotenciaDeDos(1024);
+	log_debug(logger, "%d", verdad);
+
+	int mentira = esPotenciaDeDos(6);
+	log_debug(logger, "%d", mentira);
+
+	mentira = sizeof(size_t);
+	log_debug(logger, "%d", mentira);
+
+	uint32_t nodesize = 128;
+	nodesize >>= 1;
+	log_debug(logger, "%d", nodesize);
+
+
+//	pthread_t threadClientes;
+//	pthread_create(&threadClientes, NULL, (void*) esperarClientes, NULL);
+
+
+
+//	pthread_join(threadClientes,NULL);
+//	terminar_programa(conexion, logger, config);
 
 
 }
 
-	t_config* leer_config() {
-		t_config* config =
-				config_create(
-						"/home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/Broker/src/broker.config");
+t_config* leer_config() {
+	t_config* config =
+			config_create(
+					"/home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/Broker/src/broker.config");
 
-		if (config == NULL) {
-			printf("No pude leer la config \n");
-			exit(2);
+	if (config == NULL) {
+		printf("No pude leer la config \n");
+		exit(2);
+	}
+	log_info(logger, "Archivo de configuracion seteado");
+	return config;
+}
+
+void terminar_programa(int conexion, t_log* logger, t_config* config) {
+	if (logger != NULL) {
+		log_destroy(logger);
+	}
+
+	if (config != NULL) {
+		config_destroy(config); //destruye la esctructura de config en memoria, no lo esta eliminando el archivo de config
+	}
+
+	liberar_conexion(conexion);
+
+}
+
+void iniciarMemoria() {
+
+	log_info(logger, "Inicializando Memoria Cache");
+
+	if(TAMANO_MEMORIA < 1){
+		log_error(logger, "LA CANTIDAD DE MEMORIA INDICADA ES NULA O NEGATIVA. SE ABORTA.");
+		exit(0);
+	}
+
+	else{
+		if (string_equals_ignore_case(ALGORITMO_MEMORIA, "PARTICIONES")) {
+			log_info(logger, "LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS");
+			memoriaCache = malloc(TAMANO_MEMORIA);
 		}
-		log_info(logger, "Archivo de configuracion seteado");
-		return config;
-	}
 
-	void terminar_programa(int conexion, t_log* logger, t_config* config) {
-		if (logger != NULL) {
-			log_destroy(logger);
-		}
+		else if (ALGORITMO_MEMORIA == "BS") {
+			log_info(logger, "LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM");
 
-		if (config != NULL) {
-			config_destroy(config); //destruye la esctructura de config en memoria, no lo esta eliminando el archivo de config
-		}
-
-		liberar_conexion(conexion);
-
-	}
-
-
-	int crearID() {
-		return IDmsg++;
-
-	}
-
-	void iniciarMemoria() {
-		//while()
-		log_info(logger, "Inicializando Memoria Cache");
-		memoriaCache = malloc(TAMANO_MEMORIA);
-
-		if (string_equals_ignore_case(ALGORITMO_MEMORIA, "PARTICIONES"))
-			log_info(logger,
-					"LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS"); //no me reconoce el strcpm.
-		//else if (ALGORITMO_MEMORIA == "BS") dividirMemoria();
-		else
-			log_error(logger, "Error al iniciar la Memoria Cache");
-	}
-	void iniciarColas() {
-		pthread_mutex_lock(&mutexColas);
-		IDmsg = -1;
-		cola[0].nombreCola = NEW_POKEMON;
-		cola[0].suscriptores = list_create();
-		cola[0].mensajes = list_create();
-		cola[1].nombreCola = APPEARED_POKEMON;
-		cola[1].suscriptores = list_create();
-		cola[1].mensajes = list_create();
-		cola[2].nombreCola = CATCH_POKEMON;
-		cola[2].suscriptores = list_create();
-		cola[2].mensajes = list_create();
-		cola[3].nombreCola = CAUGHT_POKEMON;
-		cola[3].suscriptores = list_create();
-		cola[3].mensajes = list_create();
-		cola[4].nombreCola = GET_POKEMON;
-		cola[4].suscriptores = list_create();
-		cola[4].mensajes = list_create();
-		cola[5].nombreCola = LOCALIZED_POKEMON;
-		cola[5].suscriptores = list_create();
-		cola[5].mensajes = list_create();
-		pthread_mutex_unlock(&mutexColas);
-	}
-
-	t_log* iniciar_logger(void) {
-			t_log * log = malloc(sizeof(t_log));
-			log = log_create("broker.log", "BROKER", 1, LOG_LEVEL_DEBUG);
-			if (log == NULL) {
-				printf("No pude crear el logger \n");
-				exit(1);
+			if (!esPotenciaDeDos(TAMANO_MEMORIA)){
+				log_error(logger, "LA CANTIDAD DE MEMORIA INDICADA NO ES POTENCIA DE DOS. SE ABORTA.");
+				exit(0);
 			}
-			log_info(log, "Logger Iniciado");
-			return log;
+
+			memoriaCache = malloc(TAMANO_MEMORIA);
+			iniciarBuddySystem();
 		}
+		else{
+			log_error(logger, "EL TIPO DE ESTRUCTURA DE MEMORIA CACHE INDICADA ES INVALIDA. SE ABORTA.");
+			exit(0);
+		}
+	}
+}
+
+void iniciarColas() {
+	pthread_mutex_lock(&mutexColas);
+	IDmsg = -1;
+	cantidadParticionesEliminadas = 0;
+	cola[0].nombreCola = NEW_POKEMON;
+	cola[0].suscriptores = list_create();
+	cola[0].mensajes = list_create();
+	cola[1].nombreCola = APPEARED_POKEMON;
+	cola[1].suscriptores = list_create();
+	cola[1].mensajes = list_create();
+	cola[2].nombreCola = CATCH_POKEMON;
+	cola[2].suscriptores = list_create();
+	cola[2].mensajes = list_create();
+	cola[3].nombreCola = CAUGHT_POKEMON;
+	cola[3].suscriptores = list_create();
+	cola[3].mensajes = list_create();
+	cola[4].nombreCola = GET_POKEMON;
+	cola[4].suscriptores = list_create();
+	cola[4].mensajes = list_create();
+	cola[5].nombreCola = LOCALIZED_POKEMON;
+	cola[5].suscriptores = list_create();
+	cola[5].mensajes = list_create();
+	pthread_mutex_unlock(&mutexColas);
+}
+
+t_log* iniciar_logger(void) {
+		t_log * log = malloc(sizeof(t_log));
+		log = log_create("broker.log", "BROKER", 1, LOG_LEVEL_DEBUG);
+		if (log == NULL) {
+			printf("No pude crear el logger \n");
+			exit(1);
+		}
+		log_info(log, "Logger Iniciado");
+		return log;
+	}

@@ -8,7 +8,9 @@
 #ifndef SRC_COLAS_H_
 #define SRC_COLAS_H_
 
-#include "Broker.h"
+#include "variables.h"
+#include "particiones.h"
+#include "memoriaCache.h"
 
 #define SINPARTICION -1;
 

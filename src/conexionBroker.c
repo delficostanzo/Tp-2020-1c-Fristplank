@@ -5,8 +5,7 @@
  *      Author: utnso
  */
 
-#include "conexionBroker.h"
-
+#include "Broker.h"
 
 void * esperarClientes() {
 
@@ -34,7 +33,6 @@ void * esperarClientes() {
 	}
 }
 
-//void atenderCliente(int * cliente) {
 void atenderCliente(argumentos* sockets) {
 	log_debug(logger, "START: atenderCliente");
 
