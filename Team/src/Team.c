@@ -16,8 +16,7 @@ int main(int argc, char *argv[]) {
 //	pasarAReadyEntrenador(entrenador1);
 //	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
 
-
-	objetivosTotales = getObjetivosTotalesDesde(entrenadores);
+	objetivosTotales = getObjetivosTotalesDesde(entrenadores); //son pokes copias
 	objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
 	objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
 

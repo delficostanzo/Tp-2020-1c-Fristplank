@@ -136,7 +136,6 @@ void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cl
 t_paquete* recibir_mensaje(int socket_cliente) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	//TODO: en el caso de prueba 5, por alguna razon muere aca
 	if(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) < 1){
 		//ACA ENTRA SI HAY ERROR
 		free(paquete);

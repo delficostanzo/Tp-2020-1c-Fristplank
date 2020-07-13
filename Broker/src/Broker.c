@@ -87,7 +87,6 @@ int main(void) {
 		suscripcionCaught = aceptarConexion(conexion);
 		socketACKCaught = aceptarConexion(conexion);
 
-		//liberar_conexion(teamSocket);
 
 		log_info(logger, "Team se suscribio a 3 colas");
 		break;
@@ -117,7 +116,7 @@ int main(void) {
 		sleep(2);
 		enviarIdCatchA(socketIdCatch);
 
-		sleep(7);
+		sleep(15);
 		enviarCaughtA(suscripcionCaught);
 		//recibirACK(socketACKCaught);
 	}
@@ -166,9 +165,19 @@ int main(void) {
 
 	destruirLog(logger);
 
-	//loguear mensaje recibido
-	//log_info(logger, "El mensaje recibido es: %s\n", mensaje);
-	//terminar_programa(conexion, logger, config);
+
+//	terminar_programa(config);
+//
+//	liberarConexion(socketGet);
+//	//liberarConexion(socketIdGet);
+//	liberarConexion(suscripcionAppeared);
+//	//liberarConexion(socketACKAppeared);
+//	liberarConexion(suscripcionLocalized);
+//	//liberarConexion(socketACKLocalized);
+//	liberarConexion(socketCatch);
+//	liberarConexion(socketIdCatch);
+//	liberarConexion(suscripcionCaught);
+//	liberarConexion(socketACKCaught);
 
 }
 
@@ -438,21 +447,25 @@ t_config* leer_config()
 }
 
 
-void terminar_programa(int conexion, t_log* logger, t_config* config)
+void terminar_programa(t_config* config)
 {
-	if(logger != NULL){
-		log_destroy(logger);
-	}
 
 	if(config != NULL){
 		config_destroy(config); //destruye la esctructura de config en memoria, no lo esta eliminando el archivo de config
 	}
 
-	liberar_conexion(conexion);
 }
 
 void destruirLog(t_log* logger) {
 	if (logger != NULL) {
 		log_destroy(logger);
 	}
+}
+
+void liberarConexion(int socket_cliente) {
+	t_log* logger = iniciar_log();
+	if (close(socket_cliente) == -1) {
+		log_error(logger, "Error al cerrar la conexion");
+	}
+	destruirLog(logger);
 }

@@ -193,13 +193,11 @@ t_list* getObjetivosTotalesDesde(t_list* entrenadores) {
 	//es una lista de listas
 	objetivosTotales = list_map(entrenadores, (erasedTypeMap)getObjetivosDesde);
 
-	//TODO: consume 1 rafaga de CPU por cada objetivo porque los envia con GET
-
 	t_list* objetivosAgrupados = list_create();
 
 	void agregarAUnaNuevaListaConcat(t_list* objetivosDeUnEntrenador) {
 		for(int index=0; index<list_size(objetivosDeUnEntrenador); index++){
-			PokemonEnElMapa* pokemonEnLaLista = list_get(objetivosDeUnEntrenador,index);
+			PokemonEnElMapa* pokemonEnLaLista = asignarPokemonCopia(list_get(objetivosDeUnEntrenador,index));
 			setPokemonA(objetivosAgrupados,pokemonEnLaLista);
 		}
 	}
