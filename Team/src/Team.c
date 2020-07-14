@@ -8,14 +8,12 @@ int main(int argc, char *argv[]) {
 
 	config = leerConfigDesde("src/team.config");
 	iniciarVariables();
+
+
 	//obtiene la lista de entrenadores desde el config
 	entrenadores = getEntrenadoresDesde("src/team.config");
 	t_list* entrena = entrenadores;
 	quickLog("$-Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
-
-//	Entrenador* entrenador1 = list_get(entrenadores, 0);
-//	pasarAReadyEntrenador(entrenador1);
-//	log_info(logger, "El entrenador paso a estar en exec para atrapar a %s", entrenador1->movimientoEnExec->pokemonNecesitado->nombre);
 
 	objetivosTotales = getObjetivosTotalesDesde(entrenadores); //son pokes copias
 	objetivosAtrapados = getTotalAtrapadosDesde(entrenadores);
@@ -29,8 +27,8 @@ int main(int argc, char *argv[]) {
 
 
 	//Lanzar hilo para escuchar a GameBoy
-//	pthread_t hiloEscuchaGameBoy;
-//	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
+	pthread_t hiloEscuchaGameBoy;
+	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
 
 	while(!generarSocketsConBroker()){
@@ -55,8 +53,8 @@ int main(int argc, char *argv[]) {
 
 	planificarEntrenadores();
 
-	pthread_join(hilosEscuchaBroker, NULL);
-	//pthread_join(hiloEscuchaGameBoy, NULL);
+	//pthread_join(hilosEscuchaBroker, NULL);
+	pthread_join(hiloEscuchaGameBoy, NULL);
 
 	//list_destroy_and_destroy_elements(entrenadores, free);
 

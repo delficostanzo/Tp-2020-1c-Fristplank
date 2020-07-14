@@ -15,15 +15,15 @@ int main(int argc, char* argv[]) {
 	config = leer_config();
 
 /*	DONE ./gameboy BROKER NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
- * ejemplo: ./GameBoy BROKER NEW_POKEMON "pikachu" 3 7 2
+ * ejemplo: ./GameBoy BROKER NEW_POKEMON pikachu 3 7 2
  *
- * DONE ./gameboy BROKER APPEARED_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
+ * DONE ./gameboy BROKER APPEARED_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE_CORRELATIVO]
  * ejemplo:
  *
  * DONE ./gameboy BROKER CATCH_POKEMON [POKEMON] [POSX] [POSY]
  * ejemplo:
  *
- * DONE ./gameboy BROKER CAUGHT_POKEMON [ID_MENSAJE] [OK/FAIL]
+ * DONE ./gameboy BROKER CAUGHT_POKEMON [ID_MENSAJE_CORRELATIVO] [OK/FAIL]
  * ejemplo:
  *
  * DONE ./gameboy BROKER GET_POKEMON [POKEMON]
@@ -31,14 +31,15 @@ int main(int argc, char* argv[]) {
  *
  * DONE ./gameboy TEAM APPEARED_POKEMON [POKEMON] [POSX] [POSY]
  * ejemplo:
+ * 			./GameBoy TEAM APPEARED_POKEMON Pikachu 5 3
  *
- * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD]
+ * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD] [ID_MENSAJE]
  * ejemplo:
  *
  * DONE ./gameboy GAMECARD CATCH_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
  * ejemplo:
  *
- * DONE ./gameboy GAMECARD GET_POKEMON [POKEMON]
+ * DONE ./gameboy GAMECARD GET_POKEMON [POKEMON] [ID_MENSAJE]
  * ejemplo:
  *
  * DONE ./gameboy SUSCRIPTOR [COLA_DE_MENSAJES] [TIEMPO]
@@ -282,16 +283,20 @@ int conectarAModulo(String PUERTO, String IP){
 		log_debug(logger, "Conectando al módulo...");
 	}
 
-	id_proceso idProceso;
-	idProceso = responderHandshake(conexion, GAMEBOY);
-	log_info(logger, "El id del proceso con el que me conecte es: %s", ID_PROCESO[idProceso]);
+	t_handshake* handshake = malloc(sizeof(t_handshake));
+	handshake->id = GAMEBOY;
+	handshake->idUnico = 1;
 
+	t_handshake* handshakeRecibido = responderHandshake(conexion, handshake);
+	log_info(logger, "El id del proceso con el que me conecte es: %s | ID Unico: %d", ID_PROCESO[handshakeRecibido->id], handshakeRecibido->idUnico);
+
+	free(handshake);
 	return conexion;
 }
 
 t_config* leer_config(void)
 {
-	t_config* config = config_create("gameboy.config");
+	t_config* config = config_create("./gameboy.config");
 
 	if(config == NULL){
 		printf("No pude leer la config \n");

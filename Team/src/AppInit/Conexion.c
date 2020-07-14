@@ -5,7 +5,8 @@
 void* escucharGameBoy(){
 	conexionGameboy = crearSocket();
 	if(escuchaEn(conexionGameboy, puertoTeam)){
-		quickLog("$-Escuchando conexiones del G;ameBoy");
+		quickLog("$-Escuchando conexiones del GameBoy");
+		log_info(LO, "Escuchando conexiones del GameBoy");
 	}
 
 	while(1){
@@ -19,6 +20,7 @@ void* escucharGameBoy(){
 		handshakeResponse = iniciarHandshake(socketGameBoy, handshakePropio);
 		free(handshakePropio);
 		free(handshakeResponse);
+
 
 		quickLog("$-Me conecté con GameBoy");
 
@@ -115,7 +117,7 @@ int generarSocketsConBroker() {
 		quickLog("$-Ya se conecto a la cola de catch para poder enviarle mensajes");
 		if (conectarA(socketIdCatch, IP_BROKER, PUERTO_BROKER)) {
 			quickLog("$-Socket de recepcion de ids Catch guardado.");
-			sem_post(&semaforoCatch);
+			//sem_post(&semaforoCatch);
 		//el envio lo hace cada entrenador!
 		} else{
 			conexionCorrecta = -1;
