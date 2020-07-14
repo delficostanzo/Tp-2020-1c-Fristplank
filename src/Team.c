@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
 	iniciarVariables();
 	//obtiene la lista de entrenadores desde el config
 	entrenadores = getEntrenadoresDesde("src/team.config");
+	t_list* entrena = entrenadores;
 	quickLog("$-Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
 //	Entrenador* entrenador1 = list_get(entrenadores, 0);

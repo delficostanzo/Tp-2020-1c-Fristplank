@@ -302,6 +302,20 @@ PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador){
 }
 
 
+//siempre usar entre mutex de entrenadores
+int esteComoIntercambio(Entrenador* entrenador) {
+
+	int estaComoIntercambio(Entrenador* entrenadorMoviendose) {
+		return entrenadorMoviendose->movimientoEnExec->numeroDelEntrenadorIntercambio == entrenador->numeroEntrenador;
+	}
+
+	pthread_mutex_lock(&mutexEntrenadores);
+	int cumple  = list_any_satisfy(entrenadores, (erasedTypeFilter) estaComoIntercambio);
+	pthread_mutex_unlock(&mutexEntrenadores);
+
+	return cumple;
+}
+
 
 
 
