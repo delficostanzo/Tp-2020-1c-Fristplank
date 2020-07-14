@@ -24,7 +24,7 @@ void planificarEntrenadores(){
 		pasarAReadyParaAtrapar();
 		pasarAReadyParaIntercambiar();
 		pasarAExec();
-		//terminarSiTodosExit();
+		terminarSiTodosExit();
 	}
 
 }
@@ -144,9 +144,11 @@ void pasarAReadyParaIntercambiar(){
 
 		for(int index = 0; index < list_size(entrenadoresDeadlock); index++) {
 			Entrenador* bloqueado = list_get(entrenadoresDeadlock, index);
+
 			//se pasan invertidos los pokemones porque este pokemon necesitado es de un entrenador que pasaria como innecesario de OTRO entrenador
 			Entrenador* entrenadorDeIntercambio = buscarEntrenadorParaIntercambiar(bloqueado->movimientoEnExec->pokemonNecesitado);
-			if(entrenadorDeIntercambio != NULL) {
+			//si existe un entrenador que tenga para intercambiar el que el bloqueado necesita y mientras no este por ser intercambiado por otro entrenador
+			if(entrenadorDeIntercambio != NULL && esteComoIntercambio(entrenadorDeIntercambio) != 1) {
 				//pasa a ready, sus movimientos ya estan definidos
 				pthread_mutex_lock(&entrenadorDeIntercambio->mutexEstado);
 				entrenadorDeIntercambio->estado = 2;
@@ -274,6 +276,9 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 		disminuirCantidadPokemones(nuevoAtrapadoDelMovido, entrenadorBloqueado->pokemonesAtrapados);
 
 		log_info(LO, "Se resolvio el deadlock entre los entrenadores %d y %d", entrenadorMovido->numeroEntrenador, entrenadorBloqueado->numeroEntrenador);
+		//para que pueda volver a deadlock y no este en el intercambio viejo
+		entrenadorMovido->movimientoEnExec->numeroDelEntrenadorIntercambio = 0;
+		entrenadorBloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio = 0;
 		estadoSiAtrapo(entrenadorMovido);
 		estadoSiAtrapo(entrenadorBloqueado);
 
@@ -324,8 +329,8 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 		enviarCatchDesde(entrenador);
 		sem_post(&semaforoCatch);
 
-		//cada vez que el entrenador envia un CATCH, consume una rafaga de CPU
-		entrenador->ciclosCPUConsumido += 1;
+		log_info(LO, "El entrenador %d consumio %d ciclos de CPU", entrenador->numeroEntrenador, entrenador->ciclosCPUConsumido);
+
 
 		log_info(LO, "El entrenador %d paso a block esperando la respuesta del catch mandado", entrenador->numeroEntrenador);
 		pasarABlockEsperando(entrenador);
@@ -378,7 +383,7 @@ void logearResultadosEntrenadores(){
 }
 
 int ciclosTotales() {
-	int total;
+	int total = 0;
 	pthread_mutex_lock(&mutexEntrenadores);
 	for(int index = 0; index < list_size(entrenadores); index++) {
 		Entrenador* entrenador = list_get(entrenadores, index);
