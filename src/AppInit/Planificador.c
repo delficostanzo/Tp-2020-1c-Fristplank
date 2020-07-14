@@ -325,17 +325,9 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 
 
 		//el socket ya esta conectado con el broker en Conexion
-		sem_wait(&semaforoCatch);
+		//sem_wait(&semaforoCatch);
 		enviarCatchDesde(entrenador);
-		sem_post(&semaforoCatch);
-
-		log_info(LO, "El entrenador %d consumio %d ciclos de CPU", entrenador->numeroEntrenador, entrenador->ciclosCPUConsumido);
-
-
-		log_info(LO, "El entrenador %d paso a block esperando la respuesta del catch mandado", entrenador->numeroEntrenador);
-		pasarABlockEsperando(entrenador);
-		quickLog("$-Se paso a estado bloqueado esperando respuesta");
-
+		//sem_post(&semaforoCatch);
 
 	} else if (QUANTUM == distanciaHastaPokemon){ // se llega a mover hasta el poke pero no le alcanzo el quantum para mandar el catch
 			entrenador->ciclosCPUConsumido += distanciaHastaPokemon;
