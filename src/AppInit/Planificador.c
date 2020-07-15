@@ -61,7 +61,9 @@ void pasarAReadyParaAtrapar(){
 
 		//asignamos objetivo al entrenador mas cercano
 		for(int index=0; index < cantidadDePokesLibres; index++){
+			pthread_mutex_lock(&mutexPokemonesLibres);
 			PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
+			pthread_mutex_unlock(&mutexPokemonesLibres);
 			if(pokemonLibre != NULL){
 				pthread_mutex_lock(&mutexEntrenadores);
 				//apuntan a los mismos entrenadores globales
