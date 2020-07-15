@@ -25,11 +25,16 @@ int main(int argc, char *argv[]) {
 	log_info(logger, "$-La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
 	log_info(logger, "$-La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
 
+	crearHilosDeEntrenadores();
+	quickLog("$-Se crea un hilo por cada entrenador");
 
 	//Lanzar hilo para escuchar a GameBoy
 	pthread_t hiloEscuchaGameBoy;
 	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
 
+
+
+	planificarEntrenadores();
 
 	while(!generarSocketsConBroker()){
 		sleep(TIEMPO_RECONEXION);
@@ -48,12 +53,7 @@ int main(int argc, char *argv[]) {
 	//recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
 
 
-	crearHilosDeEntrenadores();
-	quickLog("$-Se crea un hilo por cada entrenador");
-
-	planificarEntrenadores();
-
-	//pthread_join(hilosEscuchaBroker, NULL);
+	pthread_join(hilosEscuchaBroker, NULL);
 	pthread_join(hiloEscuchaGameBoy, NULL);
 
 	//list_destroy_and_destroy_elements(entrenadores, free);

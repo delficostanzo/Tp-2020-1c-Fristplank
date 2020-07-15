@@ -107,10 +107,10 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 	if (paqueteAppeared != NULL) {
 		t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
-			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
 			agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
 
+			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
 		//	free(appeared->pokemon);
 		//	free(appeared->posicion);
@@ -144,6 +144,7 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 			PokemonEnElMapa* pokeExistente = buscarPorNombre(nombreNuevoPoke, pokemonesLibres);
 
 			pokeExistente->cantidad ++;
+			pthread_mutex_unlock(&mutexPokemonesLibres);
 		} else {
 			//solo lo agrego a la lista
 			PokemonEnElMapa* pokemonNuevo = newPokemon();
@@ -154,15 +155,16 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 			pthread_mutex_lock(&mutexPokemonesRecibidos);
 			list_add(pokemonesRecibidos, pokemonNuevo);
 			pthread_mutex_unlock(&mutexPokemonesRecibidos);
+			pthread_mutex_unlock(&mutexPokemonesLibres);
 		}
-		pthread_mutex_unlock(&mutexPokemonesLibres);
+
 	}
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
 
-	pthread_mutex_lock(&mutexPokemonesLibres);
-	log_info(logger, "$-Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
-	t_list* libres = pokemonesLibres;
-	pthread_mutex_unlock(&mutexPokemonesLibres);
+//	pthread_mutex_lock(&mutexPokemonesLibres);
+//	log_info(logger, "$-Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
+//	t_list* libres = pokemonesLibres;
+//	pthread_mutex_unlock(&mutexPokemonesLibres);
 
 }
 
