@@ -227,8 +227,9 @@ Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonNecesitado)
 
 //solo se puede pasar un entrenador a estado EXEC si no hay ninguno en estado EXEC
 void pasarAExec(){
-
+	pthread_mutex_lock(&mutexListaEntrenadoresReady);
 	Entrenador* entrenador = buscarPrimerEntrenador();
+	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
 
 	//si no hay ningun entrenador en exec y quedan entrenadores en ready
 	if(entrenadorExec() == NULL && entrenador != NULL){
@@ -252,14 +253,14 @@ void pasarAExec(){
 Entrenador* buscarPrimerEntrenador() {
 
 	//el primer entrenador de los ready es el que esta en indice 0
-	pthread_mutex_lock(&mutexListaEntrenadoresReady);
+	//pthread_mutex_lock(&mutexListaEntrenadoresReady);
 	t_list* entrenadoresR = listaEntrenadoresReady;
 	if(list_is_empty(listaEntrenadoresReady) != 1) {
 		Entrenador* entrenador = list_get(listaEntrenadoresReady, 0);
-		pthread_mutex_unlock(&mutexListaEntrenadoresReady);
+		//pthread_mutex_unlock(&mutexListaEntrenadoresReady);
 		return entrenador;
 	}
-	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
+	//pthread_mutex_unlock(&mutexListaEntrenadoresReady);
 	return NULL;
 }
 
