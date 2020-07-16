@@ -146,8 +146,6 @@ void cachearCaughtPokemon(t_metadata * meta, void * mensaje, void ** mensajeACac
 	meta->tamanioMensajeEnMemoria = offset;
 }
 
-/* ----------------------------------------------*/
-//SI VAS A ENVIAR UN MENSAJE DEBERAS CREAR EN TU FUNCION UN VOID * MENSAJE = MALLOC(meta->tamanioMensaje);
 void * descachearMensaje(void * mensajeEnMemoria, t_metadata * meta) {
 	void * estructuraPokemonReturn;
 	switch (meta->tipoMensaje) {
@@ -312,25 +310,44 @@ void modificarUltimaReferencia(t_metadata * meta, char tipoReferencia) {
 	meta->ultimaReferencia = tipoReferencia;
 }
 
-/* el operando >> mueve los bits del numero en la izquierda hacia la izquierda
- * utilizandolo con los valores de abajo logramos que el valor se incremente en potencias de dos
- * sacando la minima potencia de 2 que sea mayor al numero enviado por parametro
- */
-int potenciaDeDosProxima(uint32_t tamanio) {
-    tamanio -= 1;
-    tamanio = tamanio | (tamanio >> 1);
-    tamanio = tamanio | (tamanio >> 2);
-    tamanio = tamanio | (tamanio >> 4);
-    tamanio = tamanio | (tamanio >> 8);
-    tamanio = tamanio | (tamanio >> 16);
-    return tamanio + 1;
+
+void compactarMemoria() {
+
+	int offset = 0;
+	int diferencia;
+	t_list * particiones = list_create();
+
+	for (int j = 0; j < 6; j++) {
+		list_add_all(particiones, cola[j].mensajes);
+	}
+
+	list_sort(particiones, (void*) ordenarPosicion);
+	int cantParticiones = list_size(particiones);
+
+	for (int i = 0; i < cantParticiones; i++) {
+		t_metadata* auxParticion = list_get(particiones, i);
+
+		if (offset == auxParticion->posicion) {
+			offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
+		}
+
+		diferencia = auxParticion->posicion - offset;
+
+		/* Me guardo el mensaje para luego reubicarlo
+		 */
+		void* mensajeACachear = malloc(sizeof(auxParticion->tamanioMensajeEnMemoria));
+		memcpy(mensajeACachear, (memoriaCache + auxParticion->posicion), auxParticion->tamanioMensajeEnMemoria);
+
+		auxParticion->posicion -= diferencia;
+
+		/* Escribo el mensaje en la nueva posicion
+		 */
+		escribirMemoria(mensajeACachear, auxParticion);
+		free(mensajeACachear);
+
+		offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
+	}
+
+	cantidadParticionesEliminadas = 0;
 }
 
-int esPotenciaDeDos(int numero){
-	if(!(numero & (numero - 1))){
-		return 1;
-	}
-	else{
-		return 0;
-	}
-}

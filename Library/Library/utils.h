@@ -105,15 +105,15 @@ typedef struct
 	t_buffer* buffer;
 } t_paquete;
 
-void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
-void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
-void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
-void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
-void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
-void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
-void enviar_ACK(int socket_cliente, int ID, int IDCORRELATIVO);
-void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int ID, int IDCORRELATIVO);
-void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, int ID, int IDCORRELATIVO);
+int enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+int enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+int enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+int enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+int enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+int enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int ID, int IDCORRELATIVO);
+int enviar_ACK(int socket_cliente, int ID, int IDCORRELATIVO);
+int enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int ID, int IDCORRELATIVO);
+int enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, int ID, int IDCORRELATIVO);
 
 t_paquete* recibir_mensaje(int socket_cliente);
 

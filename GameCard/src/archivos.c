@@ -63,7 +63,7 @@ void crearArchivo(char* filePath){
 	fwrite(blocks, strlen(blocks), 1, metadata);
 	fwrite(open, strlen(open), 1, metadata);
 
-	log_debug(logger, "Se creo el metadata del pokemon.");
+	log_info(logger, "Se creo el metadata del pokemon.");
 	free(carpetaPokemon);
 	fclose(metadata);
 }

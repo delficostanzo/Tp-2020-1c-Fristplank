@@ -27,7 +27,9 @@ int main(void) {
 	pthread_mutex_init(&mutexMemoria,NULL);
 	pthread_mutex_init(&mutexColas,NULL);
 	pthread_mutex_init(&mutexIdMensaje,NULL);
+	pthread_mutex_init(&mutexEnvio, NULL);
 
+	iniciarBuddySystem();
 
 	/* Prueba
 	 *
@@ -47,26 +49,6 @@ int main(void) {
 	t_metadata* mensaje = list_get(cola[4].mensajes, 0);
 	t_get_pokemon* asdasd = leerMemoria(mensaje);
 	log_debug(logger, asdasd->pokemon);*/
-
-	uint32_t asd = potenciaDeDosProxima(7);
-	log_debug(logger, "%d", asd);
-
-	int verdad = esPotenciaDeDos(8);
-	log_debug(logger, "%d", verdad);
-
-	verdad = esPotenciaDeDos(1024);
-	log_debug(logger, "%d", verdad);
-
-	int mentira = esPotenciaDeDos(6);
-	log_debug(logger, "%d", mentira);
-
-	mentira = sizeof(size_t);
-	log_debug(logger, "%d", mentira);
-
-	uint32_t nodesize = 128;
-	nodesize >>= 1;
-	log_debug(logger, "%d", nodesize);
-
 
 //	pthread_t threadClientes;
 //	pthread_create(&threadClientes, NULL, (void*) esperarClientes, NULL);
@@ -118,17 +100,28 @@ void iniciarMemoria() {
 		if (string_equals_ignore_case(ALGORITMO_MEMORIA, "PARTICIONES")) {
 			log_info(logger, "LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS");
 			memoriaCache = malloc(TAMANO_MEMORIA);
+
+			if(memoriaCache == NULL){
+				log_error(logger, "NO HAY MEMORIA SUFICIENTE PARA ALOJAR LA CANTIDAD DE MEMORIA INDICADA. SE ABORTA.");
+				exit(0);
+			}
 		}
 
-		else if (ALGORITMO_MEMORIA == "BS") {
+		else if (string_equals_ignore_case(ALGORITMO_MEMORIA, "BS")) {
 			log_info(logger, "LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM");
 
-			if (!esPotenciaDeDos(TAMANO_MEMORIA)){
+			if (!esPotenciaDeDos(TAMANO_MEMORIA) || !esPotenciaDeDos(TAMANO_MINIMO_PARTICION)){
 				log_error(logger, "LA CANTIDAD DE MEMORIA INDICADA NO ES POTENCIA DE DOS. SE ABORTA.");
 				exit(0);
 			}
 
 			memoriaCache = malloc(TAMANO_MEMORIA);
+
+			if(memoriaCache == NULL){
+				log_error(logger, "NO HAY MEMORIA SUFICIENTE PARA ALOJAR LA CANTIDAD DE MEMORIA INDICADA. SE ABORTA.");
+				exit(0);
+			}
+
 			iniciarBuddySystem();
 		}
 		else{

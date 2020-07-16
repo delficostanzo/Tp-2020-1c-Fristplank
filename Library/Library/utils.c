@@ -56,18 +56,19 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 	return streamFinal;
 }
 
-void enviar(t_paquete* paquete, int socket_cliente)
+int enviar(t_paquete* paquete, int socket_cliente)
 {
 	int size_serializado;
 
 	void* mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
 
-	send(socket_cliente, mensajeAEnviar, size_serializado, 0);
+	int resultadoEnvio = send(socket_cliente, mensajeAEnviar, size_serializado, 0);
 
 	free(mensajeAEnviar);
 	free(paquete->buffer->stream);
 	free(paquete->buffer);
 	free(paquete);
+	return resultadoEnvio;
 }
 
 t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int Id, int IdCorrelativo, op_code op_code) {
@@ -81,50 +82,59 @@ t_paquete* crearPaqueteCon(void* datos, int sizeOfStream, int Id, int IdCorrelat
 	return paquete;
 }
 
-void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
+int enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	t_paquete* paquete = crearPaqueteCon(new_pokemon, 1 + new_pokemon->lengthOfPokemon + sizeof(uint32_t)*4, Id, IdCorrelativo, NEW_POKEMON);
-	enviar(paquete, socket_cliente);
+	int resultadoEnvio = enviar(paquete, socket_cliente);
+	return resultadoEnvio;
 }
 
-void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
+int enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	t_paquete* paquete = crearPaqueteCon(appeared_pokemon, 1 + appeared_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, APPEARED_POKEMON);
-	enviar(paquete, socket_cliente);
+	int resultadoEnvio = enviar(paquete, socket_cliente);
+	return resultadoEnvio;
 }
 
-void enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
+int enviar_catch_pokemon(t_catch_pokemon* catch_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	t_paquete* paquete = crearPaqueteCon((void*) catch_pokemon, 1 + catch_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, CATCH_POKEMON);
-	enviar(paquete, socket_cliente);
+	int resultadoEnvio = enviar(paquete, socket_cliente);
+	return resultadoEnvio;
 }
 
-void enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
+int enviar_caught_pokemon(t_caught_pokemon* caught_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	t_paquete* paquete = crearPaqueteCon((void*) caught_pokemon, sizeof(uint32_t), Id, IdCorrelativo, CAUGHT_POKEMON);
-	enviar(paquete, socket_cliente);
+	int resultadoEnvio = enviar(paquete, socket_cliente);
+	return resultadoEnvio;
 }
 
-void enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
+int enviar_get_pokemon(t_get_pokemon* get_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	t_paquete* paquete = crearPaqueteCon((void*) get_pokemon, 1 + get_pokemon->lengthOfPokemon + sizeof(uint32_t), Id, IdCorrelativo, GET_POKEMON);
-	enviar(paquete, socket_cliente);
+	int resultadoEnvio = enviar(paquete, socket_cliente);
+	return resultadoEnvio;
 }
 
-void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
+int enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
 	uint32_t sizeListaPosiciones = localized_pokemon->cantidadPosiciones * (2 * sizeof(uint32_t));
 	t_paquete* paquete = crearPaqueteCon((void*) localized_pokemon, 1 + localized_pokemon->lengthOfPokemon + sizeof(uint32_t)*2 + sizeListaPosiciones, Id, IdCorrelativo, LOCALIZED_POKEMON);
-	enviar(paquete, socket_cliente);
+	int resultadoEnvio = enviar(paquete, socket_cliente);
+	return resultadoEnvio;
 }
 
-void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int Id, int IdCorrelativo){
+int enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int Id, int IdCorrelativo){
 	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(int), Id, IdCorrelativo, RESPUESTA_ID);
-	enviar(paquete, socket_cliente);
+	int resultadoEnvio = enviar(paquete, socket_cliente);
+	return resultadoEnvio;
 }
 
-void enviar_ACK(int socket_cliente, int Id, int IdCorrelativo){
+int enviar_ACK(int socket_cliente, int Id, int IdCorrelativo){
 	t_paquete* paquete = crearPaqueteCon(NULL, 0, Id, IdCorrelativo, ACK);
-	enviar(paquete, socket_cliente);
+	int resultadoEnvio = enviar(paquete, socket_cliente);
+	return resultadoEnvio;
 }
 
-void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, int Id, int IdCorrelativo){
+int enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cliente, int Id, int IdCorrelativo){
 	t_paquete* paquete = crearPaqueteCon((void*) gameboy_suscribe, sizeof(op_code), Id, IdCorrelativo, GAMEBOYSUSCRIBE);
-	enviar(paquete, socket_cliente);
+	int resultadoEnvio = enviar(paquete, socket_cliente);
+	return resultadoEnvio;
 }
 
 /* Retorna el mensaje completo: Header y Payload ya serializado

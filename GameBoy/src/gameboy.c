@@ -164,10 +164,18 @@ void procesarSubscribe(char* argv[]){
 
 	int segundosAEscuchar = atoi(argv[3]);
 
+	pthread_t threadDuerme;
+	pthread_create(&threadDuerme, NULL, (void*) dormir, &segundosAEscuchar);
+
 	pthread_t threadEscucha;
 	pthread_create(&threadEscucha, NULL, (void*) escucharCola, (void*) cola);
-	sleep(segundosAEscuchar);
+
+	pthread_join(threadDuerme, NULL);
 	pthread_cancel(threadEscucha);
+}
+
+void dormir(int* segundos){
+	sleep(*segundos);
 }
 
 void escucharCola(void* colaAEscuchar){
@@ -194,6 +202,11 @@ void recibirEImprimirMensaje(int socketBroker, op_code cola){
 
 	t_paquete* paquete = recibir_mensaje(socketBroker);
 
+	if(paquete == NULL){
+		free(paquete);
+		return;
+	}
+
 	log_info(logger, "======= Nuevo mensaje recibido =======");
 	log_info(logger, "Tipo de mensaje: %s", COLAS_STRING[paquete->codigo_operacion]);
 	log_info(logger, "ID del mensaje: %d", paquete->ID);
@@ -202,7 +215,7 @@ void recibirEImprimirMensaje(int socketBroker, op_code cola){
 
 	switch(paquete->codigo_operacion){
 		case NEW_POKEMON:;
-			t_new_pokemon* new_pokemon = (t_new_pokemon*) paquete->buffer->stream;
+			t_new_pokemon* new_pokemon = paquete->buffer->stream;
 			log_info(logger, "Nombre de Pokemon: %s", new_pokemon->pokemon);
 			log_info(logger, "Cantidad de Pokemon: %d", new_pokemon->cantidad);
 			log_info(logger, "Posicion (X,Y) = (%d,%d)", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);

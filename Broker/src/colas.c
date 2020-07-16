@@ -23,19 +23,18 @@ void agregarMensajeACola(t_paquete * nuevoPaquete) {
 	nuevaMeta->tamanioMensaje = nuevoPaquete->buffer->size;
 	nuevaMeta->flagLRU = 0;
 	nuevaMeta->posicion = SINPARTICION;
+	nuevaMeta->ACKSuscriptores = list_create();
 
 	log_debug(logger, "Procedo a buscar la cola %d", nuevoPaquete->codigo_operacion);
 
 	for (int i = 0; i < 6; i++) {
 		if (cola[i].nombreCola == nuevoPaquete->codigo_operacion) {
-			pthread_mutex_lock(&mutexColas);
 			pthread_mutex_lock(&mutexMemoria);
 			//EL TAMAÑO Y POSICION DE UN MENSAJE EN MEMORIA  SE CALCULAN EN LA SIGUIENTE FUNCION
 			cachearMensaje(nuevaMeta, nuevoPaquete->buffer->stream);
 			list_add(cola[i].mensajes, nuevaMeta);
 
 			pthread_mutex_unlock(&mutexMemoria);
-			pthread_mutex_unlock(&mutexColas);
 
 			log_info(logger, "Se agregó un nuevo mensaje a la cola %s.",ID_COLA[i+1]); //LOG OBLIGATORIO (3)
 		}
@@ -60,9 +59,9 @@ t_list* mensajesAEnviar(int idProceso, op_code codigoCola){
 
 	for (int i = 0; i < 6; i++) {
 		if (cola[i].nombreCola == codigoCola) {
-			for(int j = 0; j < list_size(cola[i].mensajes); i++){
+			for(int j = 0; j < list_size(cola[i].mensajes); j++){
 
-				t_metadata* metadata = list_get(cola[i].mensajes, i);
+				t_metadata* metadata = list_get(cola[i].mensajes, j);
 
 				/* Chequeo que el ID no este entre los ACK
 				 */
@@ -78,61 +77,17 @@ t_list* mensajesAEnviar(int idProceso, op_code codigoCola){
 				}
 
 				if(estaEntreACK == 0){
+					pthread_mutex_lock(&mutexMemoria);
 					void* estructura = leerMemoria(metadata);
+					pthread_mutex_unlock(&mutexColas);
 					list_add(mensajes, estructura);
-					list_add(mensajes, &metadata->ID);
-					list_add(mensajes, &metadata->IDCorrelativo);
+					list_add(mensajes, &(metadata->ID));
+					list_add(mensajes, &(metadata->IDCorrelativo));
 				}
 			}
 		}
 	}
 	return mensajes;
 }
-
-/*void administrarColas(){
-	pthread_t threadColaNew;
-	pthread_t threadColaAppeared;
-	pthread_t threadColaCatch;
-	pthread_t threadColaCaught;
-	pthread_t threadColaGet;
-	pthread_t threadColaLocalized;
-		//NEW_POKEMON
-	pthread_create(&threadColaNew,NULL, (void *)enviar_mensajes_new, &cola[0]);
-		//APPEARED_POKEMON:
-	//pthread_create(&threadColaNew,NULL, (void *)enviar_mensaje_suscriptores, cola[1]);
-		//CATCH_POKEMON;
-	//pthread_create(&threadColaNew,NULL, (void *)enviar_mensaje_suscriptores, cola[2]);
-		//CAUGHT_POKEMON;
-	//pthread_create(&threadColaNew,NULL, (void *)enviar_mensaje_suscriptores, cola[3]);
-		//GET_POKEMON;
-	//pthread_create(&threadColaNew,NULL, (void *)enviar_mensaje_suscriptores, cola[4]);
-		//LOCALIZED_POKEMON;
-	//pthread_create(&threadColaNew,NULL, (void *)enviar_mensaje_suscriptores, cola[5]);
-
-	pthread_join(threadColaNew,NULL);
-	pthread_join(threadColaAppeared,NULL);
-	pthread_join(threadColaCatch,NULL);
-	pthread_join(threadColaCaught,NULL);
-	pthread_join(threadColaLocalized,NULL);
-
-
-	void enviar_mensajes_new(t_cola * cola) {
-		t_metadata * metaMensajeAEnviar = malloc(sizeof(t_metadata));
-		int i,j,unSuscriptor;
-		while(1){
-		sem_wait(colaNew);
-		for(i=0;i<list_size(cola->mensajes);i++){
-		metaMensajeAEnviar = list_get(cola->mensajes,i);
-		while(list_size(cola->suscriptores)>list_size(metaMensajeAEnviar->EnvioSuscriptores)){
-			unSuscriptor = list_get(cola->suscriptores,j);
-			if(){
-
-			}
-		}
-		}
-		}
-	}
-	*/
-//SEMAFORO CONSUMIDOR
 
 

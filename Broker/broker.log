@@ -2448,3 +2448,723 @@
 [DEBUG] 07:50:51:8 BROKER/(20615:20615): 0
 [DEBUG] 07:50:51:8 BROKER/(20615:20615): 4
 [DEBUG] 07:50:51:8 BROKER/(20615:20615): 64
+[INFO] 23:45:19:682 BROKER/(8212:8212): Logger Iniciado
+[INFO] 23:45:19:683 BROKER/(8212:8212): Archivo de configuracion seteado
+[INFO] 23:45:19:683 BROKER/(8212:8212): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:45:19:684 BROKER/(8212:8212): Inicializando Memoria Cache
+[INFO] 23:45:19:684 BROKER/(8212:8212): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 23:45:19:684 BROKER/(8212:8212): Nuestro buddy system presenta 8 niveles
+[DEBUG] 23:45:19:684 BROKER/(8212:8212): Nuestra particion minima es 2 a la 5
+[DEBUG] 23:45:19:684 BROKER/(8212:8212): 8
+[DEBUG] 23:45:19:684 BROKER/(8212:8212): 1
+[DEBUG] 23:45:19:684 BROKER/(8212:8212): 1
+[DEBUG] 23:45:19:684 BROKER/(8212:8212): 0
+[DEBUG] 23:45:19:684 BROKER/(8212:8212): 4
+[DEBUG] 23:45:19:684 BROKER/(8212:8212): 64
+[INFO] 23:46:42:383 BROKER/(8291:8291): Logger Iniciado
+[INFO] 23:46:42:383 BROKER/(8291:8291): Archivo de configuracion seteado
+[INFO] 23:46:42:383 BROKER/(8291:8291): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:46:42:383 BROKER/(8291:8291): Inicializando Memoria Cache
+[INFO] 23:46:42:383 BROKER/(8291:8291): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 23:46:42:383 BROKER/(8291:8291): Nuestro buddy system presenta 8 niveles
+[DEBUG] 23:46:42:383 BROKER/(8291:8291): Nuestra particion minima es 2 a la 5
+[DEBUG] 23:46:42:383 BROKER/(8291:8291): Nuestro size de memoria total es 2 a la 12
+[DEBUG] 23:46:42:383 BROKER/(8291:8291): 8
+[DEBUG] 23:46:42:383 BROKER/(8291:8291): 1
+[DEBUG] 23:46:42:383 BROKER/(8291:8291): 1
+[DEBUG] 23:46:42:383 BROKER/(8291:8291): 0
+[DEBUG] 23:46:42:383 BROKER/(8291:8291): 4
+[DEBUG] 23:46:42:383 BROKER/(8291:8291): 64
+[INFO] 23:47:09:454 BROKER/(8310:8310): Logger Iniciado
+[INFO] 23:47:09:465 BROKER/(8310:8310): Archivo de configuracion seteado
+[INFO] 23:47:09:465 BROKER/(8310:8310): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:47:09:468 BROKER/(8310:8310): Inicializando Memoria Cache
+[INFO] 23:47:09:468 BROKER/(8310:8310): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 23:47:09:468 BROKER/(8310:8310): Nuestro buddy system presenta 6 niveles
+[DEBUG] 23:47:09:469 BROKER/(8310:8310): Nuestra particion minima es 2 a la 6
+[DEBUG] 23:47:09:473 BROKER/(8310:8310): Nuestro size de memoria total es 2 a la 11
+[DEBUG] 23:47:09:474 BROKER/(8310:8310): 8
+[DEBUG] 23:47:09:474 BROKER/(8310:8310): 1
+[DEBUG] 23:47:09:474 BROKER/(8310:8310): 1
+[DEBUG] 23:47:09:474 BROKER/(8310:8310): 0
+[DEBUG] 23:47:09:474 BROKER/(8310:8310): 4
+[DEBUG] 23:47:09:474 BROKER/(8310:8310): 64
+[INFO] 23:49:36:417 BROKER/(8579:8579): Logger Iniciado
+[INFO] 23:49:36:417 BROKER/(8579:8579): Archivo de configuracion seteado
+[INFO] 23:49:36:417 BROKER/(8579:8579): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:49:36:417 BROKER/(8579:8579): Inicializando Memoria Cache
+[INFO] 23:49:36:417 BROKER/(8579:8579): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 23:49:36:417 BROKER/(8579:8579): Nuestro Buddy System presenta 6 niveles
+[DEBUG] 23:49:36:417 BROKER/(8579:8579): Nuestra particion minima es 2^6
+[DEBUG] 23:49:36:417 BROKER/(8579:8579): Nuestro size de memoria total es 2^11
+[DEBUG] 23:49:36:417 BROKER/(8579:8579): 8
+[DEBUG] 23:49:36:417 BROKER/(8579:8579): 1
+[DEBUG] 23:49:36:417 BROKER/(8579:8579): 1
+[DEBUG] 23:49:36:417 BROKER/(8579:8579): 0
+[DEBUG] 23:49:36:417 BROKER/(8579:8579): 4
+[DEBUG] 23:49:36:417 BROKER/(8579:8579): 64
+[INFO] 23:50:39:160 BROKER/(8698:8698): Logger Iniciado
+[INFO] 23:50:39:168 BROKER/(8698:8698): Archivo de configuracion seteado
+[INFO] 23:50:39:168 BROKER/(8698:8698): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:50:39:168 BROKER/(8698:8698): Inicializando Memoria Cache
+[INFO] 23:50:39:168 BROKER/(8698:8698): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 23:50:39:169 BROKER/(8698:8698): Nuestro Buddy System presenta 6 niveles
+[DEBUG] 23:50:39:169 BROKER/(8698:8698): Nuestra particion minima es 2^6
+[DEBUG] 23:50:39:169 BROKER/(8698:8698): Nuestro size de memoria total es 2^11
+[INFO] 23:51:03:894 BROKER/(8717:8717): Logger Iniciado
+[INFO] 23:51:03:894 BROKER/(8717:8717): Archivo de configuracion seteado
+[INFO] 23:51:03:894 BROKER/(8717:8717): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:51:03:894 BROKER/(8717:8717): Inicializando Memoria Cache
+[INFO] 23:51:03:894 BROKER/(8717:8717): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[ERROR] 23:51:03:894 BROKER/(8717:8717): LA CANTIDAD DE MEMORIA INDICADA NO ES POTENCIA DE DOS. SE ABORTA.
+[INFO] 23:51:34:305 BROKER/(8745:8745): Logger Iniciado
+[INFO] 23:51:34:305 BROKER/(8745:8745): Archivo de configuracion seteado
+[INFO] 23:51:34:305 BROKER/(8745:8745): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 23:51:34:305 BROKER/(8745:8745): Inicializando Memoria Cache
+[INFO] 23:51:34:306 BROKER/(8745:8745): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 23:51:34:306 BROKER/(8745:8745): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 23:51:34:306 BROKER/(8745:8745): Nuestra particion minima es 2^5
+[DEBUG] 23:51:34:306 BROKER/(8745:8745): Nuestro size de memoria total es 2^12
+[INFO] 01:34:52:567 BROKER/(6916:6916): Logger Iniciado
+[INFO] 01:34:52:586 BROKER/(6916:6916): Archivo de configuracion seteado
+[INFO] 01:34:52:588 BROKER/(6916:6916): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:34:52:588 BROKER/(6916:6916): Inicializando Memoria Cache
+[INFO] 01:34:52:588 BROKER/(6916:6916): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:34:52:588 BROKER/(6916:6916): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:34:52:588 BROKER/(6916:6916): Nuestra particion minima es 2^5
+[DEBUG] 01:34:52:588 BROKER/(6916:6916): Nuestro size de memoria total es 2^12
+[INFO] 01:36:19:382 BROKER/(6988:6988): Logger Iniciado
+[INFO] 01:36:19:385 BROKER/(6988:6988): Archivo de configuracion seteado
+[INFO] 01:36:19:389 BROKER/(6988:6988): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:36:19:389 BROKER/(6988:6988): Inicializando Memoria Cache
+[INFO] 01:36:19:389 BROKER/(6988:6988): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:36:19:389 BROKER/(6988:6988): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:36:19:389 BROKER/(6988:6988): Nuestra particion minima es 2^5
+[DEBUG] 01:36:19:389 BROKER/(6988:6988): Nuestro size de memoria total es 2^12
+[INFO] 01:36:52:288 BROKER/(7027:7027): Logger Iniciado
+[INFO] 01:36:52:289 BROKER/(7027:7027): Archivo de configuracion seteado
+[INFO] 01:36:52:289 BROKER/(7027:7027): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:36:52:289 BROKER/(7027:7027): Inicializando Memoria Cache
+[INFO] 01:36:52:289 BROKER/(7027:7027): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:36:52:289 BROKER/(7027:7027): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:36:52:289 BROKER/(7027:7027): Nuestra particion minima es 2^5
+[DEBUG] 01:36:52:289 BROKER/(7027:7027): Nuestro size de memoria total es 2^12
+[INFO] 01:50:40:195 BROKER/(7313:7313): Logger Iniciado
+[INFO] 01:50:40:201 BROKER/(7313:7313): Archivo de configuracion seteado
+[INFO] 01:50:40:201 BROKER/(7313:7313): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:50:40:202 BROKER/(7313:7313): Inicializando Memoria Cache
+[INFO] 01:50:40:202 BROKER/(7313:7313): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:50:40:202 BROKER/(7313:7313): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:50:40:202 BROKER/(7313:7313): Nuestra particion minima es 2^5
+[DEBUG] 01:50:40:202 BROKER/(7313:7313): Nuestro size de memoria total es 2^12
+[DEBUG] 01:50:45:81 BROKER/(7313:7313): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:50:45:81 BROKER/(7313:7313): Nuestra particion minima es 2^5
+[DEBUG] 01:50:45:81 BROKER/(7313:7313): Nuestro size de memoria total es 2^12
+[INFO] 01:51:42:482 BROKER/(7374:7374): Logger Iniciado
+[INFO] 01:51:42:492 BROKER/(7374:7374): Archivo de configuracion seteado
+[INFO] 01:51:42:492 BROKER/(7374:7374): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:51:42:492 BROKER/(7374:7374): Inicializando Memoria Cache
+[INFO] 01:51:42:492 BROKER/(7374:7374): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:51:42:492 BROKER/(7374:7374): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:51:42:493 BROKER/(7374:7374): Nuestra particion minima es 2^5
+[DEBUG] 01:51:42:493 BROKER/(7374:7374): Nuestro size de memoria total es 2^12
+[DEBUG] 01:51:42:493 BROKER/(7374:7374): La cantidad de bloques es 0
+[DEBUG] 01:51:42:493 BROKER/(7374:7374): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:51:42:493 BROKER/(7374:7374): Nuestra particion minima es 2^5
+[DEBUG] 01:51:42:493 BROKER/(7374:7374): Nuestro size de memoria total es 2^12
+[DEBUG] 01:51:42:493 BROKER/(7374:7374): La cantidad de bloques es 0
+[INFO] 01:52:12:811 BROKER/(7423:7423): Logger Iniciado
+[INFO] 01:52:12:820 BROKER/(7423:7423): Archivo de configuracion seteado
+[INFO] 01:52:12:820 BROKER/(7423:7423): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:52:12:820 BROKER/(7423:7423): Inicializando Memoria Cache
+[INFO] 01:52:12:820 BROKER/(7423:7423): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:52:12:820 BROKER/(7423:7423): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:52:12:820 BROKER/(7423:7423): Nuestra particion minima es 2^5
+[DEBUG] 01:52:12:820 BROKER/(7423:7423): Nuestro size de memoria total es 2^12
+[DEBUG] 01:52:12:820 BROKER/(7423:7423): La cantidad de bloques es 0
+[DEBUG] 01:52:12:820 BROKER/(7423:7423): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:52:12:820 BROKER/(7423:7423): Nuestra particion minima es 2^5
+[DEBUG] 01:52:12:820 BROKER/(7423:7423): Nuestro size de memoria total es 2^12
+[DEBUG] 01:52:12:820 BROKER/(7423:7423): La cantidad de bloques es 0
+[INFO] 01:52:30:423 BROKER/(7461:7461): Logger Iniciado
+[INFO] 01:52:30:431 BROKER/(7461:7461): Archivo de configuracion seteado
+[INFO] 01:52:30:431 BROKER/(7461:7461): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:52:30:431 BROKER/(7461:7461): Inicializando Memoria Cache
+[INFO] 01:52:30:431 BROKER/(7461:7461): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:52:30:431 BROKER/(7461:7461): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:52:30:431 BROKER/(7461:7461): Nuestra particion minima es 2^5
+[DEBUG] 01:52:30:431 BROKER/(7461:7461): Nuestro size de memoria total es 2^12
+[DEBUG] 01:52:36:906 BROKER/(7461:7461): La cantidad de bloques es 533842674
+[DEBUG] 01:52:36:906 BROKER/(7461:7461): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:52:36:906 BROKER/(7461:7461): Nuestra particion minima es 2^5
+[DEBUG] 01:52:36:906 BROKER/(7461:7461): Nuestro size de memoria total es 2^12
+[INFO] 01:52:50:921 BROKER/(7502:7502): Logger Iniciado
+[INFO] 01:52:50:922 BROKER/(7502:7502): Archivo de configuracion seteado
+[INFO] 01:52:50:922 BROKER/(7502:7502): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:52:50:922 BROKER/(7502:7502): Inicializando Memoria Cache
+[INFO] 01:52:50:923 BROKER/(7502:7502): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:52:50:923 BROKER/(7502:7502): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:52:50:923 BROKER/(7502:7502): Nuestra particion minima es 2^5
+[DEBUG] 01:52:50:925 BROKER/(7502:7502): Nuestro size de memoria total es 2^12
+[DEBUG] 01:52:50:925 BROKER/(7502:7502): La cantidad de bloques es 0
+[DEBUG] 01:52:50:926 BROKER/(7502:7502): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:52:50:928 BROKER/(7502:7502): Nuestra particion minima es 2^5
+[DEBUG] 01:52:50:928 BROKER/(7502:7502): Nuestro size de memoria total es 2^12
+[DEBUG] 01:52:50:928 BROKER/(7502:7502): La cantidad de bloques es 0
+[INFO] 01:53:31:341 BROKER/(7553:7553): Logger Iniciado
+[INFO] 01:53:31:343 BROKER/(7553:7553): Archivo de configuracion seteado
+[INFO] 01:53:31:343 BROKER/(7553:7553): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:53:31:343 BROKER/(7553:7553): Inicializando Memoria Cache
+[INFO] 01:53:31:343 BROKER/(7553:7553): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:53:31:343 BROKER/(7553:7553): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:53:31:343 BROKER/(7553:7553): Nuestra particion minima es 2^5
+[DEBUG] 01:53:31:343 BROKER/(7553:7553): Nuestro size de memoria total es 2^12
+[DEBUG] 01:53:31:343 BROKER/(7553:7553): La cantidad de bloques es 204
+[DEBUG] 01:53:31:344 BROKER/(7553:7553): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:53:31:344 BROKER/(7553:7553): Nuestra particion minima es 2^5
+[DEBUG] 01:53:31:344 BROKER/(7553:7553): Nuestro size de memoria total es 2^12
+[DEBUG] 01:53:31:344 BROKER/(7553:7553): La cantidad de bloques es 204
+[INFO] 01:57:08:804 BROKER/(7856:7856): Logger Iniciado
+[INFO] 01:57:08:807 BROKER/(7856:7856): Archivo de configuracion seteado
+[INFO] 01:57:08:807 BROKER/(7856:7856): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:57:08:807 BROKER/(7856:7856): Inicializando Memoria Cache
+[INFO] 01:57:08:807 BROKER/(7856:7856): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:57:08:807 BROKER/(7856:7856): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:57:08:807 BROKER/(7856:7856): Nuestra particion minima es 2^5
+[DEBUG] 01:57:08:807 BROKER/(7856:7856): Nuestro size de memoria total es 2^12
+[DEBUG] 01:57:08:807 BROKER/(7856:7856): La cantidad de bloques es 204
+[DEBUG] 01:57:08:823 BROKER/(7856:7856): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:57:08:823 BROKER/(7856:7856): Nuestra particion minima es 2^5
+[DEBUG] 01:57:08:823 BROKER/(7856:7856): Nuestro size de memoria total es 2^12
+[DEBUG] 01:57:08:823 BROKER/(7856:7856): La cantidad de bloques es 204
+[INFO] 01:57:37:402 BROKER/(7897:7897): Logger Iniciado
+[INFO] 01:57:37:404 BROKER/(7897:7897): Archivo de configuracion seteado
+[INFO] 01:57:37:405 BROKER/(7897:7897): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:57:37:405 BROKER/(7897:7897): Inicializando Memoria Cache
+[INFO] 01:57:37:405 BROKER/(7897:7897): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:57:37:405 BROKER/(7897:7897): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:57:37:405 BROKER/(7897:7897): Nuestra particion minima es 2^5
+[DEBUG] 01:57:37:405 BROKER/(7897:7897): Nuestro size de memoria total es 2^12
+[DEBUG] 01:57:37:405 BROKER/(7897:7897): La cantidad de bloques es 204
+[DEBUG] 01:57:37:415 BROKER/(7897:7897): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:57:37:415 BROKER/(7897:7897): Nuestra particion minima es 2^5
+[DEBUG] 01:57:37:416 BROKER/(7897:7897): Nuestro size de memoria total es 2^12
+[DEBUG] 01:57:37:416 BROKER/(7897:7897): La cantidad de bloques es 204
+[INFO] 01:57:49:503 BROKER/(7936:7936): Logger Iniciado
+[INFO] 01:57:49:505 BROKER/(7936:7936): Archivo de configuracion seteado
+[INFO] 01:57:49:505 BROKER/(7936:7936): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:57:49:505 BROKER/(7936:7936): Inicializando Memoria Cache
+[INFO] 01:57:49:505 BROKER/(7936:7936): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:57:49:505 BROKER/(7936:7936): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:57:49:505 BROKER/(7936:7936): Nuestra particion minima es 2^5
+[DEBUG] 01:57:49:505 BROKER/(7936:7936): Nuestro size de memoria total es 2^12
+[DEBUG] 01:57:49:505 BROKER/(7936:7936): La cantidad de bloques es 204
+[DEBUG] 01:57:49:505 BROKER/(7936:7936): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:57:49:505 BROKER/(7936:7936): Nuestra particion minima es 2^5
+[DEBUG] 01:57:49:505 BROKER/(7936:7936): Nuestro size de memoria total es 2^12
+[DEBUG] 01:57:49:505 BROKER/(7936:7936): La cantidad de bloques es 204
+[INFO] 01:59:01:467 BROKER/(8043:8043): Logger Iniciado
+[INFO] 01:59:01:476 BROKER/(8043:8043): Archivo de configuracion seteado
+[INFO] 01:59:01:476 BROKER/(8043:8043): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:59:01:476 BROKER/(8043:8043): Inicializando Memoria Cache
+[INFO] 01:59:01:476 BROKER/(8043:8043): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:59:01:476 BROKER/(8043:8043): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:59:01:476 BROKER/(8043:8043): Nuestra particion minima es 2^5
+[DEBUG] 01:59:01:476 BROKER/(8043:8043): Nuestro size de memoria total es 2^12
+[DEBUG] 01:59:01:476 BROKER/(8043:8043): La cantidad de bloques es 204
+[DEBUG] 01:59:01:496 BROKER/(8043:8043): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:59:01:496 BROKER/(8043:8043): Nuestra particion minima es 2^5
+[DEBUG] 01:59:01:496 BROKER/(8043:8043): Nuestro size de memoria total es 2^12
+[DEBUG] 01:59:01:496 BROKER/(8043:8043): La cantidad de bloques es 204
+[INFO] 01:59:47:319 BROKER/(8089:8089): Logger Iniciado
+[INFO] 01:59:47:321 BROKER/(8089:8089): Archivo de configuracion seteado
+[INFO] 01:59:47:321 BROKER/(8089:8089): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 01:59:47:321 BROKER/(8089:8089): Inicializando Memoria Cache
+[INFO] 01:59:47:321 BROKER/(8089:8089): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 01:59:47:321 BROKER/(8089:8089): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:59:47:321 BROKER/(8089:8089): Nuestra particion minima es 2^5
+[DEBUG] 01:59:47:321 BROKER/(8089:8089): Nuestro size de memoria total es 2^12
+[DEBUG] 01:59:47:321 BROKER/(8089:8089): La cantidad de bloques es 204
+[DEBUG] 01:59:47:334 BROKER/(8089:8089): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 01:59:47:334 BROKER/(8089:8089): Nuestra particion minima es 2^5
+[DEBUG] 01:59:47:334 BROKER/(8089:8089): Nuestro size de memoria total es 2^12
+[DEBUG] 01:59:47:334 BROKER/(8089:8089): La cantidad de bloques es 204
+[INFO] 02:01:17:357 BROKER/(8167:8167): Logger Iniciado
+[INFO] 02:01:17:366 BROKER/(8167:8167): Archivo de configuracion seteado
+[INFO] 02:01:17:366 BROKER/(8167:8167): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:01:17:366 BROKER/(8167:8167): Inicializando Memoria Cache
+[INFO] 02:01:17:366 BROKER/(8167:8167): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:01:17:366 BROKER/(8167:8167): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:01:17:366 BROKER/(8167:8167): Nuestra particion minima es 2^5
+[DEBUG] 02:01:17:366 BROKER/(8167:8167): Nuestro size de memoria total es 2^12
+[DEBUG] 02:01:17:366 BROKER/(8167:8167): La cantidad de bloques es 204
+[DEBUG] 02:01:17:380 BROKER/(8167:8167): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:01:17:380 BROKER/(8167:8167): Nuestra particion minima es 2^5
+[DEBUG] 02:01:17:380 BROKER/(8167:8167): Nuestro size de memoria total es 2^12
+[DEBUG] 02:01:17:380 BROKER/(8167:8167): La cantidad de bloques es 204
+[INFO] 02:02:30:746 BROKER/(8232:8232): Logger Iniciado
+[INFO] 02:02:30:746 BROKER/(8232:8232): Archivo de configuracion seteado
+[INFO] 02:02:30:746 BROKER/(8232:8232): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:02:30:746 BROKER/(8232:8232): Inicializando Memoria Cache
+[INFO] 02:02:30:746 BROKER/(8232:8232): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:02:30:746 BROKER/(8232:8232): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:02:30:746 BROKER/(8232:8232): Nuestra particion minima es 2^5
+[DEBUG] 02:02:30:746 BROKER/(8232:8232): Nuestro size de memoria total es 2^12
+[DEBUG] 02:02:30:746 BROKER/(8232:8232): La cantidad de bloques es 204
+[DEBUG] 02:02:30:747 BROKER/(8232:8232): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:02:30:747 BROKER/(8232:8232): Nuestra particion minima es 2^5
+[DEBUG] 02:02:30:747 BROKER/(8232:8232): Nuestro size de memoria total es 2^12
+[DEBUG] 02:02:30:747 BROKER/(8232:8232): La cantidad de bloques es 204
+[INFO] 02:02:53:174 BROKER/(8277:8277): Logger Iniciado
+[INFO] 02:02:53:178 BROKER/(8277:8277): Archivo de configuracion seteado
+[INFO] 02:02:53:178 BROKER/(8277:8277): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:02:53:178 BROKER/(8277:8277): Inicializando Memoria Cache
+[INFO] 02:02:53:178 BROKER/(8277:8277): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:02:53:178 BROKER/(8277:8277): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:02:53:178 BROKER/(8277:8277): Nuestra particion minima es 2^5
+[DEBUG] 02:02:53:178 BROKER/(8277:8277): Nuestro size de memoria total es 2^12
+[DEBUG] 02:02:53:178 BROKER/(8277:8277): La cantidad de bloques es 204
+[DEBUG] 02:02:53:208 BROKER/(8277:8277): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:02:53:208 BROKER/(8277:8277): Nuestra particion minima es 2^5
+[DEBUG] 02:02:53:209 BROKER/(8277:8277): Nuestro size de memoria total es 2^12
+[DEBUG] 02:02:53:209 BROKER/(8277:8277): La cantidad de bloques es 204
+[INFO] 02:03:07:917 BROKER/(8316:8316): Logger Iniciado
+[INFO] 02:03:07:917 BROKER/(8316:8316): Archivo de configuracion seteado
+[INFO] 02:03:07:917 BROKER/(8316:8316): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:03:07:917 BROKER/(8316:8316): Inicializando Memoria Cache
+[INFO] 02:03:07:917 BROKER/(8316:8316): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:03:07:917 BROKER/(8316:8316): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:03:07:918 BROKER/(8316:8316): Nuestra particion minima es 2^5
+[DEBUG] 02:03:07:918 BROKER/(8316:8316): Nuestro size de memoria total es 2^12
+[DEBUG] 02:03:07:918 BROKER/(8316:8316): La cantidad de bloques es 204
+[DEBUG] 02:03:07:918 BROKER/(8316:8316): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:03:07:918 BROKER/(8316:8316): Nuestra particion minima es 2^5
+[DEBUG] 02:03:07:918 BROKER/(8316:8316): Nuestro size de memoria total es 2^12
+[DEBUG] 02:03:07:918 BROKER/(8316:8316): La cantidad de bloques es 204
+[INFO] 02:03:28:590 BROKER/(8361:8361): Logger Iniciado
+[INFO] 02:03:28:597 BROKER/(8361:8361): Archivo de configuracion seteado
+[INFO] 02:03:28:597 BROKER/(8361:8361): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:03:28:597 BROKER/(8361:8361): Inicializando Memoria Cache
+[INFO] 02:03:28:597 BROKER/(8361:8361): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:03:28:597 BROKER/(8361:8361): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:03:28:598 BROKER/(8361:8361): Nuestra particion minima es 2^5
+[DEBUG] 02:03:28:598 BROKER/(8361:8361): Nuestro size de memoria total es 2^12
+[DEBUG] 02:03:28:598 BROKER/(8361:8361): La cantidad de bloques es 204
+[DEBUG] 02:03:28:598 BROKER/(8361:8361): Nuestro Buddy System presenta 8 niveles
+[DEBUG] 02:03:28:598 BROKER/(8361:8361): Nuestra particion minima es 2^5
+[DEBUG] 02:03:28:598 BROKER/(8361:8361): Nuestro size de memoria total es 2^12
+[DEBUG] 02:03:28:598 BROKER/(8361:8361): La cantidad de bloques es 204
+[INFO] 02:06:10:849 BROKER/(8590:8590): Logger Iniciado
+[INFO] 02:06:10:853 BROKER/(8590:8590): Archivo de configuracion seteado
+[INFO] 02:06:10:853 BROKER/(8590:8590): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:06:10:853 BROKER/(8590:8590): Inicializando Memoria Cache
+[INFO] 02:06:10:853 BROKER/(8590:8590): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:06:10:853 BROKER/(8590:8590): Nuestro t_buddy System presenta 8 niveles
+[DEBUG] 02:06:10:853 BROKER/(8590:8590): Nuestra particion minima es 2^5
+[DEBUG] 02:06:10:853 BROKER/(8590:8590): Nuestro size de memoria total es 2^12
+[DEBUG] 02:06:10:853 BROKER/(8590:8590): La cantidad de bloques es 204
+[DEBUG] 02:06:10:853 BROKER/(8590:8590): Nuestro t_buddy System presenta 8 niveles
+[DEBUG] 02:06:10:853 BROKER/(8590:8590): Nuestra particion minima es 2^5
+[DEBUG] 02:06:10:853 BROKER/(8590:8590): Nuestro size de memoria total es 2^12
+[DEBUG] 02:06:10:853 BROKER/(8590:8590): La cantidad de bloques es 204
+[INFO] 02:08:36:445 BROKER/(8830:8830): Logger Iniciado
+[INFO] 02:08:36:446 BROKER/(8830:8830): Archivo de configuracion seteado
+[INFO] 02:08:36:446 BROKER/(8830:8830): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:08:36:446 BROKER/(8830:8830): Inicializando Memoria Cache
+[INFO] 02:08:36:446 BROKER/(8830:8830): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:08:36:446 BROKER/(8830:8830): Nuestro t_buddy System presenta 8 niveles
+[DEBUG] 02:08:36:446 BROKER/(8830:8830): Nuestra particion minima es 2^5
+[DEBUG] 02:08:36:446 BROKER/(8830:8830): Nuestro size de memoria total es 2^12
+[DEBUG] 02:08:36:446 BROKER/(8830:8830): La cantidad de bloques es 204
+[DEBUG] 02:08:36:446 BROKER/(8830:8830): Nuestro t_buddy System presenta 8 niveles
+[DEBUG] 02:08:36:446 BROKER/(8830:8830): Nuestra particion minima es 2^5
+[DEBUG] 02:08:36:447 BROKER/(8830:8830): Nuestro size de memoria total es 2^12
+[DEBUG] 02:08:36:447 BROKER/(8830:8830): La cantidad de bloques es 204
+[INFO] 02:09:20:714 BROKER/(8874:8874): Logger Iniciado
+[INFO] 02:09:20:717 BROKER/(8874:8874): Archivo de configuracion seteado
+[INFO] 02:09:20:717 BROKER/(8874:8874): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:09:20:717 BROKER/(8874:8874): Inicializando Memoria Cache
+[INFO] 02:09:20:717 BROKER/(8874:8874): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:09:20:717 BROKER/(8874:8874): Nuestro t_buddy System presenta 8 niveles
+[DEBUG] 02:09:20:717 BROKER/(8874:8874): Nuestra particion minima es 2^5
+[DEBUG] 02:09:20:717 BROKER/(8874:8874): Nuestro size de memoria total es 2^12
+[DEBUG] 02:09:20:717 BROKER/(8874:8874): Nivel 1 - Bloques 1
+[DEBUG] 02:09:20:717 BROKER/(8874:8874): Nivel 2 - Bloques 5
+[DEBUG] 02:09:20:717 BROKER/(8874:8874): Nivel 3 - Bloques 14
+[DEBUG] 02:09:20:717 BROKER/(8874:8874): Nivel 4 - Bloques 30
+[DEBUG] 02:09:20:717 BROKER/(8874:8874): Nivel 5 - Bloques 55
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 6 - Bloques 91
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 7 - Bloques 140
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 8 - Bloques 204
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): La cantidad de bloques es 204
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nuestro t_buddy System presenta 8 niveles
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nuestra particion minima es 2^5
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nuestro size de memoria total es 2^12
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 1 - Bloques 1
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 2 - Bloques 5
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 3 - Bloques 14
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 4 - Bloques 30
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 5 - Bloques 55
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 6 - Bloques 91
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 7 - Bloques 140
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): Nivel 8 - Bloques 204
+[DEBUG] 02:09:20:718 BROKER/(8874:8874): La cantidad de bloques es 204
+[INFO] 02:09:43:169 BROKER/(8919:8919): Logger Iniciado
+[INFO] 02:09:43:173 BROKER/(8919:8919): Archivo de configuracion seteado
+[INFO] 02:09:43:173 BROKER/(8919:8919): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:09:43:173 BROKER/(8919:8919): Inicializando Memoria Cache
+[INFO] 02:09:43:173 BROKER/(8919:8919): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nuestro t_buddy System presenta 8 niveles
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nuestra particion minima es 2^5
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nuestro size de memoria total es 2^12
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nivel 1 - Bloques 1
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nivel 2 - Bloques 4
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nivel 3 - Bloques 9
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nivel 4 - Bloques 16
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nivel 5 - Bloques 25
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nivel 6 - Bloques 36
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nivel 7 - Bloques 49
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): Nivel 8 - Bloques 64
+[DEBUG] 02:09:43:173 BROKER/(8919:8919): La cantidad de bloques es 204
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nuestro t_buddy System presenta 8 niveles
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nuestra particion minima es 2^5
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nuestro size de memoria total es 2^12
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nivel 1 - Bloques 1
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nivel 2 - Bloques 4
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nivel 3 - Bloques 9
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nivel 4 - Bloques 16
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nivel 5 - Bloques 25
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nivel 6 - Bloques 36
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nivel 7 - Bloques 49
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): Nivel 8 - Bloques 64
+[DEBUG] 02:09:43:174 BROKER/(8919:8919): La cantidad de bloques es 204
+[INFO] 02:10:06:526 BROKER/(8942:8942): Logger Iniciado
+[INFO] 02:10:06:527 BROKER/(8942:8942): Archivo de configuracion seteado
+[INFO] 02:10:06:528 BROKER/(8942:8942): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:10:06:528 BROKER/(8942:8942): Inicializando Memoria Cache
+[INFO] 02:10:06:528 BROKER/(8942:8942): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:10:06:528 BROKER/(8942:8942): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:10:06:528 BROKER/(8942:8942): Nuestra particion minima es 2^2
+[DEBUG] 02:10:06:528 BROKER/(8942:8942): Nuestro size de memoria total es 2^4
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): Nivel 1 - Bloques 1
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): Nivel 2 - Bloques 4
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): Nivel 3 - Bloques 9
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): La cantidad de bloques es 14
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): Nuestra particion minima es 2^2
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): Nuestro size de memoria total es 2^4
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): Nivel 1 - Bloques 1
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): Nivel 2 - Bloques 4
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): Nivel 3 - Bloques 9
+[DEBUG] 02:10:06:529 BROKER/(8942:8942): La cantidad de bloques es 14
+[INFO] 02:11:35:421 BROKER/(9085:9085): Logger Iniciado
+[INFO] 02:11:35:422 BROKER/(9085:9085): Archivo de configuracion seteado
+[INFO] 02:11:35:422 BROKER/(9085:9085): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:11:35:422 BROKER/(9085:9085): Inicializando Memoria Cache
+[INFO] 02:11:35:422 BROKER/(9085:9085): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:11:35:422 BROKER/(9085:9085): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:11:35:422 BROKER/(9085:9085): Nuestra particion minima es 2^2
+[DEBUG] 02:11:35:422 BROKER/(9085:9085): Nuestro size de memoria total es 2^4
+[DEBUG] 02:11:35:422 BROKER/(9085:9085): Nivel 1 - Bloques 2
+[DEBUG] 02:11:35:422 BROKER/(9085:9085): Nivel 2 - Bloques 4
+[DEBUG] 02:11:35:423 BROKER/(9085:9085): Nivel 3 - Bloques 6
+[DEBUG] 02:11:35:423 BROKER/(9085:9085): La cantidad de bloques es 12
+[DEBUG] 02:11:35:423 BROKER/(9085:9085): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:11:35:423 BROKER/(9085:9085): Nuestra particion minima es 2^2
+[DEBUG] 02:11:35:423 BROKER/(9085:9085): Nuestro size de memoria total es 2^4
+[DEBUG] 02:11:35:423 BROKER/(9085:9085): Nivel 1 - Bloques 2
+[DEBUG] 02:11:35:423 BROKER/(9085:9085): Nivel 2 - Bloques 4
+[DEBUG] 02:11:35:423 BROKER/(9085:9085): Nivel 3 - Bloques 6
+[DEBUG] 02:11:35:423 BROKER/(9085:9085): La cantidad de bloques es 12
+[INFO] 02:13:19:22 BROKER/(9158:9158): Logger Iniciado
+[INFO] 02:13:19:25 BROKER/(9158:9158): Archivo de configuracion seteado
+[INFO] 02:13:19:25 BROKER/(9158:9158): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:13:19:25 BROKER/(9158:9158): Inicializando Memoria Cache
+[INFO] 02:13:19:25 BROKER/(9158:9158): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nuestra particion minima es 2^2
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nuestro size de memoria total es 2^4
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nivel 0 - Bloques 0
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nivel 1 - Bloques 2
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nivel 2 - Bloques 4
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): La cantidad de bloques es 0
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nuestra particion minima es 2^2
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nuestro size de memoria total es 2^4
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nivel 0 - Bloques 0
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nivel 1 - Bloques 2
+[DEBUG] 02:13:19:27 BROKER/(9158:9158): Nivel 2 - Bloques 4
+[DEBUG] 02:13:19:28 BROKER/(9158:9158): La cantidad de bloques es 0
+[INFO] 02:13:55:575 BROKER/(9201:9201): Logger Iniciado
+[INFO] 02:13:55:580 BROKER/(9201:9201): Archivo de configuracion seteado
+[INFO] 02:13:55:580 BROKER/(9201:9201): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:13:55:580 BROKER/(9201:9201): Inicializando Memoria Cache
+[INFO] 02:13:55:580 BROKER/(9201:9201): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:13:55:580 BROKER/(9201:9201): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:13:55:580 BROKER/(9201:9201): Nuestra particion minima es 2^2
+[DEBUG] 02:13:55:580 BROKER/(9201:9201): Nuestro size de memoria total es 2^4
+[DEBUG] 02:13:55:580 BROKER/(9201:9201): Nivel 0 - Bloques 0
+[DEBUG] 02:13:55:580 BROKER/(9201:9201): Nivel 1 - Bloques 2
+[DEBUG] 02:13:55:581 BROKER/(9201:9201): Nivel 2 - Bloques 4
+[DEBUG] 02:13:55:581 BROKER/(9201:9201): La cantidad de bloques es 0
+[DEBUG] 02:13:55:581 BROKER/(9201:9201): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:13:55:581 BROKER/(9201:9201): Nuestra particion minima es 2^2
+[DEBUG] 02:13:55:581 BROKER/(9201:9201): Nuestro size de memoria total es 2^4
+[DEBUG] 02:13:55:581 BROKER/(9201:9201): Nivel 0 - Bloques 0
+[DEBUG] 02:13:55:581 BROKER/(9201:9201): Nivel 1 - Bloques 2
+[DEBUG] 02:13:55:581 BROKER/(9201:9201): Nivel 2 - Bloques 4
+[DEBUG] 02:13:55:581 BROKER/(9201:9201): La cantidad de bloques es 0
+[INFO] 02:14:41:181 BROKER/(9252:9252): Logger Iniciado
+[INFO] 02:14:41:184 BROKER/(9252:9252): Archivo de configuracion seteado
+[INFO] 02:14:41:184 BROKER/(9252:9252): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:14:41:184 BROKER/(9252:9252): Inicializando Memoria Cache
+[INFO] 02:14:41:184 BROKER/(9252:9252): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:14:41:184 BROKER/(9252:9252): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:14:41:184 BROKER/(9252:9252): Nuestra particion minima es 2^2
+[DEBUG] 02:14:41:184 BROKER/(9252:9252): Nuestro size de memoria total es 2^4
+[DEBUG] 02:14:41:184 BROKER/(9252:9252): Nivel 0 - Bloques 0
+[DEBUG] 02:14:41:184 BROKER/(9252:9252): Nivel 1 - Bloques 2
+[DEBUG] 02:14:41:184 BROKER/(9252:9252): Nivel 2 - Bloques 4
+[DEBUG] 02:14:41:184 BROKER/(9252:9252): La cantidad de bloques es 0
+[DEBUG] 02:14:41:185 BROKER/(9252:9252): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:14:41:185 BROKER/(9252:9252): Nuestra particion minima es 2^2
+[DEBUG] 02:14:41:185 BROKER/(9252:9252): Nuestro size de memoria total es 2^4
+[DEBUG] 02:14:41:185 BROKER/(9252:9252): Nivel 0 - Bloques 0
+[DEBUG] 02:14:41:185 BROKER/(9252:9252): Nivel 1 - Bloques 2
+[DEBUG] 02:14:41:185 BROKER/(9252:9252): Nivel 2 - Bloques 4
+[DEBUG] 02:14:41:185 BROKER/(9252:9252): La cantidad de bloques es 0
+[INFO] 02:16:17:797 BROKER/(9315:9315): Logger Iniciado
+[INFO] 02:16:17:797 BROKER/(9315:9315): Archivo de configuracion seteado
+[INFO] 02:16:17:797 BROKER/(9315:9315): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:16:17:797 BROKER/(9315:9315): Inicializando Memoria Cache
+[INFO] 02:16:17:798 BROKER/(9315:9315): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:16:17:798 BROKER/(9315:9315): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:16:17:798 BROKER/(9315:9315): Nuestra particion minima es 2^2
+[DEBUG] 02:16:17:798 BROKER/(9315:9315): Nuestro size de memoria total es 2^4
+[DEBUG] 02:16:17:798 BROKER/(9315:9315): Nivel 0 - Bloques 0
+[DEBUG] 02:16:17:798 BROKER/(9315:9315): Nivel 1 - Bloques 2
+[DEBUG] 02:16:17:798 BROKER/(9315:9315): Nivel 2 - Bloques 4
+[DEBUG] 02:16:17:798 BROKER/(9315:9315): La cantidad de bloques es 0
+[DEBUG] 02:16:17:799 BROKER/(9315:9315): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:16:17:799 BROKER/(9315:9315): Nuestra particion minima es 2^2
+[DEBUG] 02:16:17:799 BROKER/(9315:9315): Nuestro size de memoria total es 2^4
+[DEBUG] 02:16:17:799 BROKER/(9315:9315): Nivel 0 - Bloques 0
+[DEBUG] 02:16:17:799 BROKER/(9315:9315): Nivel 1 - Bloques 2
+[DEBUG] 02:16:17:799 BROKER/(9315:9315): Nivel 2 - Bloques 4
+[DEBUG] 02:16:17:800 BROKER/(9315:9315): La cantidad de bloques es 0
+[INFO] 02:23:13:475 BROKER/(10114:10114): Logger Iniciado
+[INFO] 02:23:13:475 BROKER/(10114:10114): Archivo de configuracion seteado
+[INFO] 02:23:13:475 BROKER/(10114:10114): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:23:13:475 BROKER/(10114:10114): Inicializando Memoria Cache
+[INFO] 02:23:13:475 BROKER/(10114:10114): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:23:13:475 BROKER/(10114:10114): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:23:13:475 BROKER/(10114:10114): Nuestra particion minima es 2^2
+[DEBUG] 02:23:13:475 BROKER/(10114:10114): Nuestro size de memoria total es 2^4
+[DEBUG] 02:23:13:475 BROKER/(10114:10114): Nivel 0 - Bloques 0
+[DEBUG] 02:23:13:475 BROKER/(10114:10114): Nivel 1 - Bloques 0
+[DEBUG] 02:23:13:475 BROKER/(10114:10114): Nivel 2 - Bloques 0
+[DEBUG] 02:23:13:476 BROKER/(10114:10114): La cantidad de bloques es 0
+[DEBUG] 02:23:13:476 BROKER/(10114:10114): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:23:13:476 BROKER/(10114:10114): Nuestra particion minima es 2^2
+[DEBUG] 02:23:13:476 BROKER/(10114:10114): Nuestro size de memoria total es 2^4
+[DEBUG] 02:23:13:476 BROKER/(10114:10114): Nivel 0 - Bloques 0
+[DEBUG] 02:23:13:476 BROKER/(10114:10114): Nivel 1 - Bloques 0
+[DEBUG] 02:23:13:476 BROKER/(10114:10114): Nivel 2 - Bloques 0
+[DEBUG] 02:23:13:476 BROKER/(10114:10114): La cantidad de bloques es 0
+[INFO] 02:23:37:207 BROKER/(10156:10156): Logger Iniciado
+[INFO] 02:23:37:207 BROKER/(10156:10156): Archivo de configuracion seteado
+[INFO] 02:23:37:207 BROKER/(10156:10156): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:23:37:207 BROKER/(10156:10156): Inicializando Memoria Cache
+[INFO] 02:23:37:207 BROKER/(10156:10156): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:23:37:207 BROKER/(10156:10156): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:23:37:207 BROKER/(10156:10156): Nuestra particion minima es 2^2
+[DEBUG] 02:23:37:207 BROKER/(10156:10156): Nuestro size de memoria total es 2^4
+[DEBUG] 02:23:37:207 BROKER/(10156:10156): Nivel 0 - Bloques 0
+[DEBUG] 02:23:37:207 BROKER/(10156:10156): Nivel 1 - Bloques 0
+[DEBUG] 02:23:37:208 BROKER/(10156:10156): Nivel 2 - Bloques 0
+[DEBUG] 02:23:37:208 BROKER/(10156:10156): La cantidad de bloques es 0
+[DEBUG] 02:23:37:208 BROKER/(10156:10156): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:23:37:208 BROKER/(10156:10156): Nuestra particion minima es 2^2
+[DEBUG] 02:23:37:208 BROKER/(10156:10156): Nuestro size de memoria total es 2^4
+[DEBUG] 02:23:37:208 BROKER/(10156:10156): Nivel 0 - Bloques 0
+[DEBUG] 02:23:37:208 BROKER/(10156:10156): Nivel 1 - Bloques 0
+[DEBUG] 02:23:37:208 BROKER/(10156:10156): Nivel 2 - Bloques 0
+[DEBUG] 02:23:37:208 BROKER/(10156:10156): La cantidad de bloques es 0
+[INFO] 02:24:10:503 BROKER/(10197:10197): Logger Iniciado
+[INFO] 02:24:10:509 BROKER/(10197:10197): Archivo de configuracion seteado
+[INFO] 02:24:10:509 BROKER/(10197:10197): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:24:10:509 BROKER/(10197:10197): Inicializando Memoria Cache
+[INFO] 02:24:10:509 BROKER/(10197:10197): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nuestra particion minima es 2^2
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nuestro size de memoria total es 2^4
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nivel 0 - Bloques 2
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nivel 1 - Bloques 4
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nivel 2 - Bloques 8
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): La cantidad de bloques es 8
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nuestra particion minima es 2^2
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nuestro size de memoria total es 2^4
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nivel 0 - Bloques 2
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nivel 1 - Bloques 4
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): Nivel 2 - Bloques 8
+[DEBUG] 02:24:10:509 BROKER/(10197:10197): La cantidad de bloques es 8
+[INFO] 02:25:17:383 BROKER/(10321:10321): Logger Iniciado
+[INFO] 02:25:17:383 BROKER/(10321:10321): Archivo de configuracion seteado
+[INFO] 02:25:17:383 BROKER/(10321:10321): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:25:17:383 BROKER/(10321:10321): Inicializando Memoria Cache
+[INFO] 02:25:17:383 BROKER/(10321:10321): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:25:17:383 BROKER/(10321:10321): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:25:17:383 BROKER/(10321:10321): Nuestra particion minima es 2^2
+[DEBUG] 02:25:17:383 BROKER/(10321:10321): Nuestro size de memoria total es 2^4
+[DEBUG] 02:25:17:383 BROKER/(10321:10321): Nivel 0 - Bloques 2
+[DEBUG] 02:25:17:383 BROKER/(10321:10321): Nivel 1 - Bloques 4
+[DEBUG] 02:25:17:383 BROKER/(10321:10321): Nivel 2 - Bloques 8
+[DEBUG] 02:25:17:383 BROKER/(10321:10321): La cantidad de bloques es 8
+[DEBUG] 02:25:17:384 BROKER/(10321:10321): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:25:17:384 BROKER/(10321:10321): Nuestra particion minima es 2^2
+[DEBUG] 02:25:17:384 BROKER/(10321:10321): Nuestro size de memoria total es 2^4
+[DEBUG] 02:25:17:384 BROKER/(10321:10321): Nivel 0 - Bloques 2
+[DEBUG] 02:25:17:384 BROKER/(10321:10321): Nivel 1 - Bloques 4
+[DEBUG] 02:25:17:384 BROKER/(10321:10321): Nivel 2 - Bloques 8
+[DEBUG] 02:25:17:384 BROKER/(10321:10321): La cantidad de bloques es 8
+[INFO] 02:25:26:632 BROKER/(10368:10368): Logger Iniciado
+[INFO] 02:25:26:632 BROKER/(10368:10368): Archivo de configuracion seteado
+[INFO] 02:25:26:633 BROKER/(10368:10368): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:25:26:633 BROKER/(10368:10368): Inicializando Memoria Cache
+[INFO] 02:25:26:633 BROKER/(10368:10368): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:25:26:633 BROKER/(10368:10368): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:25:26:633 BROKER/(10368:10368): Nuestra particion minima es 2^2
+[DEBUG] 02:25:26:633 BROKER/(10368:10368): Nuestro size de memoria total es 2^4
+[DEBUG] 02:25:26:633 BROKER/(10368:10368): Nivel 0 - Bloques 2
+[DEBUG] 02:25:26:633 BROKER/(10368:10368): Nivel 1 - Bloques 4
+[DEBUG] 02:25:26:633 BROKER/(10368:10368): Nivel 2 - Bloques 8
+[DEBUG] 02:25:26:633 BROKER/(10368:10368): La cantidad de bloques es 8
+[DEBUG] 02:25:26:633 BROKER/(10368:10368): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:25:26:634 BROKER/(10368:10368): Nuestra particion minima es 2^2
+[DEBUG] 02:25:26:634 BROKER/(10368:10368): Nuestro size de memoria total es 2^4
+[DEBUG] 02:25:26:634 BROKER/(10368:10368): Nivel 0 - Bloques 2
+[DEBUG] 02:25:26:634 BROKER/(10368:10368): Nivel 1 - Bloques 4
+[DEBUG] 02:25:26:634 BROKER/(10368:10368): Nivel 2 - Bloques 8
+[DEBUG] 02:25:26:634 BROKER/(10368:10368): La cantidad de bloques es 8
+[INFO] 02:25:45:132 BROKER/(10412:10412): Logger Iniciado
+[INFO] 02:25:45:136 BROKER/(10412:10412): Archivo de configuracion seteado
+[INFO] 02:25:45:136 BROKER/(10412:10412): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:25:45:136 BROKER/(10412:10412): Inicializando Memoria Cache
+[INFO] 02:25:45:136 BROKER/(10412:10412): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:25:45:136 BROKER/(10412:10412): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:25:45:136 BROKER/(10412:10412): Nuestra particion minima es 2^2
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nuestro size de memoria total es 2^4
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nivel 0 - Bloques 2
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nivel 1 - Bloques 4
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nivel 2 - Bloques 8
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): La cantidad de bloques es 8
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nuestra particion minima es 2^2
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nuestro size de memoria total es 2^4
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nivel 0 - Bloques 2
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nivel 1 - Bloques 4
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): Nivel 2 - Bloques 8
+[DEBUG] 02:25:45:137 BROKER/(10412:10412): La cantidad de bloques es 8
+[INFO] 02:26:38:770 BROKER/(10467:10467): Logger Iniciado
+[INFO] 02:26:38:772 BROKER/(10467:10467): Archivo de configuracion seteado
+[INFO] 02:26:38:772 BROKER/(10467:10467): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:26:38:772 BROKER/(10467:10467): Inicializando Memoria Cache
+[INFO] 02:26:38:772 BROKER/(10467:10467): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:26:38:772 BROKER/(10467:10467): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:26:38:772 BROKER/(10467:10467): Nuestra particion minima es 2^2
+[DEBUG] 02:26:38:772 BROKER/(10467:10467): Nuestro size de memoria total es 2^4
+[DEBUG] 02:26:38:772 BROKER/(10467:10467): Nivel 0 - Bloques 2
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): Nivel 1 - Bloques 4
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): Nivel 2 - Bloques 8
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): La cantidad de bloques es 8
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): Nuestra particion minima es 2^2
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): Nuestro size de memoria total es 2^4
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): Nivel 0 - Bloques 2
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): Nivel 1 - Bloques 4
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): Nivel 2 - Bloques 8
+[DEBUG] 02:26:38:773 BROKER/(10467:10467): La cantidad de bloques es 8
+[INFO] 02:26:46:510 BROKER/(10505:10505): Logger Iniciado
+[INFO] 02:26:46:512 BROKER/(10505:10505): Archivo de configuracion seteado
+[INFO] 02:26:46:512 BROKER/(10505:10505): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:26:46:512 BROKER/(10505:10505): Inicializando Memoria Cache
+[INFO] 02:26:46:512 BROKER/(10505:10505): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:26:46:512 BROKER/(10505:10505): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nuestra particion minima es 2^2
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nuestro size de memoria total es 2^4
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nivel 0 - Bloques 2
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nivel 1 - Bloques 4
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nivel 2 - Bloques 8
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): La cantidad de bloques es 8
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nuestra particion minima es 2^2
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nuestro size de memoria total es 2^4
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nivel 0 - Bloques 2
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nivel 1 - Bloques 4
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): Nivel 2 - Bloques 8
+[DEBUG] 02:26:46:513 BROKER/(10505:10505): La cantidad de bloques es 8
+[INFO] 02:26:56:796 BROKER/(10545:10545): Logger Iniciado
+[INFO] 02:26:56:799 BROKER/(10545:10545): Archivo de configuracion seteado
+[INFO] 02:26:56:799 BROKER/(10545:10545): Lei la IP 127.0.0.1 y PUERTO 7942
+
+[INFO] 02:26:56:799 BROKER/(10545:10545): Inicializando Memoria Cache
+[INFO] 02:26:56:799 BROKER/(10545:10545): LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM
+[DEBUG] 02:26:56:799 BROKER/(10545:10545): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:26:56:799 BROKER/(10545:10545): Nuestra particion minima es 2^2
+[DEBUG] 02:26:56:799 BROKER/(10545:10545): Nuestro size de memoria total es 2^4
+[DEBUG] 02:26:56:799 BROKER/(10545:10545): Nivel 0 - Bloques 2
+[DEBUG] 02:26:56:799 BROKER/(10545:10545): Nivel 1 - Bloques 4
+[DEBUG] 02:26:56:799 BROKER/(10545:10545): Nivel 2 - Bloques 8
+[DEBUG] 02:26:56:799 BROKER/(10545:10545): La cantidad de bloques es 8
+[DEBUG] 02:26:56:800 BROKER/(10545:10545): Nuestro t_buddy System presenta 3 niveles
+[DEBUG] 02:26:56:800 BROKER/(10545:10545): Nuestra particion minima es 2^2
+[DEBUG] 02:26:56:800 BROKER/(10545:10545): Nuestro size de memoria total es 2^4
+[DEBUG] 02:26:56:800 BROKER/(10545:10545): Nivel 0 - Bloques 2
+[DEBUG] 02:26:56:800 BROKER/(10545:10545): Nivel 1 - Bloques 4
+[DEBUG] 02:26:56:800 BROKER/(10545:10545): Nivel 2 - Bloques 8
+[DEBUG] 02:26:56:800 BROKER/(10545:10545): La cantidad de bloques es 8

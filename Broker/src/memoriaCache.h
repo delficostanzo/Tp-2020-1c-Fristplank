@@ -34,8 +34,7 @@ void * descachearCaughtPokemon(void* mensajeEnMemoria);
 void escribirMemoria(void * mensaje, t_metadata * meta);
 void * leerMemoria(t_metadata * meta);
 void modificarUltimaReferencia(t_metadata * meta, char tipoReferencia);
+void compactarMemoria();
 
-int potenciaDeDosProxima(uint32_t size);
-int esPotenciaDeDos(int numero);
 
 #endif /* SRC_MEMORIACACHE_H_ */
