@@ -24,7 +24,6 @@ void enviarGetDesde(int socketGet){
 		enviar_get_pokemon(getPoke, socketGet, -1, -1);
 		//recibirIdGet(socketGet);
 
-		//free(getPoke); ->DOUBLE FREE
 	}
 
 	pthread_mutex_unlock(&mutexObjetivosGlobales);

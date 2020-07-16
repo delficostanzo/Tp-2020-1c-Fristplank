@@ -280,7 +280,7 @@ int conectarAModulo(String PUERTO, String IP){
 
 	int puertoInt = atoi(PUERTO);
 	while(conectarA(conexion, IP, puertoInt) != 1){
-		log_debug(logger, "Conectando al módulo...");
+		//log_debug(logger, "Conectando al módulo...");
 	}
 
 	t_handshake* handshake = malloc(sizeof(t_handshake));

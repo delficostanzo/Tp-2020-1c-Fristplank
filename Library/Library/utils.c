@@ -138,7 +138,7 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 
 	if(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) < 1){
 		//ACA ENTRA SI HAY ERROR
-		free(paquete);
+		//free(paquete);
 		return NULL;
 	}
 
