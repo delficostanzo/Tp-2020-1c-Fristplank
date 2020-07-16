@@ -51,23 +51,31 @@ void pasarAReadyParaAtrapar(){
 		pthread_mutex_unlock(&entrenador->mutexEstado);
 		return cumple;
 	}
-	pthread_mutex_lock(&mutexEntrenadores);
-	t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
-	int cantidadPosibles = list_size(entrenadoresPosibles);
-	pthread_mutex_unlock(&mutexEntrenadores);
 
-	if(cantidadPosibles != 0) {
-		pthread_mutex_lock(&mutexPokemonesLibres);
-		int cantidadDePokesLibres = list_size(pokemonesLibres);
-		pthread_mutex_unlock(&mutexPokemonesLibres);
+	pthread_mutex_lock(&mutexPokemonesLibres);
+	int cantidadDePokesLibres = list_size(pokemonesLibres);
+	pthread_mutex_unlock(&mutexPokemonesLibres);
 
-		//asignamos objetivo al entrenador mas cercano
-		for(int index=0; index < cantidadDePokesLibres; index++){
+	//asignamos objetivo al entrenador mas cercano
+	for(int index=0; index < cantidadDePokesLibres; index++){
+
+		pthread_mutex_lock(&mutexEntrenadores);
+		t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
+		int cantidadPosibles = list_size(entrenadoresPosibles);
+		pthread_mutex_unlock(&mutexEntrenadores);
+
+		if(cantidadPosibles != 0) {
+
+
+
 			pthread_mutex_lock(&mutexPokemonesLibres);
 			PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
 			pthread_mutex_unlock(&mutexPokemonesLibres);
 			if(pokemonLibre != NULL){
 
+//				pthread_mutex_lock(&mutexEntrenadores);
+//				t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
+//				pthread_mutex_unlock(&mutexEntrenadores);
 
 				pthread_mutex_lock(&mutexEntrenadores);
 				//apuntan a los mismos entrenadores globales
@@ -89,11 +97,14 @@ void pasarAReadyParaAtrapar(){
 				int cantTotal = cantidadDeEspeciesTotales;
 				log_info(LO, "El entrenador %d paso a estado ready para atrapar al pokemon %s", entrenadorAReady->numeroEntrenador, pokemonLibre->nombre);
 
+
 			}
 
 
 		}
+
 	}
+
 	//destruirLog(logger);
 }
 
@@ -224,10 +235,12 @@ void pasarAExec(){
 		CC ++;
 		char* charDelMovimiento = obtenerCharDeMov(entrenador->movimientoEnExec->objetivo);
 		//sem_wait(&semaforoEstados);
+		sacarDeListaReady(entrenador);
+
 		pthread_mutex_lock(&entrenador->mutexEstado);
 		entrenador->estado = 3;
 		pthread_mutex_unlock(&entrenador->mutexEstado);
-		sacarDeListaReady(entrenador);
+
 		log_info(LO, "El entrenador %d paso a estado exec para %s", entrenador->numeroEntrenador, charDelMovimiento);
 		//sem_post(&semaforoEstados);
 		//pthread_mutex_unlock(&(entrenador->mutexEntrenador));
@@ -373,26 +386,26 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 
 void terminarSiTodosExit() {
 
-	int estaEnExec(Entrenador* entrenador) {
-		pthread_mutex_lock(&entrenador->mutexEstado);
-		int cumple = entrenador->estado == 5;
-		pthread_mutex_unlock(&entrenador->mutexEstado);
-		return cumple;
-	}
-	pthread_mutex_lock(&mutexEntrenadores);
-	int todosCumplen = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExec);
-	pthread_mutex_unlock(&mutexEntrenadores);
-
-
-	if(todosCumplen) {
+//	int estaEnExec(Entrenador* entrenador) {
+//		pthread_mutex_lock(&entrenador->mutexEstado);
+//		int cumple = entrenador->estado == 5;
+//		pthread_mutex_unlock(&entrenador->mutexEstado);
+//		return cumple;
+//	}
+//	pthread_mutex_lock(&mutexEntrenadores);
+//	int todosCumplen = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExec);
+//	pthread_mutex_unlock(&mutexEntrenadores);
+//
+//
+//	if(todosCumplen) {
 		int cantidadCPUTotal = ciclosTotales();
 		log_info(LO, "Todos lo entrenadores estan en exit, el Team cumplio su objetivo");
-		log_info(LO, "El total de ciclos de CPU  consumidos por el team fue de : %d", cantidadCPUTotal);
+		log_info(LO, "El total de ciclos de CPU  consumidos por el team fue de: %d", cantidadCPUTotal);
 		log_info(LO, "La cantidad de cambios de contexto fue: %d", CC);
 		log_info(LO, "La cantidad de deadlocks fue: %d", cantidadDeadlocks);
 		logearResultadosEntrenadores();
 		//terminarTeam();
-	}
+	//}
 }
 
 void logearResultadosEntrenadores(){

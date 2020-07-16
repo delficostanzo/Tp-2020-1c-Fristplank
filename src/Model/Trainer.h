@@ -51,11 +51,6 @@ typedef struct {
 	int numeroEntrenador;
 }Entrenador;
 
-typedef enum{
-	FIFO = 1,
-	ROUNDROBIN = 2
-}Algoritmo; //NO LO USO ?
-
 Entrenador* newEntrenador();
 Entrenador* buscarPorNumero(int numero);
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion);

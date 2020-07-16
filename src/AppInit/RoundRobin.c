@@ -66,11 +66,12 @@ void moverSiDistanciaMayorAQ(Entrenador* entrenador, int posicionXPoke, int posi
 }
 
 void pasarAReadyPorQuantum(Entrenador* entrenador){
+	agregarAListaReady(entrenador);
 	// se pasa a ready con el mismo objetivo de atrapar el mismo poke
 	pthread_mutex_lock(&entrenador->mutexEstado);
 	entrenador->estado = 2;
 	pthread_mutex_unlock(&entrenador->mutexEstado);
-	agregarAListaReady(entrenador);
+
 }
 
 
