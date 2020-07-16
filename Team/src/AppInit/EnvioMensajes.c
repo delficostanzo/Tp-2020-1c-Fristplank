@@ -107,16 +107,11 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 	if (paqueteAppeared != NULL) {
 		t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
-
 			agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
 
 			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
-		//	free(appeared->pokemon);
-		//	free(appeared->posicion);
-		//	free(appeared);
-		//	free(paqueteAppeared->buffer);
-		//	free(paqueteAppeared);
+
 			log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
 			free(appeared);
@@ -139,32 +134,35 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 	if(buscarPorNombre(nombreNuevoPoke, pokemonesAAtrapar) != NULL) {
 
 		//ya tengo uno de esos pokes libres en el mapa y esta en la misma posicion
-		pthread_mutex_lock(&mutexPokemonesLibres);
-		if(buscarPorNombre(nombreNuevoPoke, pokemonesLibres) != NULL && sonLaMismaPosicion(buscarPorNombre(nombreNuevoPoke, pokemonesLibres)->posicion, posicionNuevoPoke)) {
-			PokemonEnElMapa* pokeExistente = buscarPorNombre(nombreNuevoPoke, pokemonesLibres);
-
-			pokeExistente->cantidad ++;
-			pthread_mutex_unlock(&mutexPokemonesLibres);
-		} else {
+//		pthread_mutex_lock(&mutexPokemonesLibres);
+//		if(buscarPorNombre(nombreNuevoPoke, pokemonesLibres) != NULL && sonLaMismaPosicion(buscarPorNombre(nombreNuevoPoke, pokemonesLibres)->posicion, posicionNuevoPoke)) {
+//			PokemonEnElMapa* pokeExistente = buscarPorNombre(nombreNuevoPoke, pokemonesLibres);
+//
+//			pokeExistente->cantidad ++;
+//			pthread_mutex_unlock(&mutexPokemonesLibres);
+//		} else {
 			//solo lo agrego a la lista
 			PokemonEnElMapa* pokemonNuevo = newPokemon();
 			setPosicionTo(pokemonNuevo, posicionNuevoPoke);
 			setNombreTo(pokemonNuevo, nombreNuevoPoke);
 			setCantidadTo(pokemonNuevo, 1);
+			pthread_mutex_lock(&mutexPokemonesLibres);
 			list_add(pokemonesLibres, pokemonNuevo);
+			pthread_mutex_unlock(&mutexPokemonesLibres);
 			pthread_mutex_lock(&mutexPokemonesRecibidos);
 			list_add(pokemonesRecibidos, pokemonNuevo);
 			pthread_mutex_unlock(&mutexPokemonesRecibidos);
-			pthread_mutex_unlock(&mutexPokemonesLibres);
-		}
+			//pthread_mutex_unlock(&mutexPokemonesLibres);
+		//}
 
 	}
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
 
-//	pthread_mutex_lock(&mutexPokemonesLibres);
-//	log_info(logger, "$-Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
-//	t_list* libres = pokemonesLibres;
-//	pthread_mutex_unlock(&mutexPokemonesLibres);
+	pthread_mutex_lock(&mutexPokemonesLibres);
+	log_info(logger, "$-Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
+	//log_info(LO, "---Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
+	t_list* libres = pokemonesLibres;
+	pthread_mutex_unlock(&mutexPokemonesLibres);
 
 }
 
@@ -217,6 +215,7 @@ void recibirIdCatch(Entrenador* entrenador) {
 		//si se corto la conexion
 		log_info(LO, "Se corto la conexion con el Broker. Por default, el entrenador atrapo al pokemon");
 		//agrego el pokemon atrapado y cambio al entrenador de estado
+		sleep(3);
 		agregarAtrapado(entrenador, entrenador->movimientoEnExec->pokemonNecesitado);
 		estadoSiAtrapo(entrenador);
 		free(paqueteIdRecibido);

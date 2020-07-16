@@ -8,6 +8,7 @@
 #include "CierreTeam.h"
 
 void freeEntrenadores();
+void liberarConexion(int socket_cliente);
 
 
 void terminarTeam() {
@@ -78,7 +79,7 @@ void freeEntrenadores() {
 		free(entrenador->movimientoEnExec->pokemonNecesitado->nombre);
 		free(entrenador->movimientoEnExec->pokemonNecesitado);
 		free(entrenador->movimientoEnExec);
-		pthread_mutex_destroy(&entrenador->mutexEntrenador);
+		//pthread_mutex_destroy(&entrenador->mutexEntrenador);
 		pthread_exit(&entrenador->hiloEntrenador);
 		free(entrenador);
 	}

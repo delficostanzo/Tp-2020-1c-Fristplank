@@ -257,11 +257,13 @@ void asignarMovimientoPorDeadlock(Entrenador* entrenador){
 
 	atrapadoDeMas->cantidad = 1;
 	objetivoNoCumplido->cantidad = 1;
-	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
-	movimiento->objetivo = 2;
-	movimiento->pokemonAIntercambiar = atrapadoDeMas;
-	movimiento->pokemonNecesitado = objetivoNoCumplido;
-	entrenador->movimientoEnExec = movimiento;
+//	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
+//	movimiento->objetivo = 2;
+//	movimiento->pokemonAIntercambiar = atrapadoDeMas;
+//	movimiento->pokemonNecesitado = objetivoNoCumplido;
+	entrenador->movimientoEnExec->objetivo = 2;
+	entrenador->movimientoEnExec->pokemonAIntercambiar = atrapadoDeMas;
+	entrenador->movimientoEnExec->pokemonNecesitado = objetivoNoCumplido;
 	//lo vuelvo a poner en 5 por si ya venia de un deadlock que le disminuyo esta cantidad
 	entrenador->ciclosCPUFaltantesIntercambio = 5;
 }
