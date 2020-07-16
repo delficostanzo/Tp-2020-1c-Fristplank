@@ -373,14 +373,14 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 
 void terminarSiTodosExit() {
 
-	int estaEnExec(Entrenador* entrenador) {
+	int estaEnExit(Entrenador* entrenador) {
 		pthread_mutex_lock(&entrenador->mutexEstado);
 		int cumple = entrenador->estado == 5;
 		pthread_mutex_unlock(&entrenador->mutexEstado);
 		return cumple;
 	}
 	pthread_mutex_lock(&mutexEntrenadores);
-	int todosCumplen = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExec);
+	int todosCumplen = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExit);
 	pthread_mutex_unlock(&mutexEntrenadores);
 
 
@@ -391,7 +391,7 @@ void terminarSiTodosExit() {
 		log_info(LO, "La cantidad de cambios de contexto fue: %d", CC);
 		log_info(LO, "La cantidad de deadlocks fue: %d", cantidadDeadlocks);
 		logearResultadosEntrenadores();
-		//terminarTeam();
+		terminarTeam();
 	}
 }
 
