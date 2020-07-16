@@ -40,9 +40,9 @@ int main(int argc, char *argv[]) {
 
 
 
-	while(!generarSocketsConBroker()){
-		sleep(TIEMPO_RECONEXION);
-	}
+//	while(!generarSocketsConBroker()){
+//		sleep(TIEMPO_RECONEXION);
+//	}
 
 //	//Lanzar hilo para concetarme a Broker
 //	pthread_t hilosEscuchaBroker;
@@ -56,12 +56,8 @@ int main(int argc, char *argv[]) {
 	//recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
 	//recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
 
-
 	//pthread_join(hilosEscuchaBroker, NULL);
 	pthread_join(hiloEscuchaGameBoy, NULL);
-
-	//list_destroy_and_destroy_elements(entrenadores, free);
-
 
 	return 0;
 }
