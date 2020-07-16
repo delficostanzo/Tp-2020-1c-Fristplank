@@ -44,16 +44,6 @@ typedef struct {
 	t_list * suscriptores;
 } t_cola;
 
-typedef struct{
-
-	uint32_t posicion;
-	uint32_t size;
-
-	struct t_nodo_buddy* xadre;
-	struct t_nodo_buddy* hijeDereche;
-	struct t_nodo_buddy* hijeIzquierde;
-}t_nodo_buddy;
-
 static const char* ID_COLA[] = { "COLAERROR", "NEW", "APPEAR", "CATCH",
 		"CAUGHT", "GET", "LOCALIZED" };
 static const char* ID_PROCESO[] = {
@@ -81,13 +71,12 @@ int cantidadParticionesEliminadas;
 pthread_mutex_t mutexMemoria;
 pthread_mutex_t mutexColas;
 pthread_mutex_t mutexIdMensaje;
+pthread_mutex_t mutexEnvio;
 sem_t * colaNew;
 sem_t compactMemoria;
 
 t_log* logger;
 void * memoriaCache;
-
-t_nodo_buddy* nodoRaiz;
 
 int crearID();
 

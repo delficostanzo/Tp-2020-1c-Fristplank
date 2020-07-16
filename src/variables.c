@@ -9,6 +9,8 @@
 #include "variables.h"
 
 int crearID() {
-	return IDmsg++;
+	IDmsg++;
+	return IDmsg;
 
 }
+

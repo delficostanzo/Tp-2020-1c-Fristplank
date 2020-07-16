@@ -120,32 +120,31 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 		}
 	}
 
-	else{
+	else if(string_equals_ignore_case(ALGORITMO_MEMORIA, "BS")){
 		/* Definimos que el tamaño a buscar sea potencia de dos
 		 */
-		sizeDato = potenciaDeDosProxima(sizeDato);
-		t_nodo_buddy* nuevoNodo = nodoRaiz;
+		sizeDato = tamanioParticionMinima(sizeDato);
+		posicionEncontrada = buddy_pedir_mem(sizeDato);
 
-//		while(sizeDato <= nuevoNodo->size){
-//			if(nuevoNodo->hijeIzquierde == NULL && nuevoNodo->size / 2 >= sizeDato){
-//				nuevoNodo->hijeIzquierde = malloc(sizeof(t_nodo_buddy));
-//				nuevoNodo->hijeIzquierde->xadre = nuevoNodo;
-//				nuevoNodo->hijeIzquierde->size = nuevoNodo->size / 2;
-//				nuevoNodo->hijeIzquierde->posicion = nuevoNodo->posicion;
-//				nuevoNodo = nuevoNodo->hijeIzquierde;
-//			}
-//
-//			else if(nuevoNodo->hijeDereche == NULL && nuevoNodo->size / 2 >= sizeDato){
-//				nuevoNodo->hijeDereche = malloc(sizeof(t_nodo_buddy));
-//				nuevoNodo->hijeDereche->xadre = nuevoNodo;
-//				nuevoNodo->hijeDereche->size = nuevoNodo->size / 2;
-//				nuevoNodo->hijeDereche->posicion = nuevoNodo->posicion;
-//				nuevoNodo = nuevoNodo->hijeDereche;
-//			}
+		if (posicionEncontrada == -1){
 
-//		}
-//		posicionEncontrada = nuevoNodo->posicion;
+			if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "FIFO")) {
+				list_sort(particiones, (void*) ordenarId);
+			}
 
+			else if(string_equals_ignore_case(ALGORITMO_REEMPLAZO, "LRU")){
+				list_sort(particiones, (void *) ordenarFlagLRU);
+			}
+
+			int i = 0;
+			while(posicionEncontrada == -1){
+				t_metadata* auxParticion = list_get(particiones, i);
+				buddy_liberar_mem(auxParticion->posicion);
+				eliminarParticion(auxParticion);
+				posicionEncontrada = buddy_pedir_mem(sizeDato);
+				i++;
+			}
+		}
 	}
 
 	list_destroy_and_destroy_elements(particionesLibres, (void*) liberarPuntero);
@@ -213,44 +212,4 @@ void particion_destroy(t_metadata *self) { //OK
 
 void ACK_destroy(int* idACK){
 	free(idACK);
-}
-
-void compactarMemoria() {
-
-	int offset = 0;
-	int diferencia;
-	t_list * particiones = list_create();
-
-	for (int j = 0; j < 6; j++) {
-		list_add_all(particiones, cola[j].mensajes);
-	}
-
-	list_sort(particiones, (void*) ordenarPosicion);
-	int cantParticiones = list_size(particiones);
-
-	for (int i = 0; i < cantParticiones; i++) {
-		t_metadata* auxParticion = list_get(particiones, i);
-
-		if (offset == auxParticion->posicion) {
-			offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
-		}
-
-		diferencia = auxParticion->posicion - offset;
-
-		/* Me guardo el mensaje para luego reubicarlo
-		 */
-		void* mensajeACachear = malloc(sizeof(auxParticion->tamanioMensajeEnMemoria));
-		memcpy(mensajeACachear, (memoriaCache + auxParticion->posicion), auxParticion->tamanioMensajeEnMemoria);
-
-		auxParticion->posicion -= diferencia;
-
-		/* Escribo el mensaje en la nueva posicion
-		 */
-		escribirMemoria(mensajeACachear, auxParticion);
-		free(mensajeACachear);
-
-		offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
-	}
-
-	cantidadParticionesEliminadas = 0;
 }

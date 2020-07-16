@@ -8,7 +8,8 @@
 #ifndef SRC_PARTICIONES_H_
 #define SRC_PARTICIONES_H_
 
-#include "variables.h"
+#include "memoriaCache.h"
+#include "buddy.h"
 
 typedef struct{
 	int posicion;
@@ -30,7 +31,6 @@ bool ordenarPosicion(t_metadata * unaParticion, t_metadata * otraParticion);
 
 int particionLibre(int sizeDato);
 int tamanioParticionMinima(int unTamanio);
-void compactarMemoria();
 
 /*Funciones para list_destroy_and_destroy_elements
  */
