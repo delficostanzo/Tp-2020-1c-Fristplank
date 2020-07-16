@@ -41,7 +41,8 @@ void funcionesDelEntrenador(void* unEntrenador){
 	while(cumple) {
 		//el unlock de este mutex lo va a hacer el planificador cuando este en exec
 		//el entrenador no se entera
-		pthread_mutex_lock(&(entrenador->mutexEntrenador));
+		//pthread_mutex_lock(&(entrenador->mutexEntrenador));
+		sem_wait(&entrenador->semaforoExecEntrenador);
 		cumplirObjetivo(entrenador);
 	}
 

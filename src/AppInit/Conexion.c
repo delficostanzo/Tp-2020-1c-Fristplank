@@ -24,9 +24,9 @@ void* escucharGameBoy(){
 
 		quickLog("$-Me conecté con GameBoy");
 
-		pthread_t escucharAppearedPokemon;
-		pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemonGameBoy, NULL);
-		pthread_detach(escucharAppearedPokemon);
+		pthread_t escucharAppearedPokemonGameBoy;
+		pthread_create(&escucharAppearedPokemonGameBoy, NULL, (void*)escucharColaAppearedPokemonGameBoy, NULL);
+		pthread_detach(escucharAppearedPokemonGameBoy);
 	}
 }
 

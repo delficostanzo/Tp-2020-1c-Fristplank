@@ -141,11 +141,13 @@ void setEstadoNew(t_list* entrenadores){
 void setMutex(t_list* entrenadores) {
 	for(int index=0; index < list_size(entrenadores); index++){
 		Entrenador* entrenador = list_get(entrenadores, index);
-		pthread_mutex_init(&(entrenador->mutexEntrenador), NULL);
+		//pthread_mutex_init(&(entrenador->mutexEntrenador), NULL);
 		//lo dejo en 0 para que no cumpla el objetivo hasta que el planificador le haga el unlock
-		pthread_mutex_lock(&(entrenador->mutexEntrenador));
+		//pthread_mutex_lock(&(entrenador->mutexEntrenador));
+		sem_init(&entrenador->semaforoExecEntrenador, 1, 0);
 		pthread_mutex_init(&(entrenador->mutexEstado), NULL);
 		pthread_mutex_init(&(entrenador->mutexCorrelativo), NULL);
+		//pthread_mutex_init(&(entrenador->mutexMovimiento), NULL);
 	}
 }
 

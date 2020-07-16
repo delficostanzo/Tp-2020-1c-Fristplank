@@ -42,9 +42,11 @@ typedef struct {
 	pthread_t hiloEntrenador;
 	int ciclosCPUConsumido;
 	int idCorrelativoDeEspera;
-	pthread_mutex_t mutexEntrenador;
+	//pthread_mutex_t mutexEntrenador;
+	sem_t semaforoExecEntrenador;
 	pthread_mutex_t mutexEstado;
 	pthread_mutex_t mutexCorrelativo;
+	pthread_mutex_t mutexMovimiento;
 	int ciclosCPUFaltantesIntercambio;
 	int numeroEntrenador;
 }Entrenador;
