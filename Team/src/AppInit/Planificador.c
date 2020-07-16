@@ -117,7 +117,7 @@ int entrenadorNoEstaEnListaReady(Entrenador* entrenador) {
 	pthread_mutex_lock(&mutexListaEntrenadoresReady);
 	int esta = list_any_satisfy(listaEntrenadoresReady, (erasedTypeFilter)estaElEntrenador);
 	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
-	return esta != 1;
+	return !esta;
 }
 
 Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre){
@@ -386,18 +386,18 @@ void atrapar(Entrenador* entrenador, PokemonEnElMapa* pokemon) {
 
 void terminarSiTodosExit() {
 
-//	int estaEnExec(Entrenador* entrenador) {
-//		pthread_mutex_lock(&entrenador->mutexEstado);
-//		int cumple = entrenador->estado == 5;
-//		pthread_mutex_unlock(&entrenador->mutexEstado);
-//		return cumple;
-//	}
-//	pthread_mutex_lock(&mutexEntrenadores);
-//	int todosCumplen = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExec);
-//	pthread_mutex_unlock(&mutexEntrenadores);
-//
-//
-//	if(todosCumplen) {
+	int estaEnExit(Entrenador* entrenador) {
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		int cumple = entrenador->estado == 5;
+		pthread_mutex_unlock(&entrenador->mutexEstado);
+		return cumple;
+	}
+	pthread_mutex_lock(&mutexEntrenadores);
+	int todosCumplen = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExit);
+	pthread_mutex_unlock(&mutexEntrenadores);
+
+
+	if(todosCumplen) {
 		int cantidadCPUTotal = ciclosTotales();
 		log_info(LO, "Todos lo entrenadores estan en exit, el Team cumplio su objetivo");
 		log_info(LO, "El total de ciclos de CPU  consumidos por el team fue de: %d", cantidadCPUTotal);
@@ -405,7 +405,7 @@ void terminarSiTodosExit() {
 		log_info(LO, "La cantidad de deadlocks fue: %d", cantidadDeadlocks);
 		logearResultadosEntrenadores();
 		//terminarTeam();
-	//}
+	}
 }
 
 void logearResultadosEntrenadores(){

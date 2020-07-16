@@ -16,7 +16,7 @@ void terminarTeam() {
 	if (config != NULL) {
 		config_destroy(config); //destruye la esctructura de config en memoria, no elimina el archivo de config
 	}
-
+	log_info(LO, "Se destruye la estructura de config sin eliminar el archivo config");
 	//pthread_exit(escucharAppearedPokemon);
 
 	liberarConexion(socketGet);
@@ -28,7 +28,11 @@ void terminarTeam() {
 	liberarConexion(suscripcionCaught);
 	liberarConexion(socketACKCaught);
 
+	log_info(LO,"Se libera la conexion de los sockets");
+
 	freeEntrenadores();
+
+	log_info(LO,"Se liberan los entrenadores");
 
 	pthread_mutex_destroy(&mutexEntrenadores);
 	pthread_mutex_destroy(&mutexObjetivosGlobales);
@@ -36,6 +40,8 @@ void terminarTeam() {
 	pthread_mutex_destroy(&mutexListaEntrenadoresReady);
 	sem_destroy(&semaforoCatch);
 	sem_destroy(&semaforoCorrelativos);
+
+	log_info(LO,"Se liberan los semaforos");
 
 	//apuntaban a los mismos entrenadores ya destruidos
 	list_destroy(entrenadores);
@@ -48,6 +54,8 @@ void terminarTeam() {
 	//TODO los globales son copias
 	list_destroy(objetivosGlobales);
 	list_destroy(pokemonesLibres);
+
+	log_info(LO, "Se liberan las variables globales");
 
 	//freePaquetes();
 	destruirLog(logger);
@@ -73,6 +81,7 @@ void freeEntrenadores() {
 			free(poke);
 		}
 		list_destroy(entrenador->pokemonesObjetivos);
+		list_destroy(entrenador->pokemonesAtrapados);
 		//son copias de los atrapados asi que tambien hay que liberarlos
 		free(entrenador->movimientoEnExec->pokemonAIntercambiar->nombre);
 		free(entrenador->movimientoEnExec->pokemonAIntercambiar);
