@@ -11,7 +11,6 @@ int main(void) {
 
 //	terminar_programa(conexion, logger, config);
 
-
 }
 
 void iniciarBroker(void){

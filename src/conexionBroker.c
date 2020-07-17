@@ -25,6 +25,7 @@ void * esperarClientes() {
 		pthread_t thread;
 		pthread_create(&thread, NULL, (void*) atenderCliente, sockets);
 		pthread_detach(thread);
+//		sleep(1);
 	}
 }
 
@@ -220,11 +221,11 @@ void atenderCliente(argumentos* sockets) {
 			enviar_mensajes_cacheados(mensajes, suscribe->codigoCola, gameboy->socketDondeEscucha);
 			pthread_mutex_unlock(&mutexEnvio);
 
+			log_info(logger, "GameBoy se suscribió a la cola %s", ID_COLA[suscribe->codigoCola]);
+
 			free(mensajeRecibido->buffer->stream);
 			free(mensajeRecibido->buffer);
 			free(mensajeRecibido);
-
-			log_info(logger, "GameBoy se suscribió a la cola %s", ID_COLA[suscribe->codigoCola]);
 		}
 
 		/* El gameboy envia un mensaje
