@@ -16,6 +16,9 @@
 #include "Model/Mapa.h"
 #include "AppInit/EnvioMensajes.h"
 #include "AppInit/Conexion.h"
+#include "Pruebas/TestEntrenadores.h"
+#include "AppInit/HilosEntrenadores.h"
+
 
 
 #endif /* TEAM_H_ */

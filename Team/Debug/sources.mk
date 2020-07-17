@@ -15,5 +15,6 @@ C_DEPS :=
 SUBDIRS := \
 src/AppInit \
 src/Model \
+src/Pruebas \
 src \
 

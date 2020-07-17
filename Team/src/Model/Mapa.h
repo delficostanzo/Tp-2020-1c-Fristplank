@@ -1,49 +1,87 @@
-/*
- * Mapa.h
- *
- *  Created on: 25 may. 2020
- *      Author: fritsplank
- */
+
 
 #ifndef SRC_MODEL_MAPA_H_
 #define SRC_MODEL_MAPA_H_
 
 #include "utils.h"
-#include "../AppInit/ConfigFunctions.h"
-#include "Trainer.h"
-
+#include<commons/config.h>
+#include "../AppInit/LogFunctions.h"
 
 char* IP_BROKER;
 int PUERTO_BROKER;
 int puertoTeam;
 
+int ID_UNICO;
+
+int TIEMPO_RECONEXION;
+int QUANTUM;
+
+char* ALGORITMO;
+
 int conexionGameboy;
 int socketGameBoy;
+
 int conexionBroker;
+
+char* LogOficial;
+t_log* LO;
+t_log* logger;
+
 int suscripcionAppeared;
 int suscripcionCaught;
 int suscripcionLocalized;
+
 int socketGet;
+//int socketIdGet;
+
 int socketCatch;
+int socketIdCatch;
 
 int socketACKAppeared;
 int socketACKCaught;
 int socketACKLocalized;
 
+pthread_t escucharLocalizedPokemon;
+pthread_t escucharAppearedPokemon;
+pthread_t escucharCaughtPokemon;
+
+int cantidadDeEspeciesTotales;
+
+int CC;
+int cantidadDeadlocks;
+
+int noHayQueFinalizar;
+
+t_config* config;
+
+
 
 pthread_mutex_t mutexEntrenadores;
-pthread_mutex_t mutexObjetivosTotales;
-pthread_mutex_t mutexObjetivosAtrapados;
 pthread_mutex_t mutexObjetivosGlobales;
 pthread_mutex_t mutexPokemonesLibres;
+pthread_mutex_t mutexPokemonesRecibidos;
+pthread_mutex_t mutexListaEntrenadoresReady;
+sem_t semaforoCatch;
 
 t_list* entrenadores;
 t_list* objetivosTotales;
 t_list* objetivosAtrapados;
 t_list* objetivosGlobales;
 t_list* pokemonesLibres;
+t_list* pokemonesRecibidos;
+t_list* listaEntrenadoresReady;
+
+t_list* idsCorrelativosCaught;
+sem_t semaforoCorrelativos;
+t_list* idsCorrelativosLocalized;
 
 
-Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores);
+sem_t semaforoEstados;
+
+
+sem_t semaforoEntrenadorEsperando;
+
+
+void iniciarVariables();
 
 #endif /* SRC_MODEL_MAPA_H_ */

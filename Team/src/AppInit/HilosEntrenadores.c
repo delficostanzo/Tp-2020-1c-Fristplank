@@ -3,59 +3,56 @@
 
 
 void crearHiloParaEntrenador(Entrenador* entrenador);
-void funcionesDelEntrenador(Data entrenador);
+void funcionesDelEntrenador(void* entrenador);
 
 /////// CREACION DE LOS HILOS DE CADA ENTRENADOR /////////////////
 
 //esta funcion agarra una lista de entrenadores e inicializa cada hilo de las estructuras de los entrenadores
-void crearHilosDeEntrenadores(t_list* entrenadores){
+void crearHilosDeEntrenadores(){
+
+	pthread_mutex_lock(&mutexEntrenadores);
+	if(list_is_empty(entrenadores) != 1){
 	for(int index=0; index < list_size(entrenadores); index ++) {
 		crearHiloParaEntrenador(list_get(entrenadores, index));
 	}
+	}
+	pthread_mutex_unlock(&mutexEntrenadores);
 }
 
 // esta funcion agarra un entrenador del tipo Entrenador y lo convierte en un hilo (este seria el estado NEW)
-void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
+void crearHiloParaEntrenador(Entrenador* entrenador){
 	typedef void*(*erasedType)(void*);
-	 pthread_t hilo = entrenador->hiloEntrenador;
+	pthread_t hilo = entrenador->hiloEntrenador;
 
 	// pthread_create(el hilo creado, por ahora NULL, la funcion (micromain) donde el hilo hace todas sus tareas, los parametros que usa esa funcion)
-	pthread_create(&hilo, NULL, (erasedType)funcionesDelEntrenador, entrenador);
+	pthread_create(&hilo, NULL, (erasedType)funcionesDelEntrenador, (void*)entrenador);
+	pthread_detach(hilo);
 }
 
 //la funcion funcionesDelEntrenador tendria que estar en el Team.c, lo dejo aca por ahora
-void funcionesDelEntrenador(void* entrenador){
+void funcionesDelEntrenador(void* unEntrenador){
 
-	while(1){
-		//cuando quiero cambiar de estado, dentro de la lista de entrenadores debo fijarme cual es el que tiene enum en ese estado
-		Entrenador* unEntrenador = entrenador;
-		switch(unEntrenador->estado){
-		case NEW:
-			//se odena por distancia mas corta (el entrenador mas cerca de ese poke) y se pasa a ready
-			break;
-		case READY:
-			// para que se pase a estado EXEC, se hace por fifo, primero se verifica que ningun entrenador este en EXEC
-			break;
-		case EXEC:
-			// aca hay 3 codiciones: moverse y atrapar en el mapa, intercambiar y mover
-			break;
-		case BLOCK:
-			//el entrenador que va a pasar a estado READY es el que tenga la distancia mas cerca al poke
-			//condiciones: esperando respuesta del broker o esperando otro en BLOCK por intercambio de pokes
-			break;
-		case EXIT:
-			//cada vez que entrea un entrenador, se verifica que se cumple el objetivo global
-			break;
-		}
+	Entrenador* entrenador = (Entrenador*) unEntrenador;
+
+	quickLog("$-LLEGA ACA");
+
+	pthread_mutex_lock(&entrenador->mutexEstado);
+	int cumple = entrenador->estado != 5;
+	pthread_mutex_unlock(&entrenador->mutexEstado);
+	//bloqueo esperando que otro me active y me da el objetivo
+	while(cumple) {
+		//el unlock de este mutex lo va a hacer el planificador cuando este en exec
+		//el entrenador no se entera
+		//pthread_mutex_lock(&(entrenador->mutexEntrenador));
+		sem_wait(&entrenador->semaforoExecEntrenador);
+		cumplirObjetivo(entrenador);
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		cumple = entrenador->estado != 5;
+		pthread_mutex_unlock(&entrenador->mutexEstado);
 	}
-//
-//	if(no hay ninguno ejecutando){
-//		lock();
-//		entrenador pasa de READY a EXEC
-//		hace lo que tenga en su objetivo (enum de objetivos)
-//		entrenador pasa a estado BLOCK / EXIT / READY
-//		unlock();
-//	}
 
+	log_info(LO, "--El entrenador %c ya esta en exit", entrenador->numeroEntrenador);
+
+	quickLog("$-un entrenador ya esta en exit");
 }
 

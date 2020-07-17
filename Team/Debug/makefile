@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include src/Pruebas/subdir.mk
 -include src/Model/subdir.mk
 -include src/AppInit/subdir.mk
 -include src/subdir.mk
@@ -28,7 +29,7 @@ endif
 all: Team
 
 dependents:
-	-cd /home/utnso/tp-2020-1c-Fritsplank/Library/Library/Debug && $(MAKE) clean all
+	-cd /home/utnso/tp-2020-1c-Fritsplank/Library/Library/Debug && $(MAKE) all
 
 # Tool invocations
 Team: $(OBJS) $(USER_OBJS) /home/utnso/tp-2020-1c-Fritsplank/Library/Library/Debug/libLibrary.so

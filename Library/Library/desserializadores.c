@@ -12,7 +12,7 @@ void* des_serializar_new_pokemon(int socket_cliente, int size){
 
 	void* stream = recibirDatos(socket_cliente, size);
 	void* recorrerStream = stream;
-	t_new_pokemon* new_pokemon = malloc(sizeof(new_pokemon));
+	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
 
 	memcpy(&(new_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
@@ -36,7 +36,7 @@ void* des_serializar_new_pokemon(int socket_cliente, int size){
 void* des_serializar_appeared_pokemon(int socket_cliente, int size){
 	void* stream = recibirDatos(socket_cliente, size);
 	void* recorrerStream = stream;
-	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(appeared_pokemon));
+	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
 
 	memcpy(&(appeared_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
@@ -55,7 +55,7 @@ void* des_serializar_appeared_pokemon(int socket_cliente, int size){
 void* des_serializar_catch_pokemon(int socket_cliente, int size){
 	void* stream = recibirDatos(socket_cliente, size);
 	void* recorrerStream = stream;
-	t_catch_pokemon* catch_pokemon = malloc(sizeof(catch_pokemon));
+	t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
 
 	memcpy(&(catch_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
@@ -74,7 +74,7 @@ void* des_serializar_catch_pokemon(int socket_cliente, int size){
 void* des_serializar_caught_pokemon(int socket_cliente, int size){
 	void* stream = recibirDatos(socket_cliente, size);
 	void* recorrerStream = stream;
-	t_caught_pokemon* caught_pokemon = malloc(sizeof(caught_pokemon));
+	t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
 
 	memcpy(&(caught_pokemon->ok), recorrerStream, sizeof(uint32_t));
 
@@ -85,7 +85,7 @@ void* des_serializar_caught_pokemon(int socket_cliente, int size){
 void* des_serializar_get_pokemon(int socket_cliente, int size){
 	void* stream = recibirDatos(socket_cliente, size);
 	void* recorrerStream = stream;
-	t_get_pokemon* get_pokemon = malloc(sizeof(get_pokemon));
+	t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
 
 	memcpy(&(get_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
@@ -99,7 +99,7 @@ void* des_serializar_get_pokemon(int socket_cliente, int size){
 void* des_serializar_localized_pokemon(int socket_cliente, int size){
 	void* stream = recibirDatos(socket_cliente, size);
 	void* recorrerStream = stream;
-	t_localized_pokemon* localized_pokemon = malloc(sizeof(localized_pokemon));
+	t_localized_pokemon* localized_pokemon = malloc(sizeof(t_localized_pokemon));
 
 	memcpy(&(localized_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
@@ -111,7 +111,9 @@ void* des_serializar_localized_pokemon(int socket_cliente, int size){
 
 	localized_pokemon->listaPosiciones = list_create();
 
-	for(int i = 0; i < localized_pokemon->cantidadPosiciones; i++){
+	int cantidadPosiciones = (int) localized_pokemon->cantidadPosiciones;
+
+	for(int i = 0; i < cantidadPosiciones; i++){
 		t_posicion* posicion = malloc(sizeof(t_posicion));
 
 		memcpy(&(posicion->posicionX), recorrerStream, sizeof(uint32_t));
@@ -130,8 +132,8 @@ void* des_serializar_respuesta_id(int socket_cliente, int size){
 	void* recorrerStream = stream;
 	t_respuesta_id* respuesta_id = malloc(sizeof(t_respuesta_id));
 
-	memcpy(&(respuesta_id->idCorrelativo), recorrerStream, sizeof(uint32_t));
-	recorrerStream += sizeof(uint32_t);
+	memcpy(&(respuesta_id->idCorrelativo), recorrerStream, sizeof(int));
+	recorrerStream += sizeof(int);
 
 	free(stream);
 	return respuesta_id;

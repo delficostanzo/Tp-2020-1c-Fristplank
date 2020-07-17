@@ -87,7 +87,7 @@ void enviar_new_pokemon(t_new_pokemon* new_pokemon, int socket_cliente, int Id, 
 }
 
 void enviar_appeared_pokemon(t_appeared_pokemon* appeared_pokemon, int socket_cliente, int Id, int IdCorrelativo) {
-	t_paquete* paquete = crearPaqueteCon(appeared_pokemon, 1 + appeared_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, APPEARED_POKEMON);
+	t_paquete* paquete = crearPaqueteCon((void*) appeared_pokemon, 1 + appeared_pokemon->lengthOfPokemon + sizeof(uint32_t)*3, Id, IdCorrelativo, APPEARED_POKEMON);
 	enviar(paquete, socket_cliente);
 }
 
@@ -113,7 +113,7 @@ void enviar_localized_pokemon(t_localized_pokemon* localized_pokemon, int socket
 }
 
 void enviar_respuesta_id(t_respuesta_id* respuesta_id, int socket_cliente, int Id, int IdCorrelativo){
-	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(uint32_t), Id, IdCorrelativo, RESPUESTA_ID);
+	t_paquete* paquete = crearPaqueteCon((void*) respuesta_id, sizeof(int), Id, IdCorrelativo, RESPUESTA_ID);
 	enviar(paquete, socket_cliente);
 }
 
@@ -136,8 +136,10 @@ void enviar_gameboy_suscribe(t_gameboy_suscribe* gameboy_suscribe, int socket_cl
 t_paquete* recibir_mensaje(int socket_cliente) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	while(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) < 1){
-		//ESPERO MENSAJE VALIDO
+	if(recv(socket_cliente, &(paquete->codigo_operacion), sizeof(op_code), MSG_WAITALL) < 1){
+		//ACA ENTRA SI HAY ERROR
+		//free(paquete);
+		return NULL;
 	}
 
 	recv(socket_cliente, &(paquete->ID), sizeof(int), MSG_WAITALL);
@@ -150,27 +152,27 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 			paquete->buffer->stream = des_serializar_new_pokemon(socket_cliente, paquete->buffer->size);
 			break;
 
-		case APPEARED_POKEMON:;
+		case APPEARED_POKEMON:
 			paquete->buffer->stream = des_serializar_appeared_pokemon(socket_cliente, paquete->buffer->size);
 			break;
 
-		case CATCH_POKEMON:;
+		case CATCH_POKEMON:
 			paquete->buffer->stream = des_serializar_catch_pokemon(socket_cliente, paquete->buffer->size);
 			break;
 
-		case CAUGHT_POKEMON:;
+		case CAUGHT_POKEMON:
 			paquete->buffer->stream = des_serializar_caught_pokemon(socket_cliente, paquete->buffer->size);
 			break;
 
-		case GET_POKEMON:;
+		case GET_POKEMON:
 			paquete->buffer->stream = des_serializar_get_pokemon(socket_cliente, paquete->buffer->size);
 			break;
 
-		case LOCALIZED_POKEMON:;
+		case LOCALIZED_POKEMON:
 			paquete->buffer->stream = des_serializar_localized_pokemon(socket_cliente, paquete->buffer->size);
 			break;
 
-		case RESPUESTA_ID:;
+		case RESPUESTA_ID:
 			paquete->buffer->stream = des_serializar_respuesta_id(socket_cliente, paquete->buffer->size);
 			break;
 
@@ -178,7 +180,7 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 			// No se hace nada porque no tiene payload
 			break;
 
-		case GAMEBOYSUSCRIBE:;
+		case GAMEBOYSUSCRIBE:
 			paquete->buffer->stream = des_serializar_gameboy_suscribe(socket_cliente, paquete->buffer->size);
 			break;
 	}

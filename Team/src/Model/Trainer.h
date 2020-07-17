@@ -29,22 +29,48 @@ typedef struct {
 	PokemonEnElMapa* pokemonNecesitado;
 	PokemonEnElMapa* pokemonAIntercambiar; // cuando el objetivo sea atrapar, este estaria en NULL. Se va a usar cuando es mover e intercambiar(DEADLOCK)
 	ObjetivoEnExec objetivo;
-}LibreConObjetivo;
+	char numeroDelEntrenadorIntercambio;
+}MovimientoEnExec;
 
 typedef struct {
 	t_posicion* posicion;
 	t_list* pokemonesObjetivos;
 	t_list* pokemonesAtrapados;
-	LibreConObjetivo* pokemonYObjetivo;
+	MovimientoEnExec* movimientoEnExec;
 	MotivoDeBloqueo motivo;
 	Estado estado;
 	pthread_t hiloEntrenador;
-	//pthread_mutex o contador, despues vemo
+	int ciclosCPUConsumido;
+	int idCorrelativoDeEspera;
+	//pthread_mutex_t mutexEntrenador;
+	sem_t semaforoExecEntrenador;
+	pthread_mutex_t mutexEstado;
+	pthread_mutex_t mutexCorrelativo;
+	int ciclosCPUFaltantesIntercambio;
+	char numeroEntrenador;
 }Entrenador;
 
 Entrenador* newEntrenador();
+Entrenador* buscarPorNumero(int numero);
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
 void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon);
 t_posicion* newPosicion();
+char* obtenerCharDeMov(ObjetivoEnExec objetivo);
+
+Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores);
+Entrenador* buscarEntrenadorParaIntercambiar(PokemonEnElMapa* pokemonInnecesario);
+void agregarAListaReady(Entrenador* entrenadorAReady);
+void sacarDeListaReady(Entrenador* entrenadorASacar);
+void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado);
+void pasarADormido(Entrenador* entrenador);
+void pasarADeadlock(Entrenador* entrenador);
+int noEstaEnExit(Entrenador* entrenador);
+int estaEnExit(Entrenador* entrenador);
+void estadoSiAtrapo(Entrenador* entrenador);
+void pasarABlockEsperando(Entrenador* entrenador);
+int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);
+void asignarMovimientoPorDeadlock(Entrenador* entrenador);
+int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
+int esteComoIntercambio(Entrenador* entrenador);
 
 #endif /* SRC_MODEL_TRAINER_H_ */

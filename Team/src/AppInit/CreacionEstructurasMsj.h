@@ -12,5 +12,6 @@
 #include "../Model/Pokemon.h"
 
 t_get_pokemon* crearEstructuraGetDesde(PokemonEnElMapa* pokemones);
+t_catch_pokemon* crearEstructuraCatchDesde(PokemonEnElMapa* pokemon);
 
 #endif /* SRC_APPINIT_CREACIONESTRUCTURASMSJ_H_ */

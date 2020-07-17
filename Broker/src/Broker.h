@@ -15,12 +15,16 @@
 #include<commons/collections/list.h>
 #include<utils.h>
 
-pthread_t thread;
+
+pthread_t escucharACKAppearedPokemon;
+pthread_t escucharACKLocalizedPokemon;
+pthread_t escucharACKCaughtPokemon;
 
 
 t_log* iniciar_logger(void);
 t_config* leer_config(void);
-void terminar_programa(int, t_log*, t_config*);
+void terminar_programa(t_config*);
 void iniciar_servidor(void);
+void liberarConexion(int socket_cliente);
 
 #endif /* BROKER_H_ */
