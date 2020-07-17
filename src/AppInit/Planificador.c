@@ -333,24 +333,36 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 			log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
 
 			pasarAReadyPorQuantum(entrenadorMovido);
-			log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para moverse e intercambiar", entrenadorMovido->numeroEntrenador);
+			log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para intercambiar", entrenadorMovido->numeroEntrenador);
 
 		} else if(QUANTUM > distanciaHastaBloqueado) { //llega a hacer la distancia y consume parte de ciclo de intercambio
 					entrenadorMovido->posicion = entrenadorBloqueado->posicion;
 					//lo que sobro del quantum
-					int sobrante = QUANTUM - distanciaHastaBloqueado;
-					entrenadorMovido->ciclosCPUConsumido += QUANTUM;
-
-					entrenadorMovido->ciclosCPUFaltantesIntercambio = sobrante;
-					//por si en el proximo ready se planifica al bloqueado para que se mueva
-					entrenadorBloqueado->ciclosCPUFaltantesIntercambio = sobrante;
+//					int sobrante = QUANTUM - distanciaHastaBloqueado;
+//
+//					entrenadorMovido->ciclosCPUConsumido += sobrante;
+//
+//					entrenadorMovido->ciclosCPUFaltantesIntercambio -= sobrante;
+//
+//					//por si en el proximo ready se planifica al bloqueado para que se mueva
+//					entrenadorBloqueado->ciclosCPUFaltantesIntercambio = sobrante;
 
 					log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
 
 					pasarAReadyPorQuantum(entrenadorMovido);
 					log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para terminar de hacer el intercambio", entrenadorMovido->numeroEntrenador);
 
-				} else { //no llego a moverse hasta el entrenador para hacer el intercambio
+					//para el intercambio
+					int cpuIntercambio = entrenadorMovido->ciclosCPUFaltantesIntercambio;
+
+					if(QUANTUM < cpuIntercambio){
+						entrenadorMovido->ciclosCPUConsumido += QUANTUM;
+						int loQueLeFalta = cpuIntercambio - QUANTUM;
+						entrenadorMovido->ciclosCPUFaltantesIntercambio = loQueLeFalta;
+						pasarAReadyPorQuantum(entrenadorMovido);
+					}// si no es este caso, hace el if de arriba de todo
+
+					} else { //no llego a moverse hasta el entrenador para hacer el intercambio
 					moverSiDistanciaMayorAQ(entrenadorMovido, entrenadorBloqueado->posicion->posicionX, entrenadorBloqueado->posicion->posicionY, distanciaHastaBloqueado);
 
 					log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para moverse y hacer el intercambio", entrenadorMovido->numeroEntrenador);
