@@ -1,17 +1,21 @@
 
 #include "utils.h"
 #include "ConfigFunctions.h"
-#include "../Model/Mapa.h"
-
+#include "EnvioMensajes.h"
+#include "../Model/EntrenadoresPorEstado.h"
+#include "../Model/Trainer.h"
+#include "RoundRobin.h"
+#include "../Model/CierreTeam.h"
 
 #ifndef SRC_APPINIT_PLANIFICADOR_H_
 #define SRC_APPINIT_PLANIFICADOR_H_
 
-typedef struct{
-	t_list* entrenadores;
-}ListaEstados;
 
-void pasarDeNewAReady(t_list* entrenadores, t_list* pokemonesLibres);
-void pasarDeReadyAExec(t_list* entrenadores);
-void pasarDeBlockAReady(t_list* entrenadores, t_list* pokemonesLibres);
+void cumplirObjetivo(Entrenador* entrenador);
+void pasarAReadyParaAtrapar();
+void pasarAReadyParaIntercambiar();
+void pasarAExec();
+void planificarEntrenadores();
+void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes);
+
 #endif /* SRC_APPINIT_PLANIFICADOR_H_ */
