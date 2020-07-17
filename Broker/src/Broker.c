@@ -16,7 +16,7 @@ int main(void) {
 			"ALGORITMO_PARTICION_LIBRE");
 	IP_BROKER = config_get_string_value(config, "IP_BROKER");
 	PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
-	int FRECUENCIA_COMPACTACION = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
+	FRECUENCIA_COMPACTACION = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
 	//char* LOG_FILE =  config_get_string_value(config,"LOG_FILE");
 
 	log_info(logger, "Lei la IP %s y PUERTO %d\n", IP_BROKER, PUERTO_BROKER);
@@ -28,8 +28,6 @@ int main(void) {
 	pthread_mutex_init(&mutexColas,NULL);
 	pthread_mutex_init(&mutexIdMensaje,NULL);
 	pthread_mutex_init(&mutexEnvio, NULL);
-
-	iniciarBuddySystem();
 
 	/* Prueba
 	 *
@@ -50,12 +48,12 @@ int main(void) {
 	t_get_pokemon* asdasd = leerMemoria(mensaje);
 	log_debug(logger, asdasd->pokemon);*/
 
-//	pthread_t threadClientes;
-//	pthread_create(&threadClientes, NULL, (void*) esperarClientes, NULL);
+	pthread_t threadClientes;
+	pthread_create(&threadClientes, NULL, (void*) esperarClientes, NULL);
 
 
 
-//	pthread_join(threadClientes,NULL);
+	pthread_join(threadClientes,NULL);
 //	terminar_programa(conexion, logger, config);
 
 

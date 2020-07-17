@@ -8,7 +8,6 @@
 #include"bitmap.h"
 
 int solicitarBloque() {
-	pthread_mutex_lock(&semaforoBitarray);
 	log_debug(logger, "<> START: Solicitar bloque <>");
 
 	int bloqueEncontrado = -1;
@@ -36,7 +35,6 @@ int solicitarBloque() {
 	}
 
 	log_debug(logger, "<> END: Solicitar bloque <>");
-	pthread_mutex_unlock(&semaforoBitarray);
 
 	return bloqueEncontrado;
 }

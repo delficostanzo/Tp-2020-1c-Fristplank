@@ -11,7 +11,10 @@ void procesarNewPokemon(void* args) {
 	log_debug(logger, "<> START: procesarNewPokemon <>");
 
 	t_new_pokemon* new_pokemon = args;
-	log_info(logger, "Comenzamos a procesar NEW_POKEMON: Agregamos una cantidad %d en la posicion (%d,%d) del Pokemon %s", new_pokemon->cantidad, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->pokemon);
+	log_info(logger, "Procesar NEW_POKEMON");
+	log_info(logger, "Pokemon: %s", new_pokemon->pokemon);
+	log_info(logger, "Posicion: (%d,%d)", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
+	log_info(logger, "Cantidad: %d", new_pokemon->cantidad);
 
 	char* filePath = string_new();
 	char* finFilePath = string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES, new_pokemon->pokemon);
@@ -26,8 +29,7 @@ void procesarNewPokemon(void* args) {
 	t_config* metadata = config_create(filePath);
 	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
 	int sizeArchivo = config_get_int_value(metadata, "SIZE");
-	log_info("El size actual es %d bytes", sizeArchivo);
-
+	log_info("Size actual: [%d]", sizeArchivo);
 
 	char* posicionPlana = string_from_format("%d-%d=",
 			new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
@@ -58,10 +60,10 @@ void procesarNewPokemon(void* args) {
 				char** posicionYCantidad = string_split(posicionesActuales[i],
 						"=");
 
-				log_debug(logger, "Se ha encontrado la posicion");
-				log_debug(logger, "Cantidad vieja de Pokemons: %d",
+				log_info(logger, "Se ha encontrado la posicion");
+				log_info(logger, "Cantidad vieja de Pokemons: %d",
 						atoi(posicionYCantidad[1]));
-				log_debug(logger, "Cantidad nueva de Pokemons: %d",
+				log_info(logger, "Cantidad nueva de Pokemons: %d",
 						atoi(posicionYCantidad[1]) + new_pokemon->cantidad);
 
 				char* punteroACantidadVieja = posicionYCantidad[1];
@@ -126,7 +128,7 @@ void procesarNewPokemon(void* args) {
 		}
 		free(arrayDeBlocks);
 
-		log_info(logger, "La lista actual de bloques es %s]", listaDeBloques);
+		log_info(logger, "Lista de bloques previa: %s]", listaDeBloques);
 
 		/* PIDO BLOQUES SI ES NECESARIO
 		 */
@@ -134,8 +136,11 @@ void procesarNewPokemon(void* args) {
 		t_list* listaDeBloquesNuevos = list_create();
 
 		while ( (sizeNuevo > cantidadDeBloques * BLOCK_SIZE) && (noHayBloquesDisponibles == -1) ) {
-			log_info(logger, "Solicitando un bloque más.");
+			log_info(logger, "Solicitando un bloque más.")
+					;
+			pthread_mutex_lock(&semaforoBitarray);
 			int bloque = solicitarBloque();
+			pthread_mutex_unlock(&semaforoBitarray);
 
 			if(bloque < 0){
 				log_info(logger, "No hay bloques disponibles para guardar la información.");
@@ -178,14 +183,14 @@ void procesarNewPokemon(void* args) {
 				list_remove(listaDeBloquesNuevos, i);
 			}
 
-			log_info(logger, "La nueva lista de bloques es %s", listaDeBloques);
+			log_info(logger, "Lista de bloques actualizada: %s", listaDeBloques);
 			/* SETEO LA NUEVA LISTA DE BLOQUES EN LA CONFIG
 			 */
 
 			char* sizeEnConfig = string_itoa(sizeNuevo);
 			config_set_value(metadata, "SIZE", sizeEnConfig);
 			config_set_value(metadata, "BLOCKS", listaDeBloques);
-			log_info(logger, "El size nuevo es %s bytes", sizeEnConfig);
+			log_info(logger, "Size nuevo: [%s]", sizeEnConfig);
 
 			/* TRABAJO CON EL NUEVO ARRAY
 			 * PARA GUARDAR LOS DATOS
@@ -218,7 +223,10 @@ void procesarNewPokemon(void* args) {
 	else {
 		log_info(logger, "No existen bloques del pokemon.");
 		log_debug(logger, "Se procede a guardar la linea: %s", posicionPlanaYCantidad);
+
+		pthread_mutex_lock(&semaforoBitarray);
 		int bloqueAEscribir = solicitarBloque();
+		pthread_mutex_unlock(&semaforoBitarray);
 
 		if(bloqueAEscribir < 0){
 			log_info(logger, "No hay bloques disponibles para guardar la información.");
@@ -234,9 +242,9 @@ void procesarNewPokemon(void* args) {
 					bloqueAEscribir);
 
 			char* bloqueEnConfig = string_from_format("[%d]", bloqueAEscribir);
-			log_info(logger, "La nueva lista de bloques es %s", bloqueEnConfig);
+			log_info(logger, "Lista de bloques actualizada: %s", bloqueEnConfig);
 			config_set_value(metadata, "BLOCKS", bloqueEnConfig);
-			log_info(logger, "El size nuevo es %d bytes", strlen(posicionPlanaYCantidad));
+			log_info(logger, "Size nuevo: [%d]", strlen(posicionPlanaYCantidad));
 			char* sizeEnConfig = string_itoa(strlen(posicionPlanaYCantidad));
 			config_set_value(metadata, "SIZE", sizeEnConfig);
 
@@ -256,12 +264,14 @@ void procesarNewPokemon(void* args) {
 	log_debug(logger, "<> END: procesarNewPokemon <>");
 }
 
-void* procesarCatchPokemon(void* args) {
+int* procesarCatchPokemon(void* args) {
 
 	log_debug(logger, "<> START: procesarCatchPokemon <>");
 
 	t_catch_pokemon* catch_pokemon = args;
-	log_info(logger, "Comenzamos a procesar CATCH_POKEMON: Buscamos la posicion (%d,%d) del Pokemon %s",catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY, catch_pokemon->pokemon);
+	log_info(logger, "Procesar CATCH_POKEMON");
+	log_info(logger, "Pokemon: %s", catch_pokemon->pokemon);
+	log_info(logger, "Posicion: (%d,%d)", catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
 
 	/* Si el metadata no existe significa que el Pokemon no existe
 	 * devolvemos 0 para que se informe que no se pudo atrapar
@@ -283,7 +293,8 @@ void* procesarCatchPokemon(void* args) {
 	t_config* metadata = config_create(filePath);
 	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
 	int sizeArchivo = config_get_int_value(metadata, "SIZE");
-	log_info("El size actual es %d bytes", sizeArchivo);
+	log_info(logger, "Size actual: [%d]", sizeArchivo);
+
 
 	//	Verificar si las posiciones ya existen dentro del archivo. En caso de no existir se debe informar un error.
 	//	En caso que la cantidad del Pokémon sea “1”, se debe eliminar la línea. En caso contrario se debe decrementar la cantidad en uno.
@@ -375,7 +386,7 @@ void* procesarCatchPokemon(void* args) {
 		int sizeNuevo = strlen(contenidoNuevo);
 		char* sizeEnConfig = string_itoa(sizeNuevo);
 		config_set_value(metadata, "SIZE", sizeEnConfig);
-		log_info("El size nuevo es %d bytes", sizeNuevo);
+		log_info(logger, "Size nuevo: [%s]", sizeEnConfig);
 
 		log_debug(logger, "Comenzamos a guardar los %d bytes en los bloques.", sizeNuevo);
 
@@ -423,7 +434,7 @@ void* procesarCatchPokemon(void* args) {
 
 		string_append(&listaDeBloques, "]");
 
-		log_info(logger, "La nueva lista de bloques es %s", listaDeBloques);
+		log_info(logger, "Lista de bloques actualizada: %s", listaDeBloques);
 
 		/* SETEO LA NUEVA LISTA DE BLOQUES EN LA CONFIG
 		 */
@@ -483,6 +494,8 @@ void procesarGetPokemon(t_argumentos_procesar_get* args) {
 	log_debug(logger, "<> START: procesarGetPokemon <>");
 
 	t_get_pokemon* get_pokemon = args->get_pokemon;
+	log_info(logger, "Procesar GET_POKEMON");
+	log_info(logger, "Pokemon: %s", get_pokemon->pokemon);
 
 	/* Si el metadata no existe significa que el Pokemon no existe
 	 * devolvemos 0 para que se informe que no se pudo atrapar
@@ -558,7 +571,7 @@ void procesarGetPokemon(t_argumentos_procesar_get* args) {
 			}
 
 			localized_pokemon->cantidadPosiciones = posicionesEncontradas;
-			log_info(logger, "Se encontraron %d pares de posiciones para el Pokemon %s", localized_pokemon->cantidadPosiciones, localized_pokemon->pokemon);
+			log_info(logger, "Cantidad de (X,Y) encontradas: %d", localized_pokemon->cantidadPosiciones, localized_pokemon->pokemon);
 
 			for(int i = 0; arrayDeBlocks[i] != NULL; i++){
 				free(arrayDeBlocks[i]);

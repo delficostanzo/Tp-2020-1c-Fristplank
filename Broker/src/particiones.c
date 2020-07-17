@@ -41,7 +41,7 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 				/* La particion actual empieza donde termina la anterior
 				 */
 				if (offset == auxParticion->posicion) {
-					offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
+					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
 				}
 
 				/* Si la particion actual no empieza donde termina la anterior
@@ -68,7 +68,7 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 				posicionEncontrada = particion->posicion;
 			}
 
-			else if ((TAMANO_MEMORIA - offset) >= tamanioParticionMinima(sizeDato)){
+			else if ((TAMANO_MEMORIA - offset - 1) >= tamanioParticionMinima(sizeDato)){
 				posicionEncontrada = offset;
 			}
 
@@ -93,8 +93,8 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 				}
 
 			}
-			if ((TAMANO_MEMORIA - offset) >= sizeDato){
-				return offset; //SI aun puedo seguir agregando, retorno la ultima posicion
+			if ((TAMANO_MEMORIA - offset - 1) >= sizeDato){
+				posicionEncontrada = offset; //SI aun puedo seguir agregando, retorno la ultima posicion
 			}
 		}
 
@@ -200,6 +200,7 @@ void eliminarParticion(t_metadata * particionAEliminar) { //OK
 			if (auxMeta->posicion == posicion) {
 				list_remove_and_destroy_element(cola[i].mensajes, j, (void*) particion_destroy);
 				log_info(logger, "Se elimino la particion de la posicion %d", posicion); //OBLIGATORIO (7)
+				break;
 			}
 		}
 	}

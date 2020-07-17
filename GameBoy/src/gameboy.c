@@ -179,6 +179,11 @@ void dormir(int* segundos){
 }
 
 void escucharCola(void* colaAEscuchar){
+
+	for(int i = 0; 10000 > i; i++ ){
+		log_debug(logger, "asdasd[%d]", i);
+	}
+
 	op_code cola = (op_code) colaAEscuchar;
 
 	int conexionBroker = conectarAModulo(PUERTO_BROKER, IP_BROKER);
@@ -295,7 +300,7 @@ int conectarAModulo(String PUERTO, String IP){
 
 	t_handshake* handshake = malloc(sizeof(t_handshake));
 	handshake->id = GAMEBOY;
-	handshake->idUnico = 1;
+	handshake->idUnico = 999;
 
 	t_handshake* handshakeRecibido = responderHandshake(conexion, handshake);
 	log_info(logger, "El id del proceso con el que me conecte es: %s | ID Unico: %d", ID_PROCESO[handshakeRecibido->id], handshakeRecibido->idUnico);
@@ -336,7 +341,7 @@ t_config* leer_config(void)
 t_log* iniciarLogger(void){
 
 	t_log* logger;
-	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("DEBUG"))) == NULL){
+	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("INFO"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}
