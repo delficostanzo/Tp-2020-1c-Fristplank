@@ -232,10 +232,10 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsp
 	//sem_post(&semaforoEntrenadorEsperando);
 
 
-//	sem_wait(&semaforoCorrelativos);
-//	list_add(idsCorrelativosCaught, (void*) idCorrelativo);
-//	log_info(logger, "$-Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
-//	sem_post(&semaforoCorrelativos);
+	sem_wait(&semaforoCorrelativos);
+	list_add(idsCorrelativosCaught, (void*) idCorrelativo);
+	log_info(logger, "$-Ahora la cantidad de ids correlativos esperando respuestas caught es: %d", list_size(idsCorrelativosCaught));
+	sem_post(&semaforoCorrelativos);
 
 	log_info(logger, "$-Se registro el id del catch que mando el entrenador %c como id: %d", entrenadorEsperando->numeroEntrenador, idCorrelativo);
 }
@@ -243,9 +243,10 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsp
 t_paquete* recibirCaught(int socketCaught){
 	t_paquete* paqueteCaught = recibir_mensaje(socketCaught);
 
-	//sem_wait(&semaforoCorrelativos);
+	sem_wait(&semaforoCorrelativos);
 	int noVacio = list_is_empty(idsCorrelativosCaught) != 1;
-	//sem_post(&semaforoCorrelativos);
+	t_list* ids = idsCorrelativosCaught;
+	sem_post(&semaforoCorrelativos);
 
 	if(paqueteCaught != NULL){
 		t_caught_pokemon* caught = paqueteCaught->buffer->stream;

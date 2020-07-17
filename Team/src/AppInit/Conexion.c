@@ -176,8 +176,8 @@ void* escucharColaAppearedPokemon(){
 
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared);
 
-		//enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
-		//quickLog("$-Pudo enviar el ACK de los appeared");
+		enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
+		quickLog("$-Pudo enviar el ACK de los appeared");
 	}
 }
 

@@ -15,7 +15,10 @@
 #include<commons/collections/list.h>
 #include<utils.h>
 
-pthread_t thread;
+
+pthread_t escucharACKAppearedPokemon;
+pthread_t escucharACKLocalizedPokemon;
+pthread_t escucharACKCaughtPokemon;
 
 
 t_log* iniciar_logger(void);

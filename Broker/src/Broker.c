@@ -65,8 +65,8 @@ int main(void) {
 	free(handshakeResponse);
 
 	int suscripcionAppeared, suscripcionCaught, suscripcionLocalized, socketGet, socketCatch, socketIdCatch;
-	//int socketIdGet, socketACKAppeared, socketACKLocalized;
-	int socketACKCaught;
+	//int socketIdGet;
+	int socketACKCaught, socketACKAppeared, socketACKLocalized;
 
 	switch(idProcesoConectado) {
 	case TEAM:
@@ -76,10 +76,10 @@ int main(void) {
 		//socketIdGet = aceptarConexion(conexion);
 
 		suscripcionAppeared = aceptarConexion(conexion);
-		//socketACKAppeared = aceptarConexion(conexion);
+		socketACKAppeared = aceptarConexion(conexion);
 
 		suscripcionLocalized = aceptarConexion(conexion);
-		//socketACKLocalized = aceptarConexion(conexion);
+		socketACKLocalized = aceptarConexion(conexion);
 
 		socketCatch = aceptarConexion(conexion);
 		socketIdCatch = aceptarConexion(conexion);
@@ -163,6 +163,18 @@ int main(void) {
 		//recibirACK(socketACKCaught);
 	}
 
+	//pthread_t escucharACKLocalizedPokemon;
+	pthread_create(&escucharACKLocalizedPokemon, NULL, (void*)recibirACK, (void*) socketACKLocalized);
+	pthread_detach(escucharACKLocalizedPokemon);
+
+	//pthread_t escucharACKAppearedPokemon;
+	pthread_create(&escucharACKAppearedPokemon, NULL, (void*)recibirACK, (void*) socketACKAppeared);
+	pthread_detach(escucharACKAppearedPokemon);
+
+	//pthread_t escucharACKCaughtPokemon;
+	pthread_create(&escucharACKCaughtPokemon, NULL, (void*)recibirACK, (void*) socketACKCaught);
+	pthread_detach(escucharACKCaughtPokemon);
+
 	destruirLog(logger);
 
 
@@ -192,6 +204,7 @@ t_paquete* recibirGetDesde(int socketGet){
 }
 
 void recibirACK(int socketACK){
+
 	t_log* logger = iniciar_logger();
 	t_paquete* paqueteACK = recibir_mensaje(socketACK);
 
