@@ -55,7 +55,7 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 						list_add(particionesLibres, particion);
 					}
 
-					offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
+					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
 				}
 			}
 
@@ -68,7 +68,7 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 				posicionEncontrada = particion->posicion;
 			}
 
-			else if ((TAMANO_MEMORIA - offset) >= tamanioParticionMinima(sizeDato)){
+			else if ((TAMANO_MEMORIA - offset - 1) >= tamanioParticionMinima(sizeDato)){
 				posicionEncontrada = offset;
 			}
 
@@ -91,12 +91,14 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 
 					if (diferencia >= tamanioParticionMinima(sizeDato)){
 						posicionEncontrada = offset; //hay espacio entre dos particiones?? diferencia >0
+						break;
 					}
 					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
+					log_debug(logger, "Offset: %d", offset);
 				}
 
 			}
-			if ((TAMANO_MEMORIA - offset) >= sizeDato){
+			if ((TAMANO_MEMORIA - offset - 1) >= tamanioParticionMinima(sizeDato)){
 				posicionEncontrada = offset; //SI aun puedo seguir agregando, retorno la ultima posicion
 			}
 		}
@@ -108,9 +110,13 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 			//si no retorno nada en BF y FF --> hay que el eliminar 1 particion
 			//FIFO ESCOGE EL MENSAJE MAS VIEJO
 			if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "FIFO")) { //considero que el primer nodo en particiones es la que entro primero
+				log_debug(logger, "Entro en if de FIFO");
 				list_sort(particiones, (void*) ordenarId);
+				log_debug(logger, "Ordeno");
 				t_metadata* auxParticion = list_get(particiones, 0); //aca no tomo las auxTabla ya que lo voy a sacar
+				log_debug(logger, "list_get(particiones,0)");
 				eliminarParticion(auxParticion);
+				log_debug(logger, "termino de eliminar");
 			}
 
 			else if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "LRU")) {
@@ -124,8 +130,12 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 	else if(string_equals_ignore_case(ALGORITMO_MEMORIA, "BS")){
 		/* Definimos que el tamaño a buscar sea potencia de dos
 		 */
+		log_debug(logger, "Entro a if de BS");
+
 		sizeDato = tamanioParticionMinima(sizeDato);
-		posicionEncontrada = buddy_pedir_mem(sizeDato);
+		posicionEncontrada = buddy_pedir_mem((size_t) sizeDato);
+
+		log_debug(logger, "Posicion encontrada %d", posicionEncontrada);
 
 		if (posicionEncontrada == -1){
 
@@ -191,19 +201,19 @@ int existeSuscriptor(t_list * suscriptores, int suscriptor) {
 void eliminarParticion(t_metadata * particionAEliminar) { //OK
 
 	int posicion = particionAEliminar->posicion;
+	int colaABuscar = particionAEliminar->tipoMensaje - 1;
+	log_debug(logger, "%s", ID_COLA[colaABuscar]);
 
-	for (int i = 0; i < 6; i++) {
-		int cantidadMensajes = list_size(cola[i].mensajes);
+	int cantidadMensajes = list_size(cola[colaABuscar].mensajes);
 
-		for (int j = 0; j < cantidadMensajes; j++) {
-			t_metadata* auxMeta = list_get(cola[i].mensajes, j);
+	for(int i = 0; i < cantidadMensajes; i++){
+		t_metadata* auxMeta = list_get(cola[colaABuscar].mensajes, i);
 
-			if (auxMeta->posicion == posicion) {
-				list_remove_and_destroy_element(cola[i].mensajes, j, (void*) particion_destroy);
-				log_info(logger, "Se elimino la particion de la posicion %d", posicion); //OBLIGATORIO (7)
-				cantidadParticionesEliminadas++;
-				break;
-			}
+		if(auxMeta->posicion == posicion){
+			list_remove_and_destroy_element(cola[colaABuscar].mensajes, i, (void*) particion_destroy);
+			log_info(logger, "Se eliminó la partición de la posicion [%d]", auxMeta->posicion); //OBLIGATORIO (7)
+			cantidadParticionesEliminadas++;
+			break;
 		}
 	}
 }
