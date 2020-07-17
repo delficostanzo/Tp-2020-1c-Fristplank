@@ -339,42 +339,16 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 					entrenadorMovido->posicion = entrenadorBloqueado->posicion;
 					//lo que sobro del quantum
 					int sobrante = QUANTUM - distanciaHastaBloqueado;
-//					entrenadorMovido->ciclosCPUConsumido += QUANTUM;
+					entrenadorMovido->ciclosCPUConsumido += QUANTUM;
 
-//					entrenadorMovido->ciclosCPUFaltantesIntercambio = sobrante;
-//					//por si en el proximo ready se planifica al bloqueado para que se mueva
-//					entrenadorBloqueado->ciclosCPUFaltantesIntercambio = sobrante;
+					entrenadorMovido->ciclosCPUFaltantesIntercambio = sobrante;
+					//por si en el proximo ready se planifica al bloqueado para que se mueva
+					entrenadorBloqueado->ciclosCPUFaltantesIntercambio = sobrante;
 
-					if(QUANTUM < sobrante ){ // si lo que me sobra es mayor al quantum, se consume lo que hay de quantum pero no llego a hacer todo el intercambio
-						entrenadorMovido->ciclosCPUConsumido += QUANTUM;
-						log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
+					log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
 
-						pasarAReadyPorQuantum(entrenadorMovido);
-						log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para terminar de hacer el intercambio", entrenadorMovido->numeroEntrenador);
-
-					} else {// si quantum mayor o igual a sobrante, se consume sobrante y se hizo hace todo el intercambio
-						entrenadorMovido->ciclosCPUConsumido += entrenadorMovido->ciclosCPUFaltantesIntercambio;
-						cantidadDeadlocks ++;
-						PokemonEnElMapa* nuevoAtrapadoDelMovido = entrenadorBloqueado->movimientoEnExec->pokemonAIntercambiar;
-						PokemonEnElMapa* nuevoAtrapadoDelBloqueado = entrenadorMovido->movimientoEnExec->pokemonAIntercambiar;
-
-						//agrego en el que se mueve el pokemon que tenia el que se queda quieto
-						setPokemonA(entrenadorMovido->pokemonesAtrapados, nuevoAtrapadoDelMovido);
-						//y le saco el que el tenia de mas (el que se quedo quieto)
-						disminuirCantidadPokemones(nuevoAtrapadoDelBloqueado, entrenadorMovido->pokemonesAtrapados);
-
-						//agrego en el que se quedo quieto el pokemon que tenia el otro
-						setPokemonA(entrenadorBloqueado->pokemonesAtrapados, nuevoAtrapadoDelBloqueado);
-						//saco el que tenia de mas
-						disminuirCantidadPokemones(nuevoAtrapadoDelMovido, entrenadorBloqueado->pokemonesAtrapados);
-
-						log_info(LO, "Se resolvio el deadlock entre los entrenadores %c y %c", entrenadorMovido->numeroEntrenador, entrenadorBloqueado->numeroEntrenador);
-						//para que pueda volver a deadlock y no este en el intercambio viejo
-						entrenadorMovido->movimientoEnExec->numeroDelEntrenadorIntercambio = 0;
-						entrenadorBloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio = 0;
-						estadoSiAtrapo(entrenadorMovido);
-						estadoSiAtrapo(entrenadorBloqueado);
-					}
+					pasarAReadyPorQuantum(entrenadorMovido);
+					log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para terminar de hacer el intercambio", entrenadorMovido->numeroEntrenador);
 
 				} else { //no llego a moverse hasta el entrenador para hacer el intercambio
 					moverSiDistanciaMayorAQ(entrenadorMovido, entrenadorBloqueado->posicion->posicionX, entrenadorBloqueado->posicion->posicionY, distanciaHastaBloqueado);
