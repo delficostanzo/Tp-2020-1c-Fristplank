@@ -172,21 +172,21 @@ void procesarSubscribe(char* argv[]){
 
 	pthread_join(threadDuerme, NULL);
 	pthread_cancel(threadEscucha);
+	close(conexionBroker);
+	log_info(logger, "Se terminaron los %d segundos.", segundosAEscuchar);
 }
 
 void dormir(int* segundos){
+	log_debug(logger,"Procedo a dormir %d segundos", *segundos);
 	sleep(*segundos);
+	log_debug(logger, "Despierto");
 }
 
 void escucharCola(void* colaAEscuchar){
 
-	for(int i = 0; 10000 > i; i++ ){
-		log_debug(logger, "asdasd[%d]", i);
-	}
-
 	op_code cola = (op_code) colaAEscuchar;
 
-	int conexionBroker = conectarAModulo(PUERTO_BROKER, IP_BROKER);
+	conexionBroker = conectarAModulo(PUERTO_BROKER, IP_BROKER);
 
 	t_gameboy_suscribe* gameboysuscribe = malloc(sizeof(t_gameboy_suscribe));
 	gameboysuscribe->codigoCola = cola;

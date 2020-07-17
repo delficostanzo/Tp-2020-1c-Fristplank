@@ -39,25 +39,18 @@ void finish_repositorio_suscriptores(){
 }
 
 void agregar_suscriptor_gameboy(t_suscriptor_gameboy* gameboy){
-	pthread_mutex_lock(&mutexRepoGameBoy);
 	list_add(suscriptoresGameBoy, gameboy);
-	pthread_mutex_unlock(&mutexRepoGameBoy);
 }
 
 void agregar_suscriptor_team(t_suscriptor_team* team){
-	pthread_mutex_lock(&mutexRepoTeam);
 	list_add(suscriptoresTeam, team);
-	pthread_mutex_unlock(&mutexRepoTeam);
 }
 
 void agregar_suscriptor_gamecard(t_suscriptor_gamecard* gamecard){
-	pthread_mutex_lock(&mutexRepoGameCard);
 	list_add(suscriptoresGameCard, gamecard);
-	pthread_mutex_unlock(&mutexRepoGameCard);
 }
 
 void reemplazar_suscriptor_team(t_suscriptor_team* team){
-	pthread_mutex_lock(&mutexRepoTeam);
 
 	int sizeLista = list_size(suscriptoresTeam);
 	int posicion = -1;
@@ -70,12 +63,9 @@ void reemplazar_suscriptor_team(t_suscriptor_team* team){
 
 	t_suscriptor_team* teamViejo = list_replace(suscriptoresTeam, posicion, team);
 	free(teamViejo);
-
-	pthread_mutex_unlock(&mutexRepoTeam);
 }
 
 void reemplazar_suscriptor_gamecard(t_suscriptor_gamecard* gamecard){
-	pthread_mutex_lock(&mutexRepoGameCard);
 
 	int sizeLista = list_size(suscriptoresGameCard);
 	int posicion = -1;
@@ -88,12 +78,9 @@ void reemplazar_suscriptor_gamecard(t_suscriptor_gamecard* gamecard){
 
 	t_suscriptor_gamecard* gamecardViejo = list_replace(suscriptoresGameCard, posicion, gamecard);
 	free(gamecardViejo);
-
-	pthread_mutex_unlock(&mutexRepoGameCard);
 }
 
 int check_si_existe_gameboy(int ID){
-	pthread_mutex_lock(&mutexRepoGameBoy);
 
 	int encontrado = 0;
 	int sizeLista = list_size(suscriptoresGameBoy);
@@ -103,12 +90,10 @@ int check_si_existe_gameboy(int ID){
 		if(suscriptor->id == ID){ encontrado = 1; }
 	}
 
-	pthread_mutex_unlock(&mutexRepoGameBoy);
 	return encontrado;
 }
 
 int check_si_existe_team(int ID){
-	pthread_mutex_lock(&mutexRepoTeam);
 
 	int encontrado = 0;
 	int sizeLista = list_size(suscriptoresTeam);
@@ -118,12 +103,10 @@ int check_si_existe_team(int ID){
 		if(suscriptor->id == ID){ encontrado = 1; }
 	}
 
-	pthread_mutex_unlock(&mutexRepoTeam);
 	return encontrado;
 }
 
 int check_si_existe_gamecard(int ID){
-	pthread_mutex_lock(&mutexRepoGameCard);
 
 	int encontrado = 0;
 	int sizeLista = list_size(suscriptoresGameCard);
@@ -133,12 +116,10 @@ int check_si_existe_gamecard(int ID){
 		if(suscriptor->id == ID){ encontrado = 1; }
 	}
 
-	pthread_mutex_unlock(&mutexRepoGameCard);
 	return encontrado;
 }
 
 t_suscriptor_gameboy* buscar_suscriptor_gameboy(int ID){
-	pthread_mutex_lock(&mutexRepoGameBoy);
 
 	t_suscriptor_gameboy* gameboy;
 	int sizeLista = list_size(suscriptoresGameBoy);
@@ -150,12 +131,10 @@ t_suscriptor_gameboy* buscar_suscriptor_gameboy(int ID){
 		}
 	}
 
-	pthread_mutex_unlock(&mutexRepoGameBoy);
 	return gameboy;
 }
 
 t_suscriptor_team* buscar_suscriptor_team(int ID){
-	pthread_mutex_lock(&mutexRepoTeam);
 
 	t_suscriptor_team* team;
 	int sizeLista = list_size(suscriptoresTeam);
@@ -167,12 +146,10 @@ t_suscriptor_team* buscar_suscriptor_team(int ID){
 		}
 	}
 
-	pthread_mutex_unlock(&mutexRepoTeam);
 	return team;
 }
 
 t_suscriptor_gamecard* buscar_suscriptor_gamecard(int ID){
-	pthread_mutex_lock(&mutexRepoGameCard);
 
 		t_suscriptor_gamecard* gamecard;
 		int sizeLista = list_size(suscriptoresGameCard);
@@ -184,42 +161,68 @@ t_suscriptor_gamecard* buscar_suscriptor_gamecard(int ID){
 			}
 		}
 
-		pthread_mutex_unlock(&mutexRepoGameCard);
 		return gamecard;
 }
 
 int getSocketParaEnvio(int idSuscriptor, op_code tipoDeMensaje){
 
-	if(check_si_existe_team(idSuscriptor) == 1){
+	pthread_mutex_lock(&mutexRepoTeam);
+	int existeTeam = check_si_existe_team(idSuscriptor);
+	pthread_mutex_unlock(&mutexRepoTeam);
+
+	if(existeTeam == 1){
+		pthread_mutex_lock(&mutexRepoTeam);
 		t_suscriptor_team* team = buscar_suscriptor_team(idSuscriptor);
+		pthread_mutex_unlock(&mutexRepoTeam);
 		switch(tipoDeMensaje){
 			case LOCALIZED_POKEMON:
 				return team->socketLocalized;
+				break;
 			case CAUGHT_POKEMON:
 				return team->socketCaught;
+				break;
 			case APPEARED_POKEMON:
 				return team->socketAppeared;
+				break;
 			default:
 				return -1;
+				break;
 		}
 	}
 
-	else if(check_si_existe_gamecard(idSuscriptor) == 1){
+	pthread_mutex_lock(&mutexRepoGameCard);
+	int existeGameCard = check_si_existe_gamecard(idSuscriptor);
+	pthread_mutex_unlock(&mutexRepoGameCard);
+
+	if(existeGameCard == 1){
+		pthread_mutex_lock(&mutexRepoGameCard);
 		t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(idSuscriptor);
+		pthread_mutex_unlock(&mutexRepoGameCard);
 		switch(tipoDeMensaje){
 			case NEW_POKEMON:
 				return gamecard->socketNew;
+				break;
 			case GET_POKEMON:
 				return gamecard->socketGet;
+				break;
 			case CATCH_POKEMON:
 				return gamecard->socketCatch;
+				break;
 			default:
 				return -1;
+				break;
 		}
 	}
 
-	else if(check_si_existe_gameboy(idSuscriptor) == 1){
+	pthread_mutex_lock(&mutexRepoGameBoy);
+	int existeGameBoy = check_si_existe_gameboy(idSuscriptor);
+	pthread_mutex_unlock(&mutexRepoGameBoy);
+
+	if(check_si_existe_gameboy(idSuscriptor) == 1){
+		pthread_mutex_lock(&mutexRepoGameBoy);
 		t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(idSuscriptor);
+		pthread_mutex_unlock(&mutexRepoGameBoy);
+
 		if(tipoDeMensaje == gameboy->colaEscuchando){
 			return gameboy->socketDondeEscucha;
 		}
@@ -227,7 +230,6 @@ int getSocketParaEnvio(int idSuscriptor, op_code tipoDeMensaje){
 			return -1;
 		}
 	}
-
 	else{
 		return -1;
 	}

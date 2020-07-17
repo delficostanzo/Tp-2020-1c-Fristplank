@@ -18,18 +18,15 @@ void * esperarClientes() {
 		log_debug(logger, "Esperando conexiones...");
 		int socketCliente = aceptarConexion(conexionCliente);
 
-		/*prueba
-		 */
 		argumentos* sockets = malloc(sizeof(argumentos));
 		sockets->socketNuevo = &socketCliente;
 		sockets->socketOG = &conexionCliente;
 
 		pthread_t thread;
-//			pthread_create(&thread, NULL, (void*) atenderCliente, &socketCliente);
 		pthread_create(&thread, NULL, (void*) atenderCliente, sockets);
 		pthread_detach(thread);
 
-		sleep(2);
+		sleep(1);
 	}
 }
 
@@ -62,12 +59,14 @@ void atenderCliente(argumentos* sockets) {
 
 		int existeTeam = check_si_existe_team(team->id);
 
+		pthread_mutex_lock(&mutexRepoTeam);
 		if(existeTeam == 1){
 			reemplazar_suscriptor_team(team);
 		}
 		else{
 			agregar_suscriptor_team(team);
 		}
+		pthread_mutex_unlock(&mutexRepoTeam);
 
 		pthread_mutex_lock(&mutexColas);
 		agregarSuscriptorACola(team->id, LOCALIZED_POKEMON);
@@ -85,9 +84,9 @@ void atenderCliente(argumentos* sockets) {
 		lanzarHiloEscuchaACK(team->id, &team->socketACKAppeared, APPEARED_POKEMON);
 
 		pthread_mutex_lock(&mutexEnvio);
-		enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, &team->socketLocalized);
-		enviar_mensajes_cacheados(mensajesAppeared, APPEARED_POKEMON, &team->socketAppeared);
-		enviar_mensajes_cacheados(mensajesCaught, CAUGHT_POKEMON, &team->socketCaught);
+		enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized);
+		enviar_mensajes_cacheados(mensajesAppeared, APPEARED_POKEMON, team->socketAppeared);
+		enviar_mensajes_cacheados(mensajesCaught, CAUGHT_POKEMON, team->socketCaught);
 		pthread_mutex_unlock(&mutexEnvio);
 
 		log_info(logger, "Team se suscribio a 3 colas");
@@ -116,6 +115,7 @@ void atenderCliente(argumentos* sockets) {
 		gamecard->socketLocalized = aceptarConexion(*cliente);
 		log_debug(logger, "socketLocalized: %d", gamecard->socketLocalized);
 
+		pthread_mutex_lock(&mutexRepoGameCard);
 		if(check_si_existe_gamecard(gamecard->id)){
 			reemplazar_suscriptor_gamecard(gamecard);
 		}
@@ -123,6 +123,7 @@ void atenderCliente(argumentos* sockets) {
 		else{
 			agregar_suscriptor_gamecard(gamecard);
 		}
+		pthread_mutex_unlock(&mutexRepoGameCard);
 
 		pthread_mutex_lock(&mutexColas);
 		agregarSuscriptorACola(gamecard->id, GET_POKEMON);
@@ -141,9 +142,9 @@ void atenderCliente(argumentos* sockets) {
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKCatch, CATCH_POKEMON);
 
 		pthread_mutex_lock(&mutexEnvio);
-		enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, &gamecard->socketGet);
-		enviar_mensajes_cacheados(mensajesCatch, CATCH_POKEMON, &gamecard->socketCatch);
-		enviar_mensajes_cacheados(mensajesNew, NEW_POKEMON, &gamecard->socketNew);
+		enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, gamecard->socketGet);
+		enviar_mensajes_cacheados(mensajesCatch, CATCH_POKEMON, gamecard->socketCatch);
+		enviar_mensajes_cacheados(mensajesNew, NEW_POKEMON, gamecard->socketNew);
 		pthread_mutex_unlock(&mutexEnvio);
 
 		log_info(logger, "GameCard se suscribio a 3 colas");
@@ -167,10 +168,12 @@ void atenderCliente(argumentos* sockets) {
 			t_suscriptor_gameboy* gameboy;
 
 			// Si existe gameboy con ese ID le cambio el socket a enviar
+			pthread_mutex_lock(&mutexRepoGameBoy);
 			if(check_si_existe_gameboy(idProcesoConectado->idUnico) == 1){
 				log_debug(logger, "GameBoy existe en nuestro repositorio. Se procede a modificarlo.");
 				gameboy = buscar_suscriptor_gameboy(idProcesoConectado->idUnico);
-				gameboy->socketDondeEscucha = *cliente;
+				gameboy->socketDondeEscucha = *(sockets->socketNuevo);
+				pthread_mutex_unlock(&mutexRepoGameBoy);
 
 				//Lo elimino de la cola donde estaba antes
 				pthread_mutex_lock(&mutexColas);
@@ -198,12 +201,15 @@ void atenderCliente(argumentos* sockets) {
 			}
 
 			else{ // Si no existe gameboy con ese ID lo creo
+				pthread_mutex_unlock(&mutexRepoGameBoy);
 				log_debug(logger, "GameBoy no existe en nuestro repositorio. Se procede a agregarlo.");
 				gameboy = malloc(sizeof(t_suscriptor_gameboy));
 				gameboy->id = idProcesoConectado->idUnico;
-				gameboy->socketDondeEscucha = aceptarConexion(*cliente);
+				gameboy->socketDondeEscucha = *(sockets->socketNuevo);
 				gameboy->colaEscuchando = suscribe->codigoCola;
+				pthread_mutex_lock(&mutexRepoGameBoy);
 				agregar_suscriptor_gameboy(gameboy);
+				pthread_mutex_unlock(&mutexRepoGameBoy);
 			}
 
 			pthread_mutex_lock(&mutexColas);
@@ -212,7 +218,7 @@ void atenderCliente(argumentos* sockets) {
 			pthread_mutex_unlock(&mutexColas);
 
 			pthread_mutex_lock(&mutexEnvio);
-			enviar_mensajes_cacheados(mensajes, suscribe->codigoCola, &gameboy->socketDondeEscucha);
+			enviar_mensajes_cacheados(mensajes, suscribe->codigoCola, gameboy->socketDondeEscucha);
 			pthread_mutex_unlock(&mutexEnvio);
 
 			free(mensajeRecibido->buffer->stream);
@@ -230,9 +236,7 @@ void atenderCliente(argumentos* sockets) {
 			log_info(logger, "MensajeAgregado");
 			pthread_mutex_unlock(&mutexColas);
 
-			pthread_mutex_lock(&mutexEnvio);
 			enviar_mensaje_a_suscriptores(mensajeRecibido);
-			pthread_mutex_unlock(&mutexEnvio);
 		}
 		break;
 
@@ -243,7 +247,7 @@ void atenderCliente(argumentos* sockets) {
 	free(idProcesoConectado);
 }
 
-void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int* socket){
+void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int socket){
 	log_debug(logger, "START: enviar_mensajes_cacheados");
 
 	int cantidadMensajes = list_size(mensajes);
@@ -256,9 +260,8 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int* soc
 				int* id = list_get(mensajes, i + 1);
 				int* idCorrelativo = list_get(mensajes, i + 2);
 
-				int resultadoEnvio = enviar_new_pokemon(new_pokemon, *socket, *id, *idCorrelativo);
-				if (resultadoEnvio == -1){
-					log_info(logger, "Fallo en envio de mensaje.");
+				if (enviar_new_pokemon(new_pokemon, socket, *id, *idCorrelativo) == -1){
+					log_error(logger, "Fallo en envio de mensaje.");
 				}
 			}
 			break;
@@ -269,7 +272,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int* soc
 				int* id = list_get(mensajes, i + 1);
 				int* idCorrelativo = list_get(mensajes, i + 2);
 
-				enviar_appeared_pokemon(appeared_pokemon, *socket, *id, *idCorrelativo);
+				if(enviar_appeared_pokemon(appeared_pokemon, socket, *id, *idCorrelativo) == -1){
+					log_error(logger, "Fallo en envio de mensaje.");
+				}
 			}
 			break;
 
@@ -279,7 +284,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int* soc
 				int* id = list_get(mensajes, i + 1);
 				int* idCorrelativo = list_get(mensajes, i + 2);
 
-				enviar_catch_pokemon(catch_pokemon, *socket, *id, *idCorrelativo);
+				if(enviar_catch_pokemon(catch_pokemon, socket, *id, *idCorrelativo) == -1){
+					log_error(logger, "Fallo en envio de mensaje.");
+				}
 			}
 			break;
 
@@ -289,7 +296,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int* soc
 				int* id = list_get(mensajes, i + 1);
 				int* idCorrelativo = list_get(mensajes, i + 2);
 
-				enviar_caught_pokemon(caught_pokemon, *socket, *id, *idCorrelativo);
+				if(enviar_caught_pokemon(caught_pokemon, socket, *id, *idCorrelativo) == -1){
+					log_error(logger, "Fallo en envio de mensaje.");
+				}
 			}
 			break;
 
@@ -299,7 +308,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int* soc
 				int* id = list_get(mensajes, i + 1);
 				int* idCorrelativo = list_get(mensajes, i + 2);
 
-				enviar_get_pokemon(get_pokemon, *socket, *id, *idCorrelativo);
+				if(enviar_get_pokemon(get_pokemon, socket, *id, *idCorrelativo) == -1){
+					log_error(logger, "Fallo en envio de mensaje.");
+				}
 			}
 			break;
 
@@ -309,7 +320,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int* soc
 				int* id = list_get(mensajes, i + 1);
 				int* idCorrelativo = list_get(mensajes, i + 2);
 
-				enviar_localized_pokemon(localized_pokemon, *socket, *id, *idCorrelativo);
+				if(enviar_localized_pokemon(localized_pokemon, socket, *id, *idCorrelativo) == -1){
+					log_error(logger, "Fallo en envio de mensaje.");
+				}
 			}
 			break;
 
@@ -346,7 +359,6 @@ void lanzarHiloEscuchaACK(int id, int* socket, op_code cola){
 void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 
 	log_debug(logger, "START: escucharSocketMensajesACachear");
-
 	log_debug(logger, "Socket escuchado: %d", *(args->socket));
 
 	while(1){
@@ -372,11 +384,16 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 			t_respuesta_id* respuesta_id = malloc(sizeof(t_respuesta_id));
 			respuesta_id->idCorrelativo = paquete->ID;
 
-			if(check_si_existe_team(args->id) == 1){
+			pthread_mutex_lock(&mutexRepoTeam);
+			int existeTeam = check_si_existe_team(args->id);
+			pthread_mutex_unlock(&mutexRepoTeam);
+
+			if(existeTeam == 1){
+				pthread_mutex_lock(&mutexRepoTeam);
 				t_suscriptor_team* suscriptor = buscar_suscriptor_team(args->id);
-				pthread_mutex_lock(&mutexEnvio);
+				pthread_mutex_unlock(&mutexRepoTeam);
+
 				enviar_respuesta_id(respuesta_id, suscriptor->socketIdCatch, -1, -1);
-				pthread_mutex_unlock(&mutexEnvio);
 			}
 		}
 
@@ -384,11 +401,15 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 			t_respuesta_id* respuesta_id = malloc(sizeof(t_respuesta_id));
 			respuesta_id->idCorrelativo = paquete->ID;
 
-			if(check_si_existe_team(args->id) == 1){
+			pthread_mutex_lock(&mutexRepoTeam);
+			int existeTeam = check_si_existe_team(args->id);
+			pthread_mutex_unlock(&mutexRepoTeam);
+
+			if(existeTeam == 1){
+				pthread_mutex_lock(&mutexRepoTeam);
 				t_suscriptor_team* suscriptor = buscar_suscriptor_team(args->id);
-				pthread_mutex_lock(&mutexEnvio);
+				pthread_mutex_unlock(&mutexRepoTeam);
 				enviar_respuesta_id(respuesta_id, suscriptor->socketIdGet, -1, -1);
-				pthread_mutex_unlock(&mutexEnvio);
 			}
 		}
 
@@ -504,12 +525,26 @@ void enviar_mensaje_NEW_a_suscriptores(void* paqueteVoid){
 
 			for(int j = 0; j < listaSize; j++){
 				int* idSuscriptor = list_get(listaDeSuscriptores, j);
-				if(check_si_existe_gamecard(*idSuscriptor)){
+
+				pthread_mutex_lock(&mutexRepoGameCard);
+				int existeGameCard = check_si_existe_gamecard(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoGameCard);
+
+				pthread_mutex_lock(&mutexRepoGameBoy);
+				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoGameBoy);
+
+				if(existeGameCard == 1){
+					pthread_mutex_lock(&mutexRepoGameCard);
 					t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoGameCard);
 					socketAUsar = gamecard->socketNew;
 				}
-				else if(check_si_existe_gameboy(*idSuscriptor)){
+
+				else if(existeGameBoy == 1){
+					pthread_mutex_lock(&mutexRepoGameBoy);
 					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoGameBoy);
 					socketAUsar = gameboy->socketDondeEscucha;
 				}
 
@@ -558,12 +593,25 @@ void enviar_mensaje_APPEARED_a_suscriptores(void* paqueteVoid){
 
 			for(int j = 0; j < listaSize; j++){
 				int* idSuscriptor = list_get(listaDeSuscriptores, j);
-				if(check_si_existe_team(*idSuscriptor)){
+
+				pthread_mutex_lock(&mutexRepoTeam);
+				int existeTeam = check_si_existe_team(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoTeam);
+
+				pthread_mutex_lock(&mutexRepoGameBoy);
+				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoGameBoy);
+
+				if(existeTeam == 1){
+					pthread_mutex_lock(&mutexRepoTeam);
 					t_suscriptor_team* team = buscar_suscriptor_team(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoTeam);
 					socketAUsar = team->socketAppeared;
 				}
-				else if(check_si_existe_gameboy(*idSuscriptor)){
+				else if(existeGameBoy == 1){
+					pthread_mutex_lock(&mutexRepoGameBoy);
 					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoGameBoy);
 					socketAUsar = gameboy->socketDondeEscucha;
 				}
 
@@ -611,12 +659,25 @@ void enviar_mensaje_CATCH_a_suscriptores(void* paqueteVoid){
 
 			for(int j = 0; j < listaSize; j++){
 				int* idSuscriptor = list_get(listaDeSuscriptores, j);
-				if(check_si_existe_gamecard(*idSuscriptor)){
+
+				pthread_mutex_lock(&mutexRepoGameCard);
+				int existeGameCard = check_si_existe_gamecard(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoGameCard);
+
+				pthread_mutex_lock(&mutexRepoGameBoy);
+				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoGameBoy);
+
+				if(existeGameCard == 1){
+					pthread_mutex_lock(&mutexRepoGameCard);
 					t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoGameCard);
 					socketAUsar = gamecard->socketCatch;
 				}
-				else if(check_si_existe_gameboy(*idSuscriptor)){
+				else if(existeGameBoy == 1){
+					pthread_mutex_lock(&mutexRepoGameBoy);
 					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoGameBoy);
 					socketAUsar = gameboy->socketDondeEscucha;
 				}
 
@@ -664,12 +725,25 @@ void enviar_mensaje_CAUGHT_a_suscriptores(void* paqueteVoid){
 
 			for(int j = 0; j < listaSize; j++){
 				int* idSuscriptor = list_get(listaDeSuscriptores, j);
-				if(check_si_existe_team(*idSuscriptor)){
+
+				pthread_mutex_lock(&mutexRepoTeam);
+				int existeTeam = check_si_existe_team(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoTeam);
+
+				pthread_mutex_lock(&mutexRepoGameBoy);
+				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoGameBoy);
+
+				if(existeTeam == 1){
+					pthread_mutex_lock(&mutexRepoTeam);
 					t_suscriptor_team* team = buscar_suscriptor_team(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoTeam);
 					socketAUsar = team->socketCaught;
 				}
-				else if(check_si_existe_gameboy(*idSuscriptor)){
+				else if(existeGameBoy == 1){
+					pthread_mutex_lock(&mutexRepoGameBoy);
 					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoGameBoy);
 					socketAUsar = gameboy->socketDondeEscucha;
 				}
 
@@ -710,12 +784,25 @@ void enviar_mensaje_GET_a_suscriptores(void* paqueteVoid){
 
 			for(int j = 0; j < listaSize; j++){
 				int* idSuscriptor = list_get(listaDeSuscriptores, j);
-				if(check_si_existe_gamecard(*idSuscriptor)){
+
+				pthread_mutex_lock(&mutexRepoGameCard);
+				int existeGameCard = check_si_existe_gamecard(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoGameCard);
+
+				pthread_mutex_lock(&mutexRepoGameBoy);
+				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoGameBoy);
+
+				if(existeGameCard == 1){
+					pthread_mutex_lock(&mutexRepoGameCard);
 					t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoGameCard);
 					socketAUsar = gamecard->socketGet;
 				}
-				else if(check_si_existe_gameboy(*idSuscriptor)){
+				else if(existeGameBoy == 1){
+					pthread_mutex_lock(&mutexRepoGameBoy);
 					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoGameBoy);
 					socketAUsar = gameboy->socketDondeEscucha;
 				}
 
@@ -758,12 +845,25 @@ void enviar_mensaje_LOCALIZED_a_suscriptores(void* paqueteVoid){
 
 			for(int j = 0; j < listaSize; j++){
 				int* idSuscriptor = list_get(listaDeSuscriptores, j);
-				if(check_si_existe_team(*idSuscriptor)){
+
+				pthread_mutex_lock(&mutexRepoTeam);
+				int existeTeam = check_si_existe_team(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoTeam);
+
+				pthread_mutex_lock(&mutexRepoGameBoy);
+				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				pthread_mutex_unlock(&mutexRepoGameBoy);
+
+				if(existeTeam == 1){
+					pthread_mutex_lock(&mutexRepoTeam);
 					t_suscriptor_team* team = buscar_suscriptor_team(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoTeam);
 					socketAUsar = team->socketLocalized;
 				}
-				else if(check_si_existe_gameboy(*idSuscriptor)){
+				else if(existeGameBoy == 1){
+					pthread_mutex_lock(&mutexRepoGameBoy);
 					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					pthread_mutex_unlock(&mutexRepoGameBoy);
 					socketAUsar = gameboy->socketDondeEscucha;
 				}
 

@@ -52,6 +52,8 @@ char* PUERTO_GAMECARD;
 char* IP_GAMEBOY;
 char* PUERTO_GAMEBOY;
 
+int conexionBroker;
+
 t_log* logger;
 t_config* config;
 

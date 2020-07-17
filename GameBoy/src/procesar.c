@@ -53,7 +53,6 @@ void procesarGameCardGetPokemon(int socket, char* argv[]){
 		exit(1);
 	}
 
-
 	t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
 	get_pokemon->lengthOfPokemon = strlen(argv[3]);
 	get_pokemon->pokemon = string_from_format(argv[3]);
@@ -121,7 +120,17 @@ void procesarBrokerCaughtPokemon(int socket, char* argv[]){
 	}
 
 	t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
-	caught_pokemon->ok = atoi(argv[4]);
+
+	if(string_equals_ignore_case("FAIL", argv[4])){
+		caught_pokemon->ok = 0;
+	}
+	else if(string_equals_ignore_case("OK", argv[4])){
+		caught_pokemon->ok = 1;
+	}
+
+	else{
+
+	}
 
 	enviar_caught_pokemon(caught_pokemon, socket, -1, atoi(argv[3]));
 	log_info(logger, "Mensaje enviado a Broker | ID Correlativo del Mensaje: %d - Bool enviado: %d", atoi(argv[3]), atoi(argv[4]));

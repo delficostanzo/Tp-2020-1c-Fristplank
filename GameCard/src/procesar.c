@@ -29,7 +29,7 @@ void procesarNewPokemon(void* args) {
 	t_config* metadata = config_create(filePath);
 	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
 	int sizeArchivo = config_get_int_value(metadata, "SIZE");
-	log_info("Size actual: [%d]", sizeArchivo);
+	log_info(logger, "Size actual: [%d]", sizeArchivo);
 
 	char* posicionPlana = string_from_format("%d-%d=",
 			new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
