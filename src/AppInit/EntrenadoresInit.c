@@ -97,7 +97,7 @@ void setPokemonesObjetivosDesde(t_config* config, t_list* entrenadores) {
 
 		agregarObjetivosA(entrenador, objetivosDelEntrenador);
 
-		quickLog(string_from_format("$-El entrenador %d tiene %d objetivos",entrenador->numeroEntrenador,entrenador->pokemonesObjetivos->elements_count));
+		quickLog(string_from_format("$-El entrenador %c tiene %d objetivos",entrenador->numeroEntrenador,entrenador->pokemonesObjetivos->elements_count));
 	}
 
 	list_destroy(objetivos);
@@ -123,7 +123,7 @@ void setPokemonesAtrapadosDesde(t_config* config, t_list* entrenadores) {
 
 		agregarAtrapadosA(entrenador, atrapadosDelEntrenador);
 
-		quickLog(string_from_format("$-El entrenador %d tiene %d atrapados",entrenador->numeroEntrenador,entrenador->pokemonesAtrapados->elements_count));
+		quickLog(string_from_format("$-El entrenador %c tiene %d atrapados",entrenador->numeroEntrenador,entrenador->pokemonesAtrapados->elements_count));
 	}
 
 	list_destroy(atrapados);
@@ -134,7 +134,7 @@ void setEstadoNew(t_list* entrenadores){
 	for(int index=0; index < list_size(entrenadores); index++){
 		Entrenador* entrenador = list_get(entrenadores, index);
 		entrenador->estado = 1;
-		log_info(LO, "El entrenador %d arranca en estado new", entrenador->numeroEntrenador);
+		log_info(LO, "El entrenador %c arranca en estado new", entrenador->numeroEntrenador);
 	}
 }
 
@@ -147,14 +147,14 @@ void setMutex(t_list* entrenadores) {
 		sem_init(&entrenador->semaforoExecEntrenador, 1, 0);
 		pthread_mutex_init(&(entrenador->mutexEstado), NULL);
 		pthread_mutex_init(&(entrenador->mutexCorrelativo), NULL);
-		//pthread_mutex_init(&(entrenador->mutexMovimiento), NULL);
 	}
 }
 
 void numerarlos(t_list* entrenadores){
+	char abecedario[7] = {'A', 'B', 'C', 'D', 'F', 'G', 'H'};
 	for(int index=0; index < list_size(entrenadores); index++){
 		Entrenador* entrenador = list_get(entrenadores, index);
-		entrenador->numeroEntrenador = index + 1;
+		entrenador->numeroEntrenador = abecedario[index];
 	}
 }
 

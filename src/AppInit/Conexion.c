@@ -35,7 +35,7 @@ int generarSocketsConBroker() {
 
 	conexionBroker = crearSocket();
 
-	while ((conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) != 1) {
+	while ((conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) != 1 && noHayQueFinalizar) {
 		quickLog("$-Intentando conexión a Broker...");
 		log_info(LO, "Se corto la conexion con el Broker, se reintentara en %d segundos", TIEMPO_RECONEXION);
 		sleep(TIEMPO_RECONEXION);
@@ -47,7 +47,7 @@ int generarSocketsConBroker() {
 
 	t_handshake* handshakeResponse;
 	handshakeResponse = responderHandshake(conexionBroker, handshakePropio);
-	log_info(logger, "$-El id del proceso con el que me conecte es: %d", handshakeResponse->id);
+	//log_info(logger, "$-El id del proceso con el que me conecte es: %d", handshakeResponse->id);
 	free(handshakePropio);
 	free(handshakeResponse);
 
@@ -55,10 +55,10 @@ int generarSocketsConBroker() {
 	//socketIdGet = crearSocket();
 
 	suscripcionAppeared = crearSocket();
-	//socketACKAppeared = crearSocket();
+	socketACKAppeared = crearSocket();
 
 	suscripcionLocalized = crearSocket();
-	//socketACKLocalized = crearSocket();
+	socketACKLocalized = crearSocket();
 
 	socketCatch = crearSocket();
 	socketIdCatch = crearSocket();
@@ -78,22 +78,22 @@ int generarSocketsConBroker() {
 			enviarGetDesde(socketGet);
 
 			quickLog("$-Se envian correctamente los get");
-		//} else{
-//				conexionCorrecta = -1;
-//			}
-	} else{
-		conexionCorrecta = -1;
-	 }
+		} else{
+				conexionCorrecta = -1;
+			}
+//	} else{
+//		conexionCorrecta = -1;
+//	 }
 
 
 	//ESCUCHA APPEARED Y ENVIA EL ACK
 	if (conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Suscripto a la cola de appeared_pokemon");
-//		if (conectarA(socketACKAppeared, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("$-Socket de ACK Appeared Pokemon guardado.");
-		//} else{
-//			conexionCorrecta = -1;
-//		 }
+		if (conectarA(socketACKAppeared, IP_BROKER, PUERTO_BROKER)) {
+			quickLog("$-Socket de ACK Appeared Pokemon guardado.");
+		} else{
+			conexionCorrecta = -1;
+		 }
 	} else{
 		conexionCorrecta = -1;
 	 }
@@ -101,12 +101,12 @@ int generarSocketsConBroker() {
 	//ESCUCHA LOCALIZED Y ENVIA EL ACK
 	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Suscripto a la cola de localized_pokemon");
-//		if (conectarA(socketACKLocalized, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("$-Socket de ACK Localized Pokemon guardado.");
-//
-//		} else{
-//			conexionCorrecta = -1;
-//		 }
+		if (conectarA(socketACKLocalized, IP_BROKER, PUERTO_BROKER)) {
+			quickLog("$-Socket de ACK Localized Pokemon guardado.");
+
+		} else{
+			conexionCorrecta = -1;
+		 }
 
 	} else{
 		conexionCorrecta = -1;
@@ -117,7 +117,6 @@ int generarSocketsConBroker() {
 		quickLog("$-Ya se conecto a la cola de catch para poder enviarle mensajes");
 		if (conectarA(socketIdCatch, IP_BROKER, PUERTO_BROKER)) {
 			quickLog("$-Socket de recepcion de ids Catch guardado.");
-			//sem_post(&semaforoCatch);
 		//el envio lo hace cada entrenador!
 		} else{
 			conexionCorrecta = -1;
@@ -144,7 +143,10 @@ int generarSocketsConBroker() {
 
 void crearHilosDeEscucha() {
 
-	pthread_t escucharAppearedPokemon;
+	while(!generarSocketsConBroker()){
+		sleep(TIEMPO_RECONEXION);
+	}
+
 	pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);
 	pthread_detach(escucharAppearedPokemon);
 
@@ -152,11 +154,7 @@ void crearHilosDeEscucha() {
 	pthread_create(&escucharLocalizedPokemon, NULL, (void*)escucharColaLocalizedPokemon, NULL);
 	pthread_detach(escucharLocalizedPokemon);
 
-//	pthread_t escucharIdsCatchPokemon;
-//	pthread_create(&escucharIdsCatchPokemon, NULL, (void*)escucharColaIdsCatchPokemon, NULL);
-//	pthread_detach(escucharIdsCatchPokemon);
 
-	pthread_t escucharCaughtPokemon;
 	pthread_create(&escucharCaughtPokemon, NULL, (void*)escucharColaCaughtPokemon, NULL);
 	pthread_detach(escucharCaughtPokemon);
 }
@@ -188,7 +186,6 @@ void* escucharColaIdsCatchPokemon(){
 	while(1){
 		quickLog("$-Esperando mensajes de ids catch");
 
-		//recibirIdCatch(socketIdCatch);
 
 	}
 }
@@ -200,8 +197,8 @@ void* escucharColaCaughtPokemon(){
 		//el entrenador que estaba esperando esa respuesta es ejecutado y pasa al estado segun corresponda
 		t_paquete* paqueteNuevo = recibirCaught(suscripcionCaught);
 		if(paqueteNuevo != NULL){
-//			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
-//			quickLog("$-Pudo enviar el ACK del caught");
+			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
+			quickLog("$-Pudo enviar el ACK del caught");
 		}
 
 	}
@@ -214,11 +211,12 @@ void* escucharColaLocalizedPokemon(){
 
 		t_paquete* paqueteNuevo = recibirLocalizedYGuardalos(suscripcionLocalized);
 
-//		enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
-//		quickLog("$-Pudo enviar el ACK del localized");
-		if(paqueteNuevo == NULL){
+		if(paqueteNuevo != NULL) {
+			enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
+			quickLog("$-Pudo enviar el ACK del localized");
+		} else{
 			liberarConexion(suscripcionLocalized);
-			//liberarConexion(socketACKLocalized);
+			liberarConexion(socketACKLocalized);
 			pthread_cancel(escucharLocalizedPokemon);
 		}
 	}

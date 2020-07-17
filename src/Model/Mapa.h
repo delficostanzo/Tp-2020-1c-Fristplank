@@ -41,10 +41,16 @@ int socketACKAppeared;
 int socketACKCaught;
 int socketACKLocalized;
 
+pthread_t escucharLocalizedPokemon;
+pthread_t escucharAppearedPokemon;
+pthread_t escucharCaughtPokemon;
+
 int cantidadDeEspeciesTotales;
 
 int CC;
 int cantidadDeadlocks;
+
+int noHayQueFinalizar;
 
 t_config* config;
 

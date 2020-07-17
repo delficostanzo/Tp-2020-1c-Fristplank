@@ -20,44 +20,24 @@ int main(int argc, char *argv[]) {
 	objetivosGlobales = getObjetivosGlobalesDesde(objetivosTotales, objetivosAtrapados);
 
 	cantidadDeEspeciesTotales = list_size(objetivosGlobales);
-	//llegan bien sus nombres
-	log_info(logger, "$-La cantidad de pokemones objetivos es: %d",list_size(objetivosTotales));
-	log_info(logger, "$-La cantidad de pokemones atrapados es: %d",list_size(objetivosAtrapados));
-	log_info(logger, "$-La cantidad de pokemones globales que faltan por atrapar es: %d",list_size(objetivosGlobales));
 
-
-
-	//Lanzar hilo para escuchar a GameBoy
-	pthread_t hiloEscuchaGameBoy;
-	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
-
-
-
-	crearHilosDeEntrenadores();
-	quickLog("$-Se crea un hilo por cada entrenador");
-
-	planificarEntrenadores();
-
-
-
-	while(!generarSocketsConBroker()){
-		sleep(TIEMPO_RECONEXION);
-	}
 
 	//Lanzar hilo para concetarme a Broker
 	pthread_t hilosEscuchaBroker;
 	pthread_create(&hilosEscuchaBroker, NULL, (void*) crearHilosDeEscucha, NULL);
 
+	crearHilosDeEntrenadores();
+	quickLog("$-Se crea un hilo por cada entrenador");
+
+	//Lanzar hilo para escuchar a GameBoy
+	pthread_t hiloEscuchaGameBoy;
+	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
+
+	planificarEntrenadores();
 
 
-//	//verificar que el id como respuesta vuelva a enviarse a traves de ese socket
-//	//recibe los nombres de pokemones encontrados libres con sus posiciones
-//	//y si se necesitan (estan en los objetivos globales) se agregan a la lista de pokemones libres
-	//recibirLocalizedYGuardalos(suscripcionLocalized, objetivosGlobales, pokemonesLibres);
-	//recibirAppearedYGuardarlos(suscripcionAppeared, objetivosGlobales, pokemonesLibres);
-
-	//pthread_join(hilosEscuchaBroker, NULL);
-	pthread_join(hiloEscuchaGameBoy, NULL);
+//	pthread_join(hilosEscuchaBroker, NULL);
+//	pthread_join(hiloEscuchaGameBoy, NULL);
 
 	return 0;
 }

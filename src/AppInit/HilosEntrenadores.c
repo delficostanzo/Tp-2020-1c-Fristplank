@@ -11,14 +11,16 @@ void funcionesDelEntrenador(void* entrenador);
 void crearHilosDeEntrenadores(){
 
 	pthread_mutex_lock(&mutexEntrenadores);
+	if(list_is_empty(entrenadores) != 1){
 	for(int index=0; index < list_size(entrenadores); index ++) {
 		crearHiloParaEntrenador(list_get(entrenadores, index));
+	}
 	}
 	pthread_mutex_unlock(&mutexEntrenadores);
 }
 
 // esta funcion agarra un entrenador del tipo Entrenador y lo convierte en un hilo (este seria el estado NEW)
-void crearHiloParaEntrenador(Entrenador* entrenador){ // ESTADO NEW
+void crearHiloParaEntrenador(Entrenador* entrenador){
 	typedef void*(*erasedType)(void*);
 	pthread_t hilo = entrenador->hiloEntrenador;
 
@@ -44,7 +46,12 @@ void funcionesDelEntrenador(void* unEntrenador){
 		//pthread_mutex_lock(&(entrenador->mutexEntrenador));
 		sem_wait(&entrenador->semaforoExecEntrenador);
 		cumplirObjetivo(entrenador);
+		pthread_mutex_lock(&entrenador->mutexEstado);
+		cumple = entrenador->estado != 5;
+		pthread_mutex_unlock(&entrenador->mutexEstado);
 	}
+
+	log_info(LO, "--El entrenador %c ya esta en exit", entrenador->numeroEntrenador);
 
 	quickLog("$-un entrenador ya esta en exit");
 }

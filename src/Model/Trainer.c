@@ -122,16 +122,17 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	if(sonIguales(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		//ya agarro todos sus pokemones
 		pasarAExit(entrenador);
-		log_info(LO, "El entrenador %d paso a estado exit porque ya tiene atrapados todos sus objetivos", entrenador->numeroEntrenador);
+		log_info(LO, "El entrenador %c paso a estado exit porque ya tiene atrapados todos sus objetivos", entrenador->numeroEntrenador);
+		//pthread_exit(&entrenador->hiloEntrenador);
 	}
 	else if(tienenLaMismaCantidad(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		asignarMovimientoPorDeadlock(entrenador);
 		pasarADeadlock(entrenador);
-		log_info(LO, "El entrenador %d paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
+		log_info(LO, "El entrenador %c paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
 	}
 	else {
 		pasarADormido(entrenador);
-		log_info(LO, "El entrenador %d paso a block dormido esperando que le den un pokemon para atrapar", entrenador->numeroEntrenador);
+		log_info(LO, "El entrenador %c paso a block dormido esperando que le den un pokemon para atrapar", entrenador->numeroEntrenador);
 
 		quickLog("$-Quedo bloqueado dormido el entrenador");
 
@@ -223,6 +224,13 @@ int noEstaEnExit(Entrenador* entrenador){
 	int cumple = entrenador->estado != 5;
 	pthread_mutex_unlock(&entrenador->mutexEstado);
 	//sem_post(&semaforoEstados);
+	return cumple;
+}
+
+int estaEnExit(Entrenador* entrenador) {
+	pthread_mutex_lock(&entrenador->mutexEstado);
+	int cumple = entrenador->estado == 5;
+	pthread_mutex_unlock(&entrenador->mutexEstado);
 	return cumple;
 }
 

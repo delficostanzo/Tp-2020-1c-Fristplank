@@ -5,13 +5,15 @@
 #include "ConfigFunctions.h"
 #include "../Model/Mapa.h"
 #include "EnvioMensajes.h"
+#include "../Model/CierreTeam.h"
 
 //typedef struct{
 //	int socketEscucha;
 //	int socketACK;
 //}t_par_de_sockets;
 
-pthread_t escucharLocalizedPokemon;
+
+
 
 void* escucharGameBoy(void);
 int generarSocketsConBroker();
