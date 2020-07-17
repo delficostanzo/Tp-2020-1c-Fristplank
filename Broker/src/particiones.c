@@ -164,7 +164,7 @@ bool ordenarPosicion(t_metadata * unaParticion, t_metadata * otraParticion) {
 	return unaParticion->posicion <= otraParticion->posicion;
 }
 bool ordenarFlagLRU(t_metadata * unaParticion, t_metadata * otraParticion) {
-	return unaParticion->flagLRU < unaParticion->flagLRU;
+	return unaParticion->flagLRU < otraParticion->flagLRU;
 }
 bool ordenarId(t_metadata * unaParticion, t_metadata * otraParticion) {
 	return unaParticion->ID < otraParticion->ID;
