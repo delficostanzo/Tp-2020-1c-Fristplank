@@ -21,7 +21,12 @@ void agregarMensajeACola(t_paquete * nuevoPaquete) {
 
 	nuevaMeta->IDCorrelativo = nuevoPaquete->ID_CORRELATIVO;
 	nuevaMeta->tamanioMensaje = nuevoPaquete->buffer->size;
-	nuevaMeta->flagLRU = 0;
+
+	pthread_mutex_lock(&mutexLRUcounter);
+	LRUcounter++;
+	nuevaMeta->flagLRU = LRUcounter;
+	pthread_mutex_unlock(&mutexLRUcounter);
+
 	nuevaMeta->posicion = SINPARTICION;
 	nuevaMeta->ACKSuscriptores = list_create();
 
@@ -46,6 +51,7 @@ void agregarSuscriptorACola(int idSuscriptor, op_code tipoCola) {
 			if (!existeSuscriptor(cola[i].suscriptores, idSuscriptor) != 0) {
 				list_add(cola[i].suscriptores, (int*) idSuscriptor);
 				log_info(logger, "Se suscribió con éxito el proceso a la cola %s", ID_COLA[tipoCola]);
+				break;
 			}
 		}
 	}
@@ -77,7 +83,7 @@ t_list* mensajesAEnviar(int idProceso, op_code codigoCola){
 				if(estaEntreACK == 0){
 					pthread_mutex_lock(&mutexMemoria);
 					void* estructura = leerMemoria(metadata);
-					pthread_mutex_unlock(&mutexColas);
+					pthread_mutex_unlock(&mutexMemoria);
 					list_add(mensajes, estructura);
 					list_add(mensajes, &(metadata->ID));
 					list_add(mensajes, &(metadata->IDCorrelativo));

@@ -35,7 +35,6 @@ typedef struct {
 	t_list * ACKSuscriptores;
 	int flagLRU;
 	char ultimaReferencia;
-//int flagFIFO; id mensaje
 } t_metadata;
 
 typedef struct {
@@ -55,6 +54,7 @@ static const char* ID_PROCESO[] = {
 };
 t_cola cola[6];
 
+int LRUcounter;
 int IDmsg;
 
 int TAMANO_MEMORIA;
@@ -71,6 +71,7 @@ int cantidadParticionesEliminadas;
 pthread_mutex_t mutexMemoria;
 pthread_mutex_t mutexColas;
 pthread_mutex_t mutexIdMensaje;
+pthread_mutex_t mutexLRUcounter;
 pthread_mutex_t mutexEnvio;
 sem_t * colaNew;
 sem_t compactMemoria;

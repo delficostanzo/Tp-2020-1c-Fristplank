@@ -51,7 +51,7 @@ void lanzarHiloEscuchaACK(int id, int* socket, op_code cola);
 void escucharSocketMensajesACachear(t_args_socket_escucha* args);
 void escucharSocketACK(void* socketArgs);
 
-void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int* socket);
+void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int socket);
 void enviar_mensaje_a_suscriptores(t_paquete* paquete);
 void enviar_mensaje_NEW_a_suscriptores(void* paquete);
 void enviar_mensaje_APPEARED_a_suscriptores(void* paquete);

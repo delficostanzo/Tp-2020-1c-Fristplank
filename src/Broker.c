@@ -27,31 +27,11 @@ int main(void) {
 	pthread_mutex_init(&mutexMemoria,NULL);
 	pthread_mutex_init(&mutexColas,NULL);
 	pthread_mutex_init(&mutexIdMensaje,NULL);
+	pthread_mutex_init(&mutexLRUcounter,NULL);
 	pthread_mutex_init(&mutexEnvio, NULL);
-
-	/* Prueba
-	 *
-
-	t_paquete* paquete = malloc(sizeof(t_paquete));
-	paquete->codigo_operacion = GET_POKEMON;
-	paquete->ID = -1;
-	paquete->ID_CORRELATIVO = -1;
-	paquete->buffer = malloc(sizeof(t_buffer));
-	paquete->buffer->size = sizeof(uint32_t) + 5;
-	t_get_pokemon* poke = malloc(sizeof(t_get_pokemon));
-	poke->pokemon = string_from_format("Hola");
-	poke->lengthOfPokemon = 4;
-	paquete->buffer->stream = poke;
-	agregarMensajeACola(paquete);
-
-	t_metadata* mensaje = list_get(cola[4].mensajes, 0);
-	t_get_pokemon* asdasd = leerMemoria(mensaje);
-	log_debug(logger, asdasd->pokemon);*/
 
 	pthread_t threadClientes;
 	pthread_create(&threadClientes, NULL, (void*) esperarClientes, NULL);
-
-
 
 	pthread_join(threadClientes,NULL);
 //	terminar_programa(conexion, logger, config);
@@ -113,13 +93,6 @@ void iniciarMemoria() {
 				exit(0);
 			}
 
-			memoriaCache = malloc(TAMANO_MEMORIA);
-
-			if(memoriaCache == NULL){
-				log_error(logger, "NO HAY MEMORIA SUFICIENTE PARA ALOJAR LA CANTIDAD DE MEMORIA INDICADA. SE ABORTA.");
-				exit(0);
-			}
-
 			iniciarBuddySystem();
 		}
 		else{
@@ -132,6 +105,7 @@ void iniciarMemoria() {
 void iniciarColas() {
 	pthread_mutex_lock(&mutexColas);
 	IDmsg = -1;
+	LRUcounter = -1;
 	cantidadParticionesEliminadas = 0;
 	cola[0].nombreCola = NEW_POKEMON;
 	cola[0].suscriptores = list_create();

@@ -291,24 +291,19 @@ void * descachearCaughtPokemon(void* mensajeEnMemoria) {
 }
 
 void escribirMemoria(void * mensaje, t_metadata * meta) { //OK
-	/*if (!mensaje) {
-	 //log_info(logger, "No se agregó ningun mensaje en la memCache");
-	 return;
-	 }*/
 	memcpy((memoriaCache + meta->posicion), mensaje,meta->tamanioMensajeEnMemoria);
 	log_info(logger, "Se cacheo el mensaje de tamanio: %d", meta->tamanioMensajeEnMemoria); //NO OBLIGATORIO
 	log_info(logger, "Se almacena un mensaje en la posicion [%d].", meta->posicion); //OBLIGATORIO (6)
-	modificarUltimaReferencia(meta, 'X');
 }
 
 void * leerMemoria(t_metadata * meta) { //OK
+	pthread_mutex_lock(&mutexLRUcounter);
+	LRUcounter++;
+	meta->flagLRU = LRUcounter;
+	pthread_mutex_unlock(&mutexLRUcounter);
+
 	return descachearMensaje(memoriaCache + meta->posicion, meta);
 }
-void modificarUltimaReferencia(t_metadata * meta, char tipoReferencia) {
-	meta->flagLRU += 1;
-	meta->ultimaReferencia = tipoReferencia;
-}
-
 
 void compactarMemoria() {
 
