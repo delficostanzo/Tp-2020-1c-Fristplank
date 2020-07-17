@@ -43,8 +43,15 @@ typedef struct {
 	t_list * suscriptores;
 } t_cola;
 
-static const char* ID_COLA[] = { "COLAERROR", "NEW", "APPEAR", "CATCH",
-		"CAUGHT", "GET", "LOCALIZED" };
+static const char* ID_COLA[] = {
+		"COLAERROR",
+		"NEW_POKEMON",
+		"APPEARED_POKEMON",
+		"CATCH_POKEMON",
+		"CAUGHT_POKEMON",
+		"GET_POKEMON",
+		"LOCALIZED_POKEMON"};
+
 static const char* ID_PROCESO[] = {
 		"IDERROR",
 		"BROKER",
@@ -65,6 +72,7 @@ char* ALGORITMO_REEMPLAZO;
 char* IP_BROKER;
 int PUERTO_BROKER;
 int FRECUENCIA_COMPACTACION;
+char* LOG_FILE;
 
 int cantidadParticionesEliminadas;
 

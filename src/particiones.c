@@ -25,12 +25,12 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 
 	if (string_equals_ignore_case(ALGORITMO_MEMORIA, "PARTICIONES")) {
 
-		if(cantidadParticionesEliminadas == FRECUENCIA_COMPACTACION){
-			compactarMemoria();
-		}
-
 		if (cantParticionesActuales == 0){
 			return 0; //si no hay particiones, se crea al inicio
+		}
+
+		if(cantidadParticionesEliminadas == FRECUENCIA_COMPACTACION){
+			compactarMemoria(particiones);
 		}
 
 		if (string_equals_ignore_case(ALGORITMO_PARTICION_LIBRE, "BF")) {
@@ -68,7 +68,7 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 				posicionEncontrada = particion->posicion;
 			}
 
-			else if ((TAMANO_MEMORIA - offset - 1) >= tamanioParticionMinima(sizeDato)){
+			else if ((TAMANO_MEMORIA - offset) >= tamanioParticionMinima(sizeDato)){
 				posicionEncontrada = offset;
 			}
 
@@ -79,8 +79,11 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 			for (int i = 0; i < cantParticionesActuales; i++) {
 				t_metadata* auxParticion = list_get(particiones, i);
 
+				log_debug(logger, "offset es %d", offset);
 				if (offset == auxParticion->posicion) {
-					offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
+					log_debug(logger, "mensajeEncontrado en pos %d", auxParticion->posicion);
+					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
+					log_debug(logger, "tamanioMensaje %d", tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria));
 				}
 
 				else { //asumo que si no es offset, entonces es mas grande
@@ -89,11 +92,11 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 					if (diferencia >= tamanioParticionMinima(sizeDato)){
 						posicionEncontrada = offset; //hay espacio entre dos particiones?? diferencia >0
 					}
-					offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
+					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
 				}
 
 			}
-			if ((TAMANO_MEMORIA - offset - 1) >= sizeDato){
+			if ((TAMANO_MEMORIA - offset) >= sizeDato){
 				posicionEncontrada = offset; //SI aun puedo seguir agregando, retorno la ultima posicion
 			}
 		}
@@ -108,14 +111,12 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 				list_sort(particiones, (void*) ordenarId);
 				t_metadata* auxParticion = list_get(particiones, 0); //aca no tomo las auxTabla ya que lo voy a sacar
 				eliminarParticion(auxParticion);
-				cantidadParticionesEliminadas++;
 			}
 
 			else if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "LRU")) {
 				list_sort(particiones, (void *) ordenarFlagLRU);
 				t_metadata* auxParticion = list_get(particiones, 0); //aca no tomo las copias ya que lo voy a sacar
 				eliminarParticion(auxParticion);
-				cantidadParticionesEliminadas++;
 			}
 		}
 	}
@@ -200,6 +201,7 @@ void eliminarParticion(t_metadata * particionAEliminar) { //OK
 			if (auxMeta->posicion == posicion) {
 				list_remove_and_destroy_element(cola[i].mensajes, j, (void*) particion_destroy);
 				log_info(logger, "Se elimino la particion de la posicion %d", posicion); //OBLIGATORIO (7)
+				cantidadParticionesEliminadas++;
 				break;
 			}
 		}

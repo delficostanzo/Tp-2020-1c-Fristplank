@@ -40,6 +40,7 @@ void agregarMensajeACola(t_paquete * nuevoPaquete) {
 			list_add(cola[i].mensajes, nuevaMeta);
 			log_info(logger, "Se agregó un nuevo mensaje a la cola %s.",ID_COLA[i+1]); //LOG OBLIGATORIO (3)
 			pthread_mutex_unlock(&mutexMemoria);
+			break;
 		}
 	}
 }

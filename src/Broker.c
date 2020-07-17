@@ -2,25 +2,20 @@
 
 int main(void) {
 
-	t_config* config;
-	logger = iniciar_logger();
+	iniciarBroker();
+
+	pthread_t threadClientes;
+	pthread_create(&threadClientes, NULL, (void*) esperarClientes, NULL);
+
+	pthread_join(threadClientes,NULL);
+
+//	terminar_programa(conexion, logger, config);
+
+
+}
+
+void iniciarBroker(void){
 	config = leer_config();
-
-	TAMANO_MEMORIA = config_get_int_value(config, "TAMANO_MEMORIA");
-	TAMANO_MINIMO_PARTICION = config_get_int_value(config,
-			"TAMANO_MINIMO_PARTICION");
-	ALGORITMO_MEMORIA = config_get_string_value(config, "ALGORITMO_MEMORIA");
-	ALGORITMO_REEMPLAZO = config_get_string_value(config,
-			"ALGORITMO_REEMPLAZO");
-	ALGORITMO_PARTICION_LIBRE = config_get_string_value(config,
-			"ALGORITMO_PARTICION_LIBRE");
-	IP_BROKER = config_get_string_value(config, "IP_BROKER");
-	PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
-	FRECUENCIA_COMPACTACION = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
-	//char* LOG_FILE =  config_get_string_value(config,"LOG_FILE");
-
-	log_info(logger, "Lei la IP %s y PUERTO %d\n", IP_BROKER, PUERTO_BROKER);
-
 	iniciarMemoria();
 	iniciarColas();
 	init_repositorio_suscriptores();
@@ -29,26 +24,37 @@ int main(void) {
 	pthread_mutex_init(&mutexIdMensaje,NULL);
 	pthread_mutex_init(&mutexLRUcounter,NULL);
 	pthread_mutex_init(&mutexEnvio, NULL);
-
-	pthread_t threadClientes;
-	pthread_create(&threadClientes, NULL, (void*) esperarClientes, NULL);
-
-	pthread_join(threadClientes,NULL);
-//	terminar_programa(conexion, logger, config);
-
-
 }
 
 t_config* leer_config() {
-	t_config* config =
-			config_create(
-					"/home/utnso/Escritorio/Workspaces/tp-2020-1c-Fritsplank/Broker/src/broker.config");
+	t_config* config = config_create("../src/broker.config");
 
 	if (config == NULL) {
 		printf("No pude leer la config \n");
 		exit(2);
 	}
-	log_info(logger, "Archivo de configuracion seteado");
+
+	LOG_FILE = config_get_string_value(config, "LOG_FILE");
+	TAMANO_MEMORIA = config_get_int_value(config, "TAMANO_MEMORIA");
+	TAMANO_MINIMO_PARTICION = config_get_int_value(config, "TAMANO_MINIMO_PARTICION");
+	ALGORITMO_MEMORIA = config_get_string_value(config, "ALGORITMO_MEMORIA");
+	ALGORITMO_REEMPLAZO = config_get_string_value(config, "ALGORITMO_REEMPLAZO");
+	ALGORITMO_PARTICION_LIBRE = config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE");
+	IP_BROKER = config_get_string_value(config, "IP_BROKER");
+	PUERTO_BROKER = config_get_int_value(config, "PUERTO_BROKER");
+	FRECUENCIA_COMPACTACION = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
+
+	logger = iniciar_logger(LOG_FILE);
+
+	log_info(logger, "CONFIG FILE | IP Broker: %s", IP_BROKER);
+	log_info(logger, "CONFIG FILE | Puerto Broker: %d", PUERTO_BROKER);
+	log_debug(logger, "CONFIG FILE | Tamaño de memoria: %d", TAMANO_MEMORIA);
+	log_debug(logger, "CONFIG FILE | Tamaño mínimo de partición: %d", TAMANO_MINIMO_PARTICION);
+	log_debug(logger, "CONFIG FILE | Algoritmo de memoria: %s", ALGORITMO_MEMORIA);
+	log_debug(logger, "CONFIG FILE | Algoritmo de reemplazo: %s", ALGORITMO_REEMPLAZO);
+	log_debug(logger, "CONFIG FILE | Algoritmo de partición libre: %s", ALGORITMO_PARTICION_LIBRE);
+	log_debug(logger, "CONFIG FILE | Frecuencia de compactación (si aplica): %d", FRECUENCIA_COMPACTACION);
+
 	return config;
 }
 
@@ -76,7 +82,7 @@ void iniciarMemoria() {
 
 	else{
 		if (string_equals_ignore_case(ALGORITMO_MEMORIA, "PARTICIONES")) {
-			log_info(logger, "LA MEMORIA UTILIZA ALGORITMO DE PARTICIONES DINAMICAS");
+			log_info(logger, "Memoria: PARTICIONES DINÁMICAS");
 			memoriaCache = malloc(TAMANO_MEMORIA);
 
 			if(memoriaCache == NULL){
@@ -86,7 +92,7 @@ void iniciarMemoria() {
 		}
 
 		else if (string_equals_ignore_case(ALGORITMO_MEMORIA, "BS")) {
-			log_info(logger, "LA MEMORIA UTILIZA ALGORITMO DE BUDDY SYSTEM");
+			log_info(logger, "Memoria: BUDDY SYSTEM");
 
 			if (!esPotenciaDeDos(TAMANO_MEMORIA) || !esPotenciaDeDos(TAMANO_MINIMO_PARTICION)){
 				log_error(logger, "LA CANTIDAD DE MEMORIA INDICADA NO ES POTENCIA DE DOS. SE ABORTA.");
@@ -128,9 +134,9 @@ void iniciarColas() {
 	pthread_mutex_unlock(&mutexColas);
 }
 
-t_log* iniciar_logger(void) {
+t_log* iniciar_logger(char* logFile) {
 		t_log * log = malloc(sizeof(t_log));
-		log = log_create("broker.log", "BROKER", 1, LOG_LEVEL_DEBUG);
+		log = log_create(logFile, "BROKER", 1, LOG_LEVEL_DEBUG);
 		if (log == NULL) {
 			printf("No pude crear el logger \n");
 			exit(1);

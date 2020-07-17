@@ -26,11 +26,14 @@
 #include "repositorioSuscriptores.h"
 #include "buddy.h"
 
+t_config* config;
+
+void iniciarBroker(void);
 t_config* leer_config(void);
 void terminar_programa(int, t_log*, t_config*);
 void iniciarMemoria();
 void iniciarColas();
-t_log* iniciar_logger(void);
+t_log* iniciar_logger(char* logFile);
 
 //int existeSuscriptor(t_list * suscriptores, int suscriptor);
 

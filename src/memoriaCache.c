@@ -31,13 +31,15 @@ void cachearMensaje(t_metadata * meta, void * mensaje) {
 		break;
 	default:
 		log_error(logger, "No se puede cachear el mensaje. No coincide el tipo mensaje.");
+		break;
 	}
 
-	meta->posicion = particionLibre(meta->tamanioMensajeEnMemoria);
+	log_debug(logger, "Antes de particion libre");
 
 	while(meta->posicion == -1){
 		meta->posicion = particionLibre(meta->tamanioMensajeEnMemoria);
 	}
+	log_debug(logger, "Luego de particion libre");
 
 	escribirMemoria(mensajeACachear, meta);
 	free(mensajeACachear);
@@ -100,6 +102,7 @@ void cachearGetPokemon(t_metadata * meta, void * mensaje, void ** mensajeACachea
 }
 
 void cachearAppearedPokemon(t_metadata * meta, void * mensaje, void ** mensajeACachear) {
+	log_debug(logger, "Entro a cachearAppearedPokemon");
 
 	int offset = 0;
 
@@ -115,6 +118,7 @@ void cachearAppearedPokemon(t_metadata * meta, void * mensaje, void ** mensajeAC
 	offset += sizeof(uint32_t);
 
 	meta->tamanioMensajeEnMemoria = offset;
+	log_debug(logger, "Salgo de cachearAppearedPokemon");
 }
 
 void cachearCatchPokemon(t_metadata * meta, void * mensaje, void ** mensajeACachear) {
@@ -291,7 +295,7 @@ void * descachearCaughtPokemon(void* mensajeEnMemoria) {
 }
 
 void escribirMemoria(void * mensaje, t_metadata * meta) { //OK
-	memcpy((memoriaCache + meta->posicion), mensaje,meta->tamanioMensajeEnMemoria);
+	memcpy((memoriaCache + meta->posicion), mensaje, meta->tamanioMensajeEnMemoria);
 	log_info(logger, "Se cacheo el mensaje de tamanio: %d", meta->tamanioMensajeEnMemoria); //NO OBLIGATORIO
 	log_info(logger, "Se almacena un mensaje en la posicion [%d].", meta->posicion); //OBLIGATORIO (6)
 }
@@ -305,17 +309,10 @@ void * leerMemoria(t_metadata * meta) { //OK
 	return descachearMensaje(memoriaCache + meta->posicion, meta);
 }
 
-void compactarMemoria() {
+void compactarMemoria(t_list* particiones) {
 
 	int offset = 0;
 	int diferencia;
-	t_list * particiones = list_create();
-
-	for (int j = 0; j < 6; j++) {
-		list_add_all(particiones, cola[j].mensajes);
-	}
-
-	list_sort(particiones, (void*) ordenarPosicion);
 	int cantParticiones = list_size(particiones);
 
 	for (int i = 0; i < cantParticiones; i++) {
