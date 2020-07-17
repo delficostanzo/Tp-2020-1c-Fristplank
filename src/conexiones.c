@@ -119,6 +119,7 @@ void escucharGameBoy(){
 	}
 
 	while(1){
+		log_info(logger, "------------------------------------");
 		log_info(logger, "Esperando conexion de GameBoy");
 		int socketGameBoy = aceptarConexion(socketListenerGameBoy);
 
@@ -134,15 +135,21 @@ void escucharGameBoy(){
 
 		t_paquete* paqueteNuevo = recibir_mensaje(socketGameBoy);
 
-		log_debug(logger, "======= Nuevo mensaje recibido =======");
+		if(paqueteNuevo == NULL){
+			log_info(logger, "Se ha roto la conexión con GameBoy. Continuando ejecución.");
+			close(socketGameBoy);
+			continue;
+		}
+
+		log_info(logger, "<><> Nuevo mensaje de GAMEBOY recibido <><>");
 		log_info(logger, "Tipo de mensaje: %s", COLAS_STRING[paqueteNuevo->codigo_operacion]);
 		log_info(logger, "ID del mensaje: %d", paqueteNuevo->ID);
 		log_info(logger, "ID correlativo del mensaje: %d", paqueteNuevo->ID_CORRELATIVO);
 		log_debug(logger,"Tamaño de payload: %d", paqueteNuevo->buffer->size);
-//
+
 		switch(paqueteNuevo->codigo_operacion){
-			case NEW_POKEMON:;
-				log_info(logger, "Mensaje NEW_POKEMON recibido.");
+			case NEW_POKEMON:
+			log_debug(logger, "<><> Mensaje NEW_POKEMON recibido <><>");
 
 				t_new_pokemon* new_pokemon = paqueteNuevo->buffer->stream;
 				pthread_t hiloProcesarNewPokemon;
@@ -155,20 +162,24 @@ void escucharGameBoy(){
 				appeared_pokemon->posicion = new_pokemon->posicion;
 				log_debug(logger, "Por enviar APPEARED_POKEMON | Pokemon: %s, Posicion: (%d, %d)", appeared_pokemon->pokemon, appeared_pokemon->posicion->posicionX, appeared_pokemon->posicion->posicionY);
 
-				enviar_appeared_pokemon(appeared_pokemon, socketAppearedPokemon, -1, paqueteNuevo->ID);
+				if (enviar_appeared_pokemon(appeared_pokemon, socketAppearedPokemon, -1, paqueteNuevo->ID) == -1){
+					log_info(logger, "No se pudo enviar el mensaje a Broker.");
+				}
+
 				free(new_pokemon);
 				break;
 
 			case CATCH_POKEMON:
-				log_info(logger, "Mensaje CATCH_POKEMON recibido.");
+				log_debug(logger, "<><> Mensaje CATCH_POKEMON recibido <><>");
 
 				t_catch_pokemon* catch_pokemon = paqueteNuevo->buffer->stream;
 				pthread_t hiloProcesarCatchPokemon;
 				pthread_create(&hiloProcesarCatchPokemon, NULL, (void*) procesarCatchPokemon, (void *) catch_pokemon);
 
-				void* encontrado;
+				int* encontrado = malloc(sizeof(int));
 				pthread_join(hiloProcesarCatchPokemon, encontrado);
 
+				log_debug(logger, "Sale de procesar catch");
 				free(catch_pokemon->posicion);
 				free(catch_pokemon->pokemon);
 				free(catch_pokemon);
@@ -184,12 +195,14 @@ void escucharGameBoy(){
 					caught_pokemon->ok = 0;
 				}
 
-				enviar_caught_pokemon(caught_pokemon, socketCaughtPokemon, -1, paqueteNuevo->ID);
+				if (enviar_caught_pokemon(caught_pokemon, socketCaughtPokemon, -1, paqueteNuevo->ID) == -1){
+					log_info(logger, "No se pudo enviar el mensaje a Broker.");
+				}
 
 				break;
 
 			case GET_POKEMON:
-				log_info(logger, "Mensaje GET_POKEMON recibido.");
+				log_debug(logger, "<><> Mensaje GET_POKEMON recibido <><>");
 
 
 				t_argumentos_procesar_get* argumentos = malloc(sizeof(t_argumentos_procesar_get));
@@ -206,7 +219,10 @@ void escucharGameBoy(){
 				log_debug(logger, "Value de socket %d", socketLocalizedPokemon);
 				log_info("Se encontraron %d cantidad de posiciones para el pokemon %s.",localized_pokemon->cantidadPosiciones, localized_pokemon->pokemon);
 
-				enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID);
+				if (enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID) == -1){
+					log_info(logger, "No se pudo enviar el mensaje a Broker.");
+				}
+
 
 				free(paqueteNuevo->buffer->stream);
 				free(argumentos);
@@ -227,6 +243,7 @@ void escucharGameBoy(){
 void* escucharColaNewPokemon(){
 
 	while(1){
+		log_info(logger, "------------------------------------");
 		log_info(logger, "Esperando mensajes NEW_POKEMON...");
 
 		t_paquete* paqueteNuevo = recibir_mensaje(socketNewPokemon);
@@ -240,9 +257,11 @@ void* escucharColaNewPokemon(){
 		}
 
 		else{
-			enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID);
+			if (enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID) == -1){
+				log_info(logger, "No se pudo enviar el mensaje a Broker.");
+			}
 
-			log_info(logger, "Mensaje NEW_POKEMON recibido.");
+			log_info(logger, "<><> Mensaje NEW_POKEMON recibido <><>");
 
 			t_new_pokemon* new_pokemon = paqueteNuevo->buffer->stream;
 			pthread_t hiloProcesarNewPokemon;
@@ -254,7 +273,10 @@ void* escucharColaNewPokemon(){
 			appeared_pokemon->pokemon = new_pokemon->pokemon;
 			appeared_pokemon->posicion = new_pokemon->posicion;
 
-			enviar_appeared_pokemon(appeared_pokemon, socketAppearedPokemon, -1, paqueteNuevo->ID);
+			if(enviar_appeared_pokemon(appeared_pokemon, socketAppearedPokemon, -1, paqueteNuevo->ID) == -1){
+				log_info(logger, "No se pudo enviar el mensaje a Broker.");
+			}
+
 			free(new_pokemon);
 			free(paqueteNuevo->buffer);
 			free(paqueteNuevo);
@@ -265,6 +287,7 @@ void* escucharColaNewPokemon(){
 void* escucharColaCatchPokemon(){
 
 	while(1){
+		log_info(logger, "------------------------------------");
 		log_info(logger, "Esperando mensajes CATCH_POKEMON...");
 		t_paquete* paqueteNuevo = recibir_mensaje(socketCatchPokemon);
 
@@ -277,9 +300,11 @@ void* escucharColaCatchPokemon(){
 		}
 
 		else{
-			enviar_ACK(socketACKCatchPokemon, -1, paqueteNuevo->ID);
+			if(enviar_ACK(socketACKCatchPokemon, -1, paqueteNuevo->ID) == -1){
+				log_info(logger, "No se pudo enviar el mensaje a Broker.");
+			}
 
-			log_info(logger, "Mensaje CATCH_POKEMON recibido.");
+			log_info(logger, "<><> Mensaje CATCH_POKEMON recibido <><>");
 
 			t_catch_pokemon* catch_pokemon = paqueteNuevo->buffer->stream;
 			pthread_t hiloProcesarCatchPokemon;
@@ -303,7 +328,9 @@ void* escucharColaCatchPokemon(){
 				caught_pokemon->ok = 0;
 			}
 
-			enviar_caught_pokemon(caught_pokemon, socketCaughtPokemon, -1, paqueteNuevo->ID);
+			if(enviar_caught_pokemon(caught_pokemon, socketCaughtPokemon, -1, paqueteNuevo->ID) == -1){
+				log_info(logger, "No se pudo enviar el mensaje a Broker.");
+			}
 
 			free(paqueteNuevo->buffer);
 			free(paqueteNuevo);
@@ -314,6 +341,7 @@ void* escucharColaCatchPokemon(){
 void* escucharColaGetPokemon(){
 
 	while(1){
+		log_info(logger, "------------------------------------");
 		log_info(logger, "Esperando mensajes GET_POKEMON...");
 		t_paquete* paqueteNuevo = recibir_mensaje(socketGetPokemon);
 
@@ -326,9 +354,11 @@ void* escucharColaGetPokemon(){
 		}
 
 		else {
-			enviar_ACK(socketACKGetPokemon, -1, paqueteNuevo->ID);
+			if(enviar_ACK(socketACKGetPokemon, -1, paqueteNuevo->ID) == -1){
+				log_info(logger, "No se pudo enviar el mensaje a Broker.");
+			}
 
-			log_info(logger, "Mensaje GET_POKEMON recibido.");
+			log_info(logger, "<><> Mensaje GET_POKEMON recibido <><>");
 
 			t_argumentos_procesar_get* argumentos = malloc(sizeof(t_argumentos_procesar_get));
 			argumentos->get_pokemon = paqueteNuevo->buffer->stream;
@@ -339,7 +369,9 @@ void* escucharColaGetPokemon(){
 			pthread_join(hiloProcesarGetPokemon, NULL);
 			t_localized_pokemon* localized_pokemon = argumentos->puntero_a_localized_pokemon;
 
-			enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID);
+			if(enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID) == -1){
+				log_info(logger, "No se pudo enviar el mensaje a Broker.");
+			}
 			log_debug(logger, "Se envió el localized_pokemon de %s al socket %d", localized_pokemon->pokemon, socketLocalizedPokemon);
 
 			free(paqueteNuevo->buffer->stream);

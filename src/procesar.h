@@ -16,7 +16,7 @@ typedef struct{
 }t_argumentos_procesar_get;
 
 void procesarGetPokemon(t_argumentos_procesar_get* args);
-void* procesarCatchPokemon(void* args);
+int* procesarCatchPokemon(void* args);
 void procesarNewPokemon(void* args);
 
 #endif /* SRC_PROCESAR_H_ */
