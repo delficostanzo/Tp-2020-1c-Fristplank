@@ -29,7 +29,7 @@ typedef struct {
 	PokemonEnElMapa* pokemonNecesitado;
 	PokemonEnElMapa* pokemonAIntercambiar; // cuando el objetivo sea atrapar, este estaria en NULL. Se va a usar cuando es mover e intercambiar(DEADLOCK)
 	ObjetivoEnExec objetivo;
-	int numeroDelEntrenadorIntercambio;
+	char numeroDelEntrenadorIntercambio;
 }MovimientoEnExec;
 
 typedef struct {
@@ -46,9 +46,8 @@ typedef struct {
 	sem_t semaforoExecEntrenador;
 	pthread_mutex_t mutexEstado;
 	pthread_mutex_t mutexCorrelativo;
-	pthread_mutex_t mutexMovimiento;
 	int ciclosCPUFaltantesIntercambio;
-	int numeroEntrenador;
+	char numeroEntrenador;
 }Entrenador;
 
 Entrenador* newEntrenador();
@@ -66,6 +65,7 @@ void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado);
 void pasarADormido(Entrenador* entrenador);
 void pasarADeadlock(Entrenador* entrenador);
 int noEstaEnExit(Entrenador* entrenador);
+int estaEnExit(Entrenador* entrenador);
 void estadoSiAtrapo(Entrenador* entrenador);
 void pasarABlockEsperando(Entrenador* entrenador);
 int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);

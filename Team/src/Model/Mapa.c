@@ -53,6 +53,6 @@ void iniciarVariables(){
 
 	sem_init(&semaforoEntrenadorEsperando, 1, 0);
 
-
+	noHayQueFinalizar=1;
 	//llegan bien sus nombres
 }
