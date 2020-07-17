@@ -47,7 +47,7 @@ int generarSocketsConBroker() {
 		log_info(logger,"Suscripto a cola New Pokemon. Lanzando socket de escucha..");
 
 		if (conectarA(socketACKNewPokemon, IP_BROKER, puertoBrokerInt)) {
-			log_info(logger, "Socket de ACK New Pokemon guardado.");
+			log_debug(logger, "Socket de ACK New Pokemon guardado.");
 		}
 		else{
 			return -1;
@@ -75,7 +75,7 @@ int generarSocketsConBroker() {
 		log_info(logger,"Suscripto a cola Get Pokemon. Lanzando socket de escucha..");
 
 		if (conectarA(socketACKGetPokemon, IP_BROKER, puertoBrokerInt)) {
-			log_info(logger, "Socket de ACK Catch Pokemon guardado.");
+			log_debug(logger, "Socket de ACK Catch Pokemon guardado.");
 		}
 		else{
 			return -1;
@@ -85,11 +85,11 @@ int generarSocketsConBroker() {
 		return -1;
 	}
 
-	if (conectarA(socketAppearedPokemon, IP_BROKER, puertoBrokerInt)) { log_info(logger, "Socket de Appeared Pokemon guardado.");}
+	if (conectarA(socketAppearedPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Appeared Pokemon guardado.");}
 	else{return -1;}
-	if (conectarA(socketCaughtPokemon, IP_BROKER, puertoBrokerInt)) { log_info(logger, "Socket de Caught Pokemon guardado.");}
+	if (conectarA(socketCaughtPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Caught Pokemon guardado.");}
 	else{return -1;}
-	if (conectarA(socketLocalizedPokemon, IP_BROKER, puertoBrokerInt)) { log_info(logger, "Socket de Localized Pokemon guardado. Value %d", socketLocalizedPokemon);}
+	if (conectarA(socketLocalizedPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Localized Pokemon guardado.", socketLocalizedPokemon);}
 	else{return -1;}
 
 	return 1;
@@ -119,8 +119,7 @@ void escucharGameBoy(){
 	}
 
 	while(1){
-		log_info(logger, "------------------------------------");
-		log_info(logger, "Esperando conexion de GameBoy");
+		log_info(logger, "Esperando conexion de GameBoy...");
 		int socketGameBoy = aceptarConexion(socketListenerGameBoy);
 
 		t_handshake* handshakePropio = malloc(sizeof(t_handshake));
@@ -243,7 +242,6 @@ void escucharGameBoy(){
 void* escucharColaNewPokemon(){
 
 	while(1){
-		log_info(logger, "------------------------------------");
 		log_info(logger, "Esperando mensajes NEW_POKEMON...");
 
 		t_paquete* paqueteNuevo = recibir_mensaje(socketNewPokemon);
@@ -287,7 +285,6 @@ void* escucharColaNewPokemon(){
 void* escucharColaCatchPokemon(){
 
 	while(1){
-		log_info(logger, "------------------------------------");
 		log_info(logger, "Esperando mensajes CATCH_POKEMON...");
 		t_paquete* paqueteNuevo = recibir_mensaje(socketCatchPokemon);
 
@@ -341,7 +338,6 @@ void* escucharColaCatchPokemon(){
 void* escucharColaGetPokemon(){
 
 	while(1){
-		log_info(logger, "------------------------------------");
 		log_info(logger, "Esperando mensajes GET_POKEMON...");
 		t_paquete* paqueteNuevo = recibir_mensaje(socketGetPokemon);
 
