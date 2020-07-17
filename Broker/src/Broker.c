@@ -135,7 +135,7 @@ void iniciarColas() {
 
 t_log* iniciar_logger(char* logFile) {
 		t_log * log = malloc(sizeof(t_log));
-		log = log_create(logFile, "BROKER", 1, LOG_LEVEL_DEBUG);
+		log = log_create(logFile, "BROKER", 1, LOG_LEVEL_INFO);
 		if (log == NULL) {
 			printf("No pude crear el logger \n");
 			exit(1);

@@ -296,8 +296,7 @@ void * descachearCaughtPokemon(void* mensajeEnMemoria) {
 
 void escribirMemoria(void * mensaje, t_metadata * meta) { //OK
 	memcpy((memoriaCache + meta->posicion), mensaje, meta->tamanioMensajeEnMemoria);
-	log_info(logger, "Se cacheo el mensaje de tamanio: %d", meta->tamanioMensajeEnMemoria); //NO OBLIGATORIO
-	log_info(logger, "Se almacena un mensaje en la posicion [%d].", meta->posicion); //OBLIGATORIO (6)
+	log_info(logger, "Se almacena un mensaje en la posición [%d]", meta->posicion); //OBLIGATORIO (6)
 }
 
 void * leerMemoria(t_metadata * meta) { //OK
@@ -311,33 +310,33 @@ void * leerMemoria(t_metadata * meta) { //OK
 
 void compactarMemoria(t_list* particiones) {
 
+	log_info(logger, "<> Inicio Compactación de Memoria <>");
 	int offset = 0;
-	int diferencia;
 	int cantParticiones = list_size(particiones);
 
 	for (int i = 0; i < cantParticiones; i++) {
 		t_metadata* auxParticion = list_get(particiones, i);
 
 		if (offset == auxParticion->posicion) {
-			offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
+			offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
+			continue;
 		}
-
-		diferencia = auxParticion->posicion - offset;
 
 		/* Me guardo el mensaje para luego reubicarlo
 		 */
 		void* mensajeACachear = malloc(auxParticion->tamanioMensajeEnMemoria);
 		memcpy(mensajeACachear, (memoriaCache + auxParticion->posicion), auxParticion->tamanioMensajeEnMemoria);
 
-		auxParticion->posicion -= diferencia;
+		auxParticion->posicion = offset;
 
 		/* Escribo el mensaje en la nueva posicion
 		 */
 		escribirMemoria(mensajeACachear, auxParticion);
 		free(mensajeACachear);
 
-		offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
+		offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
 	}
+	log_info(logger, "<> Termino Compactación de Memoria <>");
 
 	cantidadParticionesEliminadas = 0;
 }
