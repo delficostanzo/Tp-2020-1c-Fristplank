@@ -31,6 +31,7 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 
 		if(cantidadParticionesEliminadas == FRECUENCIA_COMPACTACION){
 			compactarMemoria(particiones);
+			cantParticionesActuales = list_size(particiones);
 		}
 
 		if (string_equals_ignore_case(ALGORITMO_PARTICION_LIBRE, "BF")) {
@@ -68,7 +69,7 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 				posicionEncontrada = particion->posicion;
 			}
 
-			else if ((TAMANO_MEMORIA - offset - 1) >= tamanioParticionMinima(sizeDato)){
+			else if ((TAMANO_MEMORIA - offset) >= tamanioParticionMinima(sizeDato)){
 				posicionEncontrada = offset;
 			}
 
@@ -98,7 +99,7 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 				}
 
 			}
-			if ((TAMANO_MEMORIA - offset - 1) >= tamanioParticionMinima(sizeDato)){
+			if ((TAMANO_MEMORIA - offset) >= tamanioParticionMinima(sizeDato)){
 				posicionEncontrada = offset; //SI aun puedo seguir agregando, retorno la ultima posicion
 			}
 		}
@@ -211,7 +212,7 @@ void eliminarParticion(t_metadata * particionAEliminar) { //OK
 
 		if(auxMeta->posicion == posicion){
 			list_remove_and_destroy_element(cola[colaABuscar].mensajes, i, (void*) particion_destroy);
-			log_info(logger, "Se eliminó la partición de la posicion [%d]", auxMeta->posicion); //OBLIGATORIO (7)
+			log_info(logger, "Se eliminó la partición de la posición [%d]", auxMeta->posicion); //OBLIGATORIO (7)
 			cantidadParticionesEliminadas++;
 			break;
 		}

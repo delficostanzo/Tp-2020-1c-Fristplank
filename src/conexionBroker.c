@@ -217,11 +217,11 @@ void atenderCliente(argumentos* sockets) {
 			t_list* mensajes = mensajesAEnviar(gameboy->id, suscribe->codigoCola);
 			pthread_mutex_unlock(&mutexColas);
 
+			log_info(logger, "GameBoy se suscribió a la cola %s", ID_COLA[suscribe->codigoCola]);
+
 			pthread_mutex_lock(&mutexEnvio);
 			enviar_mensajes_cacheados(mensajes, suscribe->codigoCola, gameboy->socketDondeEscucha);
 			pthread_mutex_unlock(&mutexEnvio);
-
-			log_info(logger, "GameBoy se suscribió a la cola %s", ID_COLA[suscribe->codigoCola]);
 
 			free(mensajeRecibido->buffer->stream);
 			free(mensajeRecibido->buffer);
