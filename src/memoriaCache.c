@@ -302,7 +302,6 @@ void escribirMemoria(void * mensaje, t_metadata * meta) { //OK
 }
 
 void * leerMemoria(t_metadata * meta) { //OK
-	modificarUltimaReferencia(meta, 'L');
 	return descachearMensaje(memoriaCache + meta->posicion, meta);
 }
 void modificarUltimaReferencia(t_metadata * meta, char tipoReferencia) {
@@ -335,7 +334,7 @@ void compactarMemoria() {
 
 		/* Me guardo el mensaje para luego reubicarlo
 		 */
-		void* mensajeACachear = malloc(sizeof(auxParticion->tamanioMensajeEnMemoria));
+		void* mensajeACachear = malloc(auxParticion->tamanioMensajeEnMemoria);
 		memcpy(mensajeACachear, (memoriaCache + auxParticion->posicion), auxParticion->tamanioMensajeEnMemoria);
 
 		auxParticion->posicion -= diferencia;

@@ -155,7 +155,7 @@ void atenderCliente(argumentos* sockets) {
 
 		if(mensajeRecibido == NULL){
 			free(idProcesoConectado);
-			return;
+			break;
 		}
 
 		/* El gameboy se suscribe
