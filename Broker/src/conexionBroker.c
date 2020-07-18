@@ -899,7 +899,7 @@ void enviar_mensaje_LOCALIZED_a_suscriptores(void* paqueteVoid){
 					list_add(localized_a_enviar->listaPosiciones, posicion);
 				}
 
-				enviar_localized_pokemon(localized_pokemon, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
+				enviar_localized_pokemon(localized_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 			}
 
 			list_destroy(listaDeSuscriptores);
@@ -910,7 +910,7 @@ void enviar_mensaje_LOCALIZED_a_suscriptores(void* paqueteVoid){
 		t_posicion* posicionALiberar = list_get(localized_pokemon->listaPosiciones, i);
 		free(posicionALiberar);
 	}
-	//list_destroy(localized_pokemon->listaPosiciones);
+	list_destroy(localized_pokemon->listaPosiciones);
 	free(localized_pokemon->pokemon);
 	free(paquete->buffer->stream);
 	free(paquete->buffer);
