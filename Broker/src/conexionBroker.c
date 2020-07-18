@@ -49,10 +49,10 @@ void atenderCliente(argumentos* sockets) {
 		team->id = idProcesoConectado->idUnico;
 		team->socketGet = aceptarConexion(*cliente);
 		team->socketIdGet = aceptarConexion(*cliente);
-		team->socketLocalized = aceptarConexion(*cliente);
-		team->socketACKLocalized = aceptarConexion(*cliente);
 		team->socketAppeared = aceptarConexion(*cliente);
 		team->socketACKAppeared = aceptarConexion(*cliente);
+		team->socketLocalized = aceptarConexion(*cliente);
+		team->socketACKLocalized = aceptarConexion(*cliente);
 		team->socketCatch = aceptarConexion(*cliente);
 		team->socketIdCatch = aceptarConexion(*cliente);
 		team->socketCaught = aceptarConexion(*cliente);
