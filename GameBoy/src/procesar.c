@@ -9,6 +9,11 @@
 
 void procesarBrokerNewPokemon(int socket, char* argv[]){
 
+	if(argv[6] == NULL){
+		log_error(logger, "Faltan ingresar parámetros. Se aborta la ejecución.");
+		exit(1);
+	}
+
 	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
 	new_pokemon->lengthOfPokemon = strlen(argv[3]);
 	new_pokemon->pokemon = string_from_format(argv[3]);
@@ -22,6 +27,11 @@ void procesarBrokerNewPokemon(int socket, char* argv[]){
 }
 
 void procesarGameCardNewPokemon(int socket, char* argv[]){
+
+	if(argv[7] == NULL){
+		log_error(logger, "Faltan ingresar parámetros. Se aborta la ejecución.");
+		exit(1);
+	}
 
 	t_new_pokemon* new_pokemon = malloc(sizeof(t_new_pokemon));
 	new_pokemon->lengthOfPokemon = strlen(argv[3]);
@@ -38,6 +48,11 @@ void procesarGameCardNewPokemon(int socket, char* argv[]){
 
 void procesarGameCardGetPokemon(int socket, char* argv[]){
 
+	if(argv[4] == NULL){
+		log_error(logger, "Faltan ingresar parámetros. Se aborta la ejecución.");
+		exit(1);
+	}
+
 	t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
 	get_pokemon->lengthOfPokemon = strlen(argv[3]);
 	get_pokemon->pokemon = string_from_format(argv[3]);
@@ -47,6 +62,12 @@ void procesarGameCardGetPokemon(int socket, char* argv[]){
 }
 
 void procesarBrokerGetPokemon(int socket, char* argv[]){
+
+	if(argv[3] == NULL){
+		log_error(logger, "Faltan ingresar parámetros. Se aborta la ejecución.");
+		exit(1);
+	}
+
 	t_get_pokemon* get_pokemon = malloc(sizeof(t_get_pokemon));
 	get_pokemon->lengthOfPokemon = strlen(argv[3]);
 	get_pokemon->pokemon = string_from_format(argv[3]);
@@ -56,6 +77,12 @@ void procesarBrokerGetPokemon(int socket, char* argv[]){
 }
 
 void procesarBrokerAppearedPokemon(int socket, char* argv[]){
+
+	if(argv[6] == NULL){
+		log_error(logger, "Faltan ingresar parámetros. Se aborta la ejecución.");
+		exit(1);
+	}
+
 	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
 	appeared_pokemon->lengthOfPokemon = strlen(argv[3]);
 	appeared_pokemon->pokemon = string_from_format(argv[3]);
@@ -68,6 +95,12 @@ void procesarBrokerAppearedPokemon(int socket, char* argv[]){
 }
 
 void procesarBrokerCatchPokemon(int socket, char* argv[]){
+
+	if(argv[5] == NULL){
+		log_error(logger, "Faltan ingresar parámetros. Se aborta la ejecución.");
+		exit(1);
+	}
+
 	t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
 	catch_pokemon->lengthOfPokemon = strlen(argv[3]);
 	catch_pokemon->pokemon = string_from_format(argv[3]);
@@ -80,14 +113,36 @@ void procesarBrokerCatchPokemon(int socket, char* argv[]){
 }
 
 void procesarBrokerCaughtPokemon(int socket, char* argv[]){
+
+	if(argv[4] == NULL){
+		log_error(logger, "Faltan ingresar parámetros. Se aborta la ejecución.");
+		exit(1);
+	}
+
 	t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
-	caught_pokemon->ok = atoi(argv[4]);
+
+	if(string_equals_ignore_case("FAIL", argv[4])){
+		caught_pokemon->ok = 0;
+	}
+	else if(string_equals_ignore_case("OK", argv[4])){
+		caught_pokemon->ok = 1;
+	}
+
+	else{
+
+	}
 
 	enviar_caught_pokemon(caught_pokemon, socket, -1, atoi(argv[3]));
 	log_info(logger, "Mensaje enviado a Broker | ID Correlativo del Mensaje: %d - Bool enviado: %d", atoi(argv[3]), atoi(argv[4]));
 }
 
 void procesarTeamAppearedPokemon(int socket, char* argv[]){
+
+	if(argv[5] == NULL){
+		log_error(logger, "Faltan ingresar parámetros. Se aborta la ejecución.");
+		exit(1);
+	}
+
 	t_appeared_pokemon* appeared_pokemon = malloc(sizeof(t_appeared_pokemon));
 	appeared_pokemon->lengthOfPokemon = strlen(argv[3]);
 	appeared_pokemon->pokemon = string_from_format(argv[3]);
@@ -100,6 +155,13 @@ void procesarTeamAppearedPokemon(int socket, char* argv[]){
 }
 
 void procesarGameCardCatchPokemon(int socket, char* argv[]){
+
+	if(argv[6] == NULL){
+		log_error(logger, "Faltan ingresar parámetros. Se aborta la ejecución.");
+		exit(1);
+	}
+
+
 	t_catch_pokemon* catch_pokemon = malloc(sizeof(t_catch_pokemon));
 	catch_pokemon->lengthOfPokemon = strlen(argv[3]);
 	catch_pokemon->pokemon = string_from_format(argv[3]);

@@ -52,6 +52,8 @@ char* PUERTO_GAMECARD;
 char* IP_GAMEBOY;
 char* PUERTO_GAMEBOY;
 
+int conexionBroker;
+
 t_log* logger;
 t_config* config;
 
@@ -65,5 +67,6 @@ int conectarAModulo(String PUERTO, String IP);
 void procesarSubscribe(char* argv[]);
 void escucharCola(void* colaAEscuchar);
 void recibirEImprimirMensaje(int socketBroker, op_code cola);
+void dormir(int* segundos);
 
 #endif /* GAMEBOY_H_ */

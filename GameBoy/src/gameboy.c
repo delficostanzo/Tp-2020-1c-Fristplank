@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
  * 			./GameBoy TEAM APPEARED_POKEMON Pikachu 5 3
  *
  * DONE ./gameboy GAMECARD NEW_POKEMON [POKEMON] [POSX] [POSY] [CANTIDAD] [ID_MENSAJE]
- * ejemplo:
+ * ejemplo: ./GameBoy GAMECARD NEW_POKEMON Pikachu 2 6 2 -1
  *
  * DONE ./gameboy GAMECARD CATCH_POKEMON [POKEMON] [POSX] [POSY] [ID_MENSAJE]
  * ejemplo:
@@ -164,16 +164,29 @@ void procesarSubscribe(char* argv[]){
 
 	int segundosAEscuchar = atoi(argv[3]);
 
+	pthread_t threadDuerme;
+	pthread_create(&threadDuerme, NULL, (void*) dormir, &segundosAEscuchar);
+
 	pthread_t threadEscucha;
 	pthread_create(&threadEscucha, NULL, (void*) escucharCola, (void*) cola);
-	sleep(segundosAEscuchar);
+
+	pthread_join(threadDuerme, NULL);
 	pthread_cancel(threadEscucha);
+	close(conexionBroker);
+	log_info(logger, "Se terminaron los %d segundos.", segundosAEscuchar);
+}
+
+void dormir(int* segundos){
+	log_debug(logger,"Procedo a dormir %d segundos", *segundos);
+	sleep(*segundos);
+	log_debug(logger, "Despierto");
 }
 
 void escucharCola(void* colaAEscuchar){
+
 	op_code cola = (op_code) colaAEscuchar;
 
-	int conexionBroker = conectarAModulo(PUERTO_BROKER, IP_BROKER);
+	conexionBroker = conectarAModulo(PUERTO_BROKER, IP_BROKER);
 
 	t_gameboy_suscribe* gameboysuscribe = malloc(sizeof(t_gameboy_suscribe));
 	gameboysuscribe->codigoCola = cola;
@@ -194,6 +207,11 @@ void recibirEImprimirMensaje(int socketBroker, op_code cola){
 
 	t_paquete* paquete = recibir_mensaje(socketBroker);
 
+	if(paquete == NULL){
+		free(paquete);
+		return;
+	}
+
 	log_info(logger, "======= Nuevo mensaje recibido =======");
 	log_info(logger, "Tipo de mensaje: %s", COLAS_STRING[paquete->codigo_operacion]);
 	log_info(logger, "ID del mensaje: %d", paquete->ID);
@@ -202,7 +220,7 @@ void recibirEImprimirMensaje(int socketBroker, op_code cola){
 
 	switch(paquete->codigo_operacion){
 		case NEW_POKEMON:;
-			t_new_pokemon* new_pokemon = (t_new_pokemon*) paquete->buffer->stream;
+			t_new_pokemon* new_pokemon = paquete->buffer->stream;
 			log_info(logger, "Nombre de Pokemon: %s", new_pokemon->pokemon);
 			log_info(logger, "Cantidad de Pokemon: %d", new_pokemon->cantidad);
 			log_info(logger, "Posicion (X,Y) = (%d,%d)", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
@@ -250,15 +268,12 @@ void recibirEImprimirMensaje(int socketBroker, op_code cola){
 			for(int i = 0; i < localized_pokemon->cantidadPosiciones; i++){
 				t_posicion* posicion = list_get(localized_pokemon->listaPosiciones, i);
 				log_info(logger, "Posicion numero %d: (X,Y) = (%d,%d)", i + 1, posicion->posicionX, posicion->posicionY);
+				free(posicion);
 			}
 
 			list_destroy(localized_pokemon->listaPosiciones);
-
-			//TODO arreglar estos free
-//			puts("antes del free del nombre");
-//			free(localized_pokemon->pokemon);
-//			puts("despues del free del nombre");
-//			free(localized_pokemon);
+			free(localized_pokemon->pokemon);
+			free(localized_pokemon);
 			break;
 		default:
 			log_info(logger, "El tipo de mensaje es incorrecto");
@@ -285,7 +300,7 @@ int conectarAModulo(String PUERTO, String IP){
 
 	t_handshake* handshake = malloc(sizeof(t_handshake));
 	handshake->id = GAMEBOY;
-	handshake->idUnico = 1;
+	handshake->idUnico = 999;
 
 	t_handshake* handshakeRecibido = responderHandshake(conexion, handshake);
 	log_info(logger, "El id del proceso con el que me conecte es: %s | ID Unico: %d", ID_PROCESO[handshakeRecibido->id], handshakeRecibido->idUnico);
@@ -326,7 +341,7 @@ t_config* leer_config(void)
 t_log* iniciarLogger(void){
 
 	t_log* logger;
-	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("DEBUG"))) == NULL){
+	if((logger = log_create("./gameboy.log", "GAMEBOY", 1, log_level_from_string("INFO"))) == NULL){
 		printf("No pude crear el logger\n");
 		exit(1);
 	}
