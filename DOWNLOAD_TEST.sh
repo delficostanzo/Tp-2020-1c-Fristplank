@@ -1,9 +1,7 @@
-cd
-
 	if test -d /home/utnso/delibird-pruebas; then
-	cd /home/utnso
-	sudo rm -r /delibird-pruebas
-
+		cd /home/utnso
+		sudo rm -r /delibird-pruebas
+	fi
 cd
 
 	cd home/utnso
