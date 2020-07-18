@@ -2,15 +2,16 @@ cd
 	#COMMONS
 	
 	if test -d /home/utnso/so-commons-library; then
-	cd /home/utnso/so-commons-library	
-	sudo make unistall
-	cd ..
-	sudo rm -r /so-commons-library
+		cd /home/utnso/so-commons-library	
+		sudo make unistall
+		cd ..
+		sudo rm -r /so-commons-library
+	fi
 
 cd
 	cd /home/utnso
 	git clone https://github.com/sisoputnfrba/so-commons-library.git
-	cd so-commos-library
+	cd so-commons-library
 	sudo make install
 
 cd
