@@ -50,8 +50,9 @@ void cachearNewPokemon(t_metadata * meta, void * mensaje,void ** mensajeACachear
 	int offset = 0;
 
 	t_new_pokemon * new_pokemon = mensaje;
+	log_debug(logger, "%d", new_pokemon->lengthOfPokemon);
 
-	memcpy(*mensajeACachear + offset, &new_pokemon->lengthOfPokemon, offset);
+	memcpy(*mensajeACachear + offset, &new_pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 	memcpy(*mensajeACachear + offset, new_pokemon->pokemon, strlen(new_pokemon->pokemon));
 	offset += strlen(new_pokemon->pokemon);
@@ -151,6 +152,7 @@ void cachearCaughtPokemon(t_metadata * meta, void * mensaje, void ** mensajeACac
 }
 
 void * descachearMensaje(void * mensajeEnMemoria, t_metadata * meta) {
+	log_debug(logger, "entro a descachearMensaje");
 	void * estructuraPokemonReturn;
 	switch (meta->tipoMensaje) {
 	case NEW_POKEMON:
@@ -175,28 +177,32 @@ void * descachearMensaje(void * mensajeEnMemoria, t_metadata * meta) {
 		log_error(logger,
 				"No se puede descachear el mensaje. No coincide el tipo mensaje.");
 	}
+	log_debug(logger, "salgo a descachearMensaje");
 	return estructuraPokemonReturn;
 }
 
 void * descachearNewPokemon(void* mensajeEnMemoria) {
+	log_debug(logger, "%d", mensajeEnMemoria);
+	log_debug(logger, "entra a descachearNewPokemon");
 	void* recorrerStream = mensajeEnMemoria;
 	t_new_pokemon * new_pokemon = malloc(sizeof(t_new_pokemon));
 	memcpy(&(new_pokemon->lengthOfPokemon), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
 
-	new_pokemon->pokemon = malloc(new_pokemon->lengthOfPokemon + 1);
+	new_pokemon->pokemon = malloc(new_pokemon->lengthOfPokemon);
 	memcpy(new_pokemon->pokemon, recorrerStream, new_pokemon->lengthOfPokemon);
 	recorrerStream += new_pokemon->lengthOfPokemon;
-	*(new_pokemon->pokemon + new_pokemon->lengthOfPokemon) = '\0';
+	char* barraCero = string_from_format("\0");
+	memcpy(new_pokemon->pokemon + new_pokemon->lengthOfPokemon, barraCero, 1);
+
 	new_pokemon->posicion = malloc(sizeof(t_posicion));
-	memcpy(&(new_pokemon->posicion->posicionX), recorrerStream,
-			sizeof(uint32_t));
+	memcpy(&(new_pokemon->posicion->posicionX), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
-	memcpy(&(new_pokemon->posicion->posicionY), recorrerStream,
-			sizeof(uint32_t));
+	memcpy(&(new_pokemon->posicion->posicionY), recorrerStream, sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
 	memcpy(&(new_pokemon->cantidad), recorrerStream, sizeof(uint32_t));
 
+	free(barraCero);
 	return new_pokemon;
 
 }
@@ -208,9 +214,11 @@ void * descachearGetPokemon(void* mensajeEnMemoria) {
 	recorrerStream += sizeof(uint32_t);
 	get_pokemon->pokemon = malloc(get_pokemon->lengthOfPokemon + 1);
 	memcpy(get_pokemon->pokemon, recorrerStream, get_pokemon->lengthOfPokemon);
-	*(get_pokemon->pokemon + get_pokemon->lengthOfPokemon) = '\0';
+	char* barraCero = string_from_format("\0");
+	memcpy(get_pokemon->pokemon + get_pokemon->lengthOfPokemon, barraCero, 1);
 	return get_pokemon;
 
+	free(barraCero);
 }
 void * descachearLocalizedPokemon(void* mensajeEnMemoria) {
 	void* recorrerStream = mensajeEnMemoria;
@@ -221,10 +229,10 @@ void * descachearLocalizedPokemon(void* mensajeEnMemoria) {
 			sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
 	localized_pokemon->pokemon = malloc(localized_pokemon->lengthOfPokemon + 1);
-	memcpy(localized_pokemon->pokemon, recorrerStream,
-			localized_pokemon->lengthOfPokemon);
+	memcpy(localized_pokemon->pokemon, recorrerStream, localized_pokemon->lengthOfPokemon);
 	recorrerStream += localized_pokemon->lengthOfPokemon;
-	*(localized_pokemon->pokemon + localized_pokemon->lengthOfPokemon) = '\0';
+	char* barraCero = string_from_format("\0");
+	memcpy(localized_pokemon->pokemon + localized_pokemon->lengthOfPokemon, barraCero, 1);
 	memcpy(&(localized_pokemon->cantidadPosiciones), recorrerStream,
 			sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
@@ -243,6 +251,8 @@ void * descachearLocalizedPokemon(void* mensajeEnMemoria) {
 
 		list_add(localized_pokemon->listaPosiciones, posicion);
 	}
+
+	free(barraCero);
 	return localized_pokemon;
 }
 void * descachearAppearedPokemon(void* mensajeEnMemoria) {
@@ -256,13 +266,16 @@ void * descachearAppearedPokemon(void* mensajeEnMemoria) {
 	memcpy(appeared_pokemon->pokemon, recorrerStream,
 			appeared_pokemon->lengthOfPokemon);
 	recorrerStream += appeared_pokemon->lengthOfPokemon;
-	*(appeared_pokemon->pokemon + appeared_pokemon->lengthOfPokemon) = '\0';
+	char* barraCero = string_from_format("\0");
+	memcpy(appeared_pokemon->pokemon + appeared_pokemon->lengthOfPokemon, barraCero, 1);
 	appeared_pokemon->posicion = malloc(sizeof(t_posicion));
 	memcpy(&(appeared_pokemon->posicion->posicionX), recorrerStream,
 			sizeof(uint32_t));
 	recorrerStream += sizeof(uint32_t);
 	memcpy(&(appeared_pokemon->posicion->posicionY), recorrerStream,
 			sizeof(uint32_t));
+
+	free(barraCero);
 	return appeared_pokemon;
 }
 void * descachearCatchPokemon(void* mensajeEnMemoria) {
@@ -275,7 +288,8 @@ void * descachearCatchPokemon(void* mensajeEnMemoria) {
 	memcpy(catch_pokemon->pokemon, recorrerStream,
 			catch_pokemon->lengthOfPokemon);
 	recorrerStream += catch_pokemon->lengthOfPokemon;
-	*(catch_pokemon->pokemon + catch_pokemon->lengthOfPokemon) = '\0';
+	char* barraCero = string_from_format("\0");
+	memcpy(catch_pokemon->pokemon + catch_pokemon->lengthOfPokemon, barraCero, 1);
 	catch_pokemon->posicion = malloc(sizeof(t_posicion));
 	memcpy(&(catch_pokemon->posicion->posicionX), recorrerStream,
 			sizeof(uint32_t));
@@ -283,6 +297,7 @@ void * descachearCatchPokemon(void* mensajeEnMemoria) {
 	memcpy(&(catch_pokemon->posicion->posicionY), recorrerStream,
 			sizeof(uint32_t));
 
+	free(barraCero);
 	return catch_pokemon;
 }
 void * descachearCaughtPokemon(void* mensajeEnMemoria) {
@@ -290,13 +305,13 @@ void * descachearCaughtPokemon(void* mensajeEnMemoria) {
 	t_caught_pokemon* caught_pokemon = malloc(sizeof(t_caught_pokemon));
 
 	memcpy(&(caught_pokemon->ok), recorrerStream, sizeof(uint32_t));
-
+	log_debug(logger, "pasa 1. size: %d", caught_pokemon->ok);
 	return caught_pokemon;
 }
 
 void escribirMemoria(void * mensaje, t_metadata * meta) { //OK
 	memcpy((memoriaCache + meta->posicion), mensaje, meta->tamanioMensajeEnMemoria);
-	log_info(logger, "Se almacena un mensaje en la posición [%d]", meta->posicion); //OBLIGATORIO (6)
+	log_info(logger, "Se almacena un mensaje en la posición [%d]", meta->posicion);
 }
 
 void * leerMemoria(t_metadata * meta) { //OK
@@ -305,7 +320,7 @@ void * leerMemoria(t_metadata * meta) { //OK
 	meta->flagLRU = LRUcounter;
 	pthread_mutex_unlock(&mutexLRUcounter);
 
-	return descachearMensaje(memoriaCache + meta->posicion, meta);
+	return descachearMensaje((memoriaCache + meta->posicion), meta);
 }
 
 void compactarMemoria(t_list* particiones) {
