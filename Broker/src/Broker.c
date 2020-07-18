@@ -7,6 +7,8 @@ int main(void) {
 	pthread_t threadClientes;
 	pthread_create(&threadClientes, NULL, (void*) esperarClientes, NULL);
 
+	signal(SIGUSR1, &signal_dump);
+
 	pthread_join(threadClientes,NULL);
 
 //	terminar_programa(conexion, logger, config);
@@ -141,12 +143,138 @@ void iniciarColas() {
 }
 
 t_log* iniciar_logger(char* logFile) {
-		t_log * log = malloc(sizeof(t_log));
-		log = log_create(logFile, "BROKER", 1, LOG_LEVEL_INFO);
-		if (log == NULL) {
-			printf("No pude crear el logger \n");
-			exit(1);
-		}
-		log_info(log, "Logger Iniciado");
-		return log;
+	t_log * log = malloc(sizeof(t_log));
+	log = log_create(logFile, "BROKER", 1, LOG_LEVEL_INFO);
+	if (log == NULL) {
+		printf("No pude crear el logger \n");
+		exit(1);
 	}
+	log_info(log, "Logger Iniciado");
+	return log;
+}
+
+void signal_dump(int signal) {
+	//Dump: 14/07/2012 10:11:12
+
+   int archivoExiste = access("ArchivoDump.bin",F_OK);
+   FILE* dumpFile;
+   if (archivoExiste == -1) {
+	   dumpFile = fopen("ArchivoDump.bin","w+");
+   }
+   else{
+	   dumpFile = fopen("ArchivoDump.bin","r+");
+	   fseek(dumpFile, 0, SEEK_END);
+   }
+
+   char* divisoria = string_from_format("-----------------------------------------------------------------------------------------------------------------------------\n");
+
+   fwrite(divisoria, strlen(divisoria), 1, dumpFile);
+
+   char* primerLinea = string_new();
+   string_append(&primerLinea, "Dump: ");
+
+   time_t tiempo = time(0);
+   struct tm* localTime = localtime(&tiempo);
+   char localHour[32];
+   strftime(localHour, 32, "%d/%m/%y %H:%M:%S\n", localTime);
+   string_append(&primerLinea, localHour);
+
+   fwrite(primerLinea, strlen(primerLinea), 1, dumpFile);
+
+   t_list * particionesActuales = list_create();
+
+   for(int i=0;i<6;i++){
+	   list_add_all(particionesActuales,cola[i].mensajes);
+   }
+
+   list_sort(particionesActuales,(void*)ordenarPosicion);
+
+   int cantidadMensajes = list_size(particionesActuales);
+   int offset = 0;
+   int nroParticion = 1;
+
+   for(int j=0;j<cantidadMensajes;j++){
+
+	  t_metadata * auxParticion = list_get(particionesActuales,j);
+	  int tamanioParticion;
+
+	  if(string_equals_ignore_case(ALGORITMO_MEMORIA,"PARTICIONES")){
+		  tamanioParticion = tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
+	  }
+	  else if (string_equals_ignore_case(ALGORITMO_MEMORIA,"BS")){
+		  tamanioParticion = potenciaDeDosProxima(auxParticion->tamanioMensajeEnMemoria);
+	  }
+
+	  if(offset != auxParticion->posicion){ //SI HAY UN ESPACIO LIBRE ANTES DE LA PARTICION
+		  char* particionLibre = string_new();
+		  char* particion = string_from_format("Particion %d:",nroParticion);
+		  string_append(&particionLibre, particion);
+		  char* baseLimite = string_from_format(" %p - %p.", (memoriaCache + offset),(memoriaCache+auxParticion->posicion-1));
+		  char* size = string_from_format("Size: %db \n",auxParticion->posicion);
+
+		  string_append(&particionLibre, baseLimite);
+		  string_append(&particionLibre, " [L] ");
+		  string_append(&particionLibre, size);
+
+		  fwrite(particionLibre, strlen(particionLibre), 1, dumpFile);
+
+		  free(baseLimite);
+		  free(size);
+		  free(particion);
+		  free(particionLibre);
+	  }
+
+	  char* particionActual = string_new();
+	  char* particion = string_from_format("Particion %d:",nroParticion);
+	  char* baseLimite = string_from_format(" %p - %p.", (memoriaCache + auxParticion->posicion), (memoriaCache + tamanioParticion));
+	  char* size = string_from_format("Size: %db", tamanioParticion);
+	  char* LRU = string_from_format(" LRU:%d", auxParticion->flagLRU);
+	  char* Cola = string_from_format(" Cola:%s ", (ID_COLA[auxParticion->tipoMensaje]));
+	  char* ID = string_from_format("  ID:%d \n", auxParticion->ID);
+
+	  string_append(&particionActual, particion);
+	  string_append(&particionActual, baseLimite);
+	  string_append(&particionActual, " [X] ");
+	  string_append(&particionActual, size);
+	  string_append(&particionActual, LRU);
+	  string_append(&particionActual, Cola);
+	  string_append(&particionActual, ID);
+
+	  fwrite(particionActual, strlen(particionActual), 1, dumpFile);
+
+	  free(particion);
+	  free(baseLimite);
+	  free(size);
+	  free(LRU);
+	  free(Cola);
+	  free(ID);
+	  free(particionActual);
+
+	  offset += tamanioParticion;
+	  nroParticion++;
+  }
+
+ if((TAMANO_MEMORIA - offset) > 0){
+	char* finalMemoria = string_new();
+	char* particion = string_from_format("Particion %d:",nroParticion);
+	char* baseLimite = string_from_format(" %p - %p.", (memoriaCache + offset),(memoriaCache+TAMANO_MEMORIA));
+	char* size = string_from_format("Size: %db \n",TAMANO_MEMORIA-offset);
+
+	string_append(&finalMemoria, particion);
+	string_append(&finalMemoria, baseLimite);
+	string_append(&finalMemoria, " [L] ");
+	string_append(&finalMemoria, size);
+
+	fwrite(finalMemoria, strlen(finalMemoria), 1, dumpFile);
+
+	free(particion);
+	free(baseLimite);
+	free(size);
+	free(finalMemoria);
+  }
+
+ fwrite(divisoria, strlen(divisoria), 1, dumpFile);
+ free(divisoria);
+
+ fclose(dumpFile);
+}

@@ -35,6 +35,8 @@ void iniciarMemoria();
 void iniciarColas();
 t_log* iniciar_logger(char* logFile);
 
+void signal_dump(int signal);
+
 //int existeSuscriptor(t_list * suscriptores, int suscriptor);
 
 #endif /* BROKER_H_ */
