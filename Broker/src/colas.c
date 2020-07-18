@@ -60,6 +60,7 @@ void agregarSuscriptorACola(int idSuscriptor, op_code tipoCola) {
 
 t_list* mensajesAEnviar(int idProceso, op_code codigoCola){
 
+	log_debug(logger, "entro a mensajesAEnviar");
 	t_list* mensajes = list_create();
 
 	for (int i = 0; i < 6; i++) {
@@ -82,9 +83,13 @@ t_list* mensajesAEnviar(int idProceso, op_code codigoCola){
 				}
 
 				if(estaEntreACK == 0){
+					log_debug(logger, "antes de leerMemoria");
+					log_debug(logger, "Tipo de mensaje %d", metadata->tipoMensaje);
+					log_debug(logger, "tamaño en memoria %d", metadata->tamanioMensajeEnMemoria);
 					pthread_mutex_lock(&mutexMemoria);
 					void* estructura = leerMemoria(metadata);
 					pthread_mutex_unlock(&mutexMemoria);
+					log_debug(logger, "despues de leerMemoria");
 					list_add(mensajes, estructura);
 					list_add(mensajes, &(metadata->ID));
 					list_add(mensajes, &(metadata->IDCorrelativo));
@@ -92,6 +97,7 @@ t_list* mensajesAEnviar(int idProceso, op_code codigoCola){
 			}
 		}
 	}
+	log_debug(logger,"Salgo de mensajesAEnviar");
 	return mensajes;
 }
 

@@ -134,9 +134,9 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 		log_debug(logger, "Entro a if de BS");
 
 		sizeDato = tamanioParticionMinima(sizeDato);
-		posicionEncontrada = buddy_pedir_mem((size_t) sizeDato);
+		posicionEncontrada = buddy_pedir_mem(sizeDato);
 
-		log_debug(logger, "Posicion encontrada %d", posicionEncontrada);
+		log_debug(logger, "Posición encontrada %d", posicionEncontrada);
 
 		if (posicionEncontrada == -1){
 
@@ -148,13 +148,11 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 				list_sort(particiones, (void *) ordenarFlagLRU);
 			}
 
-			int i = 0;
-			while(posicionEncontrada == -1){
+			for(int i = 0; posicionEncontrada == -1; i++){
 				t_metadata* auxParticion = list_get(particiones, i);
 				buddy_liberar_mem(auxParticion->posicion);
 				eliminarParticion(auxParticion);
 				posicionEncontrada = buddy_pedir_mem(sizeDato);
-				i++;
 			}
 		}
 	}
