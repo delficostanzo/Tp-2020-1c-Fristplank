@@ -11,6 +11,10 @@ void procesarNewPokemon(void* args) {
 	log_debug(logger, "<> START: procesarNewPokemon <>");
 
 	t_new_pokemon* new_pokemon = args;
+	log_info(logger, "Procesar NEW_POKEMON");
+	log_info(logger, "Pokemon: %s", new_pokemon->pokemon);
+	log_info(logger, "Posicion: (%d,%d)", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
+	log_info(logger, "Cantidad: %d", new_pokemon->cantidad);
 
 	char* filePath = string_new();
 	char* finFilePath = string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES, new_pokemon->pokemon);
@@ -25,6 +29,7 @@ void procesarNewPokemon(void* args) {
 	t_config* metadata = config_create(filePath);
 	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
 	int sizeArchivo = config_get_int_value(metadata, "SIZE");
+	log_info(logger, "Size actual: [%d]", sizeArchivo);
 
 	char* posicionPlana = string_from_format("%d-%d=",
 			new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
@@ -55,10 +60,10 @@ void procesarNewPokemon(void* args) {
 				char** posicionYCantidad = string_split(posicionesActuales[i],
 						"=");
 
-				log_debug(logger, "Se ha encontrado la posicion");
-				log_debug(logger, "Cantidad vieja de Pokemons: %d",
+				log_info(logger, "Se ha encontrado la posicion");
+				log_info(logger, "Cantidad vieja de Pokemons: %d",
 						atoi(posicionYCantidad[1]));
-				log_debug(logger, "Cantidad nueva de Pokemons: %d",
+				log_info(logger, "Cantidad nueva de Pokemons: %d",
 						atoi(posicionYCantidad[1]) + new_pokemon->cantidad);
 
 				char* punteroACantidadVieja = posicionYCantidad[1];
@@ -123,7 +128,7 @@ void procesarNewPokemon(void* args) {
 		}
 		free(arrayDeBlocks);
 
-		log_debug(logger, "La lista actual de bloques es %s]", listaDeBloques);
+		log_info(logger, "Lista de bloques previa: %s]", listaDeBloques);
 
 		/* PIDO BLOQUES SI ES NECESARIO
 		 */
@@ -131,8 +136,11 @@ void procesarNewPokemon(void* args) {
 		t_list* listaDeBloquesNuevos = list_create();
 
 		while ( (sizeNuevo > cantidadDeBloques * BLOCK_SIZE) && (noHayBloquesDisponibles == -1) ) {
-			log_debug(logger, "Solicitando un bloque más.");
+			log_info(logger, "Solicitando un bloque más.")
+					;
+			pthread_mutex_lock(&semaforoBitarray);
 			int bloque = solicitarBloque();
+			pthread_mutex_unlock(&semaforoBitarray);
 
 			if(bloque < 0){
 				log_info(logger, "No hay bloques disponibles para guardar la información.");
@@ -175,13 +183,14 @@ void procesarNewPokemon(void* args) {
 				list_remove(listaDeBloquesNuevos, i);
 			}
 
-			log_debug(logger, "La nueva lista de bloques es %s", listaDeBloques);
+			log_info(logger, "Lista de bloques actualizada: %s", listaDeBloques);
 			/* SETEO LA NUEVA LISTA DE BLOQUES EN LA CONFIG
 			 */
 
 			char* sizeEnConfig = string_itoa(sizeNuevo);
 			config_set_value(metadata, "SIZE", sizeEnConfig);
 			config_set_value(metadata, "BLOCKS", listaDeBloques);
+			log_info(logger, "Size nuevo: [%s]", sizeEnConfig);
 
 			/* TRABAJO CON EL NUEVO ARRAY
 			 * PARA GUARDAR LOS DATOS
@@ -192,7 +201,7 @@ void procesarNewPokemon(void* args) {
 			guardarDatosEnBlocks(contenidoNuevo, nuevoArrayDeBloques);
 			pthread_mutex_unlock(&semaforoGuardarDatos);
 
-			log_debug(logger, "Los datos se han guardado correctamente.");
+			log_info(logger, "Los datos se han guardado correctamente.");
 
 			//LIBERO ARRAY DE BLOQUES
 			for(int i = 0; nuevoArrayDeBloques[i] != NULL; i++){
@@ -212,9 +221,12 @@ void procesarNewPokemon(void* args) {
 	/* NO HAY BLOQUES
 	 */
 	else {
-		log_debug(logger, "No existen bloques del pokemon.");
+		log_info(logger, "No existen bloques del pokemon.");
 		log_debug(logger, "Se procede a guardar la linea: %s", posicionPlanaYCantidad);
+
+		pthread_mutex_lock(&semaforoBitarray);
 		int bloqueAEscribir = solicitarBloque();
+		pthread_mutex_unlock(&semaforoBitarray);
 
 		if(bloqueAEscribir < 0){
 			log_info(logger, "No hay bloques disponibles para guardar la información.");
@@ -230,9 +242,9 @@ void procesarNewPokemon(void* args) {
 					bloqueAEscribir);
 
 			char* bloqueEnConfig = string_from_format("[%d]", bloqueAEscribir);
-			log_debug(logger, "Bloques en config: %s", bloqueEnConfig);
+			log_info(logger, "Lista de bloques actualizada: %s", bloqueEnConfig);
 			config_set_value(metadata, "BLOCKS", bloqueEnConfig);
-			log_debug(logger, "Size en config: %d", strlen(posicionPlanaYCantidad));
+			log_info(logger, "Size nuevo: [%d]", strlen(posicionPlanaYCantidad));
 			char* sizeEnConfig = string_itoa(strlen(posicionPlanaYCantidad));
 			config_set_value(metadata, "SIZE", sizeEnConfig);
 
@@ -252,11 +264,14 @@ void procesarNewPokemon(void* args) {
 	log_debug(logger, "<> END: procesarNewPokemon <>");
 }
 
-void* procesarCatchPokemon(void* args) {
+int* procesarCatchPokemon(void* args) {
 
 	log_debug(logger, "<> START: procesarCatchPokemon <>");
 
 	t_catch_pokemon* catch_pokemon = args;
+	log_info(logger, "Procesar CATCH_POKEMON");
+	log_info(logger, "Pokemon: %s", catch_pokemon->pokemon);
+	log_info(logger, "Posicion: (%d,%d)", catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
 
 	/* Si el metadata no existe significa que el Pokemon no existe
 	 * devolvemos 0 para que se informe que no se pudo atrapar
@@ -278,6 +293,8 @@ void* procesarCatchPokemon(void* args) {
 	t_config* metadata = config_create(filePath);
 	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
 	int sizeArchivo = config_get_int_value(metadata, "SIZE");
+	log_info(logger, "Size actual: [%d]", sizeArchivo);
+
 
 	//	Verificar si las posiciones ya existen dentro del archivo. En caso de no existir se debe informar un error.
 	//	En caso que la cantidad del Pokémon sea “1”, se debe eliminar la línea. En caso contrario se debe decrementar la cantidad en uno.
@@ -310,10 +327,10 @@ void* procesarCatchPokemon(void* args) {
 				char** posicionYCantidad = string_split(posicionesActuales[i],
 						"=");
 
-				log_debug(logger, "Se ha encontrado la posicion");
-				log_debug(logger, "Cantidad vieja de Pokemons: %d",
+				log_info(logger, "Se ha encontrado la posicion");
+				log_info(logger, "Cantidad vieja de Pokemons: %d",
 						atoi(posicionYCantidad[1]));
-				log_debug(logger, "Cantidad nueva de Pokemons: %d",
+				log_info(logger, "Cantidad nueva de Pokemons: %d",
 						atoi(posicionYCantidad[1]) - 1);
 
 				if (atoi(posicionYCantidad[1]) != 1) {
@@ -363,12 +380,13 @@ void* procesarCatchPokemon(void* args) {
 		/* NO ESTA LA POSICION
 		 */
 		if (!posicionEncontrada) {
-			log_debug(logger, "Posicion no encontrada.");
+			log_info(logger, "Posicion no encontrada.");
 		}
 
 		int sizeNuevo = strlen(contenidoNuevo);
 		char* sizeEnConfig = string_itoa(sizeNuevo);
 		config_set_value(metadata, "SIZE", sizeEnConfig);
+		log_info(logger, "Size nuevo: [%s]", sizeEnConfig);
 
 		log_debug(logger, "Comenzamos a guardar los %d bytes en los bloques.", sizeNuevo);
 
@@ -415,7 +433,8 @@ void* procesarCatchPokemon(void* args) {
 		free(arrayDeBlocks);
 
 		string_append(&listaDeBloques, "]");
-		log_debug(logger, "La nueva lista de bloques es %s", listaDeBloques);
+
+		log_info(logger, "Lista de bloques actualizada: %s", listaDeBloques);
 
 		/* SETEO LA NUEVA LISTA DE BLOQUES EN LA CONFIG
 		 */
@@ -432,7 +451,7 @@ void* procesarCatchPokemon(void* args) {
 		guardarDatosEnBlocks(contenidoNuevo, nuevoArrayDeBloques);
 		pthread_mutex_unlock(&semaforoGuardarDatos);
 
-		log_debug(logger, "Los datos se han guardado correctamente.");
+		log_info(logger, "Los datos se han guardado correctamente.");
 
 		//LIBERO ARRAY DE BLOQUES
 		for(int i = 0; nuevoArrayDeBloques[i] != NULL; i++){
@@ -470,11 +489,13 @@ void* procesarCatchPokemon(void* args) {
 
 }
 
-void* procesarGetPokemon(void* args) {
+void procesarGetPokemon(t_argumentos_procesar_get* args) {
 
 	log_debug(logger, "<> START: procesarGetPokemon <>");
 
-	t_get_pokemon* get_pokemon = args;
+	t_get_pokemon* get_pokemon = args->get_pokemon;
+	log_info(logger, "Procesar GET_POKEMON");
+	log_info(logger, "Pokemon: %s", get_pokemon->pokemon);
 
 	/* Si el metadata no existe significa que el Pokemon no existe
 	 * devolvemos 0 para que se informe que no se pudo atrapar
@@ -490,89 +511,98 @@ void* procesarGetPokemon(void* args) {
 		localized_pokemon->pokemon = get_pokemon->pokemon;
 		localized_pokemon->listaPosiciones = list_create();
 		localized_pokemon->cantidadPosiciones = 0;
+		args->puntero_a_localized_pokemon = localized_pokemon;
+
+		log_info(logger, "No se encontro el pokemon en el filesystem. Se retorna un localized vacío.");
 
 		free(filePath);
-		return localized_pokemon;
-	}
-
-	log_debug(logger, "Pido archivo para el uso. Ruta: %s", filePath);
-	pedirArchivoParaUso(filePath);
-	log_debug(logger, "Obtengo archivo para el uso.");
-
-	t_config* metadata = config_create(filePath);
-	char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
-	int sizeArchivo = config_get_int_value(metadata, "SIZE");
-
-	/* HAY BLOQUES
-	 */
-	if (arrayDeBlocks[0] != NULL) {
-		log_debug(logger, "Existen bloques del pokemon.");
-
-		pthread_mutex_lock(&semaforoGetDatos);
-		char* contenidoActual = getDatosDeBlocks(arrayDeBlocks, sizeArchivo);
-		pthread_mutex_unlock(&semaforoGetDatos);
-
-		char** posicionesActuales = string_split(contenidoActual, "\n");
-
-		/*INSTANCIO RESPUESTA
-		 */
-		t_localized_pokemon* localized_pokemon = malloc(sizeof(t_localized_pokemon));
-		localized_pokemon->lengthOfPokemon = get_pokemon->lengthOfPokemon;
-		localized_pokemon->pokemon = get_pokemon->pokemon;
-		localized_pokemon->listaPosiciones = list_create();
-
-		int posicionesEncontradas = 0;
-
-		for (int i = 0; posicionesActuales[i] != NULL; i++) {
-			if(string_contains(posicionesActuales[i], "=") && string_contains(posicionesActuales[i], "-")){
-				char** posicionesSeparadasDeCantidad = string_split(posicionesActuales[i], "=");
-				char** posXposY = string_split(posicionesSeparadasDeCantidad[0], "-");
-				log_debug(logger, "Posicion N°%d: (%s,%s)", i + 1, posXposY[0], posXposY[1]);
-
-				t_posicion* posicion = malloc(sizeof(posicion));
-
-				posicion->posicionX = atoi(posXposY[0]);
-				posicion->posicionY = atoi(posXposY[1]);
-
-				list_add(localized_pokemon->listaPosiciones, posicion);
-				posicionesEncontradas++;
-
-				free(posXposY[0]);
-				free(posXposY[1]);
-				free(posicionesSeparadasDeCantidad[0]);
-				free(posicionesSeparadasDeCantidad[1]);
-			}
-
-			free(posicionesActuales[i]);
-		}
-
-		localized_pokemon->cantidadPosiciones = posicionesEncontradas;
-
-		for(int i = 0; arrayDeBlocks[i] != NULL; i++){
-			free(arrayDeBlocks[i]);
-		}
-		free(arrayDeBlocks);
-		free(contenidoActual);
-		config_save(metadata);
-		config_destroy(metadata);
-		cambiarACerrado(filePath);
-		free(filePath);
-		return localized_pokemon;
 	}
 
 	else{
-		t_localized_pokemon* localized_pokemon = malloc(sizeof(t_localized_pokemon));
-		localized_pokemon->lengthOfPokemon = get_pokemon->lengthOfPokemon;
-		localized_pokemon->pokemon = get_pokemon->pokemon;
-		localized_pokemon->listaPosiciones = list_create();
-		localized_pokemon->cantidadPosiciones = 0;
+		log_debug(logger, "Pido archivo para el uso. Ruta: %s", filePath);
+		pedirArchivoParaUso(filePath);
+		log_debug(logger, "Obtengo archivo para el uso.");
 
-		free(arrayDeBlocks);
+		t_config* metadata = config_create(filePath);
+		char** arrayDeBlocks = config_get_array_value(metadata, "BLOCKS");
+		int sizeArchivo = config_get_int_value(metadata, "SIZE");
 
-		config_save(metadata);
-		config_destroy(metadata);
-		cambiarACerrado(filePath);
-		free(filePath);
-		return localized_pokemon;
+		/* HAY BLOQUES
+		 */
+		if (arrayDeBlocks[0] != NULL) {
+			log_debug(logger, "Existen bloques del pokemon.");
+
+			pthread_mutex_lock(&semaforoGetDatos);
+			char* contenidoActual = getDatosDeBlocks(arrayDeBlocks, sizeArchivo);
+			pthread_mutex_unlock(&semaforoGetDatos);
+
+			char** posicionesActuales = string_split(contenidoActual, "\n");
+
+			/*INSTANCIO RESPUESTA
+			 */
+			t_localized_pokemon* localized_pokemon = malloc(sizeof(t_localized_pokemon));
+			localized_pokemon->lengthOfPokemon = get_pokemon->lengthOfPokemon;
+			localized_pokemon->pokemon = get_pokemon->pokemon;
+			localized_pokemon->listaPosiciones = list_create();
+
+			int posicionesEncontradas = 0;
+
+			for (int i = 0; posicionesActuales[i] != NULL; i++) {
+				if(string_contains(posicionesActuales[i], "=") && string_contains(posicionesActuales[i], "-")){
+					char** posicionesSeparadasDeCantidad = string_split(posicionesActuales[i], "=");
+					char** posXposY = string_split(posicionesSeparadasDeCantidad[0], "-");
+					log_debug(logger, "Posicion N°%d: (%s,%s)", i + 1, posXposY[0], posXposY[1]);
+
+					t_posicion* posicion = malloc(sizeof(posicion));
+
+					posicion->posicionX = atoi(posXposY[0]);
+					posicion->posicionY = atoi(posXposY[1]);
+
+					list_add(localized_pokemon->listaPosiciones, posicion);
+					posicionesEncontradas++;
+
+					free(posXposY[0]);
+					free(posXposY[1]);
+					free(posicionesSeparadasDeCantidad[0]);
+					free(posicionesSeparadasDeCantidad[1]);
+				}
+
+				free(posicionesActuales[i]);
+			}
+
+			localized_pokemon->cantidadPosiciones = posicionesEncontradas;
+			log_info(logger, "Cantidad de (X,Y) encontradas: %d", localized_pokemon->cantidadPosiciones, localized_pokemon->pokemon);
+
+			for(int i = 0; arrayDeBlocks[i] != NULL; i++){
+				free(arrayDeBlocks[i]);
+			}
+			free(arrayDeBlocks);
+			free(contenidoActual);
+			config_save(metadata);
+			config_destroy(metadata);
+			cambiarACerrado(filePath);
+			free(filePath);
+
+			args->puntero_a_localized_pokemon = localized_pokemon;
+		}
+
+		else{
+			t_localized_pokemon* localized_pokemon = malloc(sizeof(t_localized_pokemon));
+			localized_pokemon->lengthOfPokemon = get_pokemon->lengthOfPokemon;
+			localized_pokemon->pokemon = get_pokemon->pokemon;
+			localized_pokemon->listaPosiciones = list_create();
+			localized_pokemon->cantidadPosiciones = 0;
+			log_info(logger, "No se encontraron bloques asignados al pokemon. Se retorna un localized vacío.");
+
+			free(arrayDeBlocks);
+
+			config_save(metadata);
+			config_destroy(metadata);
+			cambiarACerrado(filePath);
+			free(filePath);
+
+			args->puntero_a_localized_pokemon = localized_pokemon;
+		}
 	}
+	log_debug(logger, "<> END: procesarGetPokemon <>");
 }

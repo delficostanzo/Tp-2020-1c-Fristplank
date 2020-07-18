@@ -20,10 +20,7 @@ int checkingOpenFile(char* filePath){
 		retorno = 0;
 	}
 
-	log_debug(logger, "Antes de destruir config en checkingOpenFile");
-	free(openFile);
 	config_destroy(configFile);
-	log_debug(logger, "Despues de destruir config en checkingOpenFile");
 	return retorno;
 }
 
@@ -66,13 +63,14 @@ void crearArchivo(char* filePath){
 	fwrite(blocks, strlen(blocks), 1, metadata);
 	fwrite(open, strlen(open), 1, metadata);
 
-	log_debug(logger, "Se creo el metadata del pokemon.");
+	log_info(logger, "Se creo el metadata del pokemon.");
 	free(carpetaPokemon);
 	fclose(metadata);
 }
 
 int checkArchivoExiste(char* filePath){
 
+	log_debug(logger, "Chequeando si existe el archivo %s", filePath);
 	if(access(filePath, F_OK) != -1 ) { // El archivo existe. Se prosigue a verificar si está en uso. DONE
 		log_debug(logger, "Archivo existe.");
 		return 1;
