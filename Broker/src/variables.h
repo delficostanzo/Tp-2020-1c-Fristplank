@@ -61,6 +61,12 @@ static const char* ID_PROCESO[] = {
 };
 t_cola cola[6];
 
+int existeSuscriptor(t_list * suscriptores, int suscriptor);
+
+typedef struct{
+	int ID;
+}suscriptorEnCola;
+
 int LRUcounter;
 int IDmsg;
 

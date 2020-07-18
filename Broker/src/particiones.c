@@ -183,19 +183,6 @@ int tamanioParticionMinima(int unTamanio){ //LO UTILIZO EN EL OFFSET PARA MARCAR
 	if(unTamanio>=TAMANO_MINIMO_PARTICION)return unTamanio;
 	else return TAMANO_MINIMO_PARTICION;
 }
-int existeSuscriptor(t_list * suscriptores, int suscriptor) {
-	int auxSuscriptor;
-	int encontrado = 0;
-
-	int cantSuscriptoresTotales = list_size(suscriptores);
-	for (int i = 0; i < cantSuscriptoresTotales; i++) {
-		auxSuscriptor = (int) list_get(suscriptores, i);
-		if (auxSuscriptor == suscriptor){
-			encontrado = 1;
-		}
-	}
-	return encontrado;
-}
 
 void eliminarParticion(t_metadata * particionAEliminar) { //OK
 

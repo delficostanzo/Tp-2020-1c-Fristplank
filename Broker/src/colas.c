@@ -47,10 +47,16 @@ void agregarMensajeACola(t_paquete * nuevoPaquete) {
 
 void agregarSuscriptorACola(int idSuscriptor, op_code tipoCola) {
 
+	log_debug(logger, "Entro a agregarSuscriptorACola");
+
 	for (int i = 0; i < 6; i++) {
 		if (cola[i].nombreCola == tipoCola) {
-			if (!existeSuscriptor(cola[i].suscriptores, idSuscriptor) != 0) {
-				list_add(cola[i].suscriptores, (int*) idSuscriptor);
+
+			int existeSuscriptor1 = existeSuscriptor(cola[i].suscriptores, idSuscriptor);
+			if (existeSuscriptor1 == 0) {
+				suscriptorEnCola* suscriptorEnCola = malloc(sizeof(suscriptorEnCola));
+				suscriptorEnCola->ID = idSuscriptor;
+				list_add(cola[i].suscriptores, suscriptorEnCola);
 				log_info(logger, "Se suscribió con éxito el proceso a la cola %s", ID_COLA[tipoCola]);
 				break;
 			}

@@ -25,7 +25,8 @@ void * esperarClientes() {
 		pthread_t thread;
 		pthread_create(&thread, NULL, (void*) atenderCliente, sockets);
 		pthread_detach(thread);
-//		sleep(1);
+
+		sleep(1);
 	}
 }
 
@@ -522,39 +523,42 @@ void enviar_mensaje_NEW_a_suscriptores(void* paqueteVoid){
 		if(cola[i].nombreCola == paquete->codigo_operacion){
 
 			pthread_mutex_lock(&mutexColas);
-			t_list* listaDeSuscriptores = list_duplicate(cola[i].suscriptores);
-			pthread_mutex_unlock(&mutexColas);
 
 			int socketAUsar = 0;
-			int listaSize = list_size(listaDeSuscriptores);
+			int listaSize = list_size(cola[i].suscriptores);
 			log_debug(logger, "Se procede a mandar el mensaje a los %d suscriptores de la cola %d.", listaSize, paquete->codigo_operacion);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(listaDeSuscriptores, j);
+				suscriptorEnCola* suscriptor = list_get(cola[i].suscriptores, j);
+				int idSuscriptor = suscriptor->ID;
+				log_debug(logger, "El ID del proceso al que le mando mensaje es %d", idSuscriptor);
 
 				pthread_mutex_lock(&mutexRepoGameCard);
-				int existeGameCard = check_si_existe_gamecard(*idSuscriptor);
+				int existeGameCard = check_si_existe_gamecard(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoGameCard);
 
 				pthread_mutex_lock(&mutexRepoGameBoy);
-				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				int existeGameBoy = check_si_existe_gameboy(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoGameBoy);
 
 				if(existeGameCard == 1){
 					pthread_mutex_lock(&mutexRepoGameCard);
-					t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(*idSuscriptor);
+					log_debug(logger, "Existe gamecard");
+					t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(idSuscriptor);
 					socketAUsar = gamecard->socketNew;
 					pthread_mutex_unlock(&mutexRepoGameCard);
 				}
 
 				else if(existeGameBoy == 1){
+					log_debug(logger, "Existe gameboy");
 					pthread_mutex_lock(&mutexRepoGameBoy);
-					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(idSuscriptor);
 					socketAUsar = gameboy->socketDondeEscucha;
 					pthread_mutex_unlock(&mutexRepoGameBoy);
 				}
 
 				else{
+					log_debug(logger, "no existe sub");
 					continue;
 				}
 
@@ -571,8 +575,7 @@ void enviar_mensaje_NEW_a_suscriptores(void* paqueteVoid){
 
 				enviar_new_pokemon(new_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 			}
-
-			list_destroy(listaDeSuscriptores);
+			pthread_mutex_unlock(&mutexColas);
 		}
 	}
 

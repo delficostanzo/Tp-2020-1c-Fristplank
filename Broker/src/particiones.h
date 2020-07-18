@@ -17,7 +17,6 @@ typedef struct{
 }t_particion;
 
 
-int existeSuscriptor(t_list * suscriptores, int suscriptor);
 
 bool ordenarId(t_metadata * unaParticion, t_metadata * otraParticion);
 bool ordenarTamanio(t_particion * unaParticion, t_particion * otraParticion);
