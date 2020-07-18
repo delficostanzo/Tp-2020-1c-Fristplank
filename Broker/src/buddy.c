@@ -160,7 +160,6 @@ void buddy_liberar_memoria(struct t_buddy *self, int offset)
 
     for (; self->longest[index] != 0; index = xadre(index)) {
         tamanioNodo <<= 1;    /* tamanioNodo *= 2; */
-
         if (index == 0) {
             break;
         }

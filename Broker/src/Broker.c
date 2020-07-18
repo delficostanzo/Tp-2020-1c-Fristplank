@@ -98,6 +98,13 @@ void iniciarMemoria() {
 				exit(0);
 			}
 
+			memoriaCache = malloc(TAMANO_MEMORIA);
+
+			if(memoriaCache == NULL){
+				log_error(logger, "NO HAY MEMORIA SUFICIENTE PARA ALOJAR LA CANTIDAD DE MEMORIA INDICADA. SE ABORTA.");
+				exit(0);
+			}
+
 			iniciarBuddySystem();
 		}
 		else{
