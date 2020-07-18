@@ -466,7 +466,8 @@ void escucharSocketACK(void* socketArgs){
 					 */
 
 					if(list_size(mensaje->ACKSuscriptores) == list_size(cola[i].suscriptores)){
-						list_remove_and_destroy_element(cola[i].mensajes, j, (void*) liberoMensaje);
+						//list_remove_and_destroy_element(cola[i].mensajes, j, (void*) liberoMensaje);
+						list_remove(cola[i].mensajes, j);
 					}
 				}
 			}
