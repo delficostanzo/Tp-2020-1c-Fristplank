@@ -1,5 +1,5 @@
 	if test -d /home/utnso/delibird-pruebas; then
-		cd /home/utnso
+		cd /home/utnso/
 		sudo rm -r /delibird-pruebas
 	fi
 cd
