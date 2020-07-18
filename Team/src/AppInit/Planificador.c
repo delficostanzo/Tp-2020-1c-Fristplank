@@ -69,16 +69,15 @@ void pasarAReadyParaAtrapar(){
 
 		if(cantidadPosibles != 0) {
 
-
-
 			pthread_mutex_lock(&mutexPokemonesLibres);
 			PokemonEnElMapa* pokemonLibre = list_get(pokemonesLibres, index);
 			pthread_mutex_unlock(&mutexPokemonesLibres);
+
 			if(pokemonLibre != NULL){
 
-//				pthread_mutex_lock(&mutexEntrenadores);
-//				t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
-//				pthread_mutex_unlock(&mutexEntrenadores);
+	//			pthread_mutex_lock(&mutexEntrenadores);
+	//			t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
+	//			pthread_mutex_unlock(&mutexEntrenadores);
 
 				pthread_mutex_lock(&mutexEntrenadores);
 				//apuntan a los mismos entrenadores globales
@@ -97,15 +96,12 @@ void pasarAReadyParaAtrapar(){
 				cambiarCantidadEnPokesLibres(pokemonLibre);
 				// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
 				cambiarCantidadEnPokesObj(pokemonLibre);
-				int cantTotal = cantidadDeEspeciesTotales;
 				log_info(LO, "El entrenador %c paso a estado ready para atrapar al pokemon %s", entrenadorAReady->numeroEntrenador, pokemonLibre->nombre);
 
 
 			}
 
-
 		}
-
 	}
 
 	//destruirLog(logger);
@@ -144,12 +140,7 @@ void cambiarCantidadEnPokesLibres(PokemonEnElMapa* pokeLibre){
 void cambiarCantidadEnPokesObj(PokemonEnElMapa* pokeLibre){
 	pthread_mutex_lock(&mutexObjetivosGlobales);
 	disminuirCantidadPokemones(pokeLibre, objetivosGlobales);
-	t_list* objetivos = objetivosGlobales;
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
-	pthread_mutex_lock(&mutexEntrenadores);
-	t_list* entren = entrenadores;
-	pthread_mutex_unlock(&mutexEntrenadores);
-
 }
 
 void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes){
@@ -260,7 +251,6 @@ Entrenador* buscarPrimerEntrenador() {
 
 	//el primer entrenador de los ready es el que esta en indice 0
 	//pthread_mutex_lock(&mutexListaEntrenadoresReady);
-	t_list* entrenadoresR = listaEntrenadoresReady;
 	if(list_is_empty(listaEntrenadoresReady) != 1) {
 		Entrenador* entrenador = list_get(listaEntrenadoresReady, 0);
 		//pthread_mutex_unlock(&mutexListaEntrenadoresReady);

@@ -7,6 +7,7 @@ static int tienenLaMismaCantidad(t_list* objetivos, t_list* atrapados);
 static int sonIguales(t_list* objetivos, t_list* atrapados);
 static PokemonEnElMapa* buscarAtrapadoDeMas(Entrenador* entrenador);
 static PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador);
+static int sumarCantidad(int primerCantidad, PokemonEnElMapa* pokemon);
 
 
 typedef bool(*erasedTypeFilter)(void*);
@@ -185,10 +186,7 @@ int tienenLaMismaCantidad(t_list* objetivos, t_list* atrapados) {
 int sumaCantidades(t_list* pokemones) {
 	typedef void*(*erasedTypeFold)(void*, void*);
 
-	int sumarCantidad(int primerCantidad, PokemonEnElMapa* pokemon) {
-		int cantidadPoke = pokemon->cantidad;
-		return primerCantidad + cantidadPoke;
-	}
+
 
 	if(list_is_empty(pokemones)) {
 		return 0;
@@ -196,6 +194,11 @@ int sumaCantidades(t_list* pokemones) {
 
 	int cantidadFinal = list_fold(pokemones, 0, (erasedTypeFold)(sumarCantidad));
 	return cantidadFinal;
+}
+
+int sumarCantidad(int primerCantidad, PokemonEnElMapa* pokemon) {
+	int cantidadPoke = pokemon->cantidad;
+	return primerCantidad + cantidadPoke;
 }
 
 void pasarADormido(Entrenador* entrenador) {

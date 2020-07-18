@@ -53,13 +53,13 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 		log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
 
 		char* posicionesImpresas = string_new();
-		string_append(posicionesImpresas, "[");
+		string_append(&posicionesImpresas, "[");
 		for(int i = 0; i < localized->cantidadPosiciones; i++){
 			t_posicion* posicion = list_get(localized->listaPosiciones, i);
 			char* posicionAppend = string_from_format(" (%d,%d) ", posicion->posicionX, posicion->posicionY);
-			string_append(posicionesImpresas, posicionAppend);
+			string_append(&posicionesImpresas, posicionAppend);
 			free(posicionAppend);
-		} string_append(posicionesImpresas, "]");
+		} string_append(&posicionesImpresas, "]");
 
 		log_info(LO, "Lista de posiciones: %s", posicionesImpresas);
 		free(posicionesImpresas);
@@ -88,7 +88,6 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 //si ya no hay mas objetivos globales quiere decir que todos fueron encontrados a traves de un localized o un appeared
 int puedeSeguirRecibiendo() {
 	pthread_mutex_lock(&mutexPokemonesRecibidos);
-	t_list* pokesR = pokemonesRecibidos;
 	int cantidadRecibidos = list_size(pokemonesRecibidos);
 	pthread_mutex_unlock(&mutexPokemonesRecibidos);
 	log_info(logger, "La cantidad total es: %d y la cantidad recibida es: %d", cantidadDeEspeciesTotales, cantidadRecibidos);
@@ -170,12 +169,6 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 	}
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
 
-	pthread_mutex_lock(&mutexPokemonesLibres);
-	log_info(logger, "$-Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
-	//log_info(LO, "---Ahora la cantidad de pokemones libres es: %d", list_size(pokemonesLibres));
-	t_list* libres = pokemonesLibres;
-	pthread_mutex_unlock(&mutexPokemonesLibres);
-
 }
 
 
@@ -256,7 +249,6 @@ t_paquete* recibirCaught(int socketCaught){
 
 	sem_wait(&semaforoCorrelativos);
 	int noVacio = list_is_empty(idsCorrelativosCaught) != 1;
-	t_list* ids = idsCorrelativosCaught;
 	sem_post(&semaforoCorrelativos);
 
 	if(paqueteCaught != NULL){

@@ -4,6 +4,7 @@
 
 #include "CreacionEstructurasMsj.h"
 #include "../Model/EntrenadoresPorEstado.h"
+#include<commons/string.h>
 
 Entrenador* entrenadorQueEspera;
 
