@@ -52,7 +52,7 @@ int generarSocketsConBroker() {
 	free(handshakeResponse);
 
 	socketGet = crearSocket();
-	//socketIdGet = crearSocket();
+	socketIdGet = crearSocket();
 
 	suscripcionAppeared = crearSocket();
 	socketACKAppeared = crearSocket();
@@ -72,8 +72,8 @@ int generarSocketsConBroker() {
 	//ENVIA GET Y ESCUCHA EL ID GET
 	if (conectarA(socketGet, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Ya se conecto a la cola de get para poder enviarle mensajes");
-//		if (conectarA(socketIdGet, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("$-Socket de recepcion de ids Get guardado.");
+		if (conectarA(socketIdGet, IP_BROKER, PUERTO_BROKER)) {
+			quickLog("$-Socket de recepcion de ids Get guardado.");
 
 			enviarGetDesde(socketGet);
 
@@ -81,9 +81,9 @@ int generarSocketsConBroker() {
 		} else{
 				conexionCorrecta = -1;
 			}
-//	} else{
-//		conexionCorrecta = -1;
-//	 }
+	} else{
+		conexionCorrecta = -1;
+	 }
 
 
 	//ESCUCHA APPEARED Y ENVIA EL ACK
@@ -177,6 +177,8 @@ void* escucharColaAppearedPokemon(){
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared);
 
 		enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
+
+		free(paqueteNuevo);
 		quickLog("$-Pudo enviar el ACK de los appeared");
 	}
 }

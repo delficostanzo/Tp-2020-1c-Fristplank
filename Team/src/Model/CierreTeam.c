@@ -20,7 +20,6 @@ void terminarTeam() {
 	if (config != NULL) {
 		config_destroy(config); //destruye la esctructura de config en memoria, no elimina el archivo de config
 	}
-	log_info(LO, "Se destruye la estructura de config sin eliminar el archivo config");
 	//pthread_exit(escucharAppearedPokemon);
 	liberarConexion(socketGameBoy);
 	liberarConexion(conexionBroker);

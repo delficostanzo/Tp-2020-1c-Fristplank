@@ -12,7 +12,6 @@ int main(int argc, char *argv[]) {
 
 	//obtiene la lista de entrenadores desde el config
 	entrenadores = getEntrenadoresDesde("src/team.config");
-	t_list* entrena = entrenadores;
 	quickLog("$-Ya fueron todos los entrenadores cargados con sus posiciones, objetivos y atrapados");
 
 	objetivosTotales = getObjetivosTotalesDesde(entrenadores); //son pokes copias

@@ -233,7 +233,7 @@ void atenderCliente(argumentos* sockets) {
 		 */
 		else{
 			pthread_mutex_lock(&mutexColas);
-			log_info(logger, "Mensaje recibido: %s", ID_PROCESO[mensajeRecibido->codigo_operacion]);
+			log_info(logger, "Mensaje recibido: %s", ID_COLA[mensajeRecibido->codigo_operacion]);
 			agregarMensajeACola(mensajeRecibido);
 			log_info(logger, "Mensaje agregado a memoria.");
 			pthread_mutex_unlock(&mutexColas);
@@ -377,7 +377,7 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 			break;
 		}
 
-		log_info(logger, "Mensaje recibido: %s", ID_PROCESO[paquete->codigo_operacion]);
+		log_info(logger, "Mensaje recibido: %s", ID_COLA[paquete->codigo_operacion]);
 
 		pthread_mutex_lock(&mutexColas);
 		agregarMensajeACola(paquete);

@@ -26,7 +26,7 @@ int solicitarBloque() {
 	}
 
 	else{
-		log_info(logger, "Bloque libre encontrado: %d", bloqueEncontrado);
+		log_info(logger, "Bloque libre encontrado: [%d]", bloqueEncontrado);
 
 		FILE* bitmap = fopen(PATH_BITMAP, "r+w");
 		fseek(bitmap, bloqueEncontrado, SEEK_SET);

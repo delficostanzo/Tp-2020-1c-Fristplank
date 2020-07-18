@@ -46,10 +46,10 @@ void leer_configuracionGameCard(void){
 	log_info(logger, "Config file | Tiempo de reintento de conexión al broker: %d", TIEMPO_DE_REINTENTO_CONEXION);
 	log_info(logger, "Config file | Tiempo de reintento de operación: %d", TIEMPO_DE_REINTENTO_OPERACION);
 	log_info(logger, "Config file | Tiempo de retardo de operación: %d", TIEMPO_RETARDO_OPERACION);
-	log_info(logger, "Config file | Path de Bitmap calculado: %s", PATH_BITMAP);
-	log_info(logger, "Config file | Path de Files calculado: %s", PATH_FILES);
-	log_info(logger, "Config file | Path de Pokemones calculado: %s", PATH_FILES_POKEMONES);
-	log_info(logger, "Config file | Path de Blocks calculado: %s", PATH_BLOCKS);
+	log_debug(logger, "Config file | Path de Bitmap calculado: %s", PATH_BITMAP);
+	log_debug(logger, "Config file | Path de Files calculado: %s", PATH_FILES);
+	log_debug(logger, "Config file | Path de Pokemones calculado: %s", PATH_FILES_POKEMONES);
+	log_debug(logger, "Config file | Path de Blocks calculado: %s", PATH_BLOCKS);
 	log_debug(logger, "<> END: Leyendo archivo config <>");
 
 	free(PUNTO_MONTAJE_TALLGRASS_RELATIVO);

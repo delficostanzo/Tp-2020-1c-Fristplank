@@ -52,6 +52,18 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 		//TODO: Hacer list_iterate para poder mostrar por consola la lista de posiciones que recibe localized
 		log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
 
+		char* posicionesImpresas = string_new();
+		string_append(posicionesImpresas, "[");
+		for(int i = 0; i < localized->cantidadPosiciones; i++){
+			t_posicion* posicion = list_get(localized->listaPosiciones, i);
+			char* posicionAppend = string_from_format(" (%d,%d) ", posicion->posicionX, posicion->posicionY);
+			string_append(posicionesImpresas, posicionAppend);
+			free(posicionAppend);
+		} string_append(posicionesImpresas, "]");
+
+		log_info(LO, "Lista de posiciones: %s", posicionesImpresas);
+		free(posicionesImpresas);
+
 		quickLog("$-Se recibio un localized");
 		//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
 		//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
@@ -117,7 +129,6 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 
 			free(appeared);
 			free(paqueteAppeared->buffer);
-			free(paqueteAppeared);
 			return paqueteAppeared;
 	}
 

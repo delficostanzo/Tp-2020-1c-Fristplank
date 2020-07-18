@@ -11,11 +11,8 @@ void procesarNewPokemon(void* args) {
 	log_debug(logger, "<> START: procesarNewPokemon <>");
 
 	t_new_pokemon* new_pokemon = args;
-	log_info(logger, "Procesar NEW_POKEMON");
-	log_info(logger, "Pokemon: %s", new_pokemon->pokemon);
-	log_info(logger, "Posicion: (%d,%d)", new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY);
-	log_info(logger, "Cantidad: %d", new_pokemon->cantidad);
-
+	log_info(logger, "Comienzo a procesar NEW_POKEMON");
+	log_info(logger, "Pokemon: %s - Posición: (%d,%d) - Cantidad: %d", new_pokemon->pokemon, new_pokemon->posicion->posicionX, new_pokemon->posicion->posicionY, new_pokemon->cantidad);
 	char* filePath = string_new();
 	char* finFilePath = string_from_format("%s%s/Metadata.bin", PATH_FILES_POKEMONES, new_pokemon->pokemon);
 	string_append(&filePath, finFilePath);
@@ -269,9 +266,8 @@ int* procesarCatchPokemon(void* args) {
 	log_debug(logger, "<> START: procesarCatchPokemon <>");
 
 	t_catch_pokemon* catch_pokemon = args;
-	log_info(logger, "Procesar CATCH_POKEMON");
-	log_info(logger, "Pokemon: %s", catch_pokemon->pokemon);
-	log_info(logger, "Posicion: (%d,%d)", catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
+	log_info(logger, "Comienzo a procesar CATCH_POKEMON");
+	log_info(logger, "Pokemon: %s - Posición: (%d,%d)", catch_pokemon->pokemon, catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
 
 	/* Si el metadata no existe significa que el Pokemon no existe
 	 * devolvemos 0 para que se informe que no se pudo atrapar
@@ -494,7 +490,7 @@ void procesarGetPokemon(t_argumentos_procesar_get* args) {
 	log_debug(logger, "<> START: procesarGetPokemon <>");
 
 	t_get_pokemon* get_pokemon = args->get_pokemon;
-	log_info(logger, "Procesar GET_POKEMON");
+	log_info(logger, "Comienzo a procesar GET_POKEMON");
 	log_info(logger, "Pokemon: %s", get_pokemon->pokemon);
 
 	/* Si el metadata no existe significa que el Pokemon no existe

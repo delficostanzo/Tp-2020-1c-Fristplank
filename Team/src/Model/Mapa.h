@@ -32,7 +32,7 @@ int suscripcionCaught;
 int suscripcionLocalized;
 
 int socketGet;
-//int socketIdGet;
+int socketIdGet;
 
 int socketCatch;
 int socketIdCatch;
