@@ -9,106 +9,174 @@
 
 int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 
-	int offset, j, i, diferencia;
-	t_metadata * auxParticion = malloc(sizeof(t_metadata));
-	t_list * particiones = malloc(sizeof(t_list));
+	int offset = 0;
+	int posicionEncontrada = -1;
+	t_list * particiones = list_create();
 
-	for (j = 0; j < 6; j++) {
+	/* Meto todas las metadatas de las colas en una sola lista
+	 */
+	for (int j = 0; j < 6; j++) {
 		list_add_all(particiones, cola[j].mensajes);
 	}
+
 	list_sort(particiones, (void*) ordenarPosicion);
 	int cantParticionesActuales = list_size(particiones);
-	t_particion_libre * particion = malloc(sizeof(t_particion_libre));
-	t_list * particionesLibres = malloc(sizeof(t_list*));
-
-	if (!particiones)
-		return 0; //si no hay particiones, se crea al inicio
+	t_list * particionesLibres = list_create();
 
 	if (string_equals_ignore_case(ALGORITMO_MEMORIA, "PARTICIONES")) {
 
+		if (cantParticionesActuales == 0){
+			return 0; //si no hay particiones, se crea al inicio
+		}
+
+		if(cantidadParticionesEliminadas == FRECUENCIA_COMPACTACION){
+			compactarMemoria(particiones);
+			cantParticionesActuales = list_size(particiones);
+		}
+
 		if (string_equals_ignore_case(ALGORITMO_PARTICION_LIBRE, "BF")) {
 
-			for (i = 0; i < cantParticionesActuales; i++) {
-				auxParticion = list_get(particiones, i);
+			for (int i = 0; i < cantParticionesActuales; i++) {
+				t_metadata* auxParticion = list_get(particiones, i);
+
+				/* La particion actual empieza donde termina la anterior
+				 */
 				if (offset == auxParticion->posicion) {
-						offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
-					continue;
+					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
 				}
 
-				if (offset != auxParticion->posicion) {
-					diferencia = auxParticion->posicion - offset;
-					if (diferencia >= sizeDato) {
+				/* Si la particion actual no empieza donde termina la anterior
+				 */
+				else {
+					int diferencia = auxParticion->posicion - offset;
+					if (diferencia >= tamanioParticionMinima(sizeDato)) {
+						t_particion* particion = malloc(sizeof(t_particion));
 						particion->posicion = offset;
 						particion->tamanio = diferencia;
 						list_add(particionesLibres, particion);
-						offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
-						continue;
 					}
+
+					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
 				}
 			}
-			if (particionesLibres) {
+
+			/* Si hay particiones libres
+			 * Asigno la primera
+			 */
+			if (!list_is_empty(particionesLibres)) {
 				list_sort(particionesLibres, (void*) ordenarTamanio);
-				particion = list_get(particionesLibres, 0);
-				return particion->posicion;
-			} else {
-				if ((TAMANO_MEMORIA - offset) >= sizeDato)
-					return offset;
+				t_particion* particion = list_get(particionesLibres, 0);
+				posicionEncontrada = particion->posicion;
 			}
-		} //FIN BF
 
-		if (string_equals_ignore_case(ALGORITMO_PARTICION_LIBRE, "FF")) { //siempre comienza desde el principio
-
-			for (i = 0; i < cantParticionesActuales; i++) {
-				auxParticion = list_get(particiones, i);
-
-				if (offset == auxParticion->posicion) {
-					offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
-					continue;
-				}
-
-				if (offset != auxParticion->posicion) { //asumo que si no es offset, entonces es mas grande
-					diferencia = auxParticion->posicion - offset; //NO ESTA COMPACTADO
-					if (diferencia >= sizeDato)
-						return offset; //hay espacio entre dos particiones?? diferencia >0
-					offset += tamanioParticionMinima(auxParticion->tamanioMensaje);
-				}
-
-			}
-			if ((TAMANO_MEMORIA - offset) >= sizeDato)
-				return offset; //SI aun puedo seguir agregando, retorno la ultima posicion
-		//si no retorno nada en BF y FF --> hay que el eliminar 1 particion
-		//FIFO ESCOGE EL MENSAJE MAS VIEJO
-		if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "FIFO")) { //considero que el primer nodo en particiones es la que entro primero
-			list_sort(particiones, (void*) ordenarId);
-			auxParticion = list_get(particiones, i); //aca no tomo las auxTabla ya que lo voy a sacar
-			eliminarParticion(auxParticion);
+			else if ((TAMANO_MEMORIA - offset) >= tamanioParticionMinima(sizeDato)){
+				posicionEncontrada = offset;
 			}
 
 		}
-		if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "LRU")) {
 
-			list_sort(particiones, (void *) ordenarFlagLRU);
-				auxParticion = list_get(particiones, i); //aca no tomo las copias ya que lo voy a sacar
-				offset = auxParticion->posicion;
+		else if (string_equals_ignore_case(ALGORITMO_PARTICION_LIBRE, "FF")) { //siempre comienza desde el principio
+
+			for (int i = 0; i < cantParticionesActuales; i++) {
+				t_metadata* auxParticion = list_get(particiones, i);
+
+				log_debug(logger, "offset es %d", offset);
+				if (offset == auxParticion->posicion) {
+					log_debug(logger, "mensajeEncontrado en pos %d", auxParticion->posicion);
+					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
+					log_debug(logger, "tamanioMensaje %d", tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria));
+				}
+
+				else { //asumo que si no es offset, entonces es mas grande
+					int diferencia = auxParticion->posicion - offset; //NO ESTA COMPACTADO
+
+					if (diferencia >= tamanioParticionMinima(sizeDato)){
+						posicionEncontrada = offset; //hay espacio entre dos particiones?? diferencia >0
+						break;
+					}
+					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
+					log_debug(logger, "Offset: %d", offset);
+				}
+
+			}
+			if ((TAMANO_MEMORIA - offset) >= tamanioParticionMinima(sizeDato)){
+				posicionEncontrada = offset; //SI aun puedo seguir agregando, retorno la ultima posicion
+			}
+		}
+
+		/* No encontro posicion
+		 * procedo a eliminar particiones
+		 */
+		if(posicionEncontrada == -1){
+			//si no retorno nada en BF y FF --> hay que el eliminar 1 particion
+			//FIFO ESCOGE EL MENSAJE MAS VIEJO
+			if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "FIFO")) { //considero que el primer nodo en particiones es la que entro primero
+				log_debug(logger, "Entro en if de FIFO");
+				list_sort(particiones, (void*) ordenarId);
+				log_debug(logger, "Ordeno");
+				t_metadata* auxParticion = list_get(particiones, 0); //aca no tomo las auxTabla ya que lo voy a sacar
+				log_debug(logger, "list_get(particiones,0)");
 				eliminarParticion(auxParticion);
+				log_debug(logger, "termino de eliminar");
 			}
 
+			else if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "LRU")) {
+				list_sort(particiones, (void *) ordenarFlagLRU);
+				t_metadata* auxParticion = list_get(particiones, 0); //aca no tomo las copias ya que lo voy a sacar
+				eliminarParticion(auxParticion);
+			}
+		}
 	}
-	free(particion);
-	free(auxParticion);
-	free(particiones);
-	return -1;
+
+	else if(string_equals_ignore_case(ALGORITMO_MEMORIA, "BS")){
+		/* Definimos que el tamaño a buscar sea potencia de dos
+		 */
+		log_debug(logger, "Entro a if de BS");
+
+		sizeDato = tamanioParticionMinima(sizeDato);
+		posicionEncontrada = buddy_pedir_mem((size_t) sizeDato);
+
+		log_debug(logger, "Posicion encontrada %d", posicionEncontrada);
+
+		if (posicionEncontrada == -1){
+
+			if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "FIFO")) {
+				list_sort(particiones, (void*) ordenarId);
+			}
+
+			else if(string_equals_ignore_case(ALGORITMO_REEMPLAZO, "LRU")){
+				list_sort(particiones, (void *) ordenarFlagLRU);
+			}
+
+			int i = 0;
+			while(posicionEncontrada == -1){
+				t_metadata* auxParticion = list_get(particiones, i);
+				buddy_liberar_mem(auxParticion->posicion);
+				eliminarParticion(auxParticion);
+				posicionEncontrada = buddy_pedir_mem(sizeDato);
+				i++;
+			}
+		}
+	}
+
+	list_destroy_and_destroy_elements(particionesLibres, (void*) liberarPuntero);
+	list_destroy(particiones);
+	return posicionEncontrada;
 }
 
-bool ordenarTamanio(t_particion_libre * unaParticion,
-		t_particion_libre * otraParticion) {
+void liberarPuntero(t_particion* self){
+	free(self);
+}
+
+bool ordenarTamanio(t_particion * unaParticion,
+		t_particion * otraParticion) {
 	return unaParticion->tamanio <= otraParticion->tamanio;
 }
 bool ordenarPosicion(t_metadata * unaParticion, t_metadata * otraParticion) {
 	return unaParticion->posicion <= otraParticion->posicion;
 }
 bool ordenarFlagLRU(t_metadata * unaParticion, t_metadata * otraParticion) {
-	return unaParticion->flagLRU <= unaParticion->flagLRU;
+	return unaParticion->flagLRU < otraParticion->flagLRU;
 }
 bool ordenarId(t_metadata * unaParticion, t_metadata * otraParticion) {
 	return unaParticion->ID < otraParticion->ID;
@@ -134,27 +202,28 @@ int existeSuscriptor(t_list * suscriptores, int suscriptor) {
 void eliminarParticion(t_metadata * particionAEliminar) { //OK
 
 	int posicion = particionAEliminar->posicion;
-	int i, j, cantidadMensajes;
-	t_metadata * auxMeta = malloc(sizeof(t_metadata));
+	int colaABuscar = particionAEliminar->tipoMensaje - 1;
+	log_debug(logger, "%s", ID_COLA[colaABuscar]);
 
-	for (i = 0; i < 6; i++) {
-		cantidadMensajes = list_size(cola[i].mensajes);
-		for (j = 0; j < cantidadMensajes; j++) {
-			auxMeta = list_get(cola[i].mensajes, j);
-			if (auxMeta->posicion == posicion) {
-				list_remove_and_destroy_element(cola[i].mensajes, j,
-						(void*) particion_destroy);
-				log_info(logger, "Se elimino la particion de la posicion %d",
-						posicion); //OBLIGATORIO (7)
-			}
+	int cantidadMensajes = list_size(cola[colaABuscar].mensajes);
+
+	for(int i = 0; i < cantidadMensajes; i++){
+		t_metadata* auxMeta = list_get(cola[colaABuscar].mensajes, i);
+
+		if(auxMeta->posicion == posicion){
+			list_remove_and_destroy_element(cola[colaABuscar].mensajes, i, (void*) particion_destroy);
+			log_info(logger, "Se eliminó la partición de la posición [%d]", auxMeta->posicion); //OBLIGATORIO (7)
+			cantidadParticionesEliminadas++;
+			break;
 		}
 	}
-
-	free(auxMeta);
 }
 
 void particion_destroy(t_metadata *self) { //OK
+	list_destroy_and_destroy_elements(self->ACKSuscriptores, (void*) ACK_destroy);
 	free(self);
 }
 
-
+void ACK_destroy(int* idACK){
+	free(idACK);
+}

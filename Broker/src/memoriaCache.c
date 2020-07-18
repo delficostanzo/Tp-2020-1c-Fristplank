@@ -7,7 +7,9 @@
 #include "memoriaCache.h"
 
 void cachearMensaje(t_metadata * meta, void * mensaje) {
+
 	void * mensajeACachear = malloc(meta->tamanioMensaje);
+
 	switch (meta->tipoMensaje) {
 	case NEW_POKEMON:
 		cachearNewPokemon(meta, mensaje, &mensajeACachear);
@@ -19,7 +21,6 @@ void cachearMensaje(t_metadata * meta, void * mensaje) {
 		cachearGetPokemon(meta, mensaje, &mensajeACachear);
 		break;
 	case APPEARED_POKEMON:
-		//log_info(logger, "eNTRA ACACHEAR");
 		cachearAppearedPokemon(meta, mensaje,&mensajeACachear);
 		break;
 	case CATCH_POKEMON:
@@ -29,11 +30,17 @@ void cachearMensaje(t_metadata * meta, void * mensaje) {
 		cachearCaughtPokemon(meta, mensaje, &mensajeACachear);
 		break;
 	default:
-		log_error(logger,
-				"No se puede cachear el mensaje. No coincide el tipo mensaje.");
-
+		log_error(logger, "No se puede cachear el mensaje. No coincide el tipo mensaje.");
+		break;
 	}
-	meta->posicion = particionLibre(meta->tamanioMensajeEnMemoria);
+
+	log_debug(logger, "Antes de particion libre");
+
+	while(meta->posicion == -1){
+		meta->posicion = particionLibre(meta->tamanioMensajeEnMemoria);
+	}
+	log_debug(logger, "Luego de particion libre");
+
 	escribirMemoria(mensajeACachear, meta);
 	free(mensajeACachear);
 }
@@ -46,123 +53,93 @@ void cachearNewPokemon(t_metadata * meta, void * mensaje,void ** mensajeACachear
 
 	memcpy(*mensajeACachear + offset, &new_pokemon->lengthOfPokemon, offset);
 	offset += sizeof(uint32_t);
-	memcpy(*mensajeACachear + offset, new_pokemon->pokemon,
-			strlen(new_pokemon->pokemon));
+	memcpy(*mensajeACachear + offset, new_pokemon->pokemon, strlen(new_pokemon->pokemon));
 	offset += strlen(new_pokemon->pokemon);
 	memcpy(*mensajeACachear + offset, &new_pokemon->cantidad, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*mensajeACachear + offset, &new_pokemon->posicion->posicionX,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &new_pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*mensajeACachear + offset, &new_pokemon->posicion->posicionY,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &new_pokemon->posicion->posicionY, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 
 	meta->tamanioMensajeEnMemoria = offset;
-	free(new_pokemon->pokemon);
-
 }
-void cachearLocalizedPokemon(t_metadata * meta, void * mensaje,
-		void ** mensajeACachear) {
+void cachearLocalizedPokemon(t_metadata * meta, void * mensaje, void ** mensajeACachear) {
 
 	int offset = 0;
-	int i;
 
 	t_localized_pokemon * localized_pokemon = mensaje;
 
-	memcpy(*mensajeACachear + offset, &localized_pokemon->lengthOfPokemon,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &localized_pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*mensajeACachear + offset, localized_pokemon->pokemon,
-			strlen(localized_pokemon->pokemon));
+	memcpy(*mensajeACachear + offset, localized_pokemon->pokemon, strlen(localized_pokemon->pokemon));
 	offset += strlen(localized_pokemon->pokemon);
-	memcpy(*mensajeACachear + offset, &localized_pokemon->cantidadPosiciones,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &localized_pokemon->cantidadPosiciones, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 
-	for (i = 0; i < localized_pokemon->cantidadPosiciones; i++) {
-		t_posicion * posiciones = list_get(localized_pokemon->listaPosiciones,
-				i);
-		memcpy(*mensajeACachear + offset, &posiciones->posicionX,
-				sizeof(uint32_t));
+	for (int i = 0; i < localized_pokemon->cantidadPosiciones; i++) {
+		t_posicion * posiciones = list_get(localized_pokemon->listaPosiciones, i);
+		memcpy(*mensajeACachear + offset, &posiciones->posicionX, sizeof(uint32_t));
 		offset += sizeof(uint32_t);
-		memcpy(*mensajeACachear + offset, &posiciones->posicionY,
-				sizeof(uint32_t));
+		memcpy(*mensajeACachear + offset, &posiciones->posicionY, sizeof(uint32_t));
 		offset += sizeof(uint32_t);
 	}
 	meta->tamanioMensajeEnMemoria = offset;
-	free(localized_pokemon->pokemon);
 }
 
-void cachearGetPokemon(t_metadata * meta, void * mensaje,
-		void ** mensajeACachear) {
+void cachearGetPokemon(t_metadata * meta, void * mensaje, void ** mensajeACachear) {
 
 	int offset = 0;
 
 	t_get_pokemon * get_pokemon = mensaje;
 
-	memcpy(*mensajeACachear + offset, &get_pokemon->lengthOfPokemon,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &get_pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*mensajeACachear + offset, get_pokemon->pokemon,
-			strlen(get_pokemon->pokemon));
+	memcpy(*mensajeACachear + offset, get_pokemon->pokemon, strlen(get_pokemon->pokemon));
 	offset += strlen(get_pokemon->pokemon);
 
 	meta->tamanioMensajeEnMemoria = offset;
-	free(get_pokemon->pokemon);
 }
 
-void cachearAppearedPokemon(t_metadata * meta, void * mensaje,
-		void ** mensajeACachear) {
+void cachearAppearedPokemon(t_metadata * meta, void * mensaje, void ** mensajeACachear) {
+	log_debug(logger, "Entro a cachearAppearedPokemon");
 
 	int offset = 0;
 
 	t_appeared_pokemon * appeared_pokemon = mensaje;
 
-	memcpy(*mensajeACachear + offset, &appeared_pokemon->lengthOfPokemon,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &appeared_pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*mensajeACachear + offset, appeared_pokemon->pokemon,
-			strlen(appeared_pokemon->pokemon));
+	memcpy(*mensajeACachear + offset, appeared_pokemon->pokemon, strlen(appeared_pokemon->pokemon));
 	offset += strlen(appeared_pokemon->pokemon);
-	memcpy(*mensajeACachear + offset, &appeared_pokemon->posicion->posicionX,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &appeared_pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*mensajeACachear + offset, &appeared_pokemon->posicion->posicionY,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &appeared_pokemon->posicion->posicionY, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 
 	meta->tamanioMensajeEnMemoria = offset;
-	free(appeared_pokemon->pokemon);
+	log_debug(logger, "Salgo de cachearAppearedPokemon");
 }
 
-void cachearCatchPokemon(t_metadata * meta, void * mensaje,
-		void ** mensajeACachear) {
+void cachearCatchPokemon(t_metadata * meta, void * mensaje, void ** mensajeACachear) {
 
 	int offset = 0;
 
 	t_catch_pokemon * catch_pokemon = mensaje;
 
-	memcpy(*mensajeACachear + offset, &catch_pokemon->lengthOfPokemon,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &catch_pokemon->lengthOfPokemon, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*mensajeACachear + offset, catch_pokemon->pokemon,
-			strlen(catch_pokemon->pokemon));
+	memcpy(*mensajeACachear + offset, catch_pokemon->pokemon, strlen(catch_pokemon->pokemon));
 	offset += strlen(catch_pokemon->pokemon);
-	memcpy(*mensajeACachear + offset, &catch_pokemon->posicion->posicionX,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &catch_pokemon->posicion->posicionX, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
-	memcpy(*mensajeACachear + offset, &catch_pokemon->posicion->posicionY,
-			sizeof(uint32_t));
+	memcpy(*mensajeACachear + offset, &catch_pokemon->posicion->posicionY, sizeof(uint32_t));
 	offset += sizeof(uint32_t);
 
 	meta->tamanioMensajeEnMemoria = offset;
-	free(catch_pokemon->pokemon);
-	free(catch_pokemon->posicion);
 }
 
-void cachearCaughtPokemon(t_metadata * meta, void * mensaje,
-		void ** mensajeACachear) {
+void cachearCaughtPokemon(t_metadata * meta, void * mensaje, void ** mensajeACachear) {
 
 	int offset = 0;
 
@@ -173,8 +150,6 @@ void cachearCaughtPokemon(t_metadata * meta, void * mensaje,
 	meta->tamanioMensajeEnMemoria = offset;
 }
 
-/* ----------------------------------------------*/
-//SI VAS A ENVIAR UN MENSAJE DEBERAS CREAR EN TU FUNCION UN VOID * MENSAJE = MALLOC(meta->tamanioMensaje);
 void * descachearMensaje(void * mensajeEnMemoria, t_metadata * meta) {
 	void * estructuraPokemonReturn;
 	switch (meta->tipoMensaje) {
@@ -320,24 +295,49 @@ void * descachearCaughtPokemon(void* mensajeEnMemoria) {
 }
 
 void escribirMemoria(void * mensaje, t_metadata * meta) { //OK
-	/*if (!mensaje) {
-	 //log_info(logger, "No se agregó ningun mensaje en la memCache");
-	 return;
-	 }*/
-	memcpy((memoriaCache + meta->posicion), mensaje,meta->tamanioMensajeEnMemoria);
-	log_info(logger, "Se cacheo el mensaje de tamanio: %d",
-			meta->tamanioMensajeEnMemoria); //NO OBLIGATORIO
-	log_info(logger, "Se almacena un mensaje en la posicion [%d].",
-			meta->posicion); //OBLIGATORIO (6)
-	modificarUltimaReferencia(meta, 'X');
+	memcpy((memoriaCache + meta->posicion), mensaje, meta->tamanioMensajeEnMemoria);
+	log_info(logger, "Se almacena un mensaje en la posición [%d]", meta->posicion); //OBLIGATORIO (6)
 }
 
 void * leerMemoria(t_metadata * meta) { //OK
-	modificarUltimaReferencia(meta, 'L');
+	pthread_mutex_lock(&mutexLRUcounter);
+	LRUcounter++;
+	meta->flagLRU = LRUcounter;
+	pthread_mutex_unlock(&mutexLRUcounter);
+
 	return descachearMensaje(memoriaCache + meta->posicion, meta);
 }
-void modificarUltimaReferencia(t_metadata * meta, char tipoReferencia) {
-	meta->flagLRU += 1;
-	meta->ultimaReferencia = tipoReferencia;
+
+void compactarMemoria(t_list* particiones) {
+
+	log_info(logger, "<> Inicio Compactación de Memoria <>");
+	int offset = 0;
+	int cantParticiones = list_size(particiones);
+
+	for (int i = 0; i < cantParticiones; i++) {
+		t_metadata* auxParticion = list_get(particiones, i);
+
+		if (offset == auxParticion->posicion) {
+			offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
+			continue;
+		}
+
+		/* Me guardo el mensaje para luego reubicarlo
+		 */
+		void* mensajeACachear = malloc(auxParticion->tamanioMensajeEnMemoria);
+		memcpy(mensajeACachear, (memoriaCache + auxParticion->posicion), auxParticion->tamanioMensajeEnMemoria);
+
+		auxParticion->posicion = offset;
+
+		/* Escribo el mensaje en la nueva posicion
+		 */
+		escribirMemoria(mensajeACachear, auxParticion);
+		free(mensajeACachear);
+
+		offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
+	}
+	log_info(logger, "<> Termino Compactación de Memoria <>");
+
+	cantidadParticionesEliminadas = 0;
 }
 

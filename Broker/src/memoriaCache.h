@@ -7,13 +7,9 @@
 
 #ifndef SRC_MEMORIACACHE_H_
 #define SRC_MEMORIACACHE_H_
-#include "Broker.h"
-#include "colas.h"
+
+#include "variables.h"
 #include "particiones.h"
-
-#define CENTINELA '\0';
-
-int cantidadParticionesBorradas;
 
 void cachearMensaje(t_metadata * meta, void * mensaje);
 void cachearNewPokemon(t_metadata * meta, void * mensaje, void ** mensajeACachear);
@@ -34,5 +30,7 @@ void * descachearCaughtPokemon(void* mensajeEnMemoria);
 void escribirMemoria(void * mensaje, t_metadata * meta);
 void * leerMemoria(t_metadata * meta);
 void modificarUltimaReferencia(t_metadata * meta, char tipoReferencia);
+void compactarMemoria(t_list* particiones);
+
 
 #endif /* SRC_MEMORIACACHE_H_ */
