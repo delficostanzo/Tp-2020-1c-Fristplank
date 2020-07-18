@@ -49,6 +49,7 @@ int cantidadDeEspeciesTotales;
 
 int CC;
 int cantidadDeadlocks;
+int cantidadIntercambios;
 
 int noHayQueFinalizar;
 

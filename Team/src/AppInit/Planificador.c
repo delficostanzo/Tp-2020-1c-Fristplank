@@ -189,6 +189,11 @@ void pasarAReadyParaIntercambiar(){
 				pthread_mutex_lock(&entrenadorDeIntercambio->mutexEstado);
 				entrenadorDeIntercambio->estado = 2;
 				pthread_mutex_unlock(&entrenadorDeIntercambio->mutexEstado);
+
+				if(entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio != 'Z' && bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio != 'Z') {
+					cantidadDeadlocks ++;
+				}
+
 				//me guardo con que entrenador intercambiar cuando pase a exec y el que esta bloqueado a cual esta esperando
 				entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio = bloqueado->numeroEntrenador;
 				bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio = entrenadorDeIntercambio->numeroEntrenador;
@@ -304,7 +309,9 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 	if((strcmp(ALGORITMO, "FIFO") == 0) || ((strcmp(ALGORITMO, "RR") == 0) && QUANTUM >= (distanciaHastaBloqueado + entrenadorMovido->ciclosCPUFaltantesIntercambio))) {
 		entrenadorMovido->posicion = entrenadorBloqueado->posicion;
 		log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
-		cantidadDeadlocks ++;
+		cantidadIntercambios ++;
+		//si ninguno de los 2 intercambio antes
+
 		entrenadorMovido->ciclosCPUConsumido += distanciaHastaBloqueado;
 		entrenadorMovido->ciclosCPUConsumido += entrenadorMovido->ciclosCPUFaltantesIntercambio;
 		PokemonEnElMapa* nuevoAtrapadoDelMovido = entrenadorBloqueado->movimientoEnExec->pokemonAIntercambiar;
@@ -322,8 +329,8 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 
 		log_info(LO, "Se resolvio el deadlock entre los entrenadores %c y %c", entrenadorMovido->numeroEntrenador, entrenadorBloqueado->numeroEntrenador);
 		//para que pueda volver a deadlock y no este en el intercambio viejo
-		entrenadorMovido->movimientoEnExec->numeroDelEntrenadorIntercambio = 0;
-		entrenadorBloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio = 0;
+		entrenadorMovido->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Z';
+		entrenadorBloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Z';
 		estadoSiAtrapo(entrenadorMovido);
 		estadoSiAtrapo(entrenadorBloqueado);
 
@@ -415,7 +422,8 @@ int terminarSiTodosExit() {
 		log_info(LO, "Todos lo entrenadores estan en exit, el Team cumplio su objetivo");
 		log_info(LO, "El total de ciclos de CPU  consumidos por el team fue de: %d", cantidadCPUTotal);
 		log_info(LO, "La cantidad de cambios de contexto fue: %d", CC);
-		log_info(LO, "La cantidad de intercambios fue: %d", cantidadDeadlocks);
+		log_info(LO, "La cantidad de intercambios fue: %d", cantidadIntercambios);
+		log_info(LO, "La cantidad de deadlocks fue: %d", cantidadDeadlocks);
 		logearResultadosEntrenadores();
 		terminarTeam();
 		return 1;

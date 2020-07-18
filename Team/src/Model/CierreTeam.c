@@ -36,7 +36,7 @@ void terminarTeam() {
 	pthread_cancel(escucharAppearedPokemon);
 	pthread_cancel(escucharCaughtPokemon);
 
-	log_info(LO,"Se libera la conexion de los sockets");
+	quickLog("Se libera la conexion de los sockets");
 
 	pthread_mutex_destroy(&mutexEntrenadores);
 	pthread_mutex_destroy(&mutexObjetivosGlobales);
@@ -45,11 +45,11 @@ void terminarTeam() {
 	sem_destroy(&semaforoCatch);
 	sem_destroy(&semaforoCorrelativos);
 
-	log_info(LO,"Se liberan los semaforos");
+	quickLog("Se liberan los semaforos");
 
 	freeEntrenadores();
 
-	log_info(LO,"Se liberan los entrenadores");
+	quickLog("Se liberan los entrenadores");
 
 	list_destroy(objetivosTotales);
 	list_destroy(objetivosAtrapados);

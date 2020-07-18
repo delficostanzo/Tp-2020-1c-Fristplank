@@ -45,6 +45,9 @@ void iniciarVariables(){
 	idsCorrelativosLocalized = list_create();
 
 
+	cantidadDeadlocks = 0;
+	cantidadIntercambios = 0;
+
 	sem_init(&semaforoEstados, 1, 1);
 
 	pokemonesLibres = list_create();

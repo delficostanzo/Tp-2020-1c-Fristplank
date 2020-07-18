@@ -51,7 +51,7 @@ void funcionesDelEntrenador(void* unEntrenador){
 		pthread_mutex_unlock(&entrenador->mutexEstado);
 	}
 
-	log_info(LO, "--El entrenador %c ya esta en exit", entrenador->numeroEntrenador);
+	quickLog("El entrenador ya esta en exit");
 
 	quickLog("$-un entrenador ya esta en exit");
 }
