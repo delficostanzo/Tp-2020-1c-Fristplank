@@ -148,8 +148,7 @@ void crearHilosDeEscucha() {
 		sleep(TIEMPO_RECONEXION);
 	}
 
-	enviarGetDesde(socketGet);
-	quickLog("$-Se envian correctamente los get");
+
 
 	pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);
 	pthread_detach(escucharAppearedPokemon);
@@ -161,6 +160,9 @@ void crearHilosDeEscucha() {
 
 	pthread_create(&escucharCaughtPokemon, NULL, (void*)escucharColaCaughtPokemon, NULL);
 	pthread_detach(escucharCaughtPokemon);
+
+	enviarGetDesde(socketGet);
+	quickLog("$-Se envian correctamente los get");
 }
 
 ////////FUNCIONES DE LOS HILOS DE COLAS A LAS QUE ME SUSCRIBO//////////
