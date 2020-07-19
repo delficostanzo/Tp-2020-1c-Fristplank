@@ -268,7 +268,7 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					log_error(logger, "Fallo en envio de mensaje.");
 				}
 				else{
-					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					log_info(logger, "Mensaje cacheado %s enviado | ID Mensaje: %d", ID_COLA[tipoDeMensaje] , *id);
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
@@ -286,7 +286,7 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					log_error(logger, "Fallo en envio de mensaje.");
 				}
 				else{
-					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					log_info(logger, "Mensaje cacheado %s enviado | ID Mensaje: %d", ID_COLA[tipoDeMensaje] , *id);
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
@@ -304,7 +304,7 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					log_error(logger, "Fallo en envio de mensaje.");
 				}
 				else{
-					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					log_info(logger, "Mensaje cacheado %s enviado | ID Mensaje: %d", ID_COLA[tipoDeMensaje] , *id);
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
@@ -322,7 +322,7 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					log_error(logger, "Fallo en envio de mensaje.");
 				}
 				else{
-					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					log_info(logger, "Mensaje cacheado %s enviado | ID Mensaje: %d", ID_COLA[tipoDeMensaje] , *id);
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
@@ -340,7 +340,7 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					log_error(logger, "Fallo en envio de mensaje.");
 				}
 				else{
-					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					log_info(logger, "Mensaje cacheado %s enviado | ID Mensaje: %d", ID_COLA[tipoDeMensaje] , *id);
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
@@ -358,7 +358,7 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					log_error(logger, "Fallo en envio de mensaje.");
 				}
 				else{
-					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					log_info(logger, "Mensaje cacheado %s enviado | ID Mensaje: %d", ID_COLA[tipoDeMensaje] , *id);
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
@@ -494,7 +494,7 @@ void escucharSocketACK(void* socketArgs){
 		t_paquete* paquete = recibir_mensaje(*(args->socket));
 
 		if(paquete == NULL){
-			log_info(logger, "Se perdió conexión ACK con proceso ID [%d]", args->id);
+			log_info(logger, "Se perdió conexión con proceso ID [%d]", args->id);
 			close(*args->socket);
 			free(args);
 			break;
@@ -535,7 +535,7 @@ void escucharSocketACK(void* socketArgs){
 		pthread_mutex_unlock(&mutexColas);
 	}
 
-	log_debug(logger, "START: escucharSocketACK");
+	log_debug(logger, "END: escucharSocketACK");
 }
 
 void liberoMensaje(t_metadata* mensaje){
@@ -709,12 +709,12 @@ void enviar_mensaje_APPEARED_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_appeared_pokemon(appeared_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje APPEARED_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
 					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
 				}
 				else{
-					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+					log_info(logger, "Mensaje APPEARED_POKEMON no ha podido ser enviado.");
 				}
 			}
 			pthread_mutex_unlock(&mutexColas);
@@ -781,12 +781,12 @@ void enviar_mensaje_CATCH_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_catch_pokemon(catch_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje CATCH_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
 					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
 				}
 				else{
-					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+					log_info(logger, "Mensaje CATCH_POKEMON no ha podido ser enviado.");
 				}
 			}
 
@@ -849,12 +849,12 @@ void enviar_mensaje_CAUGHT_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_caught_pokemon(caught_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje CAUGHT_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
 					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
 				}
 				else{
-					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+					log_info(logger, "Mensaje CAUGHT_POKEMON no ha podido ser enviado.");
 				}
 
 			}
@@ -917,12 +917,12 @@ void enviar_mensaje_GET_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_get_pokemon(get_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje GET_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
 					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
 				}
 				else{
-					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+					log_info(logger, "Mensaje GET_POKEMON no ha podido ser enviado.");
 				}
 			}
 			pthread_mutex_unlock(&mutexColas);
@@ -996,12 +996,12 @@ void enviar_mensaje_LOCALIZED_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_localized_pokemon(localized_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje LOCALIZED_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
 					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
 				}
 				else{
-					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+					log_info(logger, "Mensaje LOCALIZED_POKEMON no ha podido ser enviado.");
 				}
 
 			}
