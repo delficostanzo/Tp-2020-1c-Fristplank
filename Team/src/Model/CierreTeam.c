@@ -19,11 +19,10 @@ void terminarTeam() {
 	if (config != NULL) {
 		config_destroy(config); //destruye la esctructura de config en memoria, no elimina el archivo de config
 	}
-	//pthread_exit(escucharAppearedPokemon);
 	liberarConexion(socketGameBoy);
 	liberarConexion(conexionBroker);
 	liberarConexion(socketGet);
-	//liberarConexion(socketIdGet);
+	liberarConexion(socketIdGet);
 	liberarConexion(suscripcionAppeared);
 	liberarConexion(socketACKAppeared);
 	liberarConexion(socketCatch);
@@ -59,21 +58,16 @@ void terminarTeam() {
 	list_destroy(entrenadores);
 	list_destroy(listaEntrenadoresReady);
 
-	//TODO: apuntaba a los mismos pokemones que apuntaban los entrenadores
-	//ya fueron liberados por cada entrenador
+	quickLog("Se liberan las variables globales");
 
-
-	//log_info(LO, "Se liberan las variables globales");
-
-	//destruirLog(logger);
-	//destruirLog(LO);
+	destruirLog(logger);
+	destruirLog(LO);
 
 }
 
 void freeEntrenadores() {
 	for(int index = 0; index < list_size(entrenadores); index++) {
 		Entrenador* entrenador = list_get(entrenadores, index);
-		//free(entrenador->posicion);
 //		t_list* atrapados = entrenador->pokemonesAtrapados;
 //		for(int i = 0; i <list_size(atrapados); i++) {
 //			PokemonEnElMapa* poke = list_get(atrapados, i);
@@ -92,18 +86,18 @@ void freeEntrenadores() {
 //		}
 		list_destroy_and_destroy_elements(entrenador->pokemonesObjetivos, destruirPokemon);
 //		list_destroy(entrenador->pokemonesObjetivos);
-		if(tieneQueLiberarMovimiento(entrenador)) {
+		//if(tieneQueLiberarMovimiento(entrenador)) {
 			free(entrenador->movimientoEnExec->pokemonNecesitado->nombre);
 			free(entrenador->movimientoEnExec->pokemonNecesitado);
 			//son copias de los atrapados asi que tambien hay que liberarlos
 			free(entrenador->movimientoEnExec->pokemonAIntercambiar->nombre);
 			free(entrenador->movimientoEnExec->pokemonAIntercambiar);
 			//pthread_cancel(entrenador->hiloEntrenador);
-		}
+		//}
 		free(entrenador->movimientoEnExec);
 		pthread_mutex_destroy(&entrenador->mutexEstado);
 		pthread_mutex_destroy(&entrenador->mutexCorrelativo);
-		//sem_destroy(&entrenador->semaforoExecEntrenador);
+		sem_destroy(&entrenador->semaforoExecEntrenador);
 		//pthread_mutex_destroy(&entrenador->mutexEntrenador);
 //		pthread_cancel(entrenador->hiloEntrenador);
 		free(entrenador);

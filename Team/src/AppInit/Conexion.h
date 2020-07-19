@@ -23,5 +23,6 @@ void* escucharColaAppearedPokemon(void);
 void* escucharColaIdsCatchPokemon();
 void* escucharColaCaughtPokemon(void);
 void* escucharColaLocalizedPokemon(void);
+void reconectarBroker();
 
 #endif /* SRC_APPINIT_CONEXION_H_ */

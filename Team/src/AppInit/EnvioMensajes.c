@@ -11,6 +11,7 @@ static char* charResultado(uint32_t ok);
 static int tieneComoIdCorrelativoCaught(int idBuscado);
 static Entrenador* entrenadorQueTieneId(int idCatchQueResponde);
 static void procesarEspera(Entrenador*  entrenador, uint32_t atrapo);
+static int noRecibioDeEsaEspecie(char* nombrePoke);
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -63,40 +64,57 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 	if(paqueteLocalized != NULL){
 		t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
 		if(puedeSeguirRecibiendo()) {
-			//TODO: Hacer list_iterate para poder mostrar por consola la lista de posiciones que recibe localized
-			log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
+			if(noRecibioDeEsaEspecie(localized->pokemon)) {
+				log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
 
-			char* posicionesImpresas = string_new();
-			string_append(&posicionesImpresas, "[");
-			for(int i = 0; i < localized->cantidadPosiciones; i++){
-				t_posicion* posicion = list_get(localized->listaPosiciones, i);
-				char* posicionAppend = string_from_format(" (%d,%d) ", posicion->posicionX, posicion->posicionY);
-				string_append(&posicionesImpresas, posicionAppend);
-				free(posicionAppend);
-			} string_append(&posicionesImpresas, "]");
+				char* posicionesImpresas = string_new();
+				string_append(&posicionesImpresas, "[");
+				for(int i = 0; i < localized->cantidadPosiciones; i++){
+					t_posicion* posicion = list_get(localized->listaPosiciones, i);
+					char* posicionAppend = string_from_format(" (%d,%d) ", posicion->posicionX, posicion->posicionY);
+					string_append(&posicionesImpresas, posicionAppend);
+					free(posicionAppend);
+				} string_append(&posicionesImpresas, "]");
 
-			log_info(LO, "Lista de posiciones: %s", posicionesImpresas);
-			free(posicionesImpresas);
+				log_info(LO, "Lista de posiciones: %s", posicionesImpresas);
+				free(posicionesImpresas);
 
-			quickLog("$-Se recibio un localized");
-			//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
-			//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
-			int cantidad = (int) (localized->cantidadPosiciones);
-			for(int index=0; index<cantidad; index++){
-				//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
-				t_posicion* posicion = list_get(localized->listaPosiciones,index);
+				quickLog("$-Se recibio un localized");
+				//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
+				//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
+				int cantidad = (int) (localized->cantidadPosiciones);
+				for(int index=0; index<cantidad; index++){
+					//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
+					t_posicion* posicion = list_get(localized->listaPosiciones,index);
 
-				agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
+					agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
 
+				}
+
+
+				log_info(logger, "$-Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
+
+				return paqueteLocalized;
 			}
 
-
-			log_info(logger, "$-Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
-
+			for(int i = 0; i < localized->cantidadPosiciones; i++){
+				t_posicion* posicion = list_remove(localized->listaPosiciones, i);
+				free(posicion);
+			}
 			return paqueteLocalized;
-		}
 
-		// aca haya localized NO NULOS que sin embargo van a retornar null
+		}
+		for(int i = 0; i < localized->cantidadPosiciones; i++){
+			t_posicion* posicion = list_remove(localized->listaPosiciones, i);
+			free(posicion);
+		}
+		paqueteLocalized->ID = -10;
+		list_destroy(localized->listaPosiciones);
+		free(paqueteLocalized->buffer->stream);
+		free(paqueteLocalized->buffer);
+		//no tiene que seguir conectado a localized porque ya recibio de todas las especies
+		return paqueteLocalized;
+
 	}
 	return NULL;
 }
@@ -108,6 +126,14 @@ int puedeSeguirRecibiendo() {
 	pthread_mutex_unlock(&mutexPokemonesRecibidos);
 	log_info(logger, "La cantidad total es: %d y la cantidad recibida es: %d", cantidadDeEspeciesTotales, cantidadRecibidos);
 	return cantidadRecibidos < cantidadDeEspeciesTotales;
+}
+
+int noRecibioDeEsaEspecie(char* nombrePoke) {
+	pthread_mutex_lock(&mutexPokemonesRecibidos);
+	PokemonEnElMapa* pokeEncontrado = buscarPorNombre(nombrePoke, pokemonesRecibidos);
+	pthread_mutex_unlock(&mutexPokemonesRecibidos);
+	//si no encontro ese poke en la lista de recibidos
+	return pokeEncontrado != NULL;
 }
 
 //int tieneComoIdCorrelativoLocalized(int idBuscado) {
@@ -160,14 +186,6 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 	//en el nombre de los globales hay cualquier cosa
 	if(buscarPorNombre(nombreNuevoPoke, pokemonesAAtrapar) != NULL) {
 
-		//ya tengo uno de esos pokes libres en el mapa y esta en la misma posicion
-//		pthread_mutex_lock(&mutexPokemonesLibres);
-//		if(buscarPorNombre(nombreNuevoPoke, pokemonesLibres) != NULL && sonLaMismaPosicion(buscarPorNombre(nombreNuevoPoke, pokemonesLibres)->posicion, posicionNuevoPoke)) {
-//			PokemonEnElMapa* pokeExistente = buscarPorNombre(nombreNuevoPoke, pokemonesLibres);
-//
-//			pokeExistente->cantidad ++;
-//			pthread_mutex_unlock(&mutexPokemonesLibres);
-//		} else {
 			//solo lo agrego a la lista
 			PokemonEnElMapa* pokemonNuevo = newPokemon();
 			setPosicionTo(pokemonNuevo, posicionNuevoPoke);
@@ -232,11 +250,13 @@ void recibirIdCatch(Entrenador* entrenador) {
 	} else {
 		//si se corto la conexion
 		log_info(LO, "Se corto la conexion con el Broker. Por default, el entrenador atrapo al pokemon");
+
 		//agrego el pokemon atrapado y cambio al entrenador de estado
-		sleep(3);
+		//sleep(3);
 		agregarAtrapado(entrenador, entrenador->movimientoEnExec->pokemonNecesitado);
 		estadoSiAtrapo(entrenador);
-		free(paqueteIdRecibido);
+		//free(paqueteIdRecibido);
+
 	}
 
 }
