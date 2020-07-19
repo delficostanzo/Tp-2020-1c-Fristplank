@@ -254,7 +254,7 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 	log_debug(logger, "START: enviar_mensajes_cacheados");
 
 	int cantidadMensajes = list_size(mensajes);
-	log_info(logger, "Se procede a enviar los %d mensajes cacheados", cantidadMensajes);
+	log_info(logger, "Se procede a enviar los %d mensajes cacheados", cantidadMensajes / 3);
 
 	switch(tipoDeMensaje){
 		case NEW_POKEMON:

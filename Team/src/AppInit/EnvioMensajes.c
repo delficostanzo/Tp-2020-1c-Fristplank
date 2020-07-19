@@ -54,41 +54,49 @@ void agregarComoIdCorrelativoLocalized(int idCorrelativo){
 t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 
 	t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
+
+	/*paqueteLocalized
+	 * si es null -> conexion rota
+	 * si no es null -> puede que lo use o no
+	 */
+
 	if(paqueteLocalized != NULL){
-	t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
-	while(puedeSeguirRecibiendo()) {
-		//TODO: Hacer list_iterate para poder mostrar por consola la lista de posiciones que recibe localized
-		log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
+		t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
+		if(puedeSeguirRecibiendo()) {
+			//TODO: Hacer list_iterate para poder mostrar por consola la lista de posiciones que recibe localized
+			log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
 
-		char* posicionesImpresas = string_new();
-		string_append(&posicionesImpresas, "[");
-		for(int i = 0; i < localized->cantidadPosiciones; i++){
-			t_posicion* posicion = list_get(localized->listaPosiciones, i);
-			char* posicionAppend = string_from_format(" (%d,%d) ", posicion->posicionX, posicion->posicionY);
-			string_append(&posicionesImpresas, posicionAppend);
-			free(posicionAppend);
-		} string_append(&posicionesImpresas, "]");
+			char* posicionesImpresas = string_new();
+			string_append(&posicionesImpresas, "[");
+			for(int i = 0; i < localized->cantidadPosiciones; i++){
+				t_posicion* posicion = list_get(localized->listaPosiciones, i);
+				char* posicionAppend = string_from_format(" (%d,%d) ", posicion->posicionX, posicion->posicionY);
+				string_append(&posicionesImpresas, posicionAppend);
+				free(posicionAppend);
+			} string_append(&posicionesImpresas, "]");
 
-		log_info(LO, "Lista de posiciones: %s", posicionesImpresas);
-		free(posicionesImpresas);
+			log_info(LO, "Lista de posiciones: %s", posicionesImpresas);
+			free(posicionesImpresas);
 
-		quickLog("$-Se recibio un localized");
-		//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
-		//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
-		int cantidad = (int) (localized->cantidadPosiciones);
-		for(int index=0; index<cantidad; index++){
-			//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
-			t_posicion* posicion = list_get(localized->listaPosiciones,index);
+			quickLog("$-Se recibio un localized");
+			//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
+			//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
+			int cantidad = (int) (localized->cantidadPosiciones);
+			for(int index=0; index<cantidad; index++){
+				//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
+				t_posicion* posicion = list_get(localized->listaPosiciones,index);
 
-			agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
+				agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
 
+			}
+
+
+			log_info(logger, "$-Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
+
+			return paqueteLocalized;
 		}
 
-
-		log_info(logger, "$-Se recibieron el localized | Pokemon: %s | Cantidad de posiciones: %d ", localized->pokemon, localized->cantidadPosiciones);
-
-		return paqueteLocalized;
-	}
+		// aca haya localized NO NULOS que sin embargo van a retornar null
 	}
 	return NULL;
 }
@@ -99,7 +107,7 @@ int puedeSeguirRecibiendo() {
 	int cantidadRecibidos = list_size(pokemonesRecibidos);
 	pthread_mutex_unlock(&mutexPokemonesRecibidos);
 	log_info(logger, "La cantidad total es: %d y la cantidad recibida es: %d", cantidadDeEspeciesTotales, cantidadRecibidos);
-	return cantidadRecibidos <= cantidadDeEspeciesTotales;
+	return cantidadRecibidos < cantidadDeEspeciesTotales;
 }
 
 //int tieneComoIdCorrelativoLocalized(int idBuscado) {
