@@ -32,7 +32,8 @@ typedef struct {
 	int posicion;
 	int tamanioMensaje; // con /0
 	int tamanioMensajeEnMemoria; // sin /0
-	t_list * ACKSuscriptores;
+	t_list* ACKSuscriptores;
+	t_list* enviadosSuscriptores;
 	int flagLRU;
 	char ultimaReferencia;
 } t_metadata;

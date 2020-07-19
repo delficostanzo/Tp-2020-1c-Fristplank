@@ -205,10 +205,11 @@ void eliminarParticion(t_metadata * particionAEliminar) { //OK
 }
 
 void particion_destroy(t_metadata *self) { //OK
-	list_destroy_and_destroy_elements(self->ACKSuscriptores, (void*) ACK_destroy);
+	list_destroy_and_destroy_elements(self->ACKSuscriptores, (void*) puntero_destroy);
+	list_destroy_and_destroy_elements(self->enviadosSuscriptores, (void*) puntero_destroy);
 	free(self);
 }
 
-void ACK_destroy(int* idACK){
+void puntero_destroy(int* idACK){
 	free(idACK);
 }

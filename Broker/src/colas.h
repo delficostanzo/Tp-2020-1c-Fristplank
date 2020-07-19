@@ -17,5 +17,6 @@
 void agregarSuscriptorACola(int suscriptor, op_code tipoCola);
 void agregarMensajeACola(t_paquete * nuevoPaquete);
 t_list* mensajesAEnviar(int idProceso, op_code codigoCola);
+void agregarIdAEnviados(int idSuscriptor, int idMensaje, op_code colaMensaje);
 
 #endif /* SRC_COLAS_H_ */

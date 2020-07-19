@@ -29,6 +29,7 @@ void agregarMensajeACola(t_paquete * nuevoPaquete) {
 
 	nuevaMeta->posicion = SINPARTICION;
 	nuevaMeta->ACKSuscriptores = list_create();
+	nuevaMeta->enviadosSuscriptores = list_create();
 
 	log_debug(logger, "Procedo a buscar la cola %d", nuevoPaquete->codigo_operacion);
 
@@ -77,18 +78,18 @@ t_list* mensajesAEnviar(int idProceso, op_code codigoCola){
 
 				/* Chequeo que el ID no este entre los ACK
 				 */
-				int estaEntreACK = 0;
-				int cantACK = list_size(metadata->ACKSuscriptores);
-				for(int h = 0; h < cantACK; h++){
-					int* ID = list_get(metadata->ACKSuscriptores, h);
+				int estaEnEnviados = 0;
+				int cantEnviados = list_size(metadata->enviadosSuscriptores);
+				for(int h = 0; h < estaEnEnviados; h++){
+					int* ID = list_get(metadata->enviadosSuscriptores, h);
 
 					if(*ID == idProceso){
-						estaEntreACK = 1;
+						estaEnEnviados = 1;
 						break;
 					}
 				}
 
-				if(estaEntreACK == 0){
+				if(estaEnEnviados == 0){
 					log_debug(logger, "antes de leerMemoria");
 					log_debug(logger, "Tipo de mensaje %d", metadata->tipoMensaje);
 					log_debug(logger, "tamaño en memoria %d", metadata->tamanioMensajeEnMemoria);
@@ -107,4 +108,24 @@ t_list* mensajesAEnviar(int idProceso, op_code codigoCola){
 	return mensajes;
 }
 
+void agregarIdAEnviados(int idSuscriptor, int idMensaje, op_code colaMensaje){
+
+	for(int i = 0; i < 6; i++){
+		if(cola[i].nombreCola == cola){
+
+			int cantMensajes = list_size(cola[i].mensajes);
+
+			for(int j = 0; j < cantMensajes; j++){
+				t_metadata* mensaje = list_get(cola[i].mensajes, j);
+
+				if(mensaje->ID == idMensaje){
+					list_add(mensaje->enviadosSuscriptores, idSuscriptor);
+					log_debug(logger, "Se ha agregado el suscriptor %d a los enviados del mensaje %d", idSuscriptor, mensaje->ID);
+					break;
+				}
+			}
+			break;
+		}
+	}
+}
 

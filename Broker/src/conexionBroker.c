@@ -18,14 +18,15 @@ void * esperarClientes() {
 		log_debug(logger, "Esperando conexiones...");
 		int socketCliente = aceptarConexion(conexionCliente);
 
-		argumentos* sockets = malloc(sizeof(argumentos));
-		sockets->socketNuevo = &socketCliente;
-		sockets->socketOG = &conexionCliente;
+		if(socketCliente != -1){
+			argumentos* sockets = malloc(sizeof(argumentos));
+			sockets->socketNuevo = &socketCliente;
+			sockets->socketOG = &conexionCliente;
 
-		pthread_t thread;
-		pthread_create(&thread, NULL, (void*) atenderCliente, sockets);
-		pthread_detach(thread);
-
+			pthread_t thread;
+			pthread_create(&thread, NULL, (void*) atenderCliente, sockets);
+			pthread_detach(thread);
+		}
 		sleep(2);
 	}
 }
@@ -85,9 +86,9 @@ void atenderCliente(argumentos* sockets) {
 		lanzarHiloEscuchaACK(team->id, &team->socketACKAppeared, APPEARED_POKEMON);
 
 		pthread_mutex_lock(&mutexEnvio);
-		enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized);
-		enviar_mensajes_cacheados(mensajesAppeared, APPEARED_POKEMON, team->socketAppeared);
-		enviar_mensajes_cacheados(mensajesCaught, CAUGHT_POKEMON, team->socketCaught);
+		enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized, team->id);
+		enviar_mensajes_cacheados(mensajesAppeared, APPEARED_POKEMON, team->socketAppeared, team->id);
+		enviar_mensajes_cacheados(mensajesCaught, CAUGHT_POKEMON, team->socketCaught, team->id);
 		pthread_mutex_unlock(&mutexEnvio);
 
 		log_info(logger, "Team se suscribió a 3 colas");
@@ -142,9 +143,9 @@ void atenderCliente(argumentos* sockets) {
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKCatch, CATCH_POKEMON);
 
 		pthread_mutex_lock(&mutexEnvio);
-		enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, gamecard->socketGet);
-		enviar_mensajes_cacheados(mensajesCatch, CATCH_POKEMON, gamecard->socketCatch);
-		enviar_mensajes_cacheados(mensajesNew, NEW_POKEMON, gamecard->socketNew);
+		enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, gamecard->socketGet, gamecard->id);
+		enviar_mensajes_cacheados(mensajesCatch, CATCH_POKEMON, gamecard->socketCatch, gamecard->id);
+		enviar_mensajes_cacheados(mensajesNew, NEW_POKEMON, gamecard->socketNew, gamecard->id);
 		pthread_mutex_unlock(&mutexEnvio);
 
 		log_info(logger, "GameCard se suscribió a 3 colas");
@@ -220,7 +221,7 @@ void atenderCliente(argumentos* sockets) {
 			log_info(logger, "GameBoy se suscribió a la cola %s", ID_COLA[suscribe->codigoCola]);
 
 			pthread_mutex_lock(&mutexEnvio);
-			enviar_mensajes_cacheados(mensajes, suscribe->codigoCola, gameboy->socketDondeEscucha);
+			enviar_mensajes_cacheados(mensajes, suscribe->codigoCola, gameboy->socketDondeEscucha, gameboy->id);
 			pthread_mutex_unlock(&mutexEnvio);
 
 			free(mensajeRecibido->buffer->stream);
@@ -250,11 +251,11 @@ void atenderCliente(argumentos* sockets) {
 	free(idProcesoConectado);
 }
 
-void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int socket){
+void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int socket, int idProceso){
 	log_debug(logger, "START: enviar_mensajes_cacheados");
 
 	int cantidadMensajes = list_size(mensajes);
-	log_info(logger, "Se procede a enviar los %d mensajes cacheados", cantidadMensajes / 3);
+	log_info(logger, "Se procede a enviar los %d mensajes cacheados.", cantidadMensajes / 4);
 
 	switch(tipoDeMensaje){
 		case NEW_POKEMON:
@@ -265,6 +266,12 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 
 				if (enviar_new_pokemon(new_pokemon, socket, *id, *idCorrelativo) == -1){
 					log_error(logger, "Fallo en envio de mensaje.");
+				}
+				else{
+					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					pthread_mutex_lock(&mutexColas);
+					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
+					pthread_mutex_unlock(&mutexColas);
 				}
 			}
 			break;
@@ -278,6 +285,12 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 				if(enviar_appeared_pokemon(appeared_pokemon, socket, *id, *idCorrelativo) == -1){
 					log_error(logger, "Fallo en envio de mensaje.");
 				}
+				else{
+					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					pthread_mutex_lock(&mutexColas);
+					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
+					pthread_mutex_unlock(&mutexColas);
+				}
 			}
 			break;
 
@@ -289,6 +302,12 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 
 				if(enviar_catch_pokemon(catch_pokemon, socket, *id, *idCorrelativo) == -1){
 					log_error(logger, "Fallo en envio de mensaje.");
+				}
+				else{
+					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					pthread_mutex_lock(&mutexColas);
+					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
+					pthread_mutex_unlock(&mutexColas);
 				}
 			}
 			break;
@@ -302,6 +321,12 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 				if(enviar_caught_pokemon(caught_pokemon, socket, *id, *idCorrelativo) == -1){
 					log_error(logger, "Fallo en envio de mensaje.");
 				}
+				else{
+					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					pthread_mutex_lock(&mutexColas);
+					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
+					pthread_mutex_unlock(&mutexColas);
+				}
 			}
 			break;
 
@@ -314,6 +339,12 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 				if(enviar_get_pokemon(get_pokemon, socket, *id, *idCorrelativo) == -1){
 					log_error(logger, "Fallo en envio de mensaje.");
 				}
+				else{
+					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					pthread_mutex_lock(&mutexColas);
+					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
+					pthread_mutex_unlock(&mutexColas);
+				}
 			}
 			break;
 
@@ -325,6 +356,12 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 
 				if(enviar_localized_pokemon(localized_pokemon, socket, *id, *idCorrelativo) == -1){
 					log_error(logger, "Fallo en envio de mensaje.");
+				}
+				else{
+					log_info(logger, "Mensaje cacheado enviado | ID Mensaje: %d", *id);
+					pthread_mutex_lock(&mutexColas);
+					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
+					pthread_mutex_unlock(&mutexColas);
 				}
 			}
 			break;
@@ -440,7 +477,6 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 				log_debug(logger, "CAUGHT = [FALSE]");
 			}
 		}
-
 
 		enviar_mensaje_a_suscriptores(paquete);
 		log_info(logger, "Mensaje enviado a suscriptores.");
@@ -598,7 +634,16 @@ void enviar_mensaje_NEW_a_suscriptores(void* paqueteVoid){
 				new_a_enviar->posicion->posicionY = new_pokemon->posicion->posicionY;
 				new_a_enviar->cantidad = new_pokemon->cantidad;
 
-				enviar_new_pokemon(new_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
+				int enviado = enviar_new_pokemon(new_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
+
+				if (enviado != -1){
+					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+
+					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
+				}
+				else{
+					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+				}
 			}
 			pthread_mutex_unlock(&mutexColas);
 		}
@@ -619,14 +664,12 @@ void enviar_mensaje_APPEARED_a_suscriptores(void* paqueteVoid){
 		if(cola[i].nombreCola == paquete->codigo_operacion){
 
 			pthread_mutex_lock(&mutexColas);
-			t_list* listaDeSuscriptores = list_duplicate(cola[i].suscriptores);
-			pthread_mutex_unlock(&mutexColas);
 
 			int socketAUsar = 0;
-			int listaSize = list_size(listaDeSuscriptores);
+			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(listaDeSuscriptores, j);
+				int* idSuscriptor = list_get(cola[i].suscriptores, j);
 
 				pthread_mutex_lock(&mutexRepoTeam);
 				int existeTeam = check_si_existe_team(*idSuscriptor);
@@ -663,10 +706,18 @@ void enviar_mensaje_APPEARED_a_suscriptores(void* paqueteVoid){
 				appeared_a_enviar->posicion->posicionX = appeared_pokemon->posicion->posicionX;
 				appeared_a_enviar->posicion->posicionY = appeared_pokemon->posicion->posicionY;
 
-				enviar_appeared_pokemon(appeared_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
-			}
+				int enviado = enviar_appeared_pokemon(appeared_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
-			list_destroy(listaDeSuscriptores);
+				if (enviado != -1){
+					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+
+					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+				}
+				else{
+					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+				}
+			}
+			pthread_mutex_unlock(&mutexColas);
 		}
 	}
 
@@ -685,14 +736,12 @@ void enviar_mensaje_CATCH_a_suscriptores(void* paqueteVoid){
 		if(cola[i].nombreCola == paquete->codigo_operacion){
 
 			pthread_mutex_lock(&mutexColas);
-			t_list* listaDeSuscriptores = list_duplicate(cola[i].suscriptores);
-			pthread_mutex_unlock(&mutexColas);
 
 			int socketAUsar = 0;
-			int listaSize = list_size(listaDeSuscriptores);
+			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(listaDeSuscriptores, j);
+				int* idSuscriptor = list_get(cola[i].suscriptores, j);
 
 				pthread_mutex_lock(&mutexRepoGameCard);
 				int existeGameCard = check_si_existe_gamecard(*idSuscriptor);
@@ -729,10 +778,19 @@ void enviar_mensaje_CATCH_a_suscriptores(void* paqueteVoid){
 				catch_a_enviar->posicion->posicionX = catch_pokemon->posicion->posicionX;
 				catch_a_enviar->posicion->posicionY = catch_pokemon->posicion->posicionY;
 
-				enviar_catch_pokemon(catch_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
+				int enviado = enviar_catch_pokemon(catch_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
+
+				if (enviado != -1){
+					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+
+					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+				}
+				else{
+					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+				}
 			}
 
-			list_destroy(listaDeSuscriptores);
+			pthread_mutex_unlock(&mutexColas);
 		}
 	}
 
@@ -751,14 +809,12 @@ void enviar_mensaje_CAUGHT_a_suscriptores(void* paqueteVoid){
 		if(cola[i].nombreCola == paquete->codigo_operacion){
 
 			pthread_mutex_lock(&mutexColas);
-			t_list* listaDeSuscriptores = list_duplicate(cola[i].suscriptores);
-			pthread_mutex_unlock(&mutexColas);
 
 			int socketAUsar = 0;
-			int listaSize = list_size(listaDeSuscriptores);
+			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(listaDeSuscriptores, j);
+				int* idSuscriptor = list_get(cola[i].suscriptores, j);
 
 				pthread_mutex_lock(&mutexRepoTeam);
 				int existeTeam = check_si_existe_team(*idSuscriptor);
@@ -790,10 +846,20 @@ void enviar_mensaje_CAUGHT_a_suscriptores(void* paqueteVoid){
 				 */
 				t_caught_pokemon* caught_a_enviar = malloc(sizeof(t_caught_pokemon));
 				caught_a_enviar->ok = caught_pokemon->ok;
-				enviar_caught_pokemon(caught_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
+				int enviado = enviar_caught_pokemon(caught_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
+
+				if (enviado != -1){
+					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+
+					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+				}
+				else{
+					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+				}
+
 			}
 
-			list_destroy(listaDeSuscriptores);
+			pthread_mutex_unlock(&mutexColas);
 		}
 	}
 
@@ -810,14 +876,12 @@ void enviar_mensaje_GET_a_suscriptores(void* paqueteVoid){
 		if(cola[i].nombreCola == paquete->codigo_operacion){
 
 			pthread_mutex_lock(&mutexColas);
-			t_list* listaDeSuscriptores = list_duplicate(cola[i].suscriptores);
-			pthread_mutex_unlock(&mutexColas);
 
 			int socketAUsar = 0;
-			int listaSize = list_size(listaDeSuscriptores);
+			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(listaDeSuscriptores, j);
+				int* idSuscriptor = list_get(cola[i].suscriptores, j);
 
 				pthread_mutex_lock(&mutexRepoGameCard);
 				int existeGameCard = check_si_existe_gamecard(*idSuscriptor);
@@ -850,10 +914,18 @@ void enviar_mensaje_GET_a_suscriptores(void* paqueteVoid){
 				t_get_pokemon* get_a_enviar = malloc(sizeof(t_get_pokemon));
 				get_a_enviar->lengthOfPokemon = get_pokemon->lengthOfPokemon;
 				get_a_enviar->pokemon = string_duplicate(get_pokemon->pokemon);
-				enviar_get_pokemon(get_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
-			}
+				int enviado = enviar_get_pokemon(get_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
-			list_destroy(listaDeSuscriptores);
+				if (enviado != -1){
+					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+
+					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+				}
+				else{
+					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+				}
+			}
+			pthread_mutex_unlock(&mutexColas);
 		}
 	}
 
@@ -871,14 +943,12 @@ void enviar_mensaje_LOCALIZED_a_suscriptores(void* paqueteVoid){
 		if(cola[i].nombreCola == paquete->codigo_operacion){
 
 			pthread_mutex_lock(&mutexColas);
-			t_list* listaDeSuscriptores = list_duplicate(cola[i].suscriptores);
-			pthread_mutex_unlock(&mutexColas);
 
 			int socketAUsar = 0;
-			int listaSize = list_size(listaDeSuscriptores);
+			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(listaDeSuscriptores, j);
+				int* idSuscriptor = list_get(cola[i].suscriptores, j);
 
 				pthread_mutex_lock(&mutexRepoTeam);
 				int existeTeam = check_si_existe_team(*idSuscriptor);
@@ -923,10 +993,19 @@ void enviar_mensaje_LOCALIZED_a_suscriptores(void* paqueteVoid){
 					list_add(localized_a_enviar->listaPosiciones, posicion);
 				}
 
-				enviar_localized_pokemon(localized_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
-			}
+				int enviado = enviar_localized_pokemon(localized_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
-			list_destroy(listaDeSuscriptores);
+				if (enviado != -1){
+					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+
+					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+				}
+				else{
+					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
+				}
+
+			}
+			pthread_mutex_unlock(&mutexColas);
 		}
 	}
 
