@@ -25,6 +25,7 @@ void* escucharGameBoy(){
 		quickLog("$-Me conecté con GameBoy");
 
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy);
+		free(paqueteNuevo);
 
 //		pthread_t escucharAppearedPokemonGameBoy;
 //		pthread_create(&escucharAppearedPokemonGameBoy, NULL, (void*)escucharColaAppearedPokemonGameBoy, NULL);
@@ -33,7 +34,7 @@ void* escucharGameBoy(){
 }
 
 int generarSocketsConBroker() {
-
+	quickLog("INICIO GENERAR SOCKETS");
 
 	conexionBroker = crearSocket();
 
@@ -70,19 +71,15 @@ int generarSocketsConBroker() {
 
 	int conexionCorrecta = 1;
 
-
 	//ENVIA GET Y ESCUCHA EL ID GET
 	if (conectarA(socketGet, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Ya se conecto a la cola de get para poder enviarle mensajes");
 		if (conectarA(socketIdGet, IP_BROKER, PUERTO_BROKER)) {
 			quickLog("$-Socket de recepcion de ids Get guardado.");
 
-			enviarGetDesde(socketGet);
-
-			quickLog("$-Se envian correctamente los get");
 		} else{
-				conexionCorrecta = -1;
-			}
+			conexionCorrecta = -1;
+		}
 	} else{
 		conexionCorrecta = -1;
 	 }
@@ -139,15 +136,20 @@ int generarSocketsConBroker() {
 		conexionCorrecta = -1;
 	 }
 
+	sleep(2);
 
 	return conexionCorrecta;
 }
 
 void crearHilosDeEscucha() {
 
-	while(!generarSocketsConBroker()){
+	while(generarSocketsConBroker() == -1){
+		quickLog("$-No se pudo conectar con Broker, se reintenta conexión");
 		sleep(TIEMPO_RECONEXION);
 	}
+
+	enviarGetDesde(socketGet);
+	quickLog("$-Se envian correctamente los get");
 
 	pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);
 	pthread_detach(escucharAppearedPokemon);
@@ -204,6 +206,10 @@ void* escucharColaCaughtPokemon(){
 			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
 			quickLog("$-Pudo enviar el ACK del caught");
 		}
+
+		free(paqueteNuevo->buffer->stream);
+		free(paqueteNuevo->buffer);
+		free(paqueteNuevo);
 
 	}
 }

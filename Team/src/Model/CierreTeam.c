@@ -8,7 +8,6 @@
 #include "CierreTeam.h"
 
 void freeEntrenadores();
-void liberarConexion(int socket_cliente);
 void liberarPokesGlobales();
 int tieneQueLiberarMovimiento(Entrenador* entrenador);
 void destruirPokemon(PokemonEnElMapa* poke);

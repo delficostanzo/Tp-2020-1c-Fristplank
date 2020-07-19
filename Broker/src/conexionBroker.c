@@ -26,7 +26,7 @@ void * esperarClientes() {
 		pthread_create(&thread, NULL, (void*) atenderCliente, sockets);
 		pthread_detach(thread);
 
-		sleep(1);
+		sleep(2);
 	}
 }
 
@@ -91,7 +91,6 @@ void atenderCliente(argumentos* sockets) {
 		pthread_mutex_unlock(&mutexEnvio);
 
 		log_info(logger, "Team se suscribió a 3 colas");
-		close(*cliente);
 		break;
 
 	case GAMECARD:;
@@ -378,7 +377,7 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 			break;
 		}
 
-		log_info(logger, "Mensaje recibido: %s", ID_COLA[paquete->codigo_operacion]);
+		log_info(logger, "Mensaje recibido: %s | ID Único proceso: %d", ID_COLA[paquete->codigo_operacion], args->id);
 
 		pthread_mutex_lock(&mutexColas);
 		agregarMensajeACola(paquete);
@@ -416,7 +415,32 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 				pthread_mutex_unlock(&mutexRepoTeam);
 				enviar_respuesta_id(respuesta_id, suscriptor->socketIdGet, -1, -1);
 			}
+		} else if(paquete->codigo_operacion == LOCALIZED_POKEMON){
+			t_localized_pokemon* localized = paquete->buffer->stream;
+			log_debug(logger, "Me llegan %d cantidad", localized->cantidadPosiciones);
+
+
+			char* posicionesImpresas = string_new();
+			string_append(&posicionesImpresas, "[");
+			for(int i = 0; i < localized->cantidadPosiciones; i++){
+				t_posicion* posicion = list_get(localized->listaPosiciones, i);
+				char* posicionAppend = string_from_format(" (%d,%d) ", posicion->posicionX, posicion->posicionY);
+				string_append(&posicionesImpresas, posicionAppend);
+				free(posicionAppend);
+			} string_append(&posicionesImpresas, "]");
+
+			log_debug(logger, "Lista de posiciones: %s", posicionesImpresas);
+			free(posicionesImpresas);
+		} else if(paquete->codigo_operacion == CAUGHT_POKEMON){
+			t_caught_pokemon* caught = paquete->buffer->stream;
+
+			if(caught->ok == 1){
+				log_debug(logger, "CAUGHT = [OK]");
+			}else{
+				log_debug(logger, "CAUGHT = [FALSE]");
+			}
 		}
+
 
 		enviar_mensaje_a_suscriptores(paquete);
 		log_info(logger, "Mensaje enviado a suscriptores.");
@@ -466,8 +490,8 @@ void escucharSocketACK(void* socketArgs){
 					 */
 
 					if(list_size(mensaje->ACKSuscriptores) == list_size(cola[i].suscriptores)){
-						//list_remove_and_destroy_element(cola[i].mensajes, j, (void*) liberoMensaje);
-						list_remove(cola[i].mensajes, j);
+						list_remove_and_destroy_element(cola[i].mensajes, j, (void*) liberoMensaje);
+//						list_remove(cola[i].mensajes, j);
 					}
 				}
 			}
@@ -479,7 +503,7 @@ void escucharSocketACK(void* socketArgs){
 }
 
 void liberoMensaje(t_metadata* mensaje){
-	list_destroy_and_destroy_elements(mensaje->ACKSuscriptores, (void*) liberoPuntero);
+	list_destroy(mensaje->ACKSuscriptores);
 	free(mensaje);
 }
 

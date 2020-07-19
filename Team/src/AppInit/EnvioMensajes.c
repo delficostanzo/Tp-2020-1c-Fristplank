@@ -21,9 +21,17 @@ void enviarGetDesde(int socketGet){
 	for(int index=0; index<list_size(objetivosGlobales);index++){
 		PokemonEnElMapa* poke = list_get(objetivosGlobales, index);
 		t_get_pokemon* getPoke = crearEstructuraGetDesde(poke);
-		enviar_get_pokemon(getPoke, socketGet, -1, -1);
-		//recibirIdGet(socketGet);
 
+		log_debug(logger, "%d", list_size(objetivosGlobales));
+
+		quickLog("Antes de enviar_get_pokemon");
+		enviar_get_pokemon(getPoke, socketGet, -1, -1);
+		quickLog("despues de enviar_get_pokemon");
+
+		t_paquete* recibirACK = recibir_mensaje(socketIdGet);
+		free(recibirACK->buffer->stream);
+		free(recibirACK->buffer);
+		free(recibirACK);
 	}
 
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
