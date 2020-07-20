@@ -182,10 +182,18 @@ void* escucharColaAppearedPokemon(){
 
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared);
 
-		enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
+		if(paqueteNuevo != NULL){
+			enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
+			free(paqueteNuevo);
+			quickLog("$-Pudo enviar el ACK de los appeared");
+		} else {
+			log_debug(logger, "Se desconecto el socket de Appeared Pokemon");
+			desconexion = 1;
+			pthread_mutex_lock(&semaforoDesconexion);
+			reconectarBroker();
+			pthread_mutex_unlock(&semaforoDesconexion);
+		}
 
-		free(paqueteNuevo);
-		quickLog("$-Pudo enviar el ACK de los appeared");
 	}
 }
 
@@ -207,11 +215,18 @@ void* escucharColaCaughtPokemon(){
 		if(paqueteNuevo != NULL){
 			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
 			quickLog("$-Pudo enviar el ACK del caught");
+			free(paqueteNuevo->buffer->stream);
+			free(paqueteNuevo->buffer);
+			free(paqueteNuevo);
+
+		} else {
+			log_debug(logger, "Se desconecto el socket de Caught Pokemon");
+			desconexion = 1;
+			pthread_mutex_lock(&semaforoDesconexion);
+			reconectarBroker();
+			pthread_mutex_unlock(&semaforoDesconexion);
 		}
 
-		free(paqueteNuevo->buffer->stream);
-		free(paqueteNuevo->buffer);
-		free(paqueteNuevo);
 
 	}
 }
@@ -223,13 +238,39 @@ void* escucharColaLocalizedPokemon(){
 
 		t_paquete* paqueteNuevo = recibirLocalizedYGuardalos(suscripcionLocalized);
 
-		if(paqueteNuevo != NULL) {
+		//si es -10 es que no se corto la conexion con broker pero tiene que dejar de escuchar localized
+		if(paqueteNuevo->ID == -10) {
 			enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
-			quickLog("$-Pudo enviar el ACK del localized");
-		} else{
+			free(paqueteNuevo);
 			liberarConexion(suscripcionLocalized);
 			liberarConexion(socketACKLocalized);
 			pthread_cancel(escucharLocalizedPokemon);
 		}
+		//si tiene que seguir recibiendo localized
+		else if(paqueteNuevo != NULL) {
+			enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
+			quickLog("$-Pudo enviar el ACK del localized");
+			free(paqueteNuevo->buffer->stream);
+			free(paqueteNuevo->buffer);
+			free(paqueteNuevo);
+		//si es null es que se desconecto del broker y tiene que reconectarse
+		} else {
+			log_debug(logger, "Se desconecto el socket de Localized Pokemon");
+			desconexion = 1;
+			pthread_mutex_lock(&semaforoDesconexion);
+			reconectarBroker();
+			pthread_mutex_unlock(&semaforoDesconexion);
+		}
+	}
+}
+
+void reconectarBroker(){
+	if (desconexion == 1) {
+		int conectado = generarSocketsConBroker();
+
+		while(conectado != 1){
+			conectado = generarSocketsConBroker();
+		}
+		desconexion = 0;
 	}
 }

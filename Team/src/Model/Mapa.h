@@ -53,6 +53,10 @@ int cantidadIntercambios;
 
 int noHayQueFinalizar;
 
+
+int desconexion;
+
+pthread_mutex_t semaforoDesconexion;
 t_config* config;
 
 
