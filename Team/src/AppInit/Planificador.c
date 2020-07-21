@@ -350,9 +350,11 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 					log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para terminar de hacer el intercambio", entrenadorMovido->numeroEntrenador);
 
 					//para el intercambio
+					int quatumSobrante = QUANTUM - distanciaHastaBloqueado;
+					//para el intercambio
 					int cpuIntercambio = entrenadorMovido->ciclosCPUFaltantesIntercambio;
-
-					if(QUANTUM < cpuIntercambio){
+					//nunca va a ser menor o igual, si no entraria en el primer if
+					if(quatumSobrante < cpuIntercambio){
 						entrenadorMovido->ciclosCPUConsumido += QUANTUM;
 						int loQueLeFalta = cpuIntercambio - QUANTUM;
 						entrenadorMovido->ciclosCPUFaltantesIntercambio = loQueLeFalta;

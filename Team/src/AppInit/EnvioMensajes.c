@@ -195,7 +195,8 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 			list_add(pokemonesLibres, pokemonNuevo);
 			pthread_mutex_unlock(&mutexPokemonesLibres);
 			pthread_mutex_lock(&mutexPokemonesRecibidos);
-			list_add(pokemonesRecibidos, pokemonNuevo);
+			setPokemonA(pokemonesRecibidos, pokemonNuevo);
+			t_list* pokesRecibidos = pokemonesRecibidos;
 			pthread_mutex_unlock(&mutexPokemonesRecibidos);
 			//pthread_mutex_unlock(&mutexPokemonesLibres);
 		//}
