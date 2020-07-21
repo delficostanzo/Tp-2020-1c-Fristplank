@@ -100,15 +100,15 @@ void atenderCliente(argumentos* sockets) {
 		gamecard->socketNew = aceptarConexion(*cliente);
 //		log_debug(logger, "socketNew: %d", gamecard->socketNew);
 		gamecard->socketACKNew = aceptarConexion(*cliente);
-//		log_debug(logger, "socketACKNew: %d", gamecard->socketACKNew);
+		log_debug(logger, "socketACKNew: %d", gamecard->socketACKNew);
 		gamecard->socketCatch = aceptarConexion(*cliente);
 //		log_debug(logger, "socketCatch: %d", gamecard->socketCatch);
 		gamecard->socketACKCatch = aceptarConexion(*cliente);
-//		log_debug(logger, "socketACKCatch: %d", gamecard->socketACKCatch);
+		log_debug(logger, "socketACKCatch: %d", gamecard->socketACKCatch);
 		gamecard->socketGet = aceptarConexion(*cliente);
 //		log_debug(logger, "socketGet: %d", gamecard->socketGet);
 		gamecard->socketACKGet = aceptarConexion(*cliente);
-//		log_debug(logger, "socketACKGet: %d", gamecard->socketACKGet);
+		log_debug(logger, "socketACKGet: %d", gamecard->socketACKGet);
 		gamecard->socketAppeared = aceptarConexion(*cliente);
 //		log_debug(logger, "socketAppeared: %d", gamecard->socketAppeared);
 		gamecard->socketCaught = aceptarConexion(*cliente);
@@ -135,12 +135,14 @@ void atenderCliente(argumentos* sockets) {
 		t_list* mensajesNew = mensajesAEnviar(gamecard->id, NEW_POKEMON);
 		pthread_mutex_unlock(&mutexColas);
 
-		lanzarHiloEscucha(gamecard->id, &(gamecard->socketAppeared));
+		lanzarHiloEscucha(gamecard->id, &gamecard->socketAppeared);
 		lanzarHiloEscucha(gamecard->id, &gamecard->socketLocalized);
 		lanzarHiloEscucha(gamecard->id, &gamecard->socketCaught);
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKNew, NEW_POKEMON);
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKGet, GET_POKEMON);
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKCatch, CATCH_POKEMON);
+
+		sleep(1);
 
 		pthread_mutex_lock(&mutexEnvio);
 		enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, gamecard->socketGet, gamecard->id);
@@ -149,7 +151,6 @@ void atenderCliente(argumentos* sockets) {
 		pthread_mutex_unlock(&mutexEnvio);
 
 		log_info(logger, "GameCard se suscribió a 3 colas");
-//			close(*cliente);
 		break;
 
 	case GAMEBOY:;
@@ -399,7 +400,6 @@ void lanzarHiloEscuchaACK(int id, int* socket, op_code cola){
 void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 
 	log_debug(logger, "START: escucharSocketMensajesACachear");
-	log_debug(logger, "Socket escuchado: %d", *(args->socket));
 
 	while(1){
 		log_debug(logger, "Esperando mensajes...");
@@ -452,7 +452,12 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 				pthread_mutex_unlock(&mutexRepoTeam);
 				enviar_respuesta_id(respuesta_id, suscriptor->socketIdGet, -1, -1);
 			}
-		} else if(paquete->codigo_operacion == LOCALIZED_POKEMON){
+		}
+
+		/* Solamente para mostrar en debug que llega
+		 *
+		 */
+		else if(paquete->codigo_operacion == LOCALIZED_POKEMON){
 			t_localized_pokemon* localized = paquete->buffer->stream;
 			log_debug(logger, "Me llegan %d cantidad", localized->cantidadPosiciones);
 
@@ -485,16 +490,18 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 	log_debug(logger, "END: escucharSocketMensajesACachear");
 }
 
-void escucharSocketACK(void* socketArgs){
+void escucharSocketACK(t_args_socket_ACK* args){
 
 	log_debug(logger, "START: escucharSocketACK");
-	t_args_socket_ACK* args = socketArgs;
+
+	log_debug(logger,"SOCKET %s ACK: %d",ID_COLA[args->cola],*(args->socket));
 
 	while(1){
+		log_info(logger, "Esperando mensajes ACK...");
 		t_paquete* paquete = recibir_mensaje(*(args->socket));
 
 		if(paquete == NULL){
-			log_info(logger, "Se perdió conexión con proceso ID [%d]", args->id);
+			log_info(logger, "Se perdió conexión ACK con proceso ID [%d]", args->id);
 			close(*args->socket);
 			free(args);
 			break;

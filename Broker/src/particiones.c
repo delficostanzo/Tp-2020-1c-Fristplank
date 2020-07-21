@@ -111,13 +111,13 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 			//si no retorno nada en BF y FF --> hay que el eliminar 1 particion
 			//FIFO ESCOGE EL MENSAJE MAS VIEJO
 			if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "FIFO")) { //considero que el primer nodo en particiones es la que entro primero
-				log_debug(logger, "Entro en if de FIFO");
+//				log_debug(logger, "Entro en if de FIFO");
 				list_sort(particiones, (void*) ordenarId);
-				log_debug(logger, "Ordeno");
+//				log_debug(logger, "Ordeno");
 				t_metadata* auxParticion = list_get(particiones, 0); //aca no tomo las auxTabla ya que lo voy a sacar
-				log_debug(logger, "list_get(particiones,0)");
+//				log_debug(logger, "list_get(particiones,0)");
 				eliminarParticion(auxParticion);
-				log_debug(logger, "termino de eliminar");
+//				log_debug(logger, "termino de eliminar");
 			}
 
 			else if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "LRU")) {

@@ -47,7 +47,7 @@ int generarSocketsConBroker() {
 		log_info(logger,"Suscripto a cola New Pokemon. Lanzando socket de escucha..");
 
 		if (conectarA(socketACKNewPokemon, IP_BROKER, puertoBrokerInt)) {
-			log_debug(logger, "Socket de ACK New Pokemon guardado.");
+			log_debug(logger, "Socket de ACK New Pokemon guardado. Valor: %d", socketACKNewPokemon);
 		}
 		else{
 			return -1;
@@ -258,13 +258,13 @@ void* escucharColaNewPokemon(){
 
 			log_info(logger, "<><> Mensaje NEW_POKEMON recibido <><>");
 
+			log_debug(logger, "Valor SOCKET ACK NEW: %d", socketACKNewPokemon);
+
 			if (enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID) == -1){
 				log_info(logger, "No se pudo enviar el mensaje a Broker.");
 			}else{
 				log_info(logger, "Se envió el ACK de NEW_POKEMON");
 			}
-
-
 
 			t_new_pokemon* new_pokemon = paqueteNuevo->buffer->stream;
 			pthread_t hiloProcesarNewPokemon;
