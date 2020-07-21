@@ -223,6 +223,7 @@ void signal_dump(int signal) {
 		  free(size);
 		  free(particion);
 		  free(particionLibre);
+		  nroParticion++;
 	  }
 
 	  char* particionActual = string_new();
@@ -256,6 +257,7 @@ void signal_dump(int signal) {
   }
 
  if((TAMANO_MEMORIA - offset) > 0){
+	nroParticion++;
 	char* finalMemoria = string_new();
 	char* particion = string_from_format("Particion %d:",nroParticion);
 	char* baseLimite = string_from_format(" %p - %p.", (memoriaCache + offset),(memoriaCache+TAMANO_MEMORIA));

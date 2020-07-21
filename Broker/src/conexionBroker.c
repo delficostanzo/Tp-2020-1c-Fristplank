@@ -1000,6 +1000,7 @@ void enviar_mensaje_LOCALIZED_a_suscriptores(void* paqueteVoid){
 					list_add(localized_a_enviar->listaPosiciones, posicion);
 				}
 
+				log_debug(logger, "LOCALIZED ENVIADO: CANTIDAD POSICIONES: [%d]", localized_a_enviar->cantidadPosiciones);
 				int enviado = enviar_localized_pokemon(localized_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
