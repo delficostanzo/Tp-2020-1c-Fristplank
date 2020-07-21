@@ -2,7 +2,6 @@
 #include "EnvioMensajes.h"
 
 static void agregarPokemonSiLoNecesita(char* nombrePokemon, t_posicion posicion);
-static void agregarComoIdCorrelativoLocalized(int idCorrelativo);
 static void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsperando);
 static void recibirIdCatch(Entrenador* entrenador);
 static int puedeSeguirRecibiendo();
@@ -12,6 +11,8 @@ static int tieneComoIdCorrelativoCaught(int idBuscado);
 static Entrenador* entrenadorQueTieneId(int idCatchQueResponde);
 static void procesarEspera(Entrenador*  entrenador, uint32_t atrapo);
 static int noRecibioDeEsaEspecie(char* nombrePoke);
+static int hayCorrelativos();
+static int seNecesita(char* pokemon);
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -38,20 +39,6 @@ void enviarGetDesde(int socketGet){
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
 }
 
-//TODO: verificar que si no lo recibe por un tiempo es que el broker no funciona
-void recibirIdGet(int socketGet) {
-	t_paquete* paqueteIdRecibido = recibir_mensaje(socketGet);
-	t_respuesta_id* idGet = paqueteIdRecibido->buffer->stream;
-	agregarComoIdCorrelativoLocalized(idGet->idCorrelativo);
-}
-
-void agregarComoIdCorrelativoLocalized(int idCorrelativo){
-	//lista de ids correlativos globales que se mandaron
-	//recien se agregan cuando recibo la respuesta del broker
-
-	list_add(idsCorrelativosLocalized, &idCorrelativo);
-}
-
 t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 
 	t_paquete* paqueteLocalized = recibir_mensaje(socketLocalized);
@@ -64,7 +51,7 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 	if(paqueteLocalized != NULL){
 		t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
 		if(puedeSeguirRecibiendo()) {
-			if(noRecibioDeEsaEspecie(localized->pokemon)) {
+			if(noRecibioDeEsaEspecie(localized->pokemon) && seNecesita(localized->pokemon)) {
 				log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
 
 				char* posicionesImpresas = string_new();
@@ -79,7 +66,7 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 				log_info(LO, "Lista de posiciones: %s", posicionesImpresas);
 				free(posicionesImpresas);
 
-				quickLog("$-Se recibio un localized");
+				quickLog("$-Se recibio un localized necesario");
 				//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
 				//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
 				int cantidad = (int) (localized->cantidadPosiciones);
@@ -97,10 +84,13 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 				return paqueteLocalized;
 			}
 
+			log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
+			log_info(LO, "Nadie necesita al poke localizado o ya se recibio de esa especie");
 			for(int i = 0; i < localized->cantidadPosiciones; i++){
 				t_posicion* posicion = list_remove(localized->listaPosiciones, i);
 				free(posicion);
 			}
+			free(localized->pokemon);
 			return paqueteLocalized;
 
 		}
@@ -108,6 +98,7 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 			t_posicion* posicion = list_remove(localized->listaPosiciones, i);
 			free(posicion);
 		}
+		log_info(logger, "Ya no deberia seguir escuchando localized");
 		paqueteLocalized->ID = -10;
 		list_destroy(localized->listaPosiciones);
 		free(paqueteLocalized->buffer->stream);
@@ -129,25 +120,26 @@ int puedeSeguirRecibiendo() {
 }
 
 int noRecibioDeEsaEspecie(char* nombrePoke) {
+	int cumple = 1;
 	pthread_mutex_lock(&mutexPokemonesRecibidos);
-	PokemonEnElMapa* pokeEncontrado = buscarPorNombre(nombrePoke, pokemonesRecibidos);
+	if(list_is_empty(pokemonesRecibidos) != 1) {
+		PokemonEnElMapa* pokeEncontrado = buscarPorNombre(nombrePoke, pokemonesRecibidos);
+		//si no es null es que nadie recibio antes a esa especie
+		cumple = pokeEncontrado != NULL;
+	}
 	pthread_mutex_unlock(&mutexPokemonesRecibidos);
 	//si no encontro ese poke en la lista de recibidos
-	return pokeEncontrado != NULL;
+	return cumple;
 }
 
-//int tieneComoIdCorrelativoLocalized(int idBuscado) {
-//	typedef bool(*erasedTypeFind)(void*);
-//
-//	int existe(int idExistente) {
-//		return idExistente == idBuscado;
-//	}
-//	if(list_is_empty(idsCorrelativosLocalized) == 1) {
-//		return 0;
-//	}
-//	//me fijo de la lista de idsCorrelativos que mande como get, si coincide con el id del que recien llego
-//	return list_find(idsCorrelativosLocalized, (erasedTypeFind)existe) != NULL;
-//}
+int seNecesita(char* pokemon) {
+	pthread_mutex_lock(&mutexObjetivosGlobales);
+	t_list* pokesGlobales = objetivosGlobales;
+	PokemonEnElMapa* pokeNecesitado = buscarPorNombre(pokemon, objetivosGlobales);
+	pthread_mutex_unlock(&mutexObjetivosGlobales);
+	int cumple = pokeNecesitado != NULL;
+	return cumple;
+}
 
 //////////APPEARED//////////////
 t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
@@ -157,20 +149,30 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 	//sudo strace -s 255 -p 4299
 
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
+	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 	//quickLog("Recibe el appeared");
-	if (paqueteAppeared != NULL) {
-		t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
+	if (paqueteAppeared != NULL && seNecesita(appeared->pokemon)) {
 
-			agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
+		agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
 
-			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+		log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
 
-			log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+		log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
-			free(appeared);
-			free(paqueteAppeared->buffer);
-			return paqueteAppeared;
+		free(appeared);
+		free(paqueteAppeared->buffer);
+		return paqueteAppeared;
+
+	} else if(paqueteAppeared != NULL) {
+
+		log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+		log_info(LO, "Nadie necesita al nuevo poke appeared");
+		free(appeared->pokemon);
+		free(appeared->posicion);
+		free(appeared);
+		free(paqueteAppeared->buffer);
+		return paqueteAppeared;
 	}
 
 	return NULL;
@@ -198,9 +200,6 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 			setPokemonA(pokemonesRecibidos, pokemonNuevo);
 			t_list* pokesRecibidos = pokemonesRecibidos;
 			pthread_mutex_unlock(&mutexPokemonesRecibidos);
-			//pthread_mutex_unlock(&mutexPokemonesLibres);
-		//}
-
 	}
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
 
@@ -284,9 +283,6 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsp
 t_paquete* recibirCaught(int socketCaught){
 	t_paquete* paqueteCaught = recibir_mensaje(socketCaught);
 
-	sem_wait(&semaforoCorrelativos);
-	int noVacio = list_is_empty(idsCorrelativosCaught) != 1;
-	sem_post(&semaforoCorrelativos);
 
 	if(paqueteCaught != NULL){
 		t_caught_pokemon* caught = paqueteCaught->buffer->stream;
@@ -294,14 +290,14 @@ t_paquete* recibirCaught(int socketCaught){
 
 
 
-		if(noVacio && tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO)) {
+		if(hayCorrelativos() && tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO)) {
 			//el entrenador que hizo el catch del caught respondido cambia de estado de acuerdo a la respuesta
 
 			ejecutarRespuestaCaught(paqueteCaught->ID_CORRELATIVO, paqueteCaught);
 			quickLog("$-El entrenador que esperaba el caught fue procesado");
 			return paqueteCaught;
 		}
-	} else if (noVacio){ //se corto la conexion al escuchar respuestas caught
+	} else if (hayCorrelativos()){ //se corto la conexion al escuchar respuestas caught
 		//tomo todas las respuestas que faltaban como true
 		log_info(LO, "Se corto la conexion con el Broker. Por default, los entrenadores esperando respuesta atrapan al pokemon");
 		for(int index = 0; index < list_size(entrenadoresEsperandoRespuesta()); index ++) {
@@ -314,6 +310,14 @@ t_paquete* recibirCaught(int socketCaught){
 	}
 
 	return NULL;
+}
+
+
+int hayCorrelativos(){
+	sem_wait(&semaforoCorrelativos);
+	int noVacio = list_is_empty(idsCorrelativosCaught) != 1;
+	sem_post(&semaforoCorrelativos);
+	return noVacio;
 }
 
 int tieneComoIdCorrelativoCaught(int idBuscado) {

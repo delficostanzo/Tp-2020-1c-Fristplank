@@ -27,9 +27,6 @@ void* escucharGameBoy(){
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy);
 		free(paqueteNuevo);
 
-//		pthread_t escucharAppearedPokemonGameBoy;
-//		pthread_create(&escucharAppearedPokemonGameBoy, NULL, (void*)escucharColaAppearedPokemonGameBoy, NULL);
-//		pthread_detach(escucharAppearedPokemonGameBoy);
 	}
 }
 

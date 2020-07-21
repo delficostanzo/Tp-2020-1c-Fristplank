@@ -14,6 +14,7 @@ static int terminarSiTodosExit();
 static void logearResultadosEntrenadores();
 static int ciclosTotales();
 static int entrenadorNoEstaEnListaReady(Entrenador* entrenador);
+static int cantidadPokesLibres();
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -22,7 +23,10 @@ void planificarEntrenadores(){
 	int cumple = noEstanTodosEnExit();
 	while(cumple){ // lista de entrenadores que no estan en exit
 		// se pasan entrenadores a READY segun su condicion
-		pasarAReadyParaAtrapar();
+		if(cantidadPokesLibres() != 0) {
+			pasarAReadyParaAtrapar();
+		}
+
 		pasarAReadyParaIntercambiar();
 		pasarAExec();
 		if(terminarSiTodosExit()) {
@@ -44,9 +48,17 @@ bool noEstanTodosEnExit(){
 
 ///////////READY/////////////////
 
+int cantidadPokesLibres() {
+	pthread_mutex_lock(&mutexPokemonesLibres);
+	int cantidadDePokesLibres = list_size(pokemonesLibres);
+	pthread_mutex_unlock(&mutexPokemonesLibres);
+	return cantidadDePokesLibres;
+}
+
 //paso a ready los entrenadores que esten mas cerca
 void pasarAReadyParaAtrapar(){
 	typedef bool(*erasedTypeFilter)(void*);
+
 
 	int tieneEstadoNewODormido(Entrenador* entrenador) {
 		pthread_mutex_lock(&entrenador->mutexEstado);
@@ -55,12 +67,8 @@ void pasarAReadyParaAtrapar(){
 		return cumple;
 	}
 
-	pthread_mutex_lock(&mutexPokemonesLibres);
-	int cantidadDePokesLibres = list_size(pokemonesLibres);
-	pthread_mutex_unlock(&mutexPokemonesLibres);
-
 	//asignamos objetivo al entrenador mas cercano
-	for(int index=0; index < cantidadDePokesLibres; index++){
+	for(int index=0; index < cantidadPokesLibres(); index++){
 
 		pthread_mutex_lock(&mutexEntrenadores);
 		t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
@@ -74,11 +82,6 @@ void pasarAReadyParaAtrapar(){
 			pthread_mutex_unlock(&mutexPokemonesLibres);
 
 			if(pokemonLibre != NULL){
-
-	//			pthread_mutex_lock(&mutexEntrenadores);
-	//			t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
-	//			pthread_mutex_unlock(&mutexEntrenadores);
-
 				pthread_mutex_lock(&mutexEntrenadores);
 				//apuntan a los mismos entrenadores globales
 				Entrenador* entrenadorAReady =  asignarObjetivoA(entrenadoresPosibles, pokemonLibre);
