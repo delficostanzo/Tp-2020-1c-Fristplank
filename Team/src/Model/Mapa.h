@@ -67,6 +67,8 @@ pthread_mutex_t mutexPokemonesLibres;
 pthread_mutex_t mutexPokemonesRecibidos;
 pthread_mutex_t mutexListaEntrenadoresReady;
 sem_t semaforoCatch;
+sem_t esperandoPasarAlgunoAExec;
+sem_t arrancarPlan;
 
 t_list* entrenadores;
 t_list* objetivosTotales;

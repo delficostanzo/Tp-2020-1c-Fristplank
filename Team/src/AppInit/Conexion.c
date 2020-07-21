@@ -35,7 +35,7 @@ int generarSocketsConBroker() {
 
 	conexionBroker = crearSocket();
 
-	while ((conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) != 1 && noHayQueFinalizar) {
+	while ((conectarA(conexionBroker, IP_BROKER, PUERTO_BROKER)) != 1) {
 		quickLog("$-Intentando conexión a Broker...");
 		log_info(LO, "Se corto la conexion con el Broker, se reintentara en %d segundos", TIEMPO_RECONEXION);
 		sleep(TIEMPO_RECONEXION);

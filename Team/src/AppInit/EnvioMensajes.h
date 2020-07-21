@@ -6,6 +6,7 @@
 #include "../Model/EntrenadoresPorEstado.h"
 #include<commons/string.h>
 #include"Conexion.h"
+#include"Planificador.h"
 
 Entrenador* entrenadorQueEspera;
 

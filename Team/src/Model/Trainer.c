@@ -119,6 +119,8 @@ void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado){
 }
 
 void estadoSiAtrapo(Entrenador* entrenador) {
+
+
 	quickLog("$-El entrenador va a cambiar de estado por atrapar un pokemon");
 	if(sonIguales(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		//ya agarro todos sus pokemones
@@ -130,6 +132,7 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 		asignarMovimientoPorDeadlock(entrenador);
 		pasarADeadlock(entrenador);
 		log_info(LO, "El entrenador %c paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
+		pasarAReadyParaIntercambiar();
 	}
 	else {
 		pasarADormido(entrenador);

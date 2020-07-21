@@ -21,13 +21,17 @@ typedef bool(*erasedTypeFilter)(void*);
 
 void planificarEntrenadores(){
 	int cumple = noEstanTodosEnExit();
+
+	sem_wait(&arrancarPlan);
 	while(cumple){ // lista de entrenadores que no estan en exit
 		// se pasan entrenadores a READY segun su condicion
-		if(cantidadPokesLibres() != 0) {
-			pasarAReadyParaAtrapar();
-		}
+//		if(cantidadPokesLibres() != 0) {
+//			pasarAReadyParaAtrapar();
+//		}
+//
+//		pasarAReadyParaIntercambiar();
 
-		pasarAReadyParaIntercambiar();
+		sem_wait(&esperandoPasarAlgunoAExec);
 		pasarAExec();
 		if(terminarSiTodosExit()) {
 			break;
@@ -67,8 +71,9 @@ void pasarAReadyParaAtrapar(){
 		return cumple;
 	}
 
+	int cantidad = cantidadPokesLibres();
 	//asignamos objetivo al entrenador mas cercano
-	for(int index=0; index < cantidadPokesLibres(); index++){
+	for(int index=0; index < cantidad; index++){
 
 		pthread_mutex_lock(&mutexEntrenadores);
 		t_list* entrenadoresPosibles = list_filter(entrenadores, (erasedTypeFilter)tieneEstadoNewODormido);
@@ -135,15 +140,16 @@ Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemo
 }
 
 void cambiarCantidadEnPokesLibres(PokemonEnElMapa* pokeLibre){
-	pthread_mutex_lock(&mutexPokemonesLibres);
+	//pthread_mutex_lock(&mutexPokemonesLibres);
 	disminuirCantidadPokemones(pokeLibre, pokemonesLibres);
-	pthread_mutex_unlock(&mutexPokemonesLibres);
+	//pthread_mutex_unlock(&mutexPokemonesLibres);
 }
 
 void cambiarCantidadEnPokesObj(PokemonEnElMapa* pokeLibre){
-	pthread_mutex_lock(&mutexObjetivosGlobales);
+	//pthread_mutex_lock(&mutexObjetivosGlobales);
+	//saco el mutex porque esta funcion es llamada dentro de dicho mutex
 	disminuirCantidadPokemones(pokeLibre, objetivosGlobales);
-	pthread_mutex_unlock(&mutexObjetivosGlobales);
+	//pthread_mutex_unlock(&mutexObjetivosGlobales);
 }
 
 void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes){

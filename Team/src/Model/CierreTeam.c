@@ -14,7 +14,6 @@ void destruirPokemon(PokemonEnElMapa* poke);
 
 void terminarTeam() {
 
-	noHayQueFinalizar = 0;
 
 	if (config != NULL) {
 		config_destroy(config); //destruye la esctructura de config en memoria, no elimina el archivo de config

@@ -39,6 +39,10 @@ void iniciarVariables(){
 	pthread_mutex_init(&mutexPokemonesRecibidos, NULL);
 	pthread_mutex_init(&mutexListaEntrenadoresReady, NULL);
 	sem_init(&semaforoCatch, 1, 0);
+	//lo inicializo en 0 para que en el primer wait del planificador no ejecutes
+	sem_init(&esperandoPasarAlgunoAExec, 1, 1);
+	sem_init(&arrancarPlan, 1, 0);
+
 
 	idsCorrelativosCaught = list_create();
 	sem_init(&semaforoCorrelativos, 1, 1);

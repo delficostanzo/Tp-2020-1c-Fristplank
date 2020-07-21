@@ -135,6 +135,7 @@ int noRecibioDeEsaEspecie(char* nombrePoke) {
 int seNecesita(char* pokemon) {
 	pthread_mutex_lock(&mutexObjetivosGlobales);
 	t_list* pokesGlobales = objetivosGlobales;
+	log_info(logger, "Cantidad de objetivos globales: %d", list_size(objetivosGlobales));
 	PokemonEnElMapa* pokeNecesitado = buscarPorNombre(pokemon, objetivosGlobales);
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
 	int cumple = pokeNecesitado != NULL;
@@ -153,9 +154,10 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 	//quickLog("Recibe el appeared");
 	if (paqueteAppeared != NULL && seNecesita(appeared->pokemon)) {
 
+		log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+
 		agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
 
-		log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
 
 		log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
@@ -200,8 +202,13 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 			setPokemonA(pokemonesRecibidos, pokemonNuevo);
 			t_list* pokesRecibidos = pokemonesRecibidos;
 			pthread_mutex_unlock(&mutexPokemonesRecibidos);
+
+
 	}
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
+
+	pasarAReadyParaAtrapar();
+	sem_post(&arrancarPlan);
 
 }
 
