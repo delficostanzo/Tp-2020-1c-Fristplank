@@ -7,6 +7,7 @@
 
 #include "EntrenadoresPorEstado.h"
 
+int tieneEstadoNew(Entrenador* entrenador);
 
 t_list* entrenadoresBloqueados();
 typedef bool(*erasedTypeFilter)(void*);
@@ -59,10 +60,10 @@ t_list* entrenadoresBloqueados() {
 		return cumple;
 	}
 
-	pthread_mutex_lock(&mutexEntrenadores);
+	//pthread_mutex_lock(&mutexEntrenadores);
 	//si no encuentra ninguno devuelve una lista vacia
 	t_list* entrenadoresBlock = list_filter(entrenadores, (erasedTypeFilter)estaBloqueado);
-	pthread_mutex_unlock(&mutexEntrenadores);
+	//pthread_mutex_unlock(&mutexEntrenadores);
 
 	return entrenadoresBlock;
 }
@@ -71,7 +72,7 @@ t_list* entrenadoresNew(void) {
 	int esNew(Entrenador* entrenador) {
 		pthread_mutex_lock(&entrenador->mutexEstado);
 		int cumple = entrenador->estado == 1;
-		pthread_mutex_lock(&entrenador->mutexEstado);
+		pthread_mutex_unlock(&entrenador->mutexEstado);
 		return cumple;
 	}
 
@@ -115,4 +116,20 @@ Entrenador* entrenadorExec(void) {
 	return entrenadorExec;
 }
 
+
+int hayEntrenadoresEnNewODormido() {
+	pthread_mutex_lock(&mutexEntrenadores);
+	log_info(LO, "Aca si llega");
+	t_list* entrena = entrenadores;
+	int cumple = list_any_satisfy(entrenadores, tieneEstadoNewODormido);
+	pthread_mutex_unlock(&mutexEntrenadores);
+	return cumple;
+}
+
+int tieneEstadoNew(Entrenador* entrenador) {
+	pthread_mutex_lock(&entrenador->mutexEstado);
+	int cumple = entrenador->estado == 1;
+	pthread_mutex_unlock(&entrenador->mutexEstado);
+	return cumple;
+}
 

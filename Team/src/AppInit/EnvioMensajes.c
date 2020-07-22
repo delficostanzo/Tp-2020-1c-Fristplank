@@ -1,7 +1,7 @@
 
 #include "EnvioMensajes.h"
 
-static void agregarPokemonSiLoNecesita(char* nombrePokemon, t_posicion posicion);
+static void agregarPokemonSiLoNecesita(char* nombrePokemon, t_posicion posicionNuevoPoke);
 static void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsperando);
 static void recibirIdCatch(Entrenador* entrenador);
 static int puedeSeguirRecibiendo();
@@ -51,7 +51,8 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 	if(paqueteLocalized != NULL){
 		t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
 		if(puedeSeguirRecibiendo()) {
-			if(noRecibioDeEsaEspecie(localized->pokemon) && seNecesita(localized->pokemon)) {
+			int esNecesario = seNecesita(localized->pokemon);
+			if(noRecibioDeEsaEspecie(localized->pokemon) && esNecesario) {
 				log_info(LO, "Se recibio el Localized | Pokemon: %s | Cantidad de posiciones: %d", localized->pokemon, localized->cantidadPosiciones);
 
 				char* posicionesImpresas = string_new();
@@ -69,12 +70,19 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 				quickLog("$-Se recibio un localized necesario");
 				//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
 				//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
-				int cantidad = (int) (localized->cantidadPosiciones);
-				for(int index=0; index<cantidad; index++){
+				pthread_mutex_lock(&mutexObjetivosGlobales);
+				int cantidadQueNecesito = buscarPorNombre(localized->pokemon, objetivosGlobales)->cantidad;
+				pthread_mutex_unlock(&mutexObjetivosGlobales);
+				for(int index=0; index<localized->cantidadPosiciones; index++){
 					//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
 					t_posicion* posicion = list_get(localized->listaPosiciones,index);
 
-					agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
+					if(index <= cantidadQueNecesito) {
+						agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
+					} else { //las posiciones del poke que vienen de mas
+						free(posicion);
+					}
+
 
 				}
 
@@ -94,6 +102,7 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 			return paqueteLocalized;
 
 		}
+
 		for(int i = 0; i < localized->cantidadPosiciones; i++){
 			t_posicion* posicion = list_remove(localized->listaPosiciones, i);
 			free(posicion);
@@ -134,8 +143,7 @@ int noRecibioDeEsaEspecie(char* nombrePoke) {
 
 int seNecesita(char* pokemon) {
 	pthread_mutex_lock(&mutexObjetivosGlobales);
-	t_list* pokesGlobales = objetivosGlobales;
-	log_info(logger, "Cantidad de objetivos globales: %d", list_size(objetivosGlobales));
+	//log_info(logger, "Cantidad de objetivos globales: %d", list_size(objetivosGlobales));
 	PokemonEnElMapa* pokeNecesitado = buscarPorNombre(pokemon, objetivosGlobales);
 	pthread_mutex_unlock(&mutexObjetivosGlobales);
 	int cumple = pokeNecesitado != NULL;
@@ -150,31 +158,43 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 	//sudo strace -s 255 -p 4299
 
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
-	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
+
 	//quickLog("Recibe el appeared");
-	if (paqueteAppeared != NULL && seNecesita(appeared->pokemon)) {
 
-		log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+	if (paqueteAppeared != NULL) {
 
-		agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
+		t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
+		int esNecesario = seNecesita(appeared->pokemon);
 
+		if(esNecesario) {
 
+			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
-		log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+//			argumentosAAgregar* args = malloc(sizeof(argumentosAAgregar));
+//			args->nombrePoke = appeared->pokemon;
+//			args->posicion = *appeared->posicion;
+//
+//			pthread_t agregarAppeared;
+//			pthread_create(&agregarAppeared, NULL, (void*)agregarPokemonSiLoNecesita, args);
+//			pthread_detach(agregarAppeared);
+			agregarPokemonSiLoNecesita(appeared->pokemon, *appeared->posicion);
 
-		free(appeared);
-		free(paqueteAppeared->buffer);
-		return paqueteAppeared;
+			log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
-	} else if(paqueteAppeared != NULL) {
+			free(appeared);
+			free(paqueteAppeared->buffer);
+			return paqueteAppeared;
 
-		log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
-		log_info(LO, "Nadie necesita al nuevo poke appeared");
-		free(appeared->pokemon);
-		free(appeared->posicion);
-		free(appeared);
-		free(paqueteAppeared->buffer);
-		return paqueteAppeared;
+		} else {
+
+			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+			log_info(LO, "Nadie necesita al nuevo poke appeared");
+			free(appeared->pokemon);
+			free(appeared->posicion);
+			free(appeared);
+			free(paqueteAppeared->buffer);
+			return paqueteAppeared;
+		}
 	}
 
 	return NULL;
@@ -183,32 +203,42 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 
 //si tengo ese pokemon como objetivo lo agregego en la lista de pokemones libres
 void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoPoke){
-
 	//si ese pokemon lo tengo como objetivo
-	pthread_mutex_lock(&mutexObjetivosGlobales);
-	t_list* pokemonesAAtrapar = objetivosGlobales;
+	//pthread_mutex_lock(&mutexObjetivosGlobales);
+	//t_list* pokemonesAAtrapar = objetivosGlobales;
 	//en el nombre de los globales hay cualquier cosa
-	if(buscarPorNombre(nombreNuevoPoke, pokemonesAAtrapar) != NULL) {
+	//if(buscarPorNombre(nombreNuevoPoke, pokemonesAAtrapar) != NULL) {
 
 			//solo lo agrego a la lista
 			PokemonEnElMapa* pokemonNuevo = newPokemon();
 			setPosicionTo(pokemonNuevo, posicionNuevoPoke);
 			setNombreTo(pokemonNuevo, nombreNuevoPoke);
 			setCantidadTo(pokemonNuevo, 1);
+
+			pthread_mutex_lock(&mutexPokemonesRecibidos);
+			setPokemonA(pokemonesRecibidos, pokemonNuevo);
+			pthread_mutex_unlock(&mutexPokemonesRecibidos);
+
 			pthread_mutex_lock(&mutexPokemonesLibres);
 			list_add(pokemonesLibres, pokemonNuevo);
 			pthread_mutex_unlock(&mutexPokemonesLibres);
-			pthread_mutex_lock(&mutexPokemonesRecibidos);
-			setPokemonA(pokemonesRecibidos, pokemonNuevo);
-			t_list* pokesRecibidos = pokemonesRecibidos;
-			pthread_mutex_unlock(&mutexPokemonesRecibidos);
 
 
+	//}
+	//pthread_mutex_unlock(&mutexObjetivosGlobales);
+
+	int hayEnNewODormido = hayEntrenadoresEnNewODormido();
+	log_info(LO, "OFICIALMENTE NO LLEGA ACA. %d", hayEnNewODormido);
+	if(hayEnNewODormido) { //quedan entrenadores sin planificar
+		log_info(LO, "-Guido inso antes");
+		pthread_mutex_lock(&mutexEntrenadores);
+		pasarAReadyParaAtrapar();
+		pthread_mutex_unlock(&mutexEntrenadores);
+		log_info(LO, "-Guido inso despues sigue siendo");
+
+	} else {
+		sem_post(&arrancarPlan);
 	}
-	pthread_mutex_unlock(&mutexObjetivosGlobales);
-
-	pasarAReadyParaAtrapar();
-	sem_post(&arrancarPlan);
 
 }
 
@@ -232,6 +262,9 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
 	//para saber que respuesta de caught es de el
 	quickLog("$-Esta esperando recibir el id de su catch enviado");
+
+	//sem_post(&esperandoPasarAlgunoAExec);
+
 	recibirIdCatch(entrenadorEsperando);
 
 
@@ -262,6 +295,7 @@ void recibirIdCatch(Entrenador* entrenador) {
 		//sleep(3);
 		agregarAtrapado(entrenador, entrenador->movimientoEnExec->pokemonNecesitado);
 		estadoSiAtrapo(entrenador);
+		sem_post(&esperandoPasarAlgunoAExec);
 		//free(paqueteIdRecibido);
 
 	}
@@ -312,6 +346,7 @@ t_paquete* recibirCaught(int socketCaught){
 			//agrego el pokemon atrapado y cambio al entrenador de estado
 			agregarAtrapado(entrenadorEsperando, entrenadorEsperando->movimientoEnExec->pokemonNecesitado);
 			estadoSiAtrapo(entrenadorEsperando);
+			sem_post(&esperandoPasarAlgunoAExec);
 		}
 
 	}
@@ -423,7 +458,12 @@ void procesarEspera(Entrenador*  entrenador, uint32_t atrapo){
 		pthread_mutex_unlock(&mutexObjetivosGlobales);
 
 		pasarADormido(entrenador);
+
+		pthread_mutex_lock(&mutexEntrenadores);
+		pasarAReadyParaAtrapar();
+		pthread_mutex_unlock(&mutexEntrenadores);
 	}
+	sem_post(&esperandoPasarAlgunoAExec);
 
 	pthread_mutex_lock(&entrenador->mutexEstado);
 	log_info(logger, "$-Luego de recibir la respuesta del caught el entrenador quedo en estado %d", entrenador->estado);

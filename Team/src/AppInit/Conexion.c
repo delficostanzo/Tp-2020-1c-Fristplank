@@ -140,12 +140,10 @@ int generarSocketsConBroker() {
 
 void crearHilosDeEscucha() {
 
-	if(generarSocketsConBroker() == -1){
+	while(generarSocketsConBroker() == -1){
 		quickLog("$-No se pudo conectar con Broker, se reintenta conexión");
 		sleep(TIEMPO_RECONEXION);
-		generarSocketsConBroker();
 	}
-
 
 
 	pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);

@@ -66,11 +66,14 @@ void pasarADormido(Entrenador* entrenador);
 void pasarADeadlock(Entrenador* entrenador);
 int noEstaEnExit(Entrenador* entrenador);
 int estaEnExit(Entrenador* entrenador);
-void estadoSiAtrapo(Entrenador* entrenador);
 void pasarABlockEsperando(Entrenador* entrenador);
 int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);
 void asignarMovimientoPorDeadlock(Entrenador* entrenador);
 int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
 int esteComoIntercambio(Entrenador* entrenador);
+int sonIguales(t_list* objetivos, t_list* atrapados);
+int tienenLaMismaCantidad(t_list* objetivos, t_list* atrapados);
+int tieneEstadoNewODormido(Entrenador* entrenador);
+int entrenadorNoEstaEnListaReady(Entrenador* entrenador);
 
 #endif /* SRC_MODEL_TRAINER_H_ */

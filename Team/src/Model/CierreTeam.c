@@ -40,6 +40,8 @@ void terminarTeam() {
 	pthread_mutex_destroy(&mutexListaEntrenadoresReady);
 	sem_destroy(&semaforoCatch);
 	sem_destroy(&semaforoCorrelativos);
+	sem_destroy(&esperandoPasarAlgunoAExec);
+	sem_destroy(&arrancarPlan);
 
 	quickLog("Se liberan los semaforos");
 
@@ -89,9 +91,9 @@ void freeEntrenadores() {
 			free(entrenador->movimientoEnExec->pokemonNecesitado->nombre);
 			free(entrenador->movimientoEnExec->pokemonNecesitado);
 			//son copias de los atrapados asi que tambien hay que liberarlos
-			if(entrenador->movimientoEnExec->pokemonAIntercambiar->nombre == NULL) {
-				free(entrenador->movimientoEnExec->pokemonAIntercambiar->nombre);
-			}
+//			if(entrenador->movimientoEnExec->pokemonAIntercambiar->nombre == NULL) {
+//				free(entrenador->movimientoEnExec->pokemonAIntercambiar->nombre);
+//			}
 
 			free(entrenador->movimientoEnExec->pokemonAIntercambiar);
 			//pthread_cancel(entrenador->hiloEntrenador);
