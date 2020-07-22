@@ -21,7 +21,7 @@ typedef bool(*erasedTypeFilter)(void*);
 void planificarEntrenadores(){
 	int cumple = noEstanTodosEnExit();
 
-	sem_wait(&arrancarPlan);
+	//sem_wait(&arrancarPlan);
 	while(cumple){ // lista de entrenadores que no estan en exit
 		// se pasan entrenadores a READY segun su condicion
 //		if(cantidadPokesLibres() != 0) {
@@ -115,6 +115,8 @@ void pasarAReadyParaAtrapar(){
 
 Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre){
 	Entrenador* entrenadorAAsignar = entrenadorMasCercanoA(pokemonLibre, entrenadoresAMover);
+	//log_info(LO, "--El entrenador mas cercano al poke %s es el %c", pokemonLibre->nombre, entrenadorAAsignar->numeroEntrenador);
+
 	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
 	movimiento->pokemonNecesitado = asignarPokemonCopia(pokemonLibre);
 	entrenadorAAsignar->movimientoEnExec = movimiento;

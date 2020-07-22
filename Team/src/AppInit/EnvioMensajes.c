@@ -216,9 +216,9 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 		//pthread_mutex_unlock(&mutexEntrenadores);
 		log_info(LO, "-Guido inso despues sigue siendo");
 
-		//sem_post(&esperandoPasarAlgunoAExec);
-	} else {
-		sem_post(&arrancarPlan);
+		sem_post(&esperandoPasarAlgunoAExec);
+//	} else {
+//		sem_post(&arrancarPlan);
 	}
 
 }

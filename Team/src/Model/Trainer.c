@@ -62,6 +62,10 @@ Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores
 	bool estaMasCerca(Entrenador* entrenador1, Entrenador* entrenador2) {
 		int distanciaEntrenador1 = distanciaEntre(entrenador1->posicion, &(pokemon->posicion));
 		int distanciaEntrenador2 = distanciaEntre(entrenador2->posicion, &(pokemon->posicion));
+
+		log_info(LO, "distanciaEntrenador %c a %s: %d", entrenador1->numeroEntrenador, pokemon->nombre, distanciaEntrenador1);
+		log_info(LO, "distanciaEntrenador %c a %s: %d", entrenador2->numeroEntrenador, pokemon->nombre, distanciaEntrenador2);
+
 		return distanciaEntrenador1 <= distanciaEntrenador2;
 
 	}
