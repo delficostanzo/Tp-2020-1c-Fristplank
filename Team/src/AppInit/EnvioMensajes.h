@@ -8,11 +8,6 @@
 #include"Conexion.h"
 #include"Planificador.h"
 
-typedef struct {
-	char* nombrePoke;
-	t_posicion posicion;
-}argumentosAAgregar;
-
 Entrenador* entrenadorQueEspera;
 
 void enviarGetDesde(int socketGet);

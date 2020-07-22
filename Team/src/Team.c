@@ -20,9 +20,6 @@ int main(int argc, char *argv[]) {
 
 	cantidadDeEspeciesTotales = list_size(objetivosGlobales);
 
-	crearHilosDeEntrenadores();
-	quickLog("$-Se crea un hilo por cada entrenador");
-
 	//Lanzar hilo para escuchar a GameBoy
 	pthread_t hiloEscuchaGameBoy;
 	pthread_create(&hiloEscuchaGameBoy, NULL, (void*) escucharGameBoy, NULL);
@@ -33,7 +30,8 @@ int main(int argc, char *argv[]) {
 	pthread_create(&hilosEscuchaBroker, NULL, (void*) crearHilosDeEscucha, NULL);
 	pthread_detach(hilosEscuchaBroker);
 
-
+	crearHilosDeEntrenadores();
+	quickLog("$-Se crea un hilo por cada entrenador");
 
 
 

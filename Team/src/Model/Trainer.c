@@ -3,6 +3,8 @@
 
 void pasarAExit(Entrenador* entrenador);
 static int sumaCantidades(t_list* pokemones);
+static int tienenLaMismaCantidad(t_list* objetivos, t_list* atrapados);
+static int sonIguales(t_list* objetivos, t_list* atrapados);
 static PokemonEnElMapa* buscarAtrapadoDeMas(Entrenador* entrenador);
 static PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador);
 static int sumarCantidad(int primerCantidad, PokemonEnElMapa* pokemon);
@@ -35,17 +37,18 @@ void setPosicionA(Entrenador* entrenador, t_posicion* posicion) {
 
 //hacer el ADD solo si esa especie no estaba antes en la lista
 void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon) {
-	PokemonEnElMapa* poke = buscarPorNombre(nuevoPokemon->nombre, listaPokemones);
 
 	if(list_is_empty(listaPokemones) == 1){
 		list_add(listaPokemones, nuevoPokemon);
 	}
 	//YA HAY UNO DE ESA ESPECIE EN LA LISTA DE POKEMONES PASADA POR PARAMETRO
-	else if(poke != NULL){
+	else if(buscarPorNombre(nuevoPokemon->nombre, listaPokemones) != NULL){
 		//le aumento la cantidad
-		poke->cantidad += nuevoPokemon->cantidad;
-	} else {
-			list_add(listaPokemones, nuevoPokemon);
+		PokemonEnElMapa* pokemonASumar = buscarPorNombre(nuevoPokemon->nombre, listaPokemones);
+		pokemonASumar->cantidad += nuevoPokemon->cantidad;
+	}
+		else {
+		list_add(listaPokemones, nuevoPokemon);
 		}
 }
 
@@ -113,6 +116,46 @@ void sacarDeListaReady(Entrenador* entrenadorASacar) {
 
 void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado){
 	setPokemonA(entrenador->pokemonesAtrapados, pokemonAtrapado);
+}
+
+void estadoSiAtrapo(Entrenador* entrenador) {
+
+
+	quickLog("$-El entrenador va a cambiar de estado por atrapar un pokemon");
+	if(sonIguales(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
+		//ya agarro todos sus pokemones
+		pasarAExit(entrenador);
+		log_info(LO, "El entrenador %c paso a estado exit porque ya tiene atrapados todos sus objetivos", entrenador->numeroEntrenador);
+		//pthread_exit(&entrenador->hiloEntrenador);
+	}
+	else if(tienenLaMismaCantidad(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
+		asignarMovimientoPorDeadlock(entrenador);
+		pasarADeadlock(entrenador);
+		log_info(LO, "El entrenador %c paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
+		pasarAReadyParaIntercambiar();
+	}
+	else {
+		pasarADormido(entrenador);
+		log_info(LO, "El entrenador %c paso a block dormido esperando que le den un pokemon para atrapar", entrenador->numeroEntrenador);
+
+		quickLog("$-Quedo bloqueado dormido el entrenador");
+
+		int cantidadAtrapados;
+		int cantidadObjetivos;
+		if(list_is_empty(entrenador->pokemonesAtrapados)) {
+			cantidadAtrapados = 0;
+		} else {
+			cantidadAtrapados = list_size(entrenador->pokemonesAtrapados);
+		}
+		if(list_is_empty(entrenador->pokemonesObjetivos)) {
+			cantidadObjetivos = 0;
+		} else {
+			cantidadObjetivos = list_size(entrenador->pokemonesAtrapados);
+		}
+
+		log_info(logger, "$-Tiene %d pokemones atrapados y %d pokemones objetivos por atrapar", cantidadAtrapados, cantidadObjetivos);
+
+	}
 }
 
 int sonIguales(t_list* objetivos, t_list* atrapados) {
@@ -275,40 +318,20 @@ PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador){
 }
 
 
-//otro se esta moviendo para intercambiar con el
+//siempre usar entre mutex de entrenadores
 int esteComoIntercambio(Entrenador* entrenador) {
 
-	bool estaComoIntercambio(Entrenador* entrenadorMoviendose) {
-		bool condicion = 0;
-		if(entrenadorMoviendose->motivo == 2) {
-			condicion = entrenadorMoviendose->movimientoEnExec->numeroDelEntrenadorIntercambio == entrenador->numeroEntrenador;
-		}
-		return condicion;
+	int estaComoIntercambio(Entrenador* entrenadorMoviendose) {
+		return entrenadorMoviendose->movimientoEnExec->numeroDelEntrenadorIntercambio == entrenador->numeroEntrenador;
 	}
 
+	pthread_mutex_lock(&mutexEntrenadores);
 	int cumple  = list_any_satisfy(entrenadores, (erasedTypeFilter) estaComoIntercambio);
+	pthread_mutex_unlock(&mutexEntrenadores);
 
 	return cumple;
 }
 
-int tieneEstadoNewODormido(Entrenador* entrenador) {
-	pthread_mutex_lock(&entrenador->mutexEstado);
-	log_info(LO, "Llegue aca????????");
-	int cumple = (entrenador->estado==1 || (entrenador->estado==4 && entrenador->motivo==2)) && (entrenadorNoEstaEnListaReady(entrenador));
-	pthread_mutex_unlock(&entrenador->mutexEstado);
-	log_info(LO, "Y libere el mutex????????");
-	return cumple;
-}
 
-int entrenadorNoEstaEnListaReady(Entrenador* entrenador) {
 
-	int estaElEntrenador(Entrenador* entrenadorQueEsta) {
-		//si algun entrenador de la lista de ready tiene el mismo numero que el entrenador que pase por param
-		return entrenadorQueEsta->numeroEntrenador == entrenador->numeroEntrenador;
-	}
-	pthread_mutex_lock(&mutexListaEntrenadoresReady);
-	int esta = list_any_satisfy(listaEntrenadoresReady, (erasedTypeFilter)estaElEntrenador);
-	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
-	return !esta;
-}
 

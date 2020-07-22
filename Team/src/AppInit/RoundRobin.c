@@ -72,8 +72,6 @@ void pasarAReadyPorQuantum(Entrenador* entrenador){
 	entrenador->estado = 2;
 	pthread_mutex_unlock(&entrenador->mutexEstado);
 
-	sem_post(&esperandoPasarAlgunoAExec);
-
 }
 
 

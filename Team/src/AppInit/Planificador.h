@@ -17,6 +17,5 @@ void pasarAReadyParaIntercambiar();
 void pasarAExec();
 void planificarEntrenadores();
 void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes);
-void estadoSiAtrapo(Entrenador* entrenador);
 
 #endif /* SRC_APPINIT_PLANIFICADOR_H_ */
