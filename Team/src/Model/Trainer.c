@@ -332,6 +332,23 @@ int esteComoIntercambio(Entrenador* entrenador) {
 	return cumple;
 }
 
+int tieneEstadoNewODormido(Entrenador* entrenador) {
+	pthread_mutex_lock(&entrenador->mutexEstado);
+	int cumple = (entrenador->estado==1 || (entrenador->estado==4 && entrenador->motivo==2)) && (entrenadorNoEstaEnListaReady(entrenador));
+	pthread_mutex_unlock(&entrenador->mutexEstado);
+	return cumple;
+}
 
+int entrenadorNoEstaEnListaReady(Entrenador* entrenador) {
+
+	int estaElEntrenador(Entrenador* entrenadorQueEsta) {
+		//si algun entrenador de la lista de ready tiene el mismo numero que el entrenador que pase por param
+		return entrenadorQueEsta->numeroEntrenador == entrenador->numeroEntrenador;
+	}
+	pthread_mutex_lock(&mutexListaEntrenadoresReady);
+	int esta = list_any_satisfy(listaEntrenadoresReady, (erasedTypeFilter)estaElEntrenador);
+	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
+	return !esta;
+}
 
 

@@ -72,5 +72,7 @@ int distanciaEntre(t_posicion* posicion1, t_posicion* posicion2);
 void asignarMovimientoPorDeadlock(Entrenador* entrenador);
 int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesario, PokemonEnElMapa* pokemonDado);
 int esteComoIntercambio(Entrenador* entrenador);
+int tieneEstadoNewODormido(Entrenador* entrenador);
+int entrenadorNoEstaEnListaReady(Entrenador* entrenador);
 
 #endif /* SRC_MODEL_TRAINER_H_ */

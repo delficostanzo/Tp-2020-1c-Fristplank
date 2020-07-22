@@ -13,7 +13,6 @@ static bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj);
 static int terminarSiTodosExit();
 static void logearResultadosEntrenadores();
 static int ciclosTotales();
-static int entrenadorNoEstaEnListaReady(Entrenador* entrenador);
 static int cantidadPokesLibres();
 
 typedef bool(*erasedTypeFilter)(void*);
@@ -33,6 +32,10 @@ void planificarEntrenadores(){
 
 		sem_wait(&esperandoPasarAlgunoAExec);
 		pasarAExec();
+		if(cantidadPokesLibres() != 0) {
+			pasarAReadyParaAtrapar();
+		}
+		pasarAReadyParaIntercambiar();
 		if(terminarSiTodosExit()) {
 			break;
 		}
@@ -63,13 +66,6 @@ int cantidadPokesLibres() {
 void pasarAReadyParaAtrapar(){
 	typedef bool(*erasedTypeFilter)(void*);
 
-
-	int tieneEstadoNewODormido(Entrenador* entrenador) {
-		pthread_mutex_lock(&entrenador->mutexEstado);
-		int cumple = (entrenador->estado==1 || (entrenador->estado==4 && entrenador->motivo==2)) && (entrenadorNoEstaEnListaReady(entrenador));
-		pthread_mutex_unlock(&entrenador->mutexEstado);
-		return cumple;
-	}
 
 	int cantidad = cantidadPokesLibres();
 	//asignamos objetivo al entrenador mas cercano
@@ -115,17 +111,7 @@ void pasarAReadyParaAtrapar(){
 	//destruirLog(logger);
 }
 
-int entrenadorNoEstaEnListaReady(Entrenador* entrenador) {
 
-	int estaElEntrenador(Entrenador* entrenadorQueEsta) {
-		//si algun entrenador de la lista de ready tiene el mismo numero que el entrenador que pase por param
-		return entrenadorQueEsta->numeroEntrenador == entrenador->numeroEntrenador;
-	}
-	pthread_mutex_lock(&mutexListaEntrenadoresReady);
-	int esta = list_any_satisfy(listaEntrenadoresReady, (erasedTypeFilter)estaElEntrenador);
-	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
-	return !esta;
-}
 
 Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre){
 	Entrenador* entrenadorAAsignar = entrenadorMasCercanoA(pokemonLibre, entrenadoresAMover);

@@ -19,5 +19,8 @@ t_list* entrenadoresEsperandoRespuesta(void);
 t_list* entrenadoresReady(void);
 t_list* entrenadoresNew(void);
 Entrenador* entrenadorExec(void);
+int hayEntrenadoresEnNewODormido();
+int tieneEstadoNew(Entrenador* entrenador);
+int hayEntrenadoresEnNew();
 
 #endif /* SRC_MODEL_ENTRENADORESPORESTADO_H_ */

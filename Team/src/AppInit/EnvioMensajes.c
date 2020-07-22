@@ -183,35 +183,45 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 
 //si tengo ese pokemon como objetivo lo agregego en la lista de pokemones libres
 void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoPoke){
-
 	//si ese pokemon lo tengo como objetivo
-	pthread_mutex_lock(&mutexObjetivosGlobales);
-	t_list* pokemonesAAtrapar = objetivosGlobales;
+	//pthread_mutex_lock(&mutexObjetivosGlobales);
+	//t_list* pokemonesAAtrapar = objetivosGlobales;
 	//en el nombre de los globales hay cualquier cosa
-	if(buscarPorNombre(nombreNuevoPoke, pokemonesAAtrapar) != NULL) {
+	//if(buscarPorNombre(nombreNuevoPoke, pokemonesAAtrapar) != NULL) {
 
 			//solo lo agrego a la lista
 			PokemonEnElMapa* pokemonNuevo = newPokemon();
 			setPosicionTo(pokemonNuevo, posicionNuevoPoke);
 			setNombreTo(pokemonNuevo, nombreNuevoPoke);
 			setCantidadTo(pokemonNuevo, 1);
+
+			pthread_mutex_lock(&mutexPokemonesRecibidos);
+			setPokemonA(pokemonesRecibidos, pokemonNuevo);
+			pthread_mutex_unlock(&mutexPokemonesRecibidos);
+
 			pthread_mutex_lock(&mutexPokemonesLibres);
 			list_add(pokemonesLibres, pokemonNuevo);
 			pthread_mutex_unlock(&mutexPokemonesLibres);
-			pthread_mutex_lock(&mutexPokemonesRecibidos);
-			setPokemonA(pokemonesRecibidos, pokemonNuevo);
-			t_list* pokesRecibidos = pokemonesRecibidos;
-			pthread_mutex_unlock(&mutexPokemonesRecibidos);
 
 
+	//}
+	//pthread_mutex_unlock(&mutexObjetivosGlobales);
+
+	int hayEnNewODormido = hayEntrenadoresEnNew();
+	log_info(LO, "OFICIALMENTE NO LLEGA ACA. %d", hayEnNewODormido);
+	if(hayEnNewODormido) { //quedan entrenadores sin planificar
+		log_info(LO, "-Guido inso antes");
+		//pthread_mutex_lock(&mutexEntrenadores);
+		pasarAReadyParaAtrapar();
+		//pthread_mutex_unlock(&mutexEntrenadores);
+		log_info(LO, "-Guido inso despues sigue siendo");
+
+		//sem_post(&esperandoPasarAlgunoAExec);
+	} else {
+		sem_post(&arrancarPlan);
 	}
-	pthread_mutex_unlock(&mutexObjetivosGlobales);
-
-	pasarAReadyParaAtrapar();
-	sem_post(&arrancarPlan);
 
 }
-
 
 
 
