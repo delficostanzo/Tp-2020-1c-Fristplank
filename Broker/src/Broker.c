@@ -28,8 +28,8 @@ void iniciarBroker(void){
 }
 
 t_config* leer_config() {
-//	t_config* config = config_create("../src/broker.config"); //CORRER POR CONSOLA
-	t_config* config = config_create("./src/broker.config"); //CORRER CON ECLIPSE
+	t_config* config = config_create("../src/broker.config"); //CORRER POR CONSOLA
+//	t_config* config = config_create("./src/broker.config"); //CORRER CON ECLIPSE
 
 	if (config == NULL) {
 		printf("No pude leer la config \n");
@@ -160,14 +160,14 @@ void signal_dump(int signal) {
    int archivoExiste = access("ArchivoDump.bin",F_OK);
    FILE* dumpFile;
    if (archivoExiste == -1) {
-	   dumpFile = fopen("ArchivoDump.bin","w+");
+	   dumpFile = fopen("ArchivoDump.bin","w");
    }
    else{
 	   dumpFile = fopen("ArchivoDump.bin","r+");
 	   fseek(dumpFile, 0, SEEK_END);
    }
 
-   char* divisoria = string_from_format("-----------------------------------------------------------------------------------------------------------------------------\n");
+   char* divisoria = string_from_format("----------------------------------------------------------------------------------------------------------------------------------------------\n");
 
    fwrite(divisoria, strlen(divisoria), 1, dumpFile);
 
@@ -194,27 +194,27 @@ void signal_dump(int signal) {
    int offset = 0;
    int nroParticion = 1;
 
-   for(int j=0;j<cantidadMensajes;j++){
+   for(int j=0; j < cantidadMensajes; j++){
 
-	  t_metadata * auxParticion = list_get(particionesActuales,j);
+	  t_metadata * auxParticion = list_get(particionesActuales, j);
 	  int tamanioParticion;
 
 	  if(string_equals_ignore_case(ALGORITMO_MEMORIA,"PARTICIONES")){
 		  tamanioParticion = tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
 	  }
 	  else if (string_equals_ignore_case(ALGORITMO_MEMORIA,"BS")){
-		  tamanioParticion = potenciaDeDosProxima(auxParticion->tamanioMensajeEnMemoria);
+		  tamanioParticion = tamanioParticionMinima(potenciaDeDosProxima(auxParticion->tamanioMensajeEnMemoria));
 	  }
 
 	  if(offset != auxParticion->posicion){ //SI HAY UN ESPACIO LIBRE ANTES DE LA PARTICION
 		  char* particionLibre = string_new();
-		  char* particion = string_from_format("Particion %d:",nroParticion);
+		  char* particion = string_from_format("Particion %d:", nroParticion);
 		  string_append(&particionLibre, particion);
-		  char* baseLimite = string_from_format(" %p - %p.", (memoriaCache + offset),(memoriaCache+auxParticion->posicion-1));
-		  char* size = string_from_format("Size: %db \n",auxParticion->posicion);
+		  char* baseLimite = string_from_format(" %p - %p.  ", (memoriaCache + offset + 1), (memoriaCache + auxParticion->posicion));
+		  char* size = string_from_format("Size: %db \n", auxParticion->posicion - offset);
 
 		  string_append(&particionLibre, baseLimite);
-		  string_append(&particionLibre, " [L] ");
+		  string_append(&particionLibre, " [L]  ");
 		  string_append(&particionLibre, size);
 
 		  fwrite(particionLibre, strlen(particionLibre), 1, dumpFile);
@@ -224,19 +224,20 @@ void signal_dump(int signal) {
 		  free(particion);
 		  free(particionLibre);
 		  nroParticion++;
+		  offset+= auxParticion->posicion - offset;
 	  }
 
 	  char* particionActual = string_new();
 	  char* particion = string_from_format("Particion %d:",nroParticion);
-	  char* baseLimite = string_from_format(" %p - %p.", (memoriaCache + auxParticion->posicion), (memoriaCache + tamanioParticion));
-	  char* size = string_from_format("Size: %db", tamanioParticion);
-	  char* LRU = string_from_format(" LRU:%d", auxParticion->flagLRU);
+	  char* baseLimite = string_from_format(" %p - %p.  ", (memoriaCache + auxParticion->posicion + 1), (memoriaCache + auxParticion->posicion + tamanioParticion));
+	  char* size = string_from_format("Size: %db ", tamanioParticion);
+	  char* LRU = string_from_format(" LRU:%d ", auxParticion->flagLRU);
 	  char* Cola = string_from_format(" Cola:%s ", (ID_COLA[auxParticion->tipoMensaje]));
 	  char* ID = string_from_format("  ID:%d \n", auxParticion->ID);
 
 	  string_append(&particionActual, particion);
 	  string_append(&particionActual, baseLimite);
-	  string_append(&particionActual, " [X] ");
+	  string_append(&particionActual, " [X]  ");
 	  string_append(&particionActual, size);
 	  string_append(&particionActual, LRU);
 	  string_append(&particionActual, Cola);
@@ -256,16 +257,15 @@ void signal_dump(int signal) {
 	  nroParticion++;
   }
 
- if((TAMANO_MEMORIA - offset) > 0){
-	nroParticion++;
+ if((TAMANO_MEMORIA - offset) != 0){
 	char* finalMemoria = string_new();
-	char* particion = string_from_format("Particion %d:",nroParticion);
-	char* baseLimite = string_from_format(" %p - %p.", (memoriaCache + offset),(memoriaCache+TAMANO_MEMORIA));
-	char* size = string_from_format("Size: %db \n",TAMANO_MEMORIA-offset);
+	char* particion = string_from_format("Particion %d:", nroParticion);
+	char* baseLimite = string_from_format(" %p - %p.  ", (memoriaCache + offset + 1),(memoriaCache + TAMANO_MEMORIA));
+	char* size = string_from_format("Size: %db \n",TAMANO_MEMORIA - offset);
 
 	string_append(&finalMemoria, particion);
 	string_append(&finalMemoria, baseLimite);
-	string_append(&finalMemoria, " [L] ");
+	string_append(&finalMemoria, " [L]  ");
 	string_append(&finalMemoria, size);
 
 	fwrite(finalMemoria, strlen(finalMemoria), 1, dumpFile);
