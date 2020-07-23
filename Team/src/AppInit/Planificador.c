@@ -29,14 +29,21 @@ void planificarEntrenadores(){
 //		}
 //
 //		pasarAReadyParaIntercambiar();
-
+//
+//		log_info(LO, "Me quede qui");
 		sem_wait(&esperandoPasarAlgunoAExec);
-		log_info(LO, "Tome el lock");
+//		log_info(LO, "Tome el lock");
 		pasarAExec();
 		if(cantidadPokesLibres() != 0) {
 			pasarAReadyParaAtrapar();
+			sem_post(&esperandoPasarAlgunoAExec);
 		}
-		pasarAReadyParaIntercambiar();
+
+		t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
+		if(list_size(entrenadoresDeadlock) >= 2){
+			pasarAReadyParaIntercambiar(entrenadoresDeadlock);
+			sem_post(&esperandoPasarAlgunoAExec);
+		}
 
 		if(terminarSiTodosExit()) {
 			break;
@@ -104,12 +111,11 @@ void pasarAReadyParaAtrapar(){
 				cambiarCantidadEnPokesObj(pokemonLibre);
 				log_info(LO, "El entrenador %c paso a estado ready para atrapar al pokemon %s", entrenadorAReady->numeroEntrenador, pokemonLibre->nombre);
 
-
+//				sem_post(&esperandoPasarAlgunoAExec);
 			}
 
 		}
 	}
-
 	//destruirLog(logger);
 }
 
@@ -163,9 +169,9 @@ bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj){
 }
 
 
-void pasarAReadyParaIntercambiar(){
-	t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
-	if(list_size(entrenadoresDeadlock) >= 2) {
+void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock){
+//	t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
+//	if(list_size(entrenadoresDeadlock) >= 2) {
 		log_info(LO, "Inicio del algoritmo de deteccion de deadlock (comienza a buscar con quien intercambiar)");
 
 		for(int index = 0; index < list_size(entrenadoresDeadlock); index++) {
@@ -193,10 +199,11 @@ void pasarAReadyParaIntercambiar(){
 				agregarAListaReady(entrenadorDeIntercambio);
 				log_info(LO, "El entrenador %c paso a estado ready para intercambiar con el entrenador %c", entrenadorDeIntercambio->numeroEntrenador, bloqueado->numeroEntrenador);
 
+//				sem_post(&esperandoPasarAlgunoAExec);
 				return;
 			}
 		}
-	}
+//	}
 
 }
 
@@ -326,9 +333,9 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 		entrenadorMovido->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Z';
 		entrenadorBloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Z';
 		estadoSiAtrapo(entrenadorMovido);
+		sem_post(&esperandoPasarAlgunoAExec);
 		estadoSiAtrapo(entrenadorBloqueado);
 
-		sem_post(&esperandoPasarAlgunoAExec);
 
 	} else if(QUANTUM == distanciaHastaBloqueado) { //llega a moverse pero no a hacer los intercambios
 			entrenadorMovido->posicion = entrenadorBloqueado->posicion;

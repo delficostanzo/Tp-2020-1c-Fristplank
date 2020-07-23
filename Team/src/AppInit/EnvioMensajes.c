@@ -199,19 +199,19 @@ void agregarPokemonSiLoNecesita(argumentosAAgregar* argus){
 	char* nombreNuevoPoke = argus->nombrePoke;
 	t_posicion posicionNuevoPoke = argus->posicion;
 
-			//solo lo agrego a la lista
-			PokemonEnElMapa* pokemonNuevo = newPokemon();
-			setPosicionTo(pokemonNuevo, posicionNuevoPoke);
-			setNombreTo(pokemonNuevo, nombreNuevoPoke);
-			setCantidadTo(pokemonNuevo, 1);
+	//solo lo agrego a la lista
+	PokemonEnElMapa* pokemonNuevo = newPokemon();
+	setPosicionTo(pokemonNuevo, posicionNuevoPoke);
+	setNombreTo(pokemonNuevo, nombreNuevoPoke);
+	setCantidadTo(pokemonNuevo, 1);
 
-			pthread_mutex_lock(&mutexPokemonesRecibidos);
-			setPokemonA(pokemonesRecibidos, pokemonNuevo);
-			pthread_mutex_unlock(&mutexPokemonesRecibidos);
+	pthread_mutex_lock(&mutexPokemonesRecibidos);
+	setPokemonA(pokemonesRecibidos, pokemonNuevo);
+	pthread_mutex_unlock(&mutexPokemonesRecibidos);
 
-			pthread_mutex_lock(&mutexPokemonesLibres);
-			list_add(pokemonesLibres, pokemonNuevo);
-			pthread_mutex_unlock(&mutexPokemonesLibres);
+	pthread_mutex_lock(&mutexPokemonesLibres);
+	list_add(pokemonesLibres, pokemonNuevo);
+	pthread_mutex_unlock(&mutexPokemonesLibres);
 
 	//}
 	//pthread_mutex_unlock(&mutexObjetivosGlobales);
@@ -285,7 +285,6 @@ void recibirIdCatch(Entrenador* entrenador) {
 		agregarAtrapado(entrenador, entrenador->movimientoEnExec->pokemonNecesitado);
 		estadoSiAtrapo(entrenador);
 
-		sem_post(&esperandoPasarAlgunoAExec);
 		//free(paqueteIdRecibido);
 
 	}
@@ -336,6 +335,7 @@ t_paquete* recibirCaught(int socketCaught){
 			//agrego el pokemon atrapado y cambio al entrenador de estado
 			agregarAtrapado(entrenadorEsperando, entrenadorEsperando->movimientoEnExec->pokemonNecesitado);
 			estadoSiAtrapo(entrenadorEsperando);
+			sem_post(&esperandoPasarAlgunoAExec);
 		}
 
 	}
@@ -437,6 +437,7 @@ void procesarEspera(Entrenador*  entrenador, uint32_t atrapo){
 		agregarAtrapado(entrenador, pokemonAtrapado);
 		quickLog("$-Se atrapo el pokemon");
 		estadoSiAtrapo(entrenador);
+		sem_post(&esperandoPasarAlgunoAExec);
 
 	}
 	//no lo atrapo
@@ -447,6 +448,7 @@ void procesarEspera(Entrenador*  entrenador, uint32_t atrapo){
 		pthread_mutex_unlock(&mutexObjetivosGlobales);
 
 		pasarADormido(entrenador);
+		sem_post(&esperandoPasarAlgunoAExec);
 	}
 
 	pthread_mutex_lock(&entrenador->mutexEstado);
