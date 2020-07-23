@@ -23,9 +23,50 @@ void* escucharGameBoy(){
 
 
 		quickLog("$-Me conecté con GameBoy");
+//		pthread_t escucharGameBoy;
+//	 	pthread_create(&escucharGameBoy, NULL, (void*)escucharColaAppearedPokemonGameBoy, NULL);
+//		pthread_detach(escucharGameBoy);
 
-		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy);
-		free(paqueteNuevo);
+
+		quickLog("$-Esta por recibir el appeared");
+
+			//sudo strace -s 255 -p 4299
+
+			t_paquete* paqueteAppeared = recibir_mensaje(socketGameBoy);
+
+			//quickLog("Recibe el appeared");
+			if (paqueteAppeared != NULL) {
+				t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
+
+				if(seNecesita(appeared->pokemon)) {
+
+					log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+
+					argumentosAAgregar* args = malloc(sizeof(argumentosAAgregar));
+					args->nombrePoke = appeared->pokemon;
+					args->posicion = *appeared->posicion;
+
+					pthread_t agregarAppeared;
+					pthread_create(&agregarAppeared, NULL, (void*)agregarPokemonSiLoNecesita, args);
+					pthread_detach(agregarAppeared);
+
+
+								log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+
+							} else{
+
+								log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+								log_info(LO, "Nadie necesita al nuevo poke appeared");
+								free(appeared->pokemon);
+								free(appeared->posicion);
+								free(appeared);
+								free(paqueteAppeared->buffer);
+							}
+						}
+
+
+//		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy);
+//		free(paqueteNuevo);
 
 	}
 }
@@ -169,6 +210,7 @@ void* escucharColaAppearedPokemonGameBoy(){
 
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy);
 
+		free(paqueteNuevo);
 		return paqueteNuevo;
 }
 

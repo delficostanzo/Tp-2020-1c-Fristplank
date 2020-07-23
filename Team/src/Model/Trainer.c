@@ -63,9 +63,6 @@ Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores
 		int distanciaEntrenador1 = distanciaEntre(entrenador1->posicion, &(pokemon->posicion));
 		int distanciaEntrenador2 = distanciaEntre(entrenador2->posicion, &(pokemon->posicion));
 
-		log_info(LO, "distanciaEntrenador %c a %s: %d", entrenador1->numeroEntrenador, pokemon->nombre, distanciaEntrenador1);
-		log_info(LO, "distanciaEntrenador %c a %s: %d", entrenador2->numeroEntrenador, pokemon->nombre, distanciaEntrenador2);
-
 		return distanciaEntrenador1 <= distanciaEntrenador2;
 
 	}
@@ -136,7 +133,7 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 		asignarMovimientoPorDeadlock(entrenador);
 		pasarADeadlock(entrenador);
 		log_info(LO, "El entrenador %c paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
-		pasarAReadyParaIntercambiar();
+		//pasarAReadyParaIntercambiar();
 	}
 	else {
 		pasarADormido(entrenador);
@@ -282,6 +279,7 @@ void asignarMovimientoPorDeadlock(Entrenador* entrenador){
 	entrenador->movimientoEnExec->objetivo = 2;
 	entrenador->movimientoEnExec->pokemonAIntercambiar = atrapadoDeMas;
 	entrenador->movimientoEnExec->pokemonNecesitado = objetivoNoCumplido;
+	entrenador->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Z';
 	//lo vuelvo a poner en 5 por si ya venia de un deadlock que le disminuyo esta cantidad
 	entrenador->ciclosCPUFaltantesIntercambio = 5;
 }
@@ -323,8 +321,9 @@ PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador){
 
 
 //siempre usar entre mutex de entrenadores
-int esteComoIntercambio(Entrenador* entrenador) {
+int esteComoIntercambioEntre(t_list* entrenadores, Entrenador* entrenador) {
 
+	log_info(LO, "Fijate si llega");
 	int estaComoIntercambio(Entrenador* entrenadorMoviendose) {
 		return entrenadorMoviendose->movimientoEnExec->numeroDelEntrenadorIntercambio == entrenador->numeroEntrenador;
 	}
@@ -333,6 +332,7 @@ int esteComoIntercambio(Entrenador* entrenador) {
 	int cumple  = list_any_satisfy(entrenadores, (erasedTypeFilter) estaComoIntercambio);
 	pthread_mutex_unlock(&mutexEntrenadores);
 
+	log_info(LO, "Aca llega tambien");
 	return cumple;
 }
 

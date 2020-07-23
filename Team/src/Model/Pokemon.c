@@ -57,18 +57,19 @@ PokemonEnElMapa* asignarPokemonCopia(PokemonEnElMapa* pokemonACopiar) {
 	PokemonEnElMapa* pokemonCopia = malloc(sizeof(PokemonEnElMapa));
 
 
-	memcpy(pokemonCopia, pokemonACopiar, sizeof(PokemonEnElMapa));
+	//memcpy(pokemonCopia, pokemonACopiar, sizeof(PokemonEnElMapa));
 
-	//int offset = 0;
-//	memcpy(pokemonCopia + offset, &(pokemonACopiar->cantidad), sizeof(int));
-//	offset += sizeof(int);
-//	memcpy(pokemonCopia + offset, pokemonACopiar->nombre, strlen(pokemonACopiar->nombre) + 1);
-//	offset += strlen(pokemonACopiar->nombre) + 1;
-//	//posicion no es un puntero
+	memcpy(&pokemonCopia->cantidad, &(pokemonACopiar->cantidad), sizeof(int));
+	pokemonCopia->nombre = malloc(strlen(pokemonACopiar->nombre) + 1);
+	memcpy(pokemonCopia->nombre, pokemonACopiar->nombre, strlen(pokemonACopiar->nombre) + 1);
+	//posicion no es un puntero
 //	memcpy(pokemonCopia + offset, &pokemonACopiar->posicion.posicionX, sizeof(uint32_t));
 //	offset += sizeof(uint32_t);
 //	memcpy(pokemonCopia + offset, &pokemonACopiar->posicion.posicionY, sizeof(uint32_t));
 //	offset += sizeof(uint32_t);
+
+	pokemonCopia->posicion.posicionX = pokemonACopiar->posicion.posicionX;
+	pokemonCopia->posicion.posicionY = pokemonACopiar->posicion.posicionY;
 
 	return pokemonCopia;
 }

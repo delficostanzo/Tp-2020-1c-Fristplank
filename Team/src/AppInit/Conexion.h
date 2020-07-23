@@ -7,12 +7,6 @@
 #include "EnvioMensajes.h"
 #include "../Model/CierreTeam.h"
 
-//typedef struct{
-//	int socketEscucha;
-//	int socketACK;
-//}t_par_de_sockets;
-
-
 
 
 void* escucharGameBoy(void);

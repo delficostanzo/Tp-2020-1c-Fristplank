@@ -1,7 +1,6 @@
 
 #include "EnvioMensajes.h"
 
-static void agregarPokemonSiLoNecesita(char* nombrePokemon, t_posicion posicion);
 static void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsperando);
 static void recibirIdCatch(Entrenador* entrenador);
 static int puedeSeguirRecibiendo();
@@ -12,7 +11,6 @@ static Entrenador* entrenadorQueTieneId(int idCatchQueResponde);
 static void procesarEspera(Entrenador*  entrenador, uint32_t atrapo);
 static int noRecibioDeEsaEspecie(char* nombrePoke);
 static int hayCorrelativos();
-static int seNecesita(char* pokemon);
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -66,6 +64,10 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 				log_info(LO, "Lista de posiciones: %s", posicionesImpresas);
 				free(posicionesImpresas);
 
+				argumentosAAgregar* args = malloc(sizeof(argumentosAAgregar));
+				args->nombrePoke = localized->pokemon;
+
+
 				quickLog("$-Se recibio un localized necesario");
 				//si el id correlativo del localized recibido coincide con algunos de los que tengo en mi lista de correlativos mandados
 				//if(tieneComoIdCorrelativoLocalized(paqueteLocalized->ID_CORRELATIVO) == 1) {
@@ -73,8 +75,9 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 				for(int index=0; index<cantidad; index++){
 					//cada posicion recibida en el localized del poke que necesito cazar la agrego en la lista de pokemonesLibres
 					t_posicion* posicion = list_get(localized->listaPosiciones,index);
+					args->posicion = *posicion;
 
-					agregarPokemonSiLoNecesita(localized->pokemon, *posicion);
+					agregarPokemonSiLoNecesita(args);
 
 				}
 
@@ -150,31 +153,39 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 	//sudo strace -s 255 -p 4299
 
 	t_paquete* paqueteAppeared = recibir_mensaje(socketAppeared);
-	t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
+
 	//quickLog("Recibe el appeared");
-	if (paqueteAppeared != NULL && seNecesita(appeared->pokemon)) {
+	if (paqueteAppeared != NULL) {
+		t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
-		log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+		if(seNecesita(appeared->pokemon)) {
 
-		agregarPokemonSiLoNecesita(appeared->pokemon, *(appeared->posicion));
+			argumentosAAgregar* args = malloc(sizeof(argumentosAAgregar));
+			args->nombrePoke = appeared->pokemon;
+			args->posicion = *appeared->posicion;
+
+			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+
+			agregarPokemonSiLoNecesita(args);
 
 
 
-		log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+			log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
 
-		free(appeared);
-		free(paqueteAppeared->buffer);
-		return paqueteAppeared;
+			free(appeared);
+			free(paqueteAppeared->buffer);
+			return paqueteAppeared;
 
-	} else if(paqueteAppeared != NULL) {
+		} else{
 
-		log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
-		log_info(LO, "Nadie necesita al nuevo poke appeared");
-		free(appeared->pokemon);
-		free(appeared->posicion);
-		free(appeared);
-		free(paqueteAppeared->buffer);
-		return paqueteAppeared;
+			log_info(LO, "Se recibio el Appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
+			log_info(LO, "Nadie necesita al nuevo poke appeared");
+			free(appeared->pokemon);
+			free(appeared->posicion);
+			free(appeared);
+			free(paqueteAppeared->buffer);
+			return paqueteAppeared;
+		}
 	}
 
 	return NULL;
@@ -182,12 +193,11 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 }
 
 //si tengo ese pokemon como objetivo lo agregego en la lista de pokemones libres
-void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoPoke){
-	//si ese pokemon lo tengo como objetivo
-	//pthread_mutex_lock(&mutexObjetivosGlobales);
-	//t_list* pokemonesAAtrapar = objetivosGlobales;
-	//en el nombre de los globales hay cualquier cosa
-	//if(buscarPorNombre(nombreNuevoPoke, pokemonesAAtrapar) != NULL) {
+//void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoPoke){
+void agregarPokemonSiLoNecesita(argumentosAAgregar* argus){
+
+	char* nombreNuevoPoke = argus->nombrePoke;
+	t_posicion posicionNuevoPoke = argus->posicion;
 
 			//solo lo agrego a la lista
 			PokemonEnElMapa* pokemonNuevo = newPokemon();
@@ -203,11 +213,10 @@ void agregarPokemonSiLoNecesita(char* nombreNuevoPoke, t_posicion posicionNuevoP
 			list_add(pokemonesLibres, pokemonNuevo);
 			pthread_mutex_unlock(&mutexPokemonesLibres);
 
-
 	//}
 	//pthread_mutex_unlock(&mutexObjetivosGlobales);
 
-	int hayEnNewODormido = hayEntrenadoresEnNew();
+	int hayEnNewODormido = hayEntrenadoresEnNewODormido();
 	log_info(LO, "OFICIALMENTE NO LLEGA ACA. %d", hayEnNewODormido);
 	if(hayEnNewODormido) { //quedan entrenadores sin planificar
 		log_info(LO, "-Guido inso antes");
@@ -259,6 +268,9 @@ void recibirIdCatch(Entrenador* entrenador) {
 
 		log_info(LO, "El entrenador %c paso a block esperando la respuesta del catch mandado", entrenador->numeroEntrenador);
 		pasarABlockEsperando(entrenador);
+
+		sem_post(&esperandoPasarAlgunoAExec);
+
 		quickLog("$-Se paso a estado bloqueado esperando respuesta");
 
 		free(idCatch);
@@ -272,6 +284,8 @@ void recibirIdCatch(Entrenador* entrenador) {
 		//sleep(3);
 		agregarAtrapado(entrenador, entrenador->movimientoEnExec->pokemonNecesitado);
 		estadoSiAtrapo(entrenador);
+
+		sem_post(&esperandoPasarAlgunoAExec);
 		//free(paqueteIdRecibido);
 
 	}

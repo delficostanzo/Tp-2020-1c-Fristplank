@@ -10,6 +10,13 @@
 
 Entrenador* entrenadorQueEspera;
 
+typedef struct{
+	char* nombrePoke;
+	t_posicion posicion;
+}argumentosAAgregar;
+
+
+
 void enviarGetDesde(int socketGet);
 void enviarCatchDesde(Entrenador* entrenadorEsperando);
 void recibirIdGet(int socketGet);
@@ -18,4 +25,6 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared);
 //void recibirIdCatch(int socketIdCatch);
 t_paquete* recibirCaught(int socketCaught);
 void ejecutarRespuestaCaught(int idCatchQueResponde, t_paquete* paqueteCaught);
+int seNecesita(char* pokemon);
+void agregarPokemonSiLoNecesita(argumentosAAgregar* argus);
 #endif /* SRC_APPINIT_ENVIOMENSAJES_H_ */
