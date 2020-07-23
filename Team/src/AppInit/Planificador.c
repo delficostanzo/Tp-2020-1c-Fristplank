@@ -36,7 +36,6 @@ void planificarEntrenadores(){
 		pasarAExec();
 		if(cantidadPokesLibres() != 0) {
 			pasarAReadyParaAtrapar();
-//			sem_post(&esperandoPasarAlgunoAExec);
 		}
 
 		t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
@@ -193,8 +192,10 @@ void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock){
 
 				log_info(LO, "Lo que te guste");
 
+				// TODO: No cuenta la cantidad de deadlocks, no se si es porque no le gusta hacer el != con un char
 				if(entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio != 'Z' && bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio != 'Z') {
 					cantidadDeadlocks ++;
+					log_info(LO,"Aca te gusto?");
 				}
 
 				//me guardo con que entrenador intercambiar cuando pase a exec y el que esta bloqueado a cual esta esperando
