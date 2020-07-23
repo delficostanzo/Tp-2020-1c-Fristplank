@@ -63,9 +63,11 @@ void atenderCliente(argumentos* sockets) {
 
 		pthread_mutex_lock(&mutexRepoTeam);
 		if(existeTeam == 1){
+			log_debug(logger, "TEAM ID [%d] YA EXISTIA EN BROKER", team->id);
 			reemplazar_suscriptor_team(team);
 		}
 		else{
+			log_debug(logger, "TEAM ID [%d] SE AGREGA", team->id);
 			agregar_suscriptor_team(team);
 		}
 		pthread_mutex_unlock(&mutexRepoTeam);
@@ -84,6 +86,8 @@ void atenderCliente(argumentos* sockets) {
 		lanzarHiloEscuchaACK(team->id, &team->socketACKLocalized, LOCALIZED_POKEMON);
 		lanzarHiloEscuchaACK(team->id, &team->socketACKCaught, CAUGHT_POKEMON);
 		lanzarHiloEscuchaACK(team->id, &team->socketACKAppeared, APPEARED_POKEMON);
+
+		sleep(1);
 
 		pthread_mutex_lock(&mutexEnvio);
 		enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized, team->id);
@@ -118,10 +122,12 @@ void atenderCliente(argumentos* sockets) {
 
 		pthread_mutex_lock(&mutexRepoGameCard);
 		if(check_si_existe_gamecard(gamecard->id)){
+			log_debug(logger, "GAMECARD ID [%d] YA EXISTIA EN BROKER", gamecard->id);
 			reemplazar_suscriptor_gamecard(gamecard);
 		}
 
 		else{
+			log_debug(logger, "GAMECARD ID [%d] SE AGREGA", gamecard->id);
 			agregar_suscriptor_gamecard(gamecard);
 		}
 		pthread_mutex_unlock(&mutexRepoGameCard);
