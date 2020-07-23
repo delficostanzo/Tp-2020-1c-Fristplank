@@ -225,7 +225,7 @@ void agregarPokemonSiLoNecesita(argumentosAAgregar* argus){
 		//pthread_mutex_unlock(&mutexEntrenadores);
 		log_info(LO, "-Guido inso despues sigue siendo");
 
-		sem_post(&esperandoPasarAlgunoAExec);
+//		sem_post(&esperandoPasarAlgunoAExec);
 //	} else {
 //		sem_post(&arrancarPlan);
 	}

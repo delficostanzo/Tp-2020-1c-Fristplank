@@ -36,7 +36,7 @@ void planificarEntrenadores(){
 		pasarAExec();
 		if(cantidadPokesLibres() != 0) {
 			pasarAReadyParaAtrapar();
-			sem_post(&esperandoPasarAlgunoAExec);
+//			sem_post(&esperandoPasarAlgunoAExec);
 		}
 
 		t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
@@ -115,7 +115,7 @@ void pasarAReadyParaAtrapar(){
 				cambiarCantidadEnPokesObj(pokemonLibre);
 				log_info(LO, "El entrenador %c paso a estado ready para atrapar al pokemon %s", entrenadorAReady->numeroEntrenador, pokemonLibre->nombre);
 
-//				sem_post(&esperandoPasarAlgunoAExec);
+				sem_post(&esperandoPasarAlgunoAExec);
 			}
 
 		}
