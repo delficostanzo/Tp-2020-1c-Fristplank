@@ -284,7 +284,7 @@ void recibirIdCatch(Entrenador* entrenador) {
 		//sleep(3);
 		agregarAtrapado(entrenador, entrenador->movimientoEnExec->pokemonNecesitado);
 		estadoSiAtrapo(entrenador);
-
+		sem_post(&esperandoPasarAlgunoAExec);
 		//free(paqueteIdRecibido);
 
 	}

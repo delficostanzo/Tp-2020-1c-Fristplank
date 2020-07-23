@@ -133,7 +133,7 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 		asignarMovimientoPorDeadlock(entrenador);
 		pasarADeadlock(entrenador);
 		log_info(LO, "El entrenador %c paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
-		//pasarAReadyParaIntercambiar();
+//		pasarAReadyParaIntercambiar();
 	}
 	else {
 		pasarADormido(entrenador);

@@ -40,7 +40,11 @@ void planificarEntrenadores(){
 		}
 
 		t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
+		log_info(LO,"Aca stamos dying");
 		if(list_size(entrenadoresDeadlock) >= 2){
+			Entrenador* entrenador1 = list_get(entrenadoresDeadlock,0);
+			Entrenador* entrenador2 = list_get(entrenadoresDeadlock,1);
+			log_info(LO,"Los entrenadores ue estan en deadlock son %c y %c", entrenador1->numeroEntrenador, entrenador2->numeroEntrenador);
 			pasarAReadyParaIntercambiar(entrenadoresDeadlock);
 			sem_post(&esperandoPasarAlgunoAExec);
 		}
