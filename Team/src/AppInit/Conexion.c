@@ -46,9 +46,8 @@ void* escucharGameBoy(){
 					args->nombrePoke = appeared->pokemon;
 					args->posicion = *appeared->posicion;
 
-					pthread_t agregarAppeared;
-					pthread_create(&agregarAppeared, NULL, (void*)agregarPokemonSiLoNecesita, args);
-					pthread_detach(agregarAppeared);
+					agregarPokemonSiLoNecesita(args);
+					free(args);
 
 
 								log_info(logger, "$-Se recibio el appeared | Pokemon: %s - Posicion X: %d - Posicion Y: %d", appeared->pokemon, appeared->posicion->posicionX, appeared->posicion->posicionY);
@@ -63,7 +62,6 @@ void* escucharGameBoy(){
 								free(paqueteAppeared->buffer);
 							}
 						}
-
 
 //		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(socketGameBoy);
 //		free(paqueteNuevo);

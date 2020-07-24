@@ -245,7 +245,9 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	enviar_catch_pokemon(catchPoke, socketCatch, -1, -1);
 
 	entrenadorEsperando->ciclosCPUConsumido += 1;
+	sleep(RETARDO_CICLO_CPU);
 	log_info(LO, "El entrenador %c consumio %d ciclos de CPU", entrenadorEsperando->numeroEntrenador, entrenadorEsperando->ciclosCPUConsumido);
+
 
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
 	//para saber que respuesta de caught es de el

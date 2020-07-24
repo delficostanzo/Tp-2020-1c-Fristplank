@@ -25,6 +25,8 @@ void moverSiDistanciaMayorAQ(Entrenador* entrenador, int posicionXPoke, int posi
 			//la x del poke y del entrenador son iguales
 			entrenador->posicion->posicionX = posicionXPoke;
 			entrenador->ciclosCPUConsumido += QUANTUM;
+			int retardo = QUANTUM * RETARDO_CICLO_CPU;
+			sleep(retardo);
 			log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenador->numeroEntrenador, entrenador->posicion->posicionX, entrenador->posicion->posicionY);
 
 			pasarAReadyPorQuantum(entrenador);
@@ -37,6 +39,8 @@ void moverSiDistanciaMayorAQ(Entrenador* entrenador, int posicionXPoke, int posi
 				entrenador->posicion->posicionX += QUANTUM; //va hacia la izquierda => disminuye
 				entrenador->ciclosCPUConsumido += QUANTUM;
 			}
+			int retardo = QUANTUM * RETARDO_CICLO_CPU;
+			sleep(retardo);
 			log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenador->numeroEntrenador, entrenador->posicion->posicionX, entrenador->posicion->posicionY);
 
 			pasarAReadyPorQuantum(entrenador);
@@ -49,7 +53,8 @@ void moverSiDistanciaMayorAQ(Entrenador* entrenador, int posicionXPoke, int posi
 					entrenador->posicion->posicionX += distanciaEnXAbs; //va hacia la izquierda => disminuye
 					entrenador->ciclosCPUConsumido += distanciaEnXAbs;
 				}
-
+			int retardoX = distanciaEnXAbs * RETARDO_CICLO_CPU;
+			sleep(retardoX);
 			int quantumQueMeSobra = QUANTUM - distanciaEnXAbs; //siempre va a sobrar porque distanciaXAbs < Q
 			if(posicionYEntrenador > posicionYPoke){//si el entrenador esta arriba
 				entrenador->posicion->posicionY -= quantumQueMeSobra;
@@ -58,6 +63,8 @@ void moverSiDistanciaMayorAQ(Entrenador* entrenador, int posicionXPoke, int posi
 				entrenador->posicion->posicionY += quantumQueMeSobra;
 				entrenador->ciclosCPUConsumido += quantumQueMeSobra;
 			}
+			int retardoY = quantumQueMeSobra * RETARDO_CICLO_CPU;
+			sleep(retardoY);
 			log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenador->numeroEntrenador, entrenador->posicion->posicionX, entrenador->posicion->posicionY);
 
 			pasarAReadyPorQuantum(entrenador);

@@ -19,6 +19,7 @@ void iniciarVariables(){
 
 	LO = iniciarLogOficial();
 
+	RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
 
 //	pthread_mutex_init(&mutexConexionGameboy, NULL);
 //	pthread_mutex_init(&mutexSocketGameBoy, NULL);
