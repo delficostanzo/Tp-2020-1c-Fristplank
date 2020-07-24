@@ -137,7 +137,6 @@ int noRecibioDeEsaEspecie(char* nombrePoke) {
 
 int seNecesita(char* pokemon) {
 	pthread_mutex_lock(&mutexObjetivosGlobales);
-	t_list* pokesGlobales = objetivosGlobales;
 	log_info(logger, "Cantidad de objetivos globales: %d", list_size(objetivosGlobales));
 	PokemonEnElMapa* pokeNecesitado = buscarPorNombre(pokemon, objetivosGlobales);
 	pthread_mutex_unlock(&mutexObjetivosGlobales);

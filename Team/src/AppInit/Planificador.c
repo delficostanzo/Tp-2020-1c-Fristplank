@@ -139,16 +139,16 @@ Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemo
 }
 
 void cambiarCantidadEnPokesLibres(PokemonEnElMapa* pokeLibre){
-	//pthread_mutex_lock(&mutexPokemonesLibres);
+	pthread_mutex_lock(&mutexPokemonesLibres);
 	disminuirCantidadPokemones(pokeLibre, pokemonesLibres);
-	//pthread_mutex_unlock(&mutexPokemonesLibres);
+	pthread_mutex_unlock(&mutexPokemonesLibres);
 }
 
 void cambiarCantidadEnPokesObj(PokemonEnElMapa* pokeLibre){
-	//pthread_mutex_lock(&mutexObjetivosGlobales);
+	pthread_mutex_lock(&mutexObjetivosGlobales);
 	//saco el mutex porque esta funcion es llamada dentro de dicho mutex
 	disminuirCantidadPokemones(pokeLibre, objetivosGlobales);
-	//pthread_mutex_unlock(&mutexObjetivosGlobales);
+	pthread_mutex_unlock(&mutexObjetivosGlobales);
 }
 
 void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes){
