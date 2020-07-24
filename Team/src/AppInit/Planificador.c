@@ -24,10 +24,11 @@ void planificarEntrenadores(){
 	//sem_wait(&arrancarPlan);
 	while(cumple){ // lista de entrenadores que no estan en exit
 		// se pasan entrenadores a READY segun su condicion
-//		if(cantidadPokesLibres() != 0) {
-//			pasarAReadyParaAtrapar();
-//		}
+		if(cantidadPokesLibres() != 0) {
+			pasarAReadyParaAtrapar();
+		}
 //
+
 //		pasarAReadyParaIntercambiar();
 //
 //		log_info(LO, "Me quede qui");
@@ -37,16 +38,17 @@ void planificarEntrenadores(){
 		if(cantidadPokesLibres() != 0) {
 			pasarAReadyParaAtrapar();
 		}
-
 		t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
-		log_info(LO,"Aca stamos dying");
-		if(list_size(entrenadoresDeadlock) >= 2){
+
+		if(list_size(entrenadoresDeadlock) >= 2) {
 			Entrenador* entrenador1 = list_get(entrenadoresDeadlock,0);
 			Entrenador* entrenador2 = list_get(entrenadoresDeadlock,1);
 			log_info(LO,"Los entrenadores ue estan en deadlock son %c y %c", entrenador1->numeroEntrenador, entrenador2->numeroEntrenador);
 			pasarAReadyParaIntercambiar(entrenadoresDeadlock);
 			sem_post(&esperandoPasarAlgunoAExec);
 		}
+
+
 
 		if(terminarSiTodosExit()) {
 			break;
@@ -97,22 +99,22 @@ void pasarAReadyParaAtrapar(){
 			if(pokemonLibre != NULL){
 				pthread_mutex_lock(&mutexEntrenadores);
 				//apuntan a los mismos entrenadores globales
-				Entrenador* entrenadorAReady =  asignarObjetivoA(entrenadoresPosibles, pokemonLibre);
+				Entrenador* entrenadorAsignado =  asignarObjetivoA(entrenadoresPosibles, pokemonLibre);
 				pthread_mutex_unlock(&mutexEntrenadores);
 
-				agregarAListaReady(entrenadorAReady);
+				agregarAListaReady(entrenadorAsignado);
 
 				// cambio de estado al entrenador, pasa a ready
-				pthread_mutex_lock(&entrenadorAReady->mutexEstado);
-				entrenadorAReady->estado = 2;
-				pthread_mutex_unlock(&entrenadorAReady->mutexEstado);
+				pthread_mutex_lock(&entrenadorAsignado->mutexEstado);
+				entrenadorAsignado->estado = 2;
+				pthread_mutex_unlock(&entrenadorAsignado->mutexEstado);
 
 
 				// ese poke se saca de la lista de pokes libres porque ya fue asginado
 				cambiarCantidadEnPokesLibres(pokemonLibre);
 				// disminuyo la cantidad de ese poke libre en los obj globales (lo saco si cant = 0)
 				cambiarCantidadEnPokesObj(pokemonLibre);
-				log_info(LO, "El entrenador %c paso a estado ready para atrapar al pokemon %s", entrenadorAReady->numeroEntrenador, pokemonLibre->nombre);
+				log_info(LO, "El entrenador %c paso a estado ready para atrapar al pokemon %s", entrenadorAsignado->numeroEntrenador, pokemonLibre->nombre);
 
 				sem_post(&esperandoPasarAlgunoAExec);
 			}
@@ -125,17 +127,17 @@ void pasarAReadyParaAtrapar(){
 
 
 Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre){
-	Entrenador* entrenadorAAsignar = entrenadorMasCercanoA(pokemonLibre, entrenadoresAMover);
-	//log_info(LO, "--El entrenador mas cercano al poke %s es el %c", pokemonLibre->nombre, entrenadorAAsignar->numeroEntrenador);
+	Entrenador* entrenadorAsignado = entrenadorMasCercanoA(pokemonLibre, entrenadoresAMover);
+	log_info(LO, "--El entrenador mas cercano al poke %s es el %c", pokemonLibre->nombre, entrenadorAsignado->numeroEntrenador);
 
 	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
 	movimiento->pokemonNecesitado = asignarPokemonCopia(pokemonLibre);
-	entrenadorAAsignar->movimientoEnExec = movimiento;
+	entrenadorAsignado->movimientoEnExec = movimiento;
 	//entrenadorAAsignar->movimientoEnExec->pokemonNecesitado = asignarPokemonCopia(pokemonLibre);
-	entrenadorAAsignar->movimientoEnExec->objetivo = 1;
+	entrenadorAsignado->movimientoEnExec->objetivo = 1;
 
 
-	return entrenadorAAsignar;
+	return entrenadorAsignado;
 }
 
 void cambiarCantidadEnPokesLibres(PokemonEnElMapa* pokeLibre){
@@ -193,9 +195,8 @@ void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock){
 				log_info(LO, "Lo que te guste");
 
 				// TODO: No cuenta la cantidad de deadlocks, no se si es porque no le gusta hacer el != con un char
-				if(entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio != 'Z' && bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio != 'Z') {
+				if(entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio != 0 && bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio != 0) {
 					cantidadDeadlocks ++;
-					log_info(LO,"Aca te gusto?");
 				}
 
 				//me guardo con que entrenador intercambiar cuando pase a exec y el que esta bloqueado a cual esta esperando
