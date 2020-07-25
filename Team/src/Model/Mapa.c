@@ -19,6 +19,7 @@ void iniciarVariables(){
 
 	LO = iniciarLogOficial();
 
+	RETARDO_CICLO_CPU = config_get_int_value(config, "RETARDO_CICLO_CPU");
 
 //	pthread_mutex_init(&mutexConexionGameboy, NULL);
 //	pthread_mutex_init(&mutexSocketGameBoy, NULL);
@@ -38,7 +39,13 @@ void iniciarVariables(){
 	pthread_mutex_init(&mutexPokemonesLibres, NULL);
 	pthread_mutex_init(&mutexPokemonesRecibidos, NULL);
 	pthread_mutex_init(&mutexListaEntrenadoresReady, NULL);
+	pthread_mutex_init(&entrandorBloqueado, NULL);
 	sem_init(&semaforoCatch, 1, 0);
+	//lo inicializo en 0 para que en el primer wait del planificador no ejecutes
+	sem_init(&esperandoPasarAlgunoAExec, 1, 1);
+	sem_init(&arrancarPlan, 1, 0);
+	sem_init(&procesoDeIntercambioDePokes, 1, 1);
+
 
 	idsCorrelativosCaught = list_create();
 	sem_init(&semaforoCorrelativos, 1, 1);

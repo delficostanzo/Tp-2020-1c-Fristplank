@@ -15,6 +15,7 @@ int ID_UNICO;
 
 int TIEMPO_RECONEXION;
 int QUANTUM;
+int RETARDO_CICLO_CPU;
 
 char* ALGORITMO;
 
@@ -62,7 +63,11 @@ pthread_mutex_t mutexObjetivosGlobales;
 pthread_mutex_t mutexPokemonesLibres;
 pthread_mutex_t mutexPokemonesRecibidos;
 pthread_mutex_t mutexListaEntrenadoresReady;
+pthread_mutex_t entrandorBloqueado;
 sem_t semaforoCatch;
+sem_t esperandoPasarAlgunoAExec;
+sem_t arrancarPlan;
+sem_t procesoDeIntercambioDePokes;
 
 t_list* entrenadores;
 t_list* objetivosTotales;

@@ -30,7 +30,7 @@ void crearHiloParaEntrenador(Entrenador* entrenador){
 }
 
 //la funcion funcionesDelEntrenador tendria que estar en el Team.c, lo dejo aca por ahora
-void funcionesDelEntrenador(void* unEntrenador){
+void funcionesDelEntrenador(void* unEntrenador) {
 
 	Entrenador* entrenador = (Entrenador*) unEntrenador;
 
@@ -46,6 +46,9 @@ void funcionesDelEntrenador(void* unEntrenador){
 		//pthread_mutex_lock(&(entrenador->mutexEntrenador));
 		sem_wait(&entrenador->semaforoExecEntrenador);
 		cumplirObjetivo(entrenador);
+
+		sem_post(&esperandoPasarAlgunoAExec);
+
 		pthread_mutex_lock(&entrenador->mutexEstado);
 		cumple = entrenador->estado != 5;
 		pthread_mutex_unlock(&entrenador->mutexEstado);

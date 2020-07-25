@@ -13,7 +13,7 @@
 
 void cumplirObjetivo(Entrenador* entrenador);
 void pasarAReadyParaAtrapar();
-void pasarAReadyParaIntercambiar();
+void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock);
 void pasarAExec();
 void planificarEntrenadores();
 void disminuirCantidadPokemones(PokemonEnElMapa* pokemonLibre, t_list* listaPokes);

@@ -14,7 +14,6 @@ void destruirPokemon(PokemonEnElMapa* poke);
 
 void terminarTeam() {
 
-	noHayQueFinalizar = 0;
 
 	if (config != NULL) {
 		config_destroy(config); //destruye la esctructura de config en memoria, no elimina el archivo de config
@@ -82,26 +81,39 @@ void freeEntrenadores() {
 //			free(poke->nombre);
 //			free(poke);
 //		}
-		list_destroy_and_destroy_elements(entrenador->pokemonesObjetivos, destruirPokemon);
+//		log_info(LO,"1");
+		list_destroy_and_destroy_elements(entrenador->pokemonesObjetivos, (void*)destruirPokemon);
 //		list_destroy(entrenador->pokemonesObjetivos);
 		//if(tieneQueLiberarMovimiento(entrenador)) {
+//		log_info(LO,"2");
 			free(entrenador->movimientoEnExec->pokemonNecesitado->nombre);
+//			log_info(LO,"3");
 			free(entrenador->movimientoEnExec->pokemonNecesitado);
+//			log_info(LO,"4");
 			//son copias de los atrapados asi que tambien hay que liberarlos
-			if(entrenador->movimientoEnExec->pokemonAIntercambiar->nombre == NULL) {
+			if(entrenador->movimientoEnExec->pokemonAIntercambiar == NULL) {
+
 				free(entrenador->movimientoEnExec->pokemonAIntercambiar->nombre);
+//				log_info(LO,"4.5");
+				free(entrenador->movimientoEnExec->pokemonAIntercambiar);
+//				log_info(LO,"5");
 			}
 
-			free(entrenador->movimientoEnExec->pokemonAIntercambiar);
+//			log_info(LO,"6)
 			//pthread_cancel(entrenador->hiloEntrenador);
 		//}
 		free(entrenador->movimientoEnExec);
+//		log_info(LO,"7");
 		pthread_mutex_destroy(&entrenador->mutexEstado);
+//		log_info(LO,"8");
 		pthread_mutex_destroy(&entrenador->mutexCorrelativo);
+//		log_info(LO,"9");
 		sem_destroy(&entrenador->semaforoExecEntrenador);
+//		log_info(LO,"10");
 		//pthread_mutex_destroy(&entrenador->mutexEntrenador);
 //		pthread_cancel(entrenador->hiloEntrenador);
 		free(entrenador);
+//		log_info(LO,"11");
 	}
 }
 

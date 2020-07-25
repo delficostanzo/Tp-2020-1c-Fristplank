@@ -207,7 +207,8 @@ t_list* getObjetivosTotalesDesde(t_list* entrenadores) {
 
 	void agregarAUnaNuevaListaConcat(t_list* objetivosDeUnEntrenador) {
 		for(int index=0; index<list_size(objetivosDeUnEntrenador); index++){
-			PokemonEnElMapa* pokemonEnLaLista = asignarPokemonCopia(list_get(objetivosDeUnEntrenador,index));
+			PokemonEnElMapa* poke = list_get(objetivosDeUnEntrenador,index);
+			PokemonEnElMapa* pokemonEnLaLista = asignarPokemonCopia(poke);
 			setPokemonA(objetivosAgrupados,pokemonEnLaLista);
 		}
 	}
