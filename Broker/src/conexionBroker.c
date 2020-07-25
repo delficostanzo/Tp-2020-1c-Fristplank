@@ -39,23 +39,26 @@ void * esperarClientes() {
 					team->socketIdCatch = aceptarConexion(conexionCliente);
 					team->socketCaught = aceptarConexion(conexionCliente);
 					team->socketACKCaught = aceptarConexion(conexionCliente);
-
-					atenderTeam(team);
+					if(team->socketCaught != -1){
+						atenderTeam(team);
+					}
+					free(idProcesoConectado);
 					break;
 
 				case GAMECARD:;
 					t_suscriptor_gamecard* gamecard = malloc(sizeof(t_suscriptor_gamecard));
 					gamecard->id = idProcesoConectado->idUnico;
 					gamecard->socketNew = aceptarConexion(conexionCliente);
-					gamecard->socketACKNew = aceptarConexion(conexionCliente);
 					gamecard->socketCatch = aceptarConexion(conexionCliente);
-					gamecard->socketACKCatch = aceptarConexion(conexionCliente);
 					gamecard->socketGet = aceptarConexion(conexionCliente);
-					gamecard->socketACKGet = aceptarConexion(conexionCliente);
 					gamecard->socketAppeared = aceptarConexion(conexionCliente);
 					gamecard->socketCaught = aceptarConexion(conexionCliente);
 					gamecard->socketLocalized = aceptarConexion(conexionCliente);
-					atenderGamecard(gamecard);
+
+					if(gamecard->socketLocalized != -1){
+						atenderGamecard(gamecard);
+					}
+					free(idProcesoConectado);
 					break;
 
 				case GAMEBOY:;
@@ -185,9 +188,9 @@ void atenderTeam(t_suscriptor_team* team){
 
 	lanzarHiloEscucha(team->id, &team->socketGet);
 	lanzarHiloEscucha(team->id, &team->socketCatch);
-	lanzarHiloEscuchaACK(team->id, &team->socketACKLocalized, LOCALIZED_POKEMON);
-	lanzarHiloEscuchaACK(team->id, &team->socketACKCaught, CAUGHT_POKEMON);
-	lanzarHiloEscuchaACK(team->id, &team->socketACKAppeared, APPEARED_POKEMON);
+//	lanzarHiloEscuchaACK(team->id, &team->socketACKLocalized, LOCALIZED_POKEMON);
+//	lanzarHiloEscuchaACK(team->id, &team->socketACKCaught, CAUGHT_POKEMON);
+//	lanzarHiloEscuchaACK(team->id, &team->socketACKAppeared, APPEARED_POKEMON);
 
 	pthread_mutex_lock(&mutexEnvio);
 	enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized, team->id);
@@ -223,9 +226,6 @@ void atenderGamecard(t_suscriptor_gamecard* gamecard){
 	lanzarHiloEscucha(gamecard->id, &gamecard->socketAppeared);
 	lanzarHiloEscucha(gamecard->id, &gamecard->socketLocalized);
 	lanzarHiloEscucha(gamecard->id, &gamecard->socketCaught);
-	lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKNew, NEW_POKEMON);
-	lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKGet, GET_POKEMON);
-	lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKCatch, CATCH_POKEMON);
 
 	pthread_mutex_lock(&mutexEnvio);
 	enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, gamecard->socketGet, gamecard->id);
@@ -257,6 +257,17 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
+
+					t_paquete* ack = recibir_mensaje(socket);
+
+					if(ack != NULL){
+						procesarACK(ack, tipoDeMensaje, idProceso);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", idProceso);
+					}
+
 				}
 			}
 			break;
@@ -275,6 +286,16 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
+
+					t_paquete* ack = recibir_mensaje(socket);
+
+					if(ack != NULL){
+						procesarACK(ack, tipoDeMensaje, idProceso);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", idProceso);
+					}
 				}
 			}
 			break;
@@ -293,6 +314,16 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
+
+					t_paquete* ack = recibir_mensaje(socket);
+
+					if(ack != NULL){
+						procesarACK(ack, tipoDeMensaje, idProceso);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", idProceso);
+					}
 				}
 			}
 			break;
@@ -311,6 +342,16 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
+
+					t_paquete* ack = recibir_mensaje(socket);
+
+					if(ack != NULL){
+						procesarACK(ack, tipoDeMensaje, idProceso);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", idProceso);
+					}
 				}
 			}
 			break;
@@ -329,6 +370,17 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
+
+					t_paquete* ack = recibir_mensaje(socket);
+
+					if(ack != NULL){
+						procesarACK(ack, tipoDeMensaje, idProceso);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", idProceso);
+					}
+
 				}
 			}
 			break;
@@ -347,6 +399,16 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idProceso, *id, tipoDeMensaje);
 					pthread_mutex_unlock(&mutexColas);
+
+					t_paquete* ack = recibir_mensaje(socket);
+
+					if(ack != NULL){
+						procesarACK(ack, tipoDeMensaje, idProceso);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", idProceso);
+					}
 				}
 			}
 			break;
@@ -370,16 +432,16 @@ void lanzarHiloEscucha(int id, int* socket){
 	pthread_detach(hilo);
 }
 
-void lanzarHiloEscuchaACK(int id, int* socket, op_code cola){
-	t_args_socket_ACK* argumentos = malloc(sizeof(t_args_socket_ACK));
-	argumentos->id = id;
-	argumentos->socket = socket;
-	argumentos->cola = cola;
-
-	pthread_t hilo;
-	pthread_create(&hilo, NULL, (void*) escucharSocketACK, argumentos);
-	pthread_detach(hilo);
-}
+//void lanzarHiloEscuchaACK(int id, int* socket, op_code cola){
+//	t_args_socket_ACK* argumentos = malloc(sizeof(t_args_socket_ACK));
+//	argumentos->id = id;
+//	argumentos->socket = socket;
+//	argumentos->cola = cola;
+//
+//	pthread_t hilo;
+//	pthread_create(&hilo, NULL, (void*) escucharSocketACK, argumentos);
+//	pthread_detach(hilo);
+//}
 
 void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 
@@ -474,59 +536,51 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 	log_debug(logger, "END: escucharSocketMensajesACachear");
 }
 
-void escucharSocketACK(t_args_socket_ACK* args){
+void procesarACK(t_paquete* paquete, op_code tipoCola, int idSuscriptor){
+	//todo agregar esto al esperarlo
+//	if(paquete == NULL){
+//		log_info(logger, "Se perdió conexión ACK con proceso ID [%d]", args->id);
+//		close(*args->socket);
+//		free(args);
+//		break;
+//	}
 
-	log_debug(logger, "START: escucharSocketACK");
+	log_info(logger, "Mensaje recibido: ACK");
+	pthread_mutex_lock(&mutexColas);
 
-	log_debug(logger,"SOCKET %s ACK: %d",ID_COLA[args->cola],*(args->socket));
-
-	while(1){
-		log_info(logger, "Esperando mensajes ACK...");
-		t_paquete* paquete = recibir_mensaje(*(args->socket));
-
-		if(paquete == NULL){
-			log_info(logger, "Se perdió conexión ACK con proceso ID [%d]", args->id);
-			close(*args->socket);
-			free(args);
-			break;
-		}
-
-		log_info(logger, "Mensaje recibido: ACK");
-		pthread_mutex_lock(&mutexColas);
-
-		/* Agrego el ID del proceso a la lista de ACK del mensaje
-		 */
-		for(int i = 0; i < 6; i++) {
-			if(cola[i].nombreCola == args->cola){
-				int cantidadMensajes = list_size(cola[i].mensajes);
-				/* Recorro la lista de mensajes hasta dar con el indicado
+	/* Agrego el ID del proceso a la lista de ACK del mensaje
+	 */
+	for(int i = 0; i < 6; i++) {
+		if(cola[i].nombreCola == tipoCola){
+			int cantidadMensajes = list_size(cola[i].mensajes);
+			/* Recorro la lista de mensajes hasta dar con el indicado
+			 */
+			for(int j = 0; j < cantidadMensajes; j++){
+				t_metadata* mensaje = list_get(cola[i].mensajes, j);
+				/* Agrego el ID del proceso a la lista de ACK del mensaje
 				 */
-				for(int j = 0; j < cantidadMensajes; j++){
-					t_metadata* mensaje = list_get(cola[i].mensajes, j);
-					/* Agrego el ID del proceso a la lista de ACK del mensaje
-					 */
-					if(mensaje->ID == paquete->ID_CORRELATIVO){
-						list_add(mensaje->ACKSuscriptores, &args->id);
-					}
+				if(mensaje->ID == paquete->ID_CORRELATIVO){
+					list_add(mensaje->ACKSuscriptores, &idSuscriptor);
+				}
 
-					/* Chequeo si se llego a la cantidad necesaria de ACK
-					 * Si tengo los suficientes, elimino el mensaje
-					 * Para eso tengo que removerlo de la lista de mensajes
-					 * Luego liberar los elementos de la lista ACK de ese mensaje,
-					 * Destruir la lista ACK y finalmente liberar el mensaje
-					 */
+				/* Chequeo si se llego a la cantidad necesaria de ACK
+				 * Si tengo los suficientes, elimino el mensaje
+				 * Para eso tengo que removerlo de la lista de mensajes
+				 * Luego liberar los elementos de la lista ACK de ese mensaje,
+				 * Destruir la lista ACK y finalmente liberar el mensaje
+				 */
 
-					if(list_size(mensaje->ACKSuscriptores) == list_size(cola[i].suscriptores)){
-						list_remove_and_destroy_element(cola[i].mensajes, j, (void*) liberoMensaje);
-//						list_remove(cola[i].mensajes, j);
-					}
+				if(list_size(mensaje->ACKSuscriptores) == list_size(cola[i].suscriptores)){
+					log_info("Todos mis suscriptores enviaron ACK. Elimino mensaje [%id].", paquete->ID);
+					list_remove_and_destroy_element(cola[i].mensajes, j, (void*) liberoMensaje);
+	//						list_remove(cola[i].mensajes, j);
 				}
 			}
 		}
-		pthread_mutex_unlock(&mutexColas);
 	}
-
-	log_debug(logger, "END: escucharSocketACK");
+	pthread_mutex_unlock(&mutexColas);
+	free(paquete->buffer);
+	free(paquete);
 }
 
 void liberoMensaje(t_metadata* mensaje){
@@ -631,6 +685,17 @@ void enviar_mensaje_NEW_a_suscriptores(void* paqueteVoid){
 					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
 					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
+
+					t_paquete* ack = recibir_mensaje(socketAUsar);
+
+					if(ack != NULL){
+						procesarACK(ack, paquete->codigo_operacion, suscriptor->ID);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", suscriptor->ID);
+						break;
+					}
 				}
 				else{
 					log_info(logger, "Mensaje NEW_POKEMON no ha podido ser enviado.");
@@ -660,25 +725,27 @@ void enviar_mensaje_APPEARED_a_suscriptores(void* paqueteVoid){
 			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(cola[i].suscriptores, j);
+				suscriptorEnCola* suscriptor = list_get(cola[i].suscriptores, j);
+				int idSuscriptor = suscriptor->ID;
+				log_debug(logger, "El ID del proceso al que le mando mensaje es %d", idSuscriptor);
 
 				pthread_mutex_lock(&mutexRepoTeam);
-				int existeTeam = check_si_existe_team(*idSuscriptor);
+				int existeTeam = check_si_existe_team(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoTeam);
 
 				pthread_mutex_lock(&mutexRepoGameBoy);
-				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				int existeGameBoy = check_si_existe_gameboy(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoGameBoy);
 
 				if(existeTeam == 1){
 					pthread_mutex_lock(&mutexRepoTeam);
-					t_suscriptor_team* team = buscar_suscriptor_team(*idSuscriptor);
+					t_suscriptor_team* team = buscar_suscriptor_team(idSuscriptor);
 					socketAUsar = team->socketAppeared;
 					pthread_mutex_unlock(&mutexRepoTeam);
 				}
 				else if(existeGameBoy == 1){
 					pthread_mutex_lock(&mutexRepoGameBoy);
-					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(idSuscriptor);
 					socketAUsar = gameboy->socketDondeEscucha;
 					pthread_mutex_unlock(&mutexRepoGameBoy);
 				}
@@ -702,7 +769,18 @@ void enviar_mensaje_APPEARED_a_suscriptores(void* paqueteVoid){
 				if (enviado != -1){
 					log_info(logger, "Mensaje APPEARED_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
-					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
+
+					t_paquete* ack = recibir_mensaje(socketAUsar);
+
+					if(ack != NULL){
+						procesarACK(ack, paquete->codigo_operacion, suscriptor->ID);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", suscriptor->ID);
+						break;
+					}
 				}
 				else{
 					log_info(logger, "Mensaje APPEARED_POKEMON no ha podido ser enviado.");
@@ -732,25 +810,27 @@ void enviar_mensaje_CATCH_a_suscriptores(void* paqueteVoid){
 			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(cola[i].suscriptores, j);
+				suscriptorEnCola* suscriptor = list_get(cola[i].suscriptores, j);
+				int idSuscriptor = suscriptor->ID;
+				log_debug(logger, "El ID del proceso al que le mando mensaje es %d", idSuscriptor);
 
 				pthread_mutex_lock(&mutexRepoGameCard);
-				int existeGameCard = check_si_existe_gamecard(*idSuscriptor);
+				int existeGameCard = check_si_existe_gamecard(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoGameCard);
 
 				pthread_mutex_lock(&mutexRepoGameBoy);
-				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				int existeGameBoy = check_si_existe_gameboy(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoGameBoy);
 
 				if(existeGameCard == 1){
 					pthread_mutex_lock(&mutexRepoGameCard);
-					t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(*idSuscriptor);
+					t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(idSuscriptor);
 					socketAUsar = gamecard->socketCatch;
 					pthread_mutex_unlock(&mutexRepoGameCard);
 				}
 				else if(existeGameBoy == 1){
 					pthread_mutex_lock(&mutexRepoGameBoy);
-					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(idSuscriptor);
 					socketAUsar = gameboy->socketDondeEscucha;
 					pthread_mutex_unlock(&mutexRepoGameBoy);
 				}
@@ -774,7 +854,18 @@ void enviar_mensaje_CATCH_a_suscriptores(void* paqueteVoid){
 				if (enviado != -1){
 					log_info(logger, "Mensaje CATCH_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
-					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
+
+					t_paquete* ack = recibir_mensaje(socketAUsar);
+
+					if(ack != NULL){
+						procesarACK(ack, paquete->codigo_operacion, suscriptor->ID);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", suscriptor->ID);
+						break;
+					}
 				}
 				else{
 					log_info(logger, "Mensaje CATCH_POKEMON no ha podido ser enviado.");
@@ -805,25 +896,27 @@ void enviar_mensaje_CAUGHT_a_suscriptores(void* paqueteVoid){
 			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(cola[i].suscriptores, j);
+				suscriptorEnCola* suscriptor = list_get(cola[i].suscriptores, j);
+				int idSuscriptor = suscriptor->ID;
+				log_debug(logger, "El ID del proceso al que le mando mensaje es %d", idSuscriptor);
 
 				pthread_mutex_lock(&mutexRepoTeam);
-				int existeTeam = check_si_existe_team(*idSuscriptor);
+				int existeTeam = check_si_existe_team(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoTeam);
 
 				pthread_mutex_lock(&mutexRepoGameBoy);
-				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				int existeGameBoy = check_si_existe_gameboy(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoGameBoy);
 
 				if(existeTeam == 1){
 					pthread_mutex_lock(&mutexRepoTeam);
-					t_suscriptor_team* team = buscar_suscriptor_team(*idSuscriptor);
+					t_suscriptor_team* team = buscar_suscriptor_team(idSuscriptor);
 					socketAUsar = team->socketCaught;
 					pthread_mutex_unlock(&mutexRepoTeam);
 				}
 				else if(existeGameBoy == 1){
 					pthread_mutex_lock(&mutexRepoGameBoy);
-					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(idSuscriptor);
 					socketAUsar = gameboy->socketDondeEscucha;
 					pthread_mutex_unlock(&mutexRepoGameBoy);
 				}
@@ -842,7 +935,18 @@ void enviar_mensaje_CAUGHT_a_suscriptores(void* paqueteVoid){
 				if (enviado != -1){
 					log_info(logger, "Mensaje CAUGHT_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
-					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
+
+					t_paquete* ack = recibir_mensaje(socketAUsar);
+
+					if(ack != NULL){
+						procesarACK(ack, paquete->codigo_operacion, suscriptor->ID);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", suscriptor->ID);
+						break;
+					}
 				}
 				else{
 					log_info(logger, "Mensaje CAUGHT_POKEMON no ha podido ser enviado.");
@@ -872,25 +976,27 @@ void enviar_mensaje_GET_a_suscriptores(void* paqueteVoid){
 			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(cola[i].suscriptores, j);
+				suscriptorEnCola* suscriptor = list_get(cola[i].suscriptores, j);
+				int idSuscriptor = suscriptor->ID;
+				log_debug(logger, "El ID del proceso al que le mando mensaje es %d", idSuscriptor);
 
 				pthread_mutex_lock(&mutexRepoGameCard);
-				int existeGameCard = check_si_existe_gamecard(*idSuscriptor);
+				int existeGameCard = check_si_existe_gamecard(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoGameCard);
 
 				pthread_mutex_lock(&mutexRepoGameBoy);
-				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				int existeGameBoy = check_si_existe_gameboy(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoGameBoy);
 
 				if(existeGameCard == 1){
 					pthread_mutex_lock(&mutexRepoGameCard);
-					t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(*idSuscriptor);
+					t_suscriptor_gamecard* gamecard = buscar_suscriptor_gamecard(idSuscriptor);
 					socketAUsar = gamecard->socketGet;
 					pthread_mutex_unlock(&mutexRepoGameCard);
 				}
 				else if(existeGameBoy == 1){
 					pthread_mutex_lock(&mutexRepoGameBoy);
-					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(idSuscriptor);
 					socketAUsar = gameboy->socketDondeEscucha;
 					pthread_mutex_unlock(&mutexRepoGameBoy);
 				}
@@ -910,7 +1016,18 @@ void enviar_mensaje_GET_a_suscriptores(void* paqueteVoid){
 				if (enviado != -1){
 					log_info(logger, "Mensaje GET_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
-					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
+
+					t_paquete* ack = recibir_mensaje(socketAUsar);
+
+					if(ack != NULL){
+						procesarACK(ack, paquete->codigo_operacion, suscriptor->ID);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", suscriptor->ID);
+						break;
+					}
 				}
 				else{
 					log_info(logger, "Mensaje GET_POKEMON no ha podido ser enviado.");
@@ -939,25 +1056,27 @@ void enviar_mensaje_LOCALIZED_a_suscriptores(void* paqueteVoid){
 			int listaSize = list_size(cola[i].suscriptores);
 
 			for(int j = 0; j < listaSize; j++){
-				int* idSuscriptor = list_get(cola[i].suscriptores, j);
+				suscriptorEnCola* suscriptor = list_get(cola[i].suscriptores, j);
+				int idSuscriptor = suscriptor->ID;
+				log_debug(logger, "El ID del proceso al que le mando mensaje es %d", idSuscriptor);
 
 				pthread_mutex_lock(&mutexRepoTeam);
-				int existeTeam = check_si_existe_team(*idSuscriptor);
+				int existeTeam = check_si_existe_team(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoTeam);
 
 				pthread_mutex_lock(&mutexRepoGameBoy);
-				int existeGameBoy = check_si_existe_gameboy(*idSuscriptor);
+				int existeGameBoy = check_si_existe_gameboy(idSuscriptor);
 				pthread_mutex_unlock(&mutexRepoGameBoy);
 
 				if(existeTeam == 1){
 					pthread_mutex_lock(&mutexRepoTeam);
-					t_suscriptor_team* team = buscar_suscriptor_team(*idSuscriptor);
+					t_suscriptor_team* team = buscar_suscriptor_team(idSuscriptor);
 					socketAUsar = team->socketLocalized;
 					pthread_mutex_unlock(&mutexRepoTeam);
 				}
 				else if(existeGameBoy == 1){
 					pthread_mutex_lock(&mutexRepoGameBoy);
-					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(*idSuscriptor);
+					t_suscriptor_gameboy* gameboy = buscar_suscriptor_gameboy(idSuscriptor);
 					socketAUsar = gameboy->socketDondeEscucha;
 					pthread_mutex_unlock(&mutexRepoGameBoy);
 				}
@@ -990,7 +1109,18 @@ void enviar_mensaje_LOCALIZED_a_suscriptores(void* paqueteVoid){
 				if (enviado != -1){
 					log_info(logger, "Mensaje LOCALIZED_POKEMON enviado | ID Mensaje: %d", paquete->ID);
 
-					agregarIdAEnviados(*idSuscriptor, paquete->ID, paquete->codigo_operacion);
+					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
+
+					t_paquete* ack = recibir_mensaje(socketAUsar);
+
+					if(ack != NULL){
+						procesarACK(ack, paquete->codigo_operacion, suscriptor->ID);
+					}
+
+					else{
+						log_info(logger, "No se pudo recibir ACK de ID [%d]", suscriptor->ID);
+						break;
+					}
 				}
 				else{
 					log_info(logger, "Mensaje LOCALIZED_POKEMON no ha podido ser enviado.");

@@ -48,7 +48,7 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 		serializar_respuesta_id(&streamFinal, offset, paquete->buffer->stream, bytes);
 		break;
 	case ACK:
-		// No se hace nada porque el ACK no tiene payload
+		*bytes = offset;
 		break;
 	case GAMEBOYSUSCRIBE:
 		serializar_gameboy_suscribe(&streamFinal, offset, paquete->buffer->stream, bytes);
