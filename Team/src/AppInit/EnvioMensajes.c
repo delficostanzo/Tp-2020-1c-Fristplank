@@ -127,7 +127,7 @@ int noRecibioDeEsaEspecie(char* nombrePoke) {
 	if(list_is_empty(pokemonesRecibidos) != 1) {
 		PokemonEnElMapa* pokeEncontrado = buscarPorNombre(nombrePoke, pokemonesRecibidos);
 		//si no es null es que nadie recibio antes a esa especie
-		cumple = pokeEncontrado != NULL;
+		cumple = pokeEncontrado == NULL;
 	}
 	pthread_mutex_unlock(&mutexPokemonesRecibidos);
 	//si no encontro ese poke en la lista de recibidos
@@ -239,12 +239,12 @@ void enviarCatchDesde(Entrenador* entrenadorEsperando){
 	PokemonEnElMapa* pokemonPorAtrapar = entrenadorEsperando->movimientoEnExec->pokemonNecesitado;
 	t_catch_pokemon* catchPoke = crearEstructuraCatchDesde(pokemonPorAtrapar);
 	//entrenadorQueEspera = entrenadorEsperando;
-	enviar_catch_pokemon(catchPoke, socketCatch, -1, -1);
 
 	entrenadorEsperando->ciclosCPUConsumido += 1;
 	sleep(RETARDO_CICLO_CPU);
-	log_info(LO, "El entrenador %c consumio %d ciclos de CPU", entrenadorEsperando->numeroEntrenador, entrenadorEsperando->ciclosCPUConsumido);
 
+	log_info(LO, "El entrenador %c consumio %d ciclos de CPU", entrenadorEsperando->numeroEntrenador, entrenadorEsperando->ciclosCPUConsumido);
+	enviar_catch_pokemon(catchPoke, socketCatch, -1, -1);
 
 	//el entrenador que mando el catch de ese pokemon necesita guardarse el id de ese que mando
 	//para saber que respuesta de caught es de el
@@ -260,9 +260,10 @@ void recibirIdCatch(Entrenador* entrenador) {
 	if(paqueteIdRecibido != NULL){
 		t_respuesta_id* idCatch = paqueteIdRecibido->buffer->stream;
 
+		log_info(LO, "Se recibio el Id del Catch del entrenador %c | Id: %d", entrenador->numeroEntrenador, idCatch->idCorrelativo);
+
 		agregarComoIdCorrelativoCaught(idCatch->idCorrelativo, entrenador);
 		quickLog("$-Se agrego como id en el entrenador necesario");
-		log_info(LO, "Se recibio el Id del Catch del entrenador %c | Id: %d", entrenador->numeroEntrenador, idCatch->idCorrelativo);
 
 		log_info(LO, "El entrenador %c paso a block esperando la respuesta del catch mandado", entrenador->numeroEntrenador);
 		pasarABlockEsperando(entrenador);
@@ -311,20 +312,20 @@ void agregarComoIdCorrelativoCaught(int idCorrelativo, Entrenador* entrenadorEsp
 t_paquete* recibirCaught(int socketCaught){
 	t_paquete* paqueteCaught = recibir_mensaje(socketCaught);
 
-
 	if(paqueteCaught != NULL){
 		enviar_ACK(socketCaught, -1, paqueteCaught->ID);
 
 		t_caught_pokemon* caught = paqueteCaught->buffer->stream;
 		log_info(logger, "$-Se recibio un caught con id %d, la respuesta es %d", paqueteCaught->ID, caught->ok);
 
-
-
 		if(hayCorrelativos() && tieneComoIdCorrelativoCaught(paqueteCaught->ID_CORRELATIVO)) {
 			//el entrenador que hizo el catch del caught respondido cambia de estado de acuerdo a la respuesta
 
 			ejecutarRespuestaCaught(paqueteCaught->ID_CORRELATIVO, paqueteCaught);
 			quickLog("$-El entrenador que esperaba el caught fue procesado");
+			return paqueteCaught;
+		}
+		else{
 			return paqueteCaught;
 		}
 	} else if (hayCorrelativos()){ //se corto la conexion al escuchar respuestas caught
