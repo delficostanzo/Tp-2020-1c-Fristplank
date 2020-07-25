@@ -39,7 +39,7 @@ void agregarMensajeACola(t_paquete * nuevoPaquete) {
 			//EL TAMAÑO Y POSICION DE UN MENSAJE EN MEMORIA  SE CALCULAN EN LA SIGUIENTE FUNCION
 			cachearMensaje(nuevaMeta, nuevoPaquete->buffer->stream);
 			list_add(cola[i].mensajes, nuevaMeta);
-			log_info(logger, "Se agregó un nuevo mensaje a la cola %s.",ID_COLA[i+1]); //LOG OBLIGATORIO (3)
+			log_info(logger, "Se agregó un nuevo mensaje a la cola %s.", ID_COLA[i + 1]); //LOG OBLIGATORIO (3)
 			pthread_mutex_unlock(&mutexMemoria);
 			break;
 		}

@@ -32,13 +32,11 @@ void * esperarClientes() {
 					team->socketGet = aceptarConexion(conexionCliente);
 					team->socketIdGet = aceptarConexion(conexionCliente);
 					team->socketAppeared = aceptarConexion(conexionCliente);
-					team->socketACKAppeared = aceptarConexion(conexionCliente);
 					team->socketLocalized = aceptarConexion(conexionCliente);
-					team->socketACKLocalized = aceptarConexion(conexionCliente);
 					team->socketCatch = aceptarConexion(conexionCliente);
 					team->socketIdCatch = aceptarConexion(conexionCliente);
 					team->socketCaught = aceptarConexion(conexionCliente);
-					team->socketACKCaught = aceptarConexion(conexionCliente);
+
 					if(team->socketCaught != -1){
 						atenderTeam(team);
 					}
@@ -188,9 +186,6 @@ void atenderTeam(t_suscriptor_team* team){
 
 	lanzarHiloEscucha(team->id, &team->socketGet);
 	lanzarHiloEscucha(team->id, &team->socketCatch);
-//	lanzarHiloEscuchaACK(team->id, &team->socketACKLocalized, LOCALIZED_POKEMON);
-//	lanzarHiloEscuchaACK(team->id, &team->socketACKCaught, CAUGHT_POKEMON);
-//	lanzarHiloEscuchaACK(team->id, &team->socketACKAppeared, APPEARED_POKEMON);
 
 	pthread_mutex_lock(&mutexEnvio);
 	enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized, team->id);
@@ -198,7 +193,7 @@ void atenderTeam(t_suscriptor_team* team){
 	enviar_mensajes_cacheados(mensajesCaught, CAUGHT_POKEMON, team->socketCaught, team->id);
 	pthread_mutex_unlock(&mutexEnvio);
 
-	log_info(logger, "Team se suscribió a 3 colas");
+	log_info(logger, "TEAM se suscribió a tres colas");
 }
 
 void atenderGamecard(t_suscriptor_gamecard* gamecard){
@@ -233,14 +228,14 @@ void atenderGamecard(t_suscriptor_gamecard* gamecard){
 	enviar_mensajes_cacheados(mensajesNew, NEW_POKEMON, gamecard->socketNew, gamecard->id);
 	pthread_mutex_unlock(&mutexEnvio);
 
-	log_info(logger, "GameCard se suscribió a 3 colas");
+	log_info(logger, "GAMECARD se suscribió a 3 colas.");
 }
 
 void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int socket, int idProceso){
 	log_debug(logger, "START: enviar_mensajes_cacheados");
 
 	int cantidadMensajes = list_size(mensajes);
-	log_info(logger, "Se procede a enviar los %d mensajes cacheados.", cantidadMensajes / 4);
+	log_info(logger, "Se procede a enviar los %d mensajes cacheados", cantidadMensajes / 4);
 
 	switch(tipoDeMensaje){
 		case NEW_POKEMON:
@@ -261,7 +256,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					t_paquete* ack = recibir_mensaje(socket);
 
 					if(ack != NULL){
+						pthread_mutex_lock(&mutexColas);
 						procesarACK(ack, tipoDeMensaje, idProceso);
+						pthread_mutex_unlock(&mutexColas);
 					}
 
 					else{
@@ -290,7 +287,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					t_paquete* ack = recibir_mensaje(socket);
 
 					if(ack != NULL){
+						pthread_mutex_lock(&mutexColas);
 						procesarACK(ack, tipoDeMensaje, idProceso);
+						pthread_mutex_unlock(&mutexColas);
 					}
 
 					else{
@@ -318,7 +317,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					t_paquete* ack = recibir_mensaje(socket);
 
 					if(ack != NULL){
+						pthread_mutex_lock(&mutexColas);
 						procesarACK(ack, tipoDeMensaje, idProceso);
+						pthread_mutex_unlock(&mutexColas);
 					}
 
 					else{
@@ -346,7 +347,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					t_paquete* ack = recibir_mensaje(socket);
 
 					if(ack != NULL){
+						pthread_mutex_lock(&mutexColas);
 						procesarACK(ack, tipoDeMensaje, idProceso);
+						pthread_mutex_unlock(&mutexColas);
 					}
 
 					else{
@@ -374,7 +377,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					t_paquete* ack = recibir_mensaje(socket);
 
 					if(ack != NULL){
+						pthread_mutex_lock(&mutexColas);
 						procesarACK(ack, tipoDeMensaje, idProceso);
+						pthread_mutex_unlock(&mutexColas);
 					}
 
 					else{
@@ -403,7 +408,9 @@ void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int sock
 					t_paquete* ack = recibir_mensaje(socket);
 
 					if(ack != NULL){
+						pthread_mutex_lock(&mutexColas);
 						procesarACK(ack, tipoDeMensaje, idProceso);
+						pthread_mutex_unlock(&mutexColas);
 					}
 
 					else{
@@ -454,7 +461,7 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 		/* Si se rompe el socket me da NULL
 		 */
 		if(paquete == NULL){
-			log_info(logger, "Se perdió conexión con proceso ID [%d]", args->id);
+			log_info(logger, "Se cerró socket de escucha a proceso ID [%d] por pérdida de conexión", args->id);
 			close(*args->socket);
 			free(args);
 			break;
@@ -465,7 +472,6 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 		pthread_mutex_lock(&mutexColas);
 		agregarMensajeACola(paquete);
 		pthread_mutex_unlock(&mutexColas);
-		log_info(logger, "Mensaje agregado a memoria.");
 
 		if(paquete->codigo_operacion == CATCH_POKEMON){
 			t_respuesta_id* respuesta_id = malloc(sizeof(t_respuesta_id));
@@ -524,7 +530,7 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 
 			if(caught->ok == 1){
 				log_debug(logger, "CAUGHT = [OK]");
-			}else{
+			} else{
 				log_debug(logger, "CAUGHT = [FALSE]");
 			}
 		}
@@ -546,7 +552,6 @@ void procesarACK(t_paquete* paquete, op_code tipoCola, int idSuscriptor){
 //	}
 
 	log_info(logger, "Mensaje recibido: ACK");
-	pthread_mutex_lock(&mutexColas);
 
 	/* Agrego el ID del proceso a la lista de ACK del mensaje
 	 */
@@ -561,24 +566,18 @@ void procesarACK(t_paquete* paquete, op_code tipoCola, int idSuscriptor){
 				 */
 				if(mensaje->ID == paquete->ID_CORRELATIVO){
 					list_add(mensaje->ACKSuscriptores, &idSuscriptor);
+
+					if(list_size(mensaje->ACKSuscriptores) == list_size(cola[i].suscriptores)){
+						log_info(logger, "Todos mis suscriptores enviaron ACK. Elimino mensaje ID [%d]", paquete->ID_CORRELATIVO);
+						list_remove_and_destroy_element(cola[i].mensajes, j, (void*) liberoMensaje);
+					}
+					break;
 				}
 
-				/* Chequeo si se llego a la cantidad necesaria de ACK
-				 * Si tengo los suficientes, elimino el mensaje
-				 * Para eso tengo que removerlo de la lista de mensajes
-				 * Luego liberar los elementos de la lista ACK de ese mensaje,
-				 * Destruir la lista ACK y finalmente liberar el mensaje
-				 */
-
-				if(list_size(mensaje->ACKSuscriptores) == list_size(cola[i].suscriptores)){
-					log_info("Todos mis suscriptores enviaron ACK. Elimino mensaje [%id].", paquete->ID);
-					list_remove_and_destroy_element(cola[i].mensajes, j, (void*) liberoMensaje);
-	//						list_remove(cola[i].mensajes, j);
-				}
 			}
+			break;
 		}
 	}
-	pthread_mutex_unlock(&mutexColas);
 	free(paquete->buffer);
 	free(paquete);
 }
@@ -632,7 +631,7 @@ void enviar_mensaje_NEW_a_suscriptores(void* paqueteVoid){
 
 			int socketAUsar = 0;
 			int listaSize = list_size(cola[i].suscriptores);
-			log_debug(logger, "Se procede a mandar el mensaje a los %d suscriptores de la cola %d.", listaSize, paquete->codigo_operacion);
+			log_debug(logger, "Se procede a mandar el mensaje a los %d suscriptores de la cola %d", listaSize, paquete->codigo_operacion);
 
 			for(int j = 0; j < listaSize; j++){
 				suscriptorEnCola* suscriptor = list_get(cola[i].suscriptores, j);
