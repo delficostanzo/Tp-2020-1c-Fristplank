@@ -13,8 +13,6 @@
 //}t_par_de_sockets;
 
 
-
-
 void* escucharGameBoy(void);
 int generarSocketsConBroker();
 void crearHilosDeEscucha();
