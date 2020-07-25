@@ -148,6 +148,7 @@ void atenderCliente(argumentos* sockets) {
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKGet, GET_POKEMON);
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKCatch, CATCH_POKEMON);
 
+
 		sleep(1);
 
 		pthread_mutex_lock(&mutexEnvio);

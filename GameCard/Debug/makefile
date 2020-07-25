@@ -26,7 +26,7 @@ endif
 all: GameCard
 
 dependents:
-	-cd /home/utnso/tp-2020-1c-Fritsplank/Library/Library/Debug && $(MAKE) all
+	-cd /home/utnso/tp-2020-1c-Fritsplank/Library/Library/Debug && $(MAKE) clean all
 
 # Tool invocations
 GameCard: $(OBJS) $(USER_OBJS) /home/utnso/tp-2020-1c-Fritsplank/Library/Library/Debug/libLibrary.so

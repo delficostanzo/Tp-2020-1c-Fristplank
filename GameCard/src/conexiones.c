@@ -47,7 +47,7 @@ int generarSocketsConBroker() {
 		log_info(logger,"Suscripto a cola New Pokemon. Lanzando socket de escucha..");
 
 		if (conectarA(socketACKNewPokemon, IP_BROKER, puertoBrokerInt)) {
-			log_debug(logger, "Socket de ACK New Pokemon guardado. Valor: %d", socketACKNewPokemon);
+			log_debug(logger, "Socket de ACK New Pokemon guardado.");
 		}
 		else{
 			return -1;
@@ -89,7 +89,7 @@ int generarSocketsConBroker() {
 	else{return -1;}
 	if (conectarA(socketCaughtPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Caught Pokemon guardado.");}
 	else{return -1;}
-	if (conectarA(socketLocalizedPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Localized Pokemon guardado.", socketLocalizedPokemon);}
+	if (conectarA(socketLocalizedPokemon, IP_BROKER, puertoBrokerInt)) { log_debug(logger, "Socket de Localized Pokemon guardado.");}
 	else{return -1;}
 
 	return 1;
@@ -218,7 +218,6 @@ void escucharGameBoy(){
 				pthread_join(hiloProcesarGetPokemon, NULL);
 				t_localized_pokemon* localized_pokemon = argumentos->puntero_a_localized_pokemon;
 
-				log_debug(logger, "Value de socket %d", socketLocalizedPokemon);
 				log_info("Se encontraron %d cantidad de posiciones para el pokemon %s.", localized_pokemon->cantidadPosiciones, localized_pokemon->pokemon);
 
 				if (enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID) == -1){
@@ -261,7 +260,7 @@ void* escucharColaNewPokemon(){
 
 			log_info(logger, "<><> Mensaje NEW_POKEMON recibido <><>");
 
-			log_debug(logger, "Valor SOCKET ACK NEW: %d", socketACKNewPokemon);
+//			log_debug(logger, "Valor SOCKET ACK NEW: %d", socketACKNewPokemon);
 
 			if (enviar_ACK(socketACKNewPokemon, -1, paqueteNuevo->ID) == -1){
 				log_info(logger, "No se pudo enviar el mensaje a Broker.");
