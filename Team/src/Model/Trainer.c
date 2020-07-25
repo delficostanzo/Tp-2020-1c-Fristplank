@@ -131,9 +131,9 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	}
 	else if(tienenLaMismaCantidad(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		asignarMovimientoPorDeadlock(entrenador);
-		if(noEstuvoEnDeadlockAntes(entrenador)){
-			cantidadDeadlocks ++;
-		}
+//		if(noEstuvoEnDeadlockAntes(entrenador)){
+//			cantidadDeadlocks ++;
+//		}
 		pasarADeadlock(entrenador);
 
 		log_info(LO, "El entrenador %c paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
@@ -163,9 +163,7 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	}
 }
 
-int noEstuvoEnDeadlockAntes(Entrenador* entrenador){
-	return entrenador->motivo != 3;
-}
+
 
 int sonIguales(t_list* objetivos, t_list* atrapados) {
 
@@ -287,7 +285,7 @@ void asignarMovimientoPorDeadlock(Entrenador* entrenador){
 	entrenador->movimientoEnExec->objetivo = 2;
 	entrenador->movimientoEnExec->pokemonAIntercambiar = atrapadoDeMas;
 	entrenador->movimientoEnExec->pokemonNecesitado = objetivoNoCumplido;
-	entrenador->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Z';
+	//entrenador->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Y';
 	//lo vuelvo a poner en 5 por si ya venia de un deadlock que le disminuyo esta cantidad
 	entrenador->ciclosCPUFaltantesIntercambio = 5;
 }

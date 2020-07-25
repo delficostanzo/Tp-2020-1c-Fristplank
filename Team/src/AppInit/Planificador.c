@@ -14,7 +14,7 @@ static int terminarSiTodosExit();
 static void logearResultadosEntrenadores();
 static int ciclosTotales();
 static int cantidadPokesLibres();
-//static int noEstuvoEnDeadlockAntes(Entrenador* entrenador);
+static int noEstuvoEnDeadlockAntes(Entrenador* entrenador);
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -191,12 +191,13 @@ void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock){
 				entrenadorDeIntercambio->estado = 2;
 				pthread_mutex_unlock(&entrenadorDeIntercambio->mutexEstado);
 
-//				char entrenadorIntercambio = entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio;
-//				char entrenadorBloqueado = bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio;
-//				if(entrenadorIntercambio == 'Z' && entrenadorBloqueado == 'Z' && (noEstuvoEnDeadlockAntes(entrenadorDeIntercambio) || noEstuvoEnDeadlockAntes(bloqueado))) {
-//					cantidadDeadlocks ++;
-//					log_info(LO,"log riquito");
-//				}
+				char nombreIntercambio = entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio;
+				char nombreBloqueado = bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio;
+				//si el nombre del poke con el que intercambia es Z es porque en algun momento intercambio
+				log_info(logger, "nombre intercambio: %c y nombre bloqueado: %c",nombreIntercambio, nombreBloqueado);
+				if(nombreIntercambio != 'Z' && nombreBloqueado != 'Z') {
+					cantidadDeadlocks ++;
+				}
 //				log_info(LO,"Llegue despues");
 
 				//me guardo con que entrenador intercambiar cuando pase a exec y el que esta bloqueado a cual esta esperando
@@ -325,6 +326,10 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 		entrenadorMovido->posicion = entrenadorBloqueado->posicion;
 		log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
 		cantidadIntercambios ++;
+
+//		if(noEstuvoEnDeadlockAntes(entrenadorMovido) && noEstuvoEnDeadlockAntes(entrenadorBloqueado)){
+//			cantidadDeadlocks ++;
+//		}
 		//si ninguno de los 2 intercambio antes
 
 		entrenadorMovido->ciclosCPUConsumido += distanciaHastaBloqueado;
@@ -399,6 +404,10 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 
 					log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para moverse y hacer el intercambio", entrenadorMovido->numeroEntrenador);
 				}
+}
+
+int noEstuvoEnDeadlockAntes(Entrenador* entrenador){
+	return entrenador->motivo != 3;
 }
 
 

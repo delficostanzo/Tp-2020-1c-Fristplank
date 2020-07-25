@@ -74,6 +74,4 @@ int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesari
 int esteComoIntercambioEntre(t_list* entrenadores, Entrenador* entrenador);
 int tieneEstadoNewODormido(Entrenador* entrenador);
 int entrenadorNoEstaEnListaReady(Entrenador* entrenador);
-int noEstuvoEnDeadlockAntes(Entrenador* entrenador);
-
 #endif /* SRC_MODEL_TRAINER_H_ */
