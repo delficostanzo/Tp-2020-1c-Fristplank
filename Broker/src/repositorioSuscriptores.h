@@ -17,17 +17,14 @@ typedef struct{
 	int socketGet; // RECIBIMOS GET
 	int socketIdGet; // ENVIAMOS IDGET
 	int socketLocalized; // ENVIAMOS LOCALIZED
-	int socketACKLocalized; // RECIBIMOS ACK DE LOCALIZED
 
 	// FLUJO CATCH - CAUGHT
 	int socketCatch; // RECIBIMOS CATCH
 	int socketIdCatch; // ENVIAMOS IDCATCH
 	int socketCaught; // ENVIAMOS CAUGHT
-	int socketACKCaught; // RECIBIMOS ACK DE CAUGHT
 
 	// FLUJO APPEARED
 	int socketAppeared; // ENVIAMOS APPEARED
-	int socketACKAppeared; // RECIBIMOS ACK DE APPEARED
 }t_suscriptor_team;
 
 typedef struct{
@@ -35,17 +32,14 @@ typedef struct{
 
 	// FLUJO NEW - APPEARED
 	int socketNew; // ENVIAMOS NEW
-	int socketACKNew; // RECIBIMOS ACK DE NEW
 	int socketAppeared; // RECIBIMOS APPEARED
 
 	// FLUJO GET - LOCALIZED
 	int socketGet; // ENVIAMOS GET
-	int socketACKGet; // RECIBIMOS ACK DE GET
 	int socketLocalized; // RECIBIMOS LOCALIZED
 
 	// FLUJO CATCH - CAUGHT
 	int socketCatch; // ENVIAMOS CATCH
-	int socketACKCatch; // RECIBIMOS ACK DE CATCH
 	int socketCaught; // RECIBIMOS CAUGHT
 }t_suscriptor_gamecard;
 
