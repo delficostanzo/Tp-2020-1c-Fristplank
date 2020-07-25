@@ -153,8 +153,6 @@ int generarSocketsConBroker() {
 		conexionCorrecta = -1;
 	 }
 
-	sleep(2);
-
 	return conexionCorrecta;
 }
 
@@ -165,8 +163,6 @@ void crearHilosDeEscucha() {
 		sleep(TIEMPO_RECONEXION);
 		generarSocketsConBroker();
 	}
-
-
 
 	pthread_create(&escucharAppearedPokemon, NULL, (void*)escucharColaAppearedPokemon, NULL);
 	pthread_detach(escucharAppearedPokemon);

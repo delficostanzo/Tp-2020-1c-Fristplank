@@ -152,9 +152,8 @@ void atenderGameboy(int* socket, int idUnico){
 	 */
 	else{
 		pthread_mutex_lock(&mutexColas);
-		log_info(logger, "Mensaje recibido: %s", ID_COLA[mensajeRecibido->codigo_operacion]);
+		log_info(logger, "Mensaje recibido: %s | Proceso: GAMEBOY", ID_COLA[mensajeRecibido->codigo_operacion]);
 		agregarMensajeACola(mensajeRecibido);
-		log_info(logger, "Mensaje agregado a memoria.");
 		pthread_mutex_unlock(&mutexColas);
 
 		enviar_mensaje_a_suscriptores(mensajeRecibido);
@@ -184,16 +183,20 @@ void atenderTeam(t_suscriptor_team* team){
 	t_list* mensajesCaught = mensajesAEnviar(team->id, CAUGHT_POKEMON);
 	pthread_mutex_unlock(&mutexColas);
 
+	log_info(logger, "TEAM se suscribe a LOCALIZED_POKEMON, APPEARED_POKEMON, CAUGHT_POKEMON");
+
 	lanzarHiloEscucha(team->id, &team->socketGet);
 	lanzarHiloEscucha(team->id, &team->socketCatch);
 
+//	pthread_mutex_lock(&mutexColas);
 	pthread_mutex_lock(&mutexEnvio);
 	enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized, team->id);
 	enviar_mensajes_cacheados(mensajesAppeared, APPEARED_POKEMON, team->socketAppeared, team->id);
 	enviar_mensajes_cacheados(mensajesCaught, CAUGHT_POKEMON, team->socketCaught, team->id);
 	pthread_mutex_unlock(&mutexEnvio);
+//	pthread_mutex_unlock(&mutexColas);
 
-	log_info(logger, "TEAM se suscribió a tres colas");
+
 }
 
 void atenderGamecard(t_suscriptor_gamecard* gamecard){
@@ -222,13 +225,15 @@ void atenderGamecard(t_suscriptor_gamecard* gamecard){
 	lanzarHiloEscucha(gamecard->id, &gamecard->socketLocalized);
 	lanzarHiloEscucha(gamecard->id, &gamecard->socketCaught);
 
+	log_info(logger, "GAMECARD se suscribe a GET_POKEMON, CATCH_POKEMON, NEW_POKEMON");
+
 	pthread_mutex_lock(&mutexEnvio);
 	enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, gamecard->socketGet, gamecard->id);
 	enviar_mensajes_cacheados(mensajesCatch, CATCH_POKEMON, gamecard->socketCatch, gamecard->id);
 	enviar_mensajes_cacheados(mensajesNew, NEW_POKEMON, gamecard->socketNew, gamecard->id);
 	pthread_mutex_unlock(&mutexEnvio);
 
-	log_info(logger, "GAMECARD se suscribió a 3 colas.");
+
 }
 
 void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int socket, int idProceso){
@@ -486,7 +491,14 @@ void escucharSocketMensajesACachear(t_args_socket_escucha* args){
 				t_suscriptor_team* suscriptor = buscar_suscriptor_team(args->id);
 				pthread_mutex_unlock(&mutexRepoTeam);
 
-				enviar_respuesta_id(respuesta_id, suscriptor->socketIdCatch, -1, -1);
+				if(enviar_respuesta_id(respuesta_id, suscriptor->socketIdCatch, -1, -1)){
+					log_debug(logger, "Se envía respuesta ID Catch");
+				} else{
+					log_debug(logger, "No se pudo enviar respuesta ID Catch");
+				}
+			}
+			else{
+				log_debug(logger, "No existe el Team %d", args->id);
 			}
 		}
 
@@ -551,7 +563,7 @@ void procesarACK(t_paquete* paquete, op_code tipoCola, int idSuscriptor){
 //		break;
 //	}
 
-	log_info(logger, "Mensaje recibido: ACK");
+	log_info(logger, "Mensaje recibido ACK | ID Mensaje: %d", paquete->ID_CORRELATIVO);
 
 	/* Agrego el ID del proceso a la lista de ACK del mensaje */
 
@@ -574,6 +586,9 @@ void procesarACK(t_paquete* paquete, op_code tipoCola, int idSuscriptor){
 						eliminarParticion(metadata);
 
 						log_debug(logger,"asd3");
+					}
+					else{
+						log_debug(logger, "Subs totales = %d | ACK recibidos = %d", list_size(mensaje->ACKSuscriptores), list_size(cola[i].suscriptores));
 					}
 					break;
 				}
@@ -690,7 +705,7 @@ void enviar_mensaje_NEW_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_new_pokemon(new_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje NEW_POKEMON enviado | ID Mensaje: %d | ID Suscriptor: %d", paquete->ID, idSuscriptor);
 
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
@@ -786,7 +801,7 @@ void enviar_mensaje_APPEARED_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_appeared_pokemon(appeared_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje APPEARED_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje APPEARED_POKEMON enviado | ID Mensaje: %d | ID Suscriptor: %d", paquete->ID, idSuscriptor);
 
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
@@ -876,7 +891,7 @@ void enviar_mensaje_CATCH_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_catch_pokemon(catch_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje CATCH_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje CATCH_POKEMON enviado | ID Mensaje: %d | ID Suscriptor: %d", paquete->ID, idSuscriptor);
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
 					pthread_mutex_unlock(&mutexColas);
@@ -959,7 +974,7 @@ void enviar_mensaje_CAUGHT_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_caught_pokemon(caught_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje CAUGHT_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje CAUGHT_POKEMON enviado | ID Mensaje: %d | ID Suscriptor: %d", paquete->ID, idSuscriptor);
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
 					pthread_mutex_unlock(&mutexColas);
@@ -1042,7 +1057,7 @@ void enviar_mensaje_GET_a_suscriptores(void* paqueteVoid){
 				int enviado = enviar_get_pokemon(get_a_enviar, socketAUsar, paquete->ID, paquete->ID_CORRELATIVO);
 
 				if (enviado != -1){
-					log_info(logger, "Mensaje GET_POKEMON enviado | ID Mensaje: %d", paquete->ID);
+					log_info(logger, "Mensaje GET_POKEMON enviado | ID Mensaje: %d | ID Suscriptor: %d", paquete->ID, idSuscriptor);
 					pthread_mutex_lock(&mutexColas);
 					agregarIdAEnviados(idSuscriptor, paquete->ID, paquete->codigo_operacion);
 					pthread_mutex_unlock(&mutexColas);
