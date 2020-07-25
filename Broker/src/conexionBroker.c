@@ -19,239 +19,221 @@ void * esperarClientes() {
 		int socketCliente = aceptarConexion(conexionCliente);
 
 		if(socketCliente != -1){
-			argumentos* sockets = malloc(sizeof(argumentos));
-			sockets->socketNuevo = &socketCliente;
-			sockets->socketOG = &conexionCliente;
+			t_handshake * broker = malloc(sizeof(t_handshake));
+			broker->id = BROKER;
+			broker->idUnico = 100;
+			t_handshake * idProcesoConectado = iniciarHandshake(socketCliente, broker);
+			free(broker);
 
-			pthread_t thread;
-			pthread_create(&thread, NULL, (void*) atenderCliente, sockets);
-			pthread_detach(thread);
+			switch (idProcesoConectado->id) {
+				case TEAM:;
+					t_suscriptor_team* team = malloc(sizeof(t_suscriptor_team));
+					team->id = idProcesoConectado->idUnico;
+					team->socketGet = aceptarConexion(conexionCliente);
+					team->socketIdGet = aceptarConexion(conexionCliente);
+					team->socketAppeared = aceptarConexion(conexionCliente);
+					team->socketACKAppeared = aceptarConexion(conexionCliente);
+					team->socketLocalized = aceptarConexion(conexionCliente);
+					team->socketACKLocalized = aceptarConexion(conexionCliente);
+					team->socketCatch = aceptarConexion(conexionCliente);
+					team->socketIdCatch = aceptarConexion(conexionCliente);
+					team->socketCaught = aceptarConexion(conexionCliente);
+					team->socketACKCaught = aceptarConexion(conexionCliente);
+
+					atenderTeam(team);
+					break;
+
+				case GAMECARD:;
+					t_suscriptor_gamecard* gamecard = malloc(sizeof(t_suscriptor_gamecard));
+					gamecard->id = idProcesoConectado->idUnico;
+					gamecard->socketNew = aceptarConexion(conexionCliente);
+					gamecard->socketACKNew = aceptarConexion(conexionCliente);
+					gamecard->socketCatch = aceptarConexion(conexionCliente);
+					gamecard->socketACKCatch = aceptarConexion(conexionCliente);
+					gamecard->socketGet = aceptarConexion(conexionCliente);
+					gamecard->socketACKGet = aceptarConexion(conexionCliente);
+					gamecard->socketAppeared = aceptarConexion(conexionCliente);
+					gamecard->socketCaught = aceptarConexion(conexionCliente);
+					gamecard->socketLocalized = aceptarConexion(conexionCliente);
+					atenderGamecard(gamecard);
+					break;
+
+				case GAMEBOY:;
+					atenderGameboy(&socketCliente, idProcesoConectado->idUnico);
+					free(idProcesoConectado);
+					break;
+
+				default:
+					break;
+			}
 		}
-		sleep(2);
 	}
 }
 
-void atenderCliente(argumentos* sockets) {
-	log_debug(logger, "START: atenderCliente");
+void atenderGameboy(int* socket, int idUnico){
+	t_paquete* mensajeRecibido = recibir_mensaje(*(socket));
 
-	t_handshake * broker = malloc(sizeof(t_handshake));
-	broker->id = BROKER;
-	broker->idUnico = 100;
-	t_handshake * idProcesoConectado = iniciarHandshake(*(sockets->socketNuevo), broker);
-	free(broker);
-
-	log_info(logger, "<> Nuevo proceso conectado %s <>", ID_PROCESO[idProcesoConectado->id]);
-
-	int* cliente = sockets->socketOG;
-
-	switch (idProcesoConectado->id) {
-	case TEAM:;
-		t_suscriptor_team* team = malloc(sizeof(t_suscriptor_team));
-		team->id = idProcesoConectado->idUnico;
-		team->socketGet = aceptarConexion(*cliente);
-		team->socketIdGet = aceptarConexion(*cliente);
-		team->socketAppeared = aceptarConexion(*cliente);
-		team->socketACKAppeared = aceptarConexion(*cliente);
-		team->socketLocalized = aceptarConexion(*cliente);
-		team->socketACKLocalized = aceptarConexion(*cliente);
-		team->socketCatch = aceptarConexion(*cliente);
-		team->socketIdCatch = aceptarConexion(*cliente);
-		team->socketCaught = aceptarConexion(*cliente);
-		team->socketACKCaught = aceptarConexion(*cliente);
-
-		int existeTeam = check_si_existe_team(team->id);
-
-		pthread_mutex_lock(&mutexRepoTeam);
-		if(existeTeam == 1){
-			log_debug(logger, "TEAM ID [%d] YA EXISTIA EN BROKER", team->id);
-			reemplazar_suscriptor_team(team);
-		}
-		else{
-			log_debug(logger, "TEAM ID [%d] SE AGREGA", team->id);
-			agregar_suscriptor_team(team);
-		}
-		pthread_mutex_unlock(&mutexRepoTeam);
-
-		pthread_mutex_lock(&mutexColas);
-		agregarSuscriptorACola(team->id, LOCALIZED_POKEMON);
-		t_list* mensajesLocalized = mensajesAEnviar(team->id, LOCALIZED_POKEMON);
-		agregarSuscriptorACola(team->id, APPEARED_POKEMON);
-		t_list* mensajesAppeared = mensajesAEnviar(team->id, APPEARED_POKEMON);
-		agregarSuscriptorACola(team->id, CAUGHT_POKEMON);
-		t_list* mensajesCaught = mensajesAEnviar(team->id, CAUGHT_POKEMON);
-		pthread_mutex_unlock(&mutexColas);
-
-		lanzarHiloEscucha(team->id, &team->socketGet);
-		lanzarHiloEscucha(team->id, &team->socketCatch);
-		lanzarHiloEscuchaACK(team->id, &team->socketACKLocalized, LOCALIZED_POKEMON);
-		lanzarHiloEscuchaACK(team->id, &team->socketACKCaught, CAUGHT_POKEMON);
-		lanzarHiloEscuchaACK(team->id, &team->socketACKAppeared, APPEARED_POKEMON);
-
-		pthread_mutex_lock(&mutexEnvio);
-		enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized, team->id);
-		enviar_mensajes_cacheados(mensajesAppeared, APPEARED_POKEMON, team->socketAppeared, team->id);
-		enviar_mensajes_cacheados(mensajesCaught, CAUGHT_POKEMON, team->socketCaught, team->id);
-		pthread_mutex_unlock(&mutexEnvio);
-
-		log_info(logger, "Team se suscribió a 3 colas");
-		break;
-
-	case GAMECARD:;
-		t_suscriptor_gamecard* gamecard = malloc(sizeof(t_suscriptor_gamecard));
-		gamecard->id = idProcesoConectado->idUnico;
-		gamecard->socketNew = aceptarConexion(*cliente);
-//		log_debug(logger, "socketNew: %d", gamecard->socketNew);
-		gamecard->socketACKNew = aceptarConexion(*cliente);
-		log_debug(logger, "socketACKNew: %d", gamecard->socketACKNew);
-		gamecard->socketCatch = aceptarConexion(*cliente);
-//		log_debug(logger, "socketCatch: %d", gamecard->socketCatch);
-		gamecard->socketACKCatch = aceptarConexion(*cliente);
-		log_debug(logger, "socketACKCatch: %d", gamecard->socketACKCatch);
-		gamecard->socketGet = aceptarConexion(*cliente);
-//		log_debug(logger, "socketGet: %d", gamecard->socketGet);
-		gamecard->socketACKGet = aceptarConexion(*cliente);
-		log_debug(logger, "socketACKGet: %d", gamecard->socketACKGet);
-		gamecard->socketAppeared = aceptarConexion(*cliente);
-//		log_debug(logger, "socketAppeared: %d", gamecard->socketAppeared);
-		gamecard->socketCaught = aceptarConexion(*cliente);
-//		log_debug(logger, "socketCaught: %d", gamecard->socketCaught);
-		gamecard->socketLocalized = aceptarConexion(*cliente);
-//		log_debug(logger, "socketLocalized: %d", gamecard->socketLocalized);
-
-		pthread_mutex_lock(&mutexRepoGameCard);
-		if(check_si_existe_gamecard(gamecard->id)){
-			log_debug(logger, "GAMECARD ID [%d] YA EXISTIA EN BROKER", gamecard->id);
-			reemplazar_suscriptor_gamecard(gamecard);
-		}
-
-		else{
-			log_debug(logger, "GAMECARD ID [%d] SE AGREGA", gamecard->id);
-			agregar_suscriptor_gamecard(gamecard);
-		}
-		pthread_mutex_unlock(&mutexRepoGameCard);
-
-		pthread_mutex_lock(&mutexColas);
-		agregarSuscriptorACola(gamecard->id, GET_POKEMON);
-		t_list* mensajesGet = mensajesAEnviar(gamecard->id, GET_POKEMON);
-		agregarSuscriptorACola(gamecard->id, CATCH_POKEMON);
-		t_list* mensajesCatch = mensajesAEnviar(gamecard->id, CATCH_POKEMON);
-		agregarSuscriptorACola(gamecard->id, NEW_POKEMON);
-		t_list* mensajesNew = mensajesAEnviar(gamecard->id, NEW_POKEMON);
-		pthread_mutex_unlock(&mutexColas);
-
-		lanzarHiloEscucha(gamecard->id, &gamecard->socketAppeared);
-		lanzarHiloEscucha(gamecard->id, &gamecard->socketLocalized);
-		lanzarHiloEscucha(gamecard->id, &gamecard->socketCaught);
-		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKNew, NEW_POKEMON);
-		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKGet, GET_POKEMON);
-		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKCatch, CATCH_POKEMON);
-
-		pthread_mutex_lock(&mutexEnvio);
-		enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, gamecard->socketGet, gamecard->id);
-		enviar_mensajes_cacheados(mensajesCatch, CATCH_POKEMON, gamecard->socketCatch, gamecard->id);
-		enviar_mensajes_cacheados(mensajesNew, NEW_POKEMON, gamecard->socketNew, gamecard->id);
-		pthread_mutex_unlock(&mutexEnvio);
-
-		log_info(logger, "GameCard se suscribió a 3 colas");
-		break;
-
-	case GAMEBOY:;
-		t_paquete* mensajeRecibido = recibir_mensaje(*(sockets->socketNuevo));
-
-		if(mensajeRecibido == NULL){
-			free(idProcesoConectado);
-			break;
-		}
-
-		/* El gameboy se suscribe
-		 * a alguna cola
-		 */
-		if(mensajeRecibido->codigo_operacion == GAMEBOYSUSCRIBE){
-			log_debug(logger, "Recibimos un GAMEBOYSUSCRIBE");
-			t_gameboy_suscribe* suscribe = mensajeRecibido->buffer->stream;
-			t_suscriptor_gameboy* gameboy;
-
-			// Si existe gameboy con ese ID le cambio el socket a enviar
-			pthread_mutex_lock(&mutexRepoGameBoy);
-			if(check_si_existe_gameboy(idProcesoConectado->idUnico) == 1){
-				log_debug(logger, "GameBoy existe en nuestro repositorio. Se procede a modificarlo.");
-				gameboy = buscar_suscriptor_gameboy(idProcesoConectado->idUnico);
-				gameboy->socketDondeEscucha = *(sockets->socketNuevo);
-				pthread_mutex_unlock(&mutexRepoGameBoy);
-
-				//Lo elimino de la cola donde estaba antes
-				pthread_mutex_lock(&mutexColas);
-				for(int i = 0; i < 6; i++) {
-					if(cola[i].nombreCola == gameboy->colaEscuchando){
-
-						int index = -1;
-						int cantidadSuscriptores = list_size(cola[i].suscriptores);
-
-						for(int j = 0; j < cantidadSuscriptores; j++){
-							int ID = (int) list_get(cola[i].suscriptores, j);
-							if(ID == idProcesoConectado->idUnico){
-								index = j;
-							}
-						}
-
-						if (index != -1){
-							list_remove_and_destroy_element(cola[i].suscriptores, index, (void*) liberoPuntero);
-						}
-					}
-				}
-				pthread_mutex_unlock(&mutexColas);
-
-				gameboy->colaEscuchando = suscribe->codigoCola;
-			}
-
-			else{ // Si no existe gameboy con ese ID lo creo
-				pthread_mutex_unlock(&mutexRepoGameBoy);
-				log_debug(logger, "GameBoy no existe en nuestro repositorio. Se procede a agregarlo.");
-				gameboy = malloc(sizeof(t_suscriptor_gameboy));
-				gameboy->id = idProcesoConectado->idUnico;
-				gameboy->socketDondeEscucha = *(sockets->socketNuevo);
-				gameboy->colaEscuchando = suscribe->codigoCola;
-				pthread_mutex_lock(&mutexRepoGameBoy);
-				agregar_suscriptor_gameboy(gameboy);
-				pthread_mutex_unlock(&mutexRepoGameBoy);
-			}
-
-			pthread_mutex_lock(&mutexColas);
-			agregarSuscriptorACola(gameboy->id, suscribe->codigoCola);
-			t_list* mensajes = mensajesAEnviar(gameboy->id, suscribe->codigoCola);
-			pthread_mutex_unlock(&mutexColas);
-
-			log_info(logger, "GameBoy se suscribió a la cola %s", ID_COLA[suscribe->codigoCola]);
-
-			pthread_mutex_lock(&mutexEnvio);
-			enviar_mensajes_cacheados(mensajes, suscribe->codigoCola, gameboy->socketDondeEscucha, gameboy->id);
-			pthread_mutex_unlock(&mutexEnvio);
-
-			free(mensajeRecibido->buffer->stream);
-			free(mensajeRecibido->buffer);
-			free(mensajeRecibido);
-		}
-
-		/* El gameboy envia un mensaje
-		 * que debemos agregar a la cola
-		 */
-		else{
-			pthread_mutex_lock(&mutexColas);
-			log_info(logger, "Mensaje recibido: %s", ID_COLA[mensajeRecibido->codigo_operacion]);
-			agregarMensajeACola(mensajeRecibido);
-			log_info(logger, "Mensaje agregado a memoria.");
-			pthread_mutex_unlock(&mutexColas);
-
-			enviar_mensaje_a_suscriptores(mensajeRecibido);
-			log_info(logger, "Mensaje enviado a suscriptores.");
-		}
-		break;
-
-	default:
-		break;
+	if(mensajeRecibido == NULL){
+		return;
 	}
 
-	free(idProcesoConectado);
+	/* El gameboy se suscribe
+	 * a alguna cola
+	 */
+	if(mensajeRecibido->codigo_operacion == GAMEBOYSUSCRIBE){
+		log_debug(logger, "Recibimos un GAMEBOYSUSCRIBE");
+		t_gameboy_suscribe* suscribe = mensajeRecibido->buffer->stream;
+		t_suscriptor_gameboy* gameboy;
+
+		// Si existe gameboy con ese ID le cambio el socket a enviar
+		pthread_mutex_lock(&mutexRepoGameBoy);
+		if(check_si_existe_gameboy(idUnico) == 1){
+			log_debug(logger, "GameBoy existe en nuestro repositorio. Se procede a modificarlo.");
+			gameboy = buscar_suscriptor_gameboy(idUnico);
+			gameboy->socketDondeEscucha = *(socket);
+			pthread_mutex_unlock(&mutexRepoGameBoy);
+
+			//Lo elimino de la cola donde estaba antes
+			pthread_mutex_lock(&mutexColas);
+			for(int i = 0; i < 6; i++) {
+				if(cola[i].nombreCola == gameboy->colaEscuchando){
+
+					int index = -1;
+					int cantidadSuscriptores = list_size(cola[i].suscriptores);
+
+					for(int j = 0; j < cantidadSuscriptores; j++){
+						int ID = (int) list_get(cola[i].suscriptores, j);
+						if(ID == idUnico){
+							index = j;
+						}
+					}
+
+					if (index != -1){
+						list_remove_and_destroy_element(cola[i].suscriptores, index, (void*) liberoPuntero);
+					}
+				}
+			}
+			pthread_mutex_unlock(&mutexColas);
+
+			gameboy->colaEscuchando = suscribe->codigoCola;
+		}
+
+		else{ // Si no existe gameboy con ese ID lo creo
+			pthread_mutex_unlock(&mutexRepoGameBoy);
+			log_debug(logger, "GameBoy no existe en nuestro repositorio. Se procede a agregarlo.");
+			gameboy = malloc(sizeof(t_suscriptor_gameboy));
+			gameboy->id = idUnico;
+			gameboy->socketDondeEscucha = *(socket);
+			gameboy->colaEscuchando = suscribe->codigoCola;
+			pthread_mutex_lock(&mutexRepoGameBoy);
+			agregar_suscriptor_gameboy(gameboy);
+			pthread_mutex_unlock(&mutexRepoGameBoy);
+		}
+
+		pthread_mutex_lock(&mutexColas);
+		agregarSuscriptorACola(gameboy->id, suscribe->codigoCola);
+		t_list* mensajes = mensajesAEnviar(gameboy->id, suscribe->codigoCola);
+		pthread_mutex_unlock(&mutexColas);
+
+		log_info(logger, "GameBoy se suscribió a la cola %s", ID_COLA[suscribe->codigoCola]);
+
+		pthread_mutex_lock(&mutexEnvio);
+		enviar_mensajes_cacheados(mensajes, suscribe->codigoCola, gameboy->socketDondeEscucha, gameboy->id);
+		pthread_mutex_unlock(&mutexEnvio);
+
+		free(mensajeRecibido->buffer->stream);
+		free(mensajeRecibido->buffer);
+		free(mensajeRecibido);
+	}
+
+	/* El gameboy envia un mensaje
+	 * que debemos agregar a la cola
+	 */
+	else{
+		pthread_mutex_lock(&mutexColas);
+		log_info(logger, "Mensaje recibido: %s", ID_COLA[mensajeRecibido->codigo_operacion]);
+		agregarMensajeACola(mensajeRecibido);
+		log_info(logger, "Mensaje agregado a memoria.");
+		pthread_mutex_unlock(&mutexColas);
+
+		enviar_mensaje_a_suscriptores(mensajeRecibido);
+		log_info(logger, "Mensaje enviado a suscriptores.");
+	}
+}
+
+void atenderTeam(t_suscriptor_team* team){
+
+	pthread_mutex_lock(&mutexRepoTeam);
+	if(check_si_existe_team(team->id) == 1){
+		log_debug(logger, "TEAM ID [%d] YA EXISTIA EN BROKER", team->id);
+		reemplazar_suscriptor_team(team);
+	}
+	else{
+		log_debug(logger, "TEAM ID [%d] SE AGREGA", team->id);
+		agregar_suscriptor_team(team);
+	}
+	pthread_mutex_unlock(&mutexRepoTeam);
+
+	pthread_mutex_lock(&mutexColas);
+	agregarSuscriptorACola(team->id, LOCALIZED_POKEMON);
+	t_list* mensajesLocalized = mensajesAEnviar(team->id, LOCALIZED_POKEMON);
+	agregarSuscriptorACola(team->id, APPEARED_POKEMON);
+	t_list* mensajesAppeared = mensajesAEnviar(team->id, APPEARED_POKEMON);
+	agregarSuscriptorACola(team->id, CAUGHT_POKEMON);
+	t_list* mensajesCaught = mensajesAEnviar(team->id, CAUGHT_POKEMON);
+	pthread_mutex_unlock(&mutexColas);
+
+	lanzarHiloEscucha(team->id, &team->socketGet);
+	lanzarHiloEscucha(team->id, &team->socketCatch);
+	lanzarHiloEscuchaACK(team->id, &team->socketACKLocalized, LOCALIZED_POKEMON);
+	lanzarHiloEscuchaACK(team->id, &team->socketACKCaught, CAUGHT_POKEMON);
+	lanzarHiloEscuchaACK(team->id, &team->socketACKAppeared, APPEARED_POKEMON);
+
+	pthread_mutex_lock(&mutexEnvio);
+	enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized, team->id);
+	enviar_mensajes_cacheados(mensajesAppeared, APPEARED_POKEMON, team->socketAppeared, team->id);
+	enviar_mensajes_cacheados(mensajesCaught, CAUGHT_POKEMON, team->socketCaught, team->id);
+	pthread_mutex_unlock(&mutexEnvio);
+
+	log_info(logger, "Team se suscribió a 3 colas");
+}
+
+void atenderGamecard(t_suscriptor_gamecard* gamecard){
+	pthread_mutex_lock(&mutexRepoGameCard);
+	if(check_si_existe_gamecard(gamecard->id)){
+		log_debug(logger, "GAMECARD ID [%d] YA EXISTIA EN BROKER", gamecard->id);
+		reemplazar_suscriptor_gamecard(gamecard);
+	}
+
+	else{
+		log_debug(logger, "GAMECARD ID [%d] SE AGREGA", gamecard->id);
+		agregar_suscriptor_gamecard(gamecard);
+	}
+	pthread_mutex_unlock(&mutexRepoGameCard);
+
+	pthread_mutex_lock(&mutexColas);
+	agregarSuscriptorACola(gamecard->id, GET_POKEMON);
+	t_list* mensajesGet = mensajesAEnviar(gamecard->id, GET_POKEMON);
+	agregarSuscriptorACola(gamecard->id, CATCH_POKEMON);
+	t_list* mensajesCatch = mensajesAEnviar(gamecard->id, CATCH_POKEMON);
+	agregarSuscriptorACola(gamecard->id, NEW_POKEMON);
+	t_list* mensajesNew = mensajesAEnviar(gamecard->id, NEW_POKEMON);
+	pthread_mutex_unlock(&mutexColas);
+
+	lanzarHiloEscucha(gamecard->id, &gamecard->socketAppeared);
+	lanzarHiloEscucha(gamecard->id, &gamecard->socketLocalized);
+	lanzarHiloEscucha(gamecard->id, &gamecard->socketCaught);
+	lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKNew, NEW_POKEMON);
+	lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKGet, GET_POKEMON);
+	lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKCatch, CATCH_POKEMON);
+
+	pthread_mutex_lock(&mutexEnvio);
+	enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, gamecard->socketGet, gamecard->id);
+	enviar_mensajes_cacheados(mensajesCatch, CATCH_POKEMON, gamecard->socketCatch, gamecard->id);
+	enviar_mensajes_cacheados(mensajesNew, NEW_POKEMON, gamecard->socketNew, gamecard->id);
+	pthread_mutex_unlock(&mutexEnvio);
+
+	log_info(logger, "GameCard se suscribió a 3 colas");
 }
 
 void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int socket, int idProceso){
