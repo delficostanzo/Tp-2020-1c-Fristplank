@@ -82,11 +82,6 @@ int generarSocketsConBroker() {
 	//ESCUCHA APPEARED Y ENVIA EL ACK
 	if (conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Suscripto a la cola de appeared_pokemon");
-//		if (conectarA(socketACKAppeared, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("$-Socket de ACK Appeared Pokemon guardado.");
-//		} else{
-//			conexionCorrecta = -1;
-//		 }
 	} else{
 		conexionCorrecta = -1;
 	 }
@@ -94,12 +89,6 @@ int generarSocketsConBroker() {
 	//ESCUCHA LOCALIZED Y ENVIA EL ACK
 	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Suscripto a la cola de localized_pokemon");
-//		if (conectarA(socketACKLocalized, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("$-Socket de ACK Localized Pokemon guardado.");
-//
-//		} else{
-//			conexionCorrecta = -1;
-//		 }
 
 	} else{
 		conexionCorrecta = -1;
@@ -121,11 +110,6 @@ int generarSocketsConBroker() {
 	//ESCUCHA CAUGHT Y ENVIA EL ACK
 	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Suscripto a la cola de caught_pokemon");
-//		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
-//			quickLog("$-Socket de ACK Caught Pokemon guardado.");
-//		} else{
-//			conexionCorrecta = -1;
-//		 }
 	} else{
 		conexionCorrecta = -1;
 	 }

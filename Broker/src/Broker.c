@@ -28,8 +28,8 @@ void iniciarBroker(void){
 }
 
 t_config* leer_config() {
-//	t_config* config = config_create("../src/broker.config"); //CORRER POR CONSOLA
-	t_config* config = config_create("./src/broker.config"); //CORRER CON ECLIPSE
+	t_config* config = config_create("../src/broker.config"); //CORRER POR CONSOLA
+//	t_config* config = config_create("./src/broker.config"); //CORRER CON ECLIPSE
 
 	if (config == NULL) {
 		printf("No pude leer la config \n");
