@@ -10,7 +10,8 @@
 #ifndef SRC_APPINIT_PLANIFICADOR_H_
 #define SRC_APPINIT_PLANIFICADOR_H_
 
-
+int todosBloqueadosOExit(void);
+int deadlockOExit(Entrenador * entrenador);
 void cumplirObjetivo(Entrenador* entrenador);
 void pasarAReadyParaAtrapar();
 void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock);

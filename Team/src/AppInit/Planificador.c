@@ -25,27 +25,30 @@ void planificarEntrenadores(){
 	//sem_wait(&arrancarPlan);
 	while(cumple){ // lista de entrenadores que no estan en exit
 		// se pasan entrenadores a READY segun su condicion
+//		if(cantidadPokesLibres() != 0) {
+//			pasarAReadyParaAtrapar();
+//		}
+//
 		if(cantidadPokesLibres() != 0) {
 			pasarAReadyParaAtrapar();
 		}
-//
 
 //		pasarAReadyParaIntercambiar();
-//
-//		log_info(LO, "Me quede qui");
-		sem_wait(&esperandoPasarAlgunoAExec);
-//		log_info(LO, "Tome el lock");
-		pasarAExec();
-		if(cantidadPokesLibres() != 0) {
-			pasarAReadyParaAtrapar();
-		}
-		t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
 
-		if(list_size(entrenadoresDeadlock) >= 2) {
+		pthread_mutex_lock(&mutexEntrenadores);
+		int todosExitOBloqueados = todosBloqueadosOExit();
+		pthread_mutex_unlock(&mutexEntrenadores);
+
+		if(list_is_empty(objetivosGlobales) && todosExitOBloqueados) {
+			t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
 			pasarAReadyParaIntercambiar(entrenadoresDeadlock);
 			sem_post(&esperandoPasarAlgunoAExec);
 		}
 
+//		log_info(LO, "Me quede qui");
+		sem_wait(&esperandoPasarAlgunoAExec);
+//		log_info(LO, "Tome el lock");
+		pasarAExec();
 
 
 		if(terminarSiTodosExit()) {
@@ -54,6 +57,15 @@ void planificarEntrenadores(){
 
 		//cumple = noEstanTodosEnExit();
 	}
+}
+
+int todosBloqueadosOExit(){
+	typedef bool(*erasedType)(void*);
+	return list_all_satisfy(entrenadores, (erasedType) deadlockOExit);
+}
+
+int deadlockOExit(Entrenador * entrenador){
+	return (entrenador->estado == 4 && entrenador->motivo == 3) || entrenador->estado == 5;
 }
 
 bool noEstanTodosEnExit(){
@@ -114,7 +126,7 @@ void pasarAReadyParaAtrapar(){
 				cambiarCantidadEnPokesObj(pokemonLibre);
 				log_info(LO, "El entrenador %c paso a estado ready para atrapar al pokemon %s", entrenadorAsignado->numeroEntrenador, pokemonLibre->nombre);
 
-//				sem_post(&esperandoPasarAlgunoAExec);
+				sem_post(&esperandoPasarAlgunoAExec);
 			}
 
 		}
@@ -174,7 +186,7 @@ bool sacarSiCantidadEsCero(PokemonEnElMapa* pokeComoObj){
 
 void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock){
 //	t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
-//	if(list_size(entrenadoresDeadlock) >= 2) {
+	if(list_size(entrenadoresDeadlock) >= 2) {
 		log_info(LO, "Inicio del algoritmo de deteccion de deadlock (comienza a buscar con quien intercambiar)");
 
 		sem_wait(&procesoDeIntercambioDePokes);
@@ -213,7 +225,7 @@ void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock){
 			}
 
 		}
-//	}
+	}
 
 }
 
@@ -359,18 +371,18 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 		sem_post(&procesoDeIntercambioDePokes);
 
 	} else if(QUANTUM == distanciaHastaBloqueado) { //llega a moverse pero no a hacer los intercambios
-			entrenadorMovido->posicion = entrenadorBloqueado->posicion;
-			entrenadorMovido->ciclosCPUConsumido += distanciaHastaBloqueado;
-			int retardo = RETARDO_CICLO_CPU * distanciaHastaBloqueado;
-			sleep(retardo);
-			log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
+		entrenadorMovido->posicion = entrenadorBloqueado->posicion;
+		entrenadorMovido->ciclosCPUConsumido += distanciaHastaBloqueado;
+		int retardo = RETARDO_CICLO_CPU * distanciaHastaBloqueado;
+		sleep(retardo);
+		log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
 
-			pasarAReadyPorQuantum(entrenadorMovido);
-			log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para intercambiar", entrenadorMovido->numeroEntrenador);
+		pasarAReadyPorQuantum(entrenadorMovido);
+		log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para intercambiar", entrenadorMovido->numeroEntrenador);
 
-		} else if(QUANTUM > distanciaHastaBloqueado) { //llega a hacer la distancia y consume parte de ciclo de intercambio
-					entrenadorMovido->posicion = entrenadorBloqueado->posicion;
-					//lo que sobro del quantum
+	} else if(QUANTUM > distanciaHastaBloqueado) { //llega a hacer la distancia y consume parte de ciclo de intercambio
+		entrenadorMovido->posicion = entrenadorBloqueado->posicion;
+		//lo que sobro del quantum
 //					int sobrante = QUANTUM - distanciaHastaBloqueado;
 //
 //					entrenadorMovido->ciclosCPUConsumido += sobrante;
@@ -380,30 +392,30 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 //					//por si en el proximo ready se planifica al bloqueado para que se mueva
 //					entrenadorBloqueado->ciclosCPUFaltantesIntercambio = sobrante;
 
-					log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
+		log_info(LO, "El entrenador %c se movio a la posicion (%d, %d)", entrenadorMovido->numeroEntrenador, entrenadorMovido->posicion->posicionX, entrenadorMovido->posicion->posicionY);
 
-					//pasarAReadyPorQuantum(entrenadorMovido);
-					log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para terminar de hacer el intercambio", entrenadorMovido->numeroEntrenador);
+		//pasarAReadyPorQuantum(entrenadorMovido);
+		log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para terminar de hacer el intercambio", entrenadorMovido->numeroEntrenador);
 
-					//para el intercambio
-					int quatumSobrante = QUANTUM - distanciaHastaBloqueado;
-					//para el intercambio
-					int cpuIntercambio = entrenadorMovido->ciclosCPUFaltantesIntercambio;
-					//nunca va a ser menor o igual, si no entraria en el primer if
-					if(quatumSobrante < cpuIntercambio){
-						entrenadorMovido->ciclosCPUConsumido += QUANTUM;
-						int retardo = RETARDO_CICLO_CPU * QUANTUM;
-						sleep(retardo);
-						int loQueLeFalta = cpuIntercambio - QUANTUM;
-						entrenadorMovido->ciclosCPUFaltantesIntercambio = loQueLeFalta;
-						pasarAReadyPorQuantum(entrenadorMovido);
-					}// si no es este caso, hace el if de arriba de todo
+		//para el intercambio
+		int quatumSobrante = QUANTUM - distanciaHastaBloqueado;
+		//para el intercambio
+		int cpuIntercambio = entrenadorMovido->ciclosCPUFaltantesIntercambio;
+		//nunca va a ser menor o igual, si no entraria en el primer if
+		if(quatumSobrante < cpuIntercambio){
+			entrenadorMovido->ciclosCPUConsumido += QUANTUM;
+			int retardo = RETARDO_CICLO_CPU * QUANTUM;
+			sleep(retardo);
+			int loQueLeFalta = cpuIntercambio - QUANTUM;
+			entrenadorMovido->ciclosCPUFaltantesIntercambio = loQueLeFalta;
+			pasarAReadyPorQuantum(entrenadorMovido);
+		}// si no es este caso, hace el if de arriba de todo
 
-					} else { //no llego a moverse hasta el entrenador para hacer el intercambio
-					moverSiDistanciaMayorAQ(entrenadorMovido, entrenadorBloqueado->posicion->posicionX, entrenadorBloqueado->posicion->posicionY, distanciaHastaBloqueado);
+		} else { //no llego a moverse hasta el entrenador para hacer el intercambio
+		moverSiDistanciaMayorAQ(entrenadorMovido, entrenadorBloqueado->posicion->posicionX, entrenadorBloqueado->posicion->posicionY, distanciaHastaBloqueado);
 
-					log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para moverse y hacer el intercambio", entrenadorMovido->numeroEntrenador);
-				}
+		log_info(LO, "El entrenador %c paso devuelta a ready porque no le alcanzo el Quantum para moverse y hacer el intercambio", entrenadorMovido->numeroEntrenador);
+	}
 }
 
 int noEstuvoEnDeadlockAntes(Entrenador* entrenador){
