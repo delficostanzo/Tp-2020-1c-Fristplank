@@ -39,19 +39,8 @@ int generarSocketsConBroker() {
 	socketCaughtPokemon = crearSocket();
 	socketLocalizedPokemon = crearSocket();
 
-//	socketACKNewPokemon = crearSocket();
-//	socketACKCatchPokemon = crearSocket();
-//	socketACKGetPokemon = crearSocket();
-
 	if (conectarA(socketNewPokemon, IP_BROKER, puertoBrokerInt)) {
 		log_info(logger,"Suscripto a cola New Pokemon. Lanzando socket de escucha..");
-
-//		if (conectarA(socketACKNewPokemon, IP_BROKER, puertoBrokerInt)) {
-//			log_debug(logger, "Socket de ACK New Pokemon guardado.");
-//		}
-//		else{
-//			return -1;
-//		}
 	}
 	else{
 		return -1;
@@ -59,13 +48,6 @@ int generarSocketsConBroker() {
 
 	if (conectarA(socketCatchPokemon, IP_BROKER, puertoBrokerInt)) {
 		log_info(logger,"Suscripto a cola Catch Pokemon. Lanzando socket de escucha..");
-
-//		if (conectarA(socketACKCatchPokemon, IP_BROKER, puertoBrokerInt)) {
-//			log_debug(logger, "Socket de ACK Catch Pokemon guardado.");
-//		}
-//		else{
-//			return -1;
-//		}
 	}
 	else{
 		return -1;
@@ -74,12 +56,6 @@ int generarSocketsConBroker() {
 	if (conectarA(socketGetPokemon, IP_BROKER, puertoBrokerInt)) {
 		log_info(logger,"Suscripto a cola Get Pokemon. Lanzando socket de escucha..");
 
-//		if (conectarA(socketACKGetPokemon, IP_BROKER, puertoBrokerInt)) {
-//			log_debug(logger, "Socket de ACK Catch Pokemon guardado.");
-//		}
-//		else{
-//			return -1;
-//		}
 	}
 	else{
 		return -1;
@@ -218,8 +194,6 @@ void escucharGameBoy(){
 				pthread_join(hiloProcesarGetPokemon, NULL);
 				t_localized_pokemon* localized_pokemon = argumentos->puntero_a_localized_pokemon;
 
-//				log_info("Se encontraron %d cantidad de posiciones para el pokemon %s.", localized_pokemon->cantidadPosiciones, localized_pokemon->pokemon);
-
 				if (enviar_localized_pokemon(localized_pokemon, socketLocalizedPokemon, -1, paqueteNuevo->ID) == -1){
 					log_info(logger, "No se pudo enviar el mensaje a Broker.");
 				}
@@ -259,8 +233,6 @@ void* escucharColaNewPokemon(){
 		else{
 
 			log_info(logger, "<><> Mensaje NEW_POKEMON recibido <><>");
-
-//			log_debug(logger, "Valor SOCKET ACK NEW: %d", socketACKNewPokemon);
 
 			if (enviar_ACK(socketNewPokemon, -1, paqueteNuevo->ID) == -1){
 				log_info(logger, "No se pudo enviar el mensaje a Broker.");
