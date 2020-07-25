@@ -12,5 +12,6 @@
 #include "Trainer.h"
 
 void terminarTeam();
+void liberarConexion(int socket_cliente);
 
 #endif /* SRC_MODEL_CIERRETEAM_H_ */

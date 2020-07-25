@@ -17,10 +17,10 @@ Entrenador* newEntrenador() {
 	return malloc(sizeof(Entrenador));
 }
 
-Entrenador* buscarPorNumero(int numero) {
+Entrenador* buscarPorNumero(char nombre) {
 
 	int tieneNumero(Entrenador* entrenador) {
-		return entrenador->numeroEntrenador == numero;
+		return entrenador->numeroEntrenador == nombre;
 	}
 
 	Entrenador* entrenadorBuscado;
@@ -62,6 +62,7 @@ Entrenador* entrenadorMasCercanoA(PokemonEnElMapa* pokemon, t_list* entrenadores
 	bool estaMasCerca(Entrenador* entrenador1, Entrenador* entrenador2) {
 		int distanciaEntrenador1 = distanciaEntre(entrenador1->posicion, &(pokemon->posicion));
 		int distanciaEntrenador2 = distanciaEntre(entrenador2->posicion, &(pokemon->posicion));
+
 		return distanciaEntrenador1 <= distanciaEntrenador2;
 
 	}
@@ -119,6 +120,8 @@ void agregarAtrapado(Entrenador* entrenador, PokemonEnElMapa* pokemonAtrapado){
 }
 
 void estadoSiAtrapo(Entrenador* entrenador) {
+
+
 	quickLog("$-El entrenador va a cambiar de estado por atrapar un pokemon");
 	if(sonIguales(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		//ya agarro todos sus pokemones
@@ -128,8 +131,13 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	}
 	else if(tienenLaMismaCantidad(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		asignarMovimientoPorDeadlock(entrenador);
+//		if(noEstuvoEnDeadlockAntes(entrenador)){
+//			cantidadDeadlocks ++;
+//		}
 		pasarADeadlock(entrenador);
+
 		log_info(LO, "El entrenador %c paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
+//		pasarAReadyParaIntercambiar();
 	}
 	else {
 		pasarADormido(entrenador);
@@ -154,6 +162,8 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 
 	}
 }
+
+
 
 int sonIguales(t_list* objetivos, t_list* atrapados) {
 
@@ -275,6 +285,7 @@ void asignarMovimientoPorDeadlock(Entrenador* entrenador){
 	entrenador->movimientoEnExec->objetivo = 2;
 	entrenador->movimientoEnExec->pokemonAIntercambiar = atrapadoDeMas;
 	entrenador->movimientoEnExec->pokemonNecesitado = objetivoNoCumplido;
+	//entrenador->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Y';
 	//lo vuelvo a poner en 5 por si ya venia de un deadlock que le disminuyo esta cantidad
 	entrenador->ciclosCPUFaltantesIntercambio = 5;
 }
@@ -316,8 +327,7 @@ PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador){
 
 
 //siempre usar entre mutex de entrenadores
-int esteComoIntercambio(Entrenador* entrenador) {
-
+int esteComoIntercambioEntre(t_list* entrenadores, Entrenador* entrenador) {
 	int estaComoIntercambio(Entrenador* entrenadorMoviendose) {
 		return entrenadorMoviendose->movimientoEnExec->numeroDelEntrenadorIntercambio == entrenador->numeroEntrenador;
 	}
@@ -329,6 +339,23 @@ int esteComoIntercambio(Entrenador* entrenador) {
 	return cumple;
 }
 
+int tieneEstadoNewODormido(Entrenador* entrenador) {
+	pthread_mutex_lock(&entrenador->mutexEstado);
+	int cumple = (entrenador->estado==1 || (entrenador->estado==4 && entrenador->motivo==2)) && (entrenadorNoEstaEnListaReady(entrenador));
+	pthread_mutex_unlock(&entrenador->mutexEstado);
+	return cumple;
+}
 
+int entrenadorNoEstaEnListaReady(Entrenador* entrenador) {
+
+	int estaElEntrenador(Entrenador* entrenadorQueEsta) {
+		//si algun entrenador de la lista de ready tiene el mismo numero que el entrenador que pase por param
+		return entrenadorQueEsta->numeroEntrenador == entrenador->numeroEntrenador;
+	}
+	pthread_mutex_lock(&mutexListaEntrenadoresReady);
+	int esta = list_any_satisfy(listaEntrenadoresReady, (erasedTypeFilter)estaElEntrenador);
+	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
+	return !esta;
+}
 
 

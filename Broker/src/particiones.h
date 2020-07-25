@@ -34,6 +34,6 @@ int tamanioParticionMinima(int unTamanio);
 /*Funciones para list_destroy_and_destroy_elements
  */
 void liberarPuntero(t_particion* self);
-void ACK_destroy(int* idACK);
+void puntero_destroy(int* id);
 
 #endif /* SRC_PARTICIONES_H_ */

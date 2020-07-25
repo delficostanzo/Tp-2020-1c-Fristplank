@@ -32,7 +32,8 @@ typedef struct {
 	int posicion;
 	int tamanioMensaje; // con /0
 	int tamanioMensajeEnMemoria; // sin /0
-	t_list * ACKSuscriptores;
+	t_list* ACKSuscriptores;
+	t_list* enviadosSuscriptores;
 	int flagLRU;
 	char ultimaReferencia;
 } t_metadata;
@@ -87,6 +88,7 @@ pthread_mutex_t mutexColas;
 pthread_mutex_t mutexIdMensaje;
 pthread_mutex_t mutexLRUcounter;
 pthread_mutex_t mutexEnvio;
+pthread_mutex_t mutexParticiones;
 sem_t * colaNew;
 sem_t compactMemoria;
 

@@ -15,6 +15,7 @@ int ID_UNICO;
 
 int TIEMPO_RECONEXION;
 int QUANTUM;
+int RETARDO_CICLO_CPU;
 
 char* ALGORITMO;
 
@@ -37,10 +38,6 @@ int socketIdGet;
 int socketCatch;
 int socketIdCatch;
 
-int socketACKAppeared;
-int socketACKCaught;
-int socketACKLocalized;
-
 pthread_t escucharLocalizedPokemon;
 pthread_t escucharAppearedPokemon;
 pthread_t escucharCaughtPokemon;
@@ -53,6 +50,10 @@ int cantidadIntercambios;
 
 int noHayQueFinalizar;
 
+
+int desconexion;
+
+pthread_mutex_t semaforoDesconexion;
 t_config* config;
 
 
@@ -62,7 +63,11 @@ pthread_mutex_t mutexObjetivosGlobales;
 pthread_mutex_t mutexPokemonesLibres;
 pthread_mutex_t mutexPokemonesRecibidos;
 pthread_mutex_t mutexListaEntrenadoresReady;
+pthread_mutex_t entrandorBloqueado;
 sem_t semaforoCatch;
+sem_t esperandoPasarAlgunoAExec;
+sem_t arrancarPlan;
+sem_t procesoDeIntercambioDePokes;
 
 t_list* entrenadores;
 t_list* objetivosTotales;

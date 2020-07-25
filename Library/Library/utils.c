@@ -6,6 +6,7 @@
  */
 
 #include "utils.h"
+#include "errno.h"
 
 void* serializar_paquete(t_paquete* paquete, int *bytes)
 {
@@ -47,7 +48,7 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 		serializar_respuesta_id(&streamFinal, offset, paquete->buffer->stream, bytes);
 		break;
 	case ACK:
-		// No se hace nada porque el ACK no tiene payload
+		*bytes = offset;
 		break;
 	case GAMEBOYSUSCRIBE:
 		serializar_gameboy_suscribe(&streamFinal, offset, paquete->buffer->stream, bytes);
@@ -63,6 +64,7 @@ int enviar(t_paquete* paquete, int socket_cliente)
 	void* mensajeAEnviar = serializar_paquete(paquete, &size_serializado);
 
 	int resultadoEnvio = send(socket_cliente, mensajeAEnviar, size_serializado, 0);
+//	fprintf(stderr, "socket() failed %s\n", strerror(errno));
 
 	free(mensajeAEnviar);
 	free(paquete->buffer->stream);
@@ -151,6 +153,7 @@ t_paquete* recibir_mensaje(int socket_cliente) {
 		free(paquete);
 		return NULL;
 	}
+//	fprintf(stderr, "socket() failed %s\n", strerror(errno));
 
 	recv(socket_cliente, &(paquete->ID), sizeof(int), MSG_WAITALL);
 	recv(socket_cliente, &(paquete->ID_CORRELATIVO), sizeof(int), MSG_WAITALL);

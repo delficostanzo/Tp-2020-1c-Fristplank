@@ -33,15 +33,18 @@ int conexionCliente;
 int socketCliente;
 
 void * esperarClientes();
-void atenderCliente(argumentos* sockets);
+void atenderGameboy(int* socket, int idUnico);
+void atenderTeam(t_suscriptor_team* team);
+void atenderGamecard(t_suscriptor_gamecard* gamecard);
+void procesarACK(t_paquete* paquete, op_code tipoCola, int idSuscriptor);
 
 void lanzarHiloEscucha(int id, int* socket);
 void lanzarHiloEscuchaACK(int id, int* socket, op_code cola);
 
 void escucharSocketMensajesACachear(t_args_socket_escucha* args);
-void escucharSocketACK(void* socketArgs);
+void escucharSocketACK(t_args_socket_ACK* socketArgs);
 
-void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int socket);
+void enviar_mensajes_cacheados(t_list* mensajes, op_code tipoDeMensaje, int socket, int id);
 void enviar_mensaje_a_suscriptores(t_paquete* paquete);
 void enviar_mensaje_NEW_a_suscriptores(void* paquete);
 void enviar_mensaje_APPEARED_a_suscriptores(void* paquete);
