@@ -94,16 +94,13 @@ int generarSocketsConBroker() {
 	socketIdGet = crearSocket();
 
 	suscripcionAppeared = crearSocket();
-	socketACKAppeared = crearSocket();
 
 	suscripcionLocalized = crearSocket();
-	socketACKLocalized = crearSocket();
 
 	socketCatch = crearSocket();
 	socketIdCatch = crearSocket();
 
 	suscripcionCaught = crearSocket();
-	socketACKCaught = crearSocket();
 
 	int conexionCorrecta = 1;
 
@@ -124,11 +121,6 @@ int generarSocketsConBroker() {
 	//ESCUCHA APPEARED Y ENVIA EL ACK
 	if (conectarA(suscripcionAppeared, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Suscripto a la cola de appeared_pokemon");
-		if (conectarA(socketACKAppeared, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("$-Socket de ACK Appeared Pokemon guardado.");
-		} else{
-			conexionCorrecta = -1;
-		 }
 	} else{
 		conexionCorrecta = -1;
 	 }
@@ -136,12 +128,6 @@ int generarSocketsConBroker() {
 	//ESCUCHA LOCALIZED Y ENVIA EL ACK
 	if (conectarA(suscripcionLocalized, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Suscripto a la cola de localized_pokemon");
-		if (conectarA(socketACKLocalized, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("$-Socket de ACK Localized Pokemon guardado.");
-
-		} else{
-			conexionCorrecta = -1;
-		 }
 
 	} else{
 		conexionCorrecta = -1;
@@ -163,11 +149,6 @@ int generarSocketsConBroker() {
 	//ESCUCHA CAUGHT Y ENVIA EL ACK
 	if (conectarA(suscripcionCaught, IP_BROKER, PUERTO_BROKER)) {
 		quickLog("$-Suscripto a la cola de caught_pokemon");
-		if (conectarA(socketACKCaught, IP_BROKER, PUERTO_BROKER)) {
-			quickLog("$-Socket de ACK Caught Pokemon guardado.");
-		} else{
-			conexionCorrecta = -1;
-		 }
 	} else{
 		conexionCorrecta = -1;
 	 }
@@ -212,7 +193,6 @@ void* escucharColaAppearedPokemonGameBoy(){
 		return paqueteNuevo;
 }
 
-
 void* escucharColaAppearedPokemon(){
 
 	while(1){
@@ -221,7 +201,7 @@ void* escucharColaAppearedPokemon(){
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared);
 
 		if(paqueteNuevo != NULL){
-			enviar_ACK(socketACKAppeared, -1, paqueteNuevo->ID);
+			enviar_ACK(suscripcionAppeared, -1, paqueteNuevo->ID);
 			free(paqueteNuevo);
 			quickLog("$-Pudo enviar el ACK de los appeared");
 		} else {
@@ -251,7 +231,7 @@ void* escucharColaCaughtPokemon(){
 		//el entrenador que estaba esperando esa respuesta es ejecutado y pasa al estado segun corresponda
 		t_paquete* paqueteNuevo = recibirCaught(suscripcionCaught);
 		if(paqueteNuevo != NULL){
-			enviar_ACK(socketACKCaught, -1, paqueteNuevo->ID);
+			enviar_ACK(suscripcionCaught, -1, paqueteNuevo->ID);
 			quickLog("$-Pudo enviar el ACK del caught");
 			free(paqueteNuevo->buffer->stream);
 			free(paqueteNuevo->buffer);
@@ -278,15 +258,14 @@ void* escucharColaLocalizedPokemon(){
 
 		//si es -10 es que no se corto la conexion con broker pero tiene que dejar de escuchar localized
 		if(paqueteNuevo->ID == -10) {
-			enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
+			enviar_ACK(suscripcionLocalized, -1, paqueteNuevo->ID);
 			free(paqueteNuevo);
 			liberarConexion(suscripcionLocalized);
-			liberarConexion(socketACKLocalized);
 			pthread_cancel(escucharLocalizedPokemon);
 		}
 		//si tiene que seguir recibiendo localized
 		else if(paqueteNuevo != NULL) {
-			enviar_ACK(socketACKLocalized, -1, paqueteNuevo->ID);
+			enviar_ACK(suscripcionLocalized, -1, paqueteNuevo->ID);
 			quickLog("$-Pudo enviar el ACK del localized");
 			free(paqueteNuevo->buffer->stream);
 			free(paqueteNuevo->buffer);

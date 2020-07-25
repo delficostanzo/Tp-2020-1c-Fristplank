@@ -23,11 +23,9 @@ void terminarTeam() {
 	liberarConexion(socketGet);
 	liberarConexion(socketIdGet);
 	liberarConexion(suscripcionAppeared);
-	liberarConexion(socketACKAppeared);
 	liberarConexion(socketCatch);
 	liberarConexion(socketIdCatch);
 	liberarConexion(suscripcionCaught);
-	liberarConexion(socketACKCaught);
 
 	pthread_cancel(escucharAppearedPokemon);
 	pthread_cancel(escucharCaughtPokemon);

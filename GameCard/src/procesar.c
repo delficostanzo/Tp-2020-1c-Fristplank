@@ -261,11 +261,11 @@ void procesarNewPokemon(void* args) {
 	log_debug(logger, "<> END: procesarNewPokemon <>");
 }
 
-int* procesarCatchPokemon(void* args) {
+void procesarCatchPokemon(t_resultado_catch* args) {
 
 	log_debug(logger, "<> START: procesarCatchPokemon <>");
 
-	t_catch_pokemon* catch_pokemon = args;
+	t_catch_pokemon* catch_pokemon = args->catch_pokemon;
 	log_info(logger, "Comienzo a procesar CATCH_POKEMON");
 	log_info(logger, "Pokemon: %s - Posición: (%d,%d)", catch_pokemon->pokemon, catch_pokemon->posicion->posicionX, catch_pokemon->posicion->posicionY);
 
@@ -279,7 +279,8 @@ int* procesarCatchPokemon(void* args) {
 
 	if (!checkArchivoExiste(filePath)) {
 		free(filePath);
-		return 0;
+		args->resultado = 0;
+		return;
 	}
 
 	log_debug(logger, "Pido archivo para el uso. Ruta: %s", filePath);
@@ -469,9 +470,11 @@ int* procesarCatchPokemon(void* args) {
 		log_debug(logger, "<> END: procesarCatchPokemon <>");
 
 		if (posicionEncontrada) {
-			return 1;
+			args->resultado = 1;
+			return;
 		} else {
-			return 0;
+			args->resultado = 0;
+			return;
 		}
 	}
 
@@ -479,7 +482,9 @@ int* procesarCatchPokemon(void* args) {
 	else{
 		config_destroy(metadata);
 		cambiarACerrado(filePath);
-		return 0;
+
+		args->resultado = 0;
+		return;
 	}
 
 

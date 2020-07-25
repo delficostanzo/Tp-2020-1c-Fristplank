@@ -33,7 +33,10 @@ int conexionCliente;
 int socketCliente;
 
 void * esperarClientes();
-void atenderCliente(argumentos* sockets);
+void atenderGameboy(int* socket, int idUnico);
+void atenderTeam(t_suscriptor_team* team);
+void atenderGamecard(t_suscriptor_gamecard* gamecard);
+void procesarACK(t_paquete* paquete, op_code tipoCola, int idSuscriptor);
 
 void lanzarHiloEscucha(int id, int* socket);
 void lanzarHiloEscuchaACK(int id, int* socket, op_code cola);

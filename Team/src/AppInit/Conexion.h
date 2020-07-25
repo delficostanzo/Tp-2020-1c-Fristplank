@@ -7,8 +7,6 @@
 #include "EnvioMensajes.h"
 #include "../Model/CierreTeam.h"
 
-
-
 void* escucharGameBoy(void);
 int generarSocketsConBroker();
 void crearHilosDeEscucha();
