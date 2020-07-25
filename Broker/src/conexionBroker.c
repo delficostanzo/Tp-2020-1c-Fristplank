@@ -87,8 +87,6 @@ void atenderCliente(argumentos* sockets) {
 		lanzarHiloEscuchaACK(team->id, &team->socketACKCaught, CAUGHT_POKEMON);
 		lanzarHiloEscuchaACK(team->id, &team->socketACKAppeared, APPEARED_POKEMON);
 
-		sleep(1);
-
 		pthread_mutex_lock(&mutexEnvio);
 		enviar_mensajes_cacheados(mensajesLocalized, LOCALIZED_POKEMON, team->socketLocalized, team->id);
 		enviar_mensajes_cacheados(mensajesAppeared, APPEARED_POKEMON, team->socketAppeared, team->id);
@@ -147,9 +145,6 @@ void atenderCliente(argumentos* sockets) {
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKNew, NEW_POKEMON);
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKGet, GET_POKEMON);
 		lanzarHiloEscuchaACK(gamecard->id, &gamecard->socketACKCatch, CATCH_POKEMON);
-
-
-		sleep(1);
 
 		pthread_mutex_lock(&mutexEnvio);
 		enviar_mensajes_cacheados(mensajesGet, GET_POKEMON, gamecard->socketGet, gamecard->id);
