@@ -24,9 +24,7 @@ void enviarGetDesde(int socketGet){
 
 		log_debug(logger, "%d", list_size(objetivosGlobales));
 
-		quickLog("Antes de enviar_get_pokemon");
 		enviar_get_pokemon(getPoke, socketGet, -1, -1);
-		quickLog("despues de enviar_get_pokemon");
 
 		t_paquete* recibirACK = recibir_mensaje(socketIdGet);
 		free(recibirACK->buffer->stream);
@@ -216,15 +214,12 @@ void agregarPokemonSiLoNecesita(argumentosAAgregar* argus){
 	//pthread_mutex_unlock(&mutexObjetivosGlobales);
 
 	int hayEnNewODormido = hayEntrenadoresEnNewODormido();
-	log_info(LO, "OFICIALMENTE NO LLEGA ACA. %d", hayEnNewODormido);
 	if(hayEnNewODormido) { //quedan entrenadores sin planificar
-		log_info(LO, "-Guido inso antes");
 		//pthread_mutex_lock(&mutexEntrenadores);
 		pasarAReadyParaAtrapar();
 		//pthread_mutex_unlock(&mutexEntrenadores);
-		log_info(LO, "-Guido inso despues sigue siendo");
 
-//		sem_post(&esperandoPasarAlgunoAExec);
+		sem_post(&esperandoPasarAlgunoAExec);
 //	} else {
 //		sem_post(&arrancarPlan);
 	}
@@ -270,7 +265,7 @@ void recibirIdCatch(Entrenador* entrenador) {
 		log_info(LO, "El entrenador %c paso a block esperando la respuesta del catch mandado", entrenador->numeroEntrenador);
 		pasarABlockEsperando(entrenador);
 
-		sem_post(&esperandoPasarAlgunoAExec);
+//		sem_post(&esperandoPasarAlgunoAExec);
 
 		quickLog("$-Se paso a estado bloqueado esperando respuesta");
 
@@ -285,7 +280,7 @@ void recibirIdCatch(Entrenador* entrenador) {
 		//sleep(3);
 		agregarAtrapado(entrenador, entrenador->movimientoEnExec->pokemonNecesitado);
 		estadoSiAtrapo(entrenador);
-		sem_post(&esperandoPasarAlgunoAExec);
+//		sem_post(&esperandoPasarAlgunoAExec);
 		//free(paqueteIdRecibido);
 
 	}

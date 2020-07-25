@@ -14,6 +14,7 @@ static int terminarSiTodosExit();
 static void logearResultadosEntrenadores();
 static int ciclosTotales();
 static int cantidadPokesLibres();
+//static int noEstuvoEnDeadlockAntes(Entrenador* entrenador);
 
 typedef bool(*erasedTypeFilter)(void*);
 
@@ -41,9 +42,6 @@ void planificarEntrenadores(){
 		t_list* entrenadoresDeadlock = entrenadoresBloqueadosPorDeadlock();
 
 		if(list_size(entrenadoresDeadlock) >= 2) {
-			Entrenador* entrenador1 = list_get(entrenadoresDeadlock,0);
-			Entrenador* entrenador2 = list_get(entrenadoresDeadlock,1);
-			log_info(LO,"Los entrenadores ue estan en deadlock son %c y %c", entrenador1->numeroEntrenador, entrenador2->numeroEntrenador);
 			pasarAReadyParaIntercambiar(entrenadoresDeadlock);
 			sem_post(&esperandoPasarAlgunoAExec);
 		}
@@ -116,7 +114,7 @@ void pasarAReadyParaAtrapar(){
 				cambiarCantidadEnPokesObj(pokemonLibre);
 				log_info(LO, "El entrenador %c paso a estado ready para atrapar al pokemon %s", entrenadorAsignado->numeroEntrenador, pokemonLibre->nombre);
 
-				sem_post(&esperandoPasarAlgunoAExec);
+//				sem_post(&esperandoPasarAlgunoAExec);
 			}
 
 		}
@@ -128,7 +126,7 @@ void pasarAReadyParaAtrapar(){
 
 Entrenador* asignarObjetivoA(t_list* entrenadoresAMover, PokemonEnElMapa* pokemonLibre){
 	Entrenador* entrenadorAsignado = entrenadorMasCercanoA(pokemonLibre, entrenadoresAMover);
-	log_info(LO, "--El entrenador mas cercano al poke %s es el %c", pokemonLibre->nombre, entrenadorAsignado->numeroEntrenador);
+	log_info(LO, "El entrenador mas cercano al poke %s es el %c", pokemonLibre->nombre, entrenadorAsignado->numeroEntrenador);
 
 	MovimientoEnExec* movimiento = malloc(sizeof(MovimientoEnExec));
 	movimiento->pokemonNecesitado = asignarPokemonCopia(pokemonLibre);
@@ -179,6 +177,7 @@ void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock){
 //	if(list_size(entrenadoresDeadlock) >= 2) {
 		log_info(LO, "Inicio del algoritmo de deteccion de deadlock (comienza a buscar con quien intercambiar)");
 
+		sem_wait(&procesoDeIntercambioDePokes);
 		for(int index = 0; index < list_size(entrenadoresDeadlock); index++) {
 			Entrenador* bloqueado = list_get(entrenadoresDeadlock, index);
 
@@ -192,12 +191,13 @@ void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock){
 				entrenadorDeIntercambio->estado = 2;
 				pthread_mutex_unlock(&entrenadorDeIntercambio->mutexEstado);
 
-				log_info(LO, "Lo que te guste");
-
-				// TODO: No cuenta la cantidad de deadlocks, no se si es porque no le gusta hacer el != con un char
-				if(entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio != 0 && bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio != 0) {
-					cantidadDeadlocks ++;
-				}
+//				char entrenadorIntercambio = entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio;
+//				char entrenadorBloqueado = bloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio;
+//				if(entrenadorIntercambio == 'Z' && entrenadorBloqueado == 'Z' && (noEstuvoEnDeadlockAntes(entrenadorDeIntercambio) || noEstuvoEnDeadlockAntes(bloqueado))) {
+//					cantidadDeadlocks ++;
+//					log_info(LO,"log riquito");
+//				}
+//				log_info(LO,"Llegue despues");
 
 				//me guardo con que entrenador intercambiar cuando pase a exec y el que esta bloqueado a cual esta esperando
 				entrenadorDeIntercambio->movimientoEnExec->numeroDelEntrenadorIntercambio = bloqueado->numeroEntrenador;
@@ -205,13 +205,18 @@ void pasarAReadyParaIntercambiar(t_list* entrenadoresDeadlock){
 				agregarAListaReady(entrenadorDeIntercambio);
 				log_info(LO, "El entrenador %c paso a estado ready para intercambiar con el entrenador %c", entrenadorDeIntercambio->numeroEntrenador, bloqueado->numeroEntrenador);
 
+
+
 //				sem_post(&esperandoPasarAlgunoAExec);
 				return;
 			}
+
 		}
 //	}
 
 }
+
+
 
 //se busca al entrenador que necesite el que yo tengo de mas y tenga el que yo necesito
 //si no lo encuentra devuelve NULL
@@ -250,8 +255,11 @@ void pasarAExec(){
 		CC ++;
 		char* charDelMovimiento = obtenerCharDeMov(entrenador->movimientoEnExec->objetivo);
 		//sem_wait(&semaforoEstados);
+//		Entrenador* entrenadorBloqueado = buscarPorNumero(entrenador->movimientoEnExec->numeroDelEntrenadorIntercambio);
 		sacarDeListaReady(entrenador);
-
+//		if(entrenador->motivo == 3){
+//			sacarDeListaReady(entrenadorBloqueado);
+//		}
 		pthread_mutex_lock(&entrenador->mutexEstado);
 		entrenador->estado = 3;
 		pthread_mutex_unlock(&entrenador->mutexEstado);
@@ -267,13 +275,13 @@ void pasarAExec(){
 Entrenador* buscarPrimerEntrenador() {
 
 	//el primer entrenador de los ready es el que esta en indice 0
-	//pthread_mutex_lock(&mutexListaEntrenadoresReady);
+//	pthread_mutex_lock(&mutexListaEntrenadoresReady);
 	if(list_is_empty(listaEntrenadoresReady) != 1) {
 		Entrenador* entrenador = list_get(listaEntrenadoresReady, 0);
-		//pthread_mutex_unlock(&mutexListaEntrenadoresReady);
+//		pthread_mutex_unlock(&mutexListaEntrenadoresReady);
 		return entrenador;
 	}
-	//pthread_mutex_unlock(&mutexListaEntrenadoresReady);
+//	pthread_mutex_unlock(&mutexListaEntrenadoresReady);
 	return NULL;
 }
 
@@ -301,7 +309,7 @@ void cumplirObjetivo(Entrenador* entrenador){
 			break;
 		case MOVEReINTERCAMBIAR:
 			entrenadorDeIntercambioBloqueado = buscarPorNumero(entrenador->movimientoEnExec->numeroDelEntrenadorIntercambio);
-//			/log_info(LO, "El entrenador %c va a intercambiar con el entrenador %c", entrenador->numeroEntrenador, entrenadorDeIntercambioBloqueado->numeroEntrenador);
+			log_info(LO, "El entrenador %c va a intercambiar con el entrenador %c", entrenador->numeroEntrenador, entrenadorDeIntercambioBloqueado->numeroEntrenador);
 
 			intercambiarPokemonesCon(entrenador, entrenadorDeIntercambioBloqueado);
 			break;
@@ -341,9 +349,9 @@ void intercambiarPokemonesCon(Entrenador* entrenadorMovido, Entrenador* entrenad
 		entrenadorMovido->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Z';
 		entrenadorBloqueado->movimientoEnExec->numeroDelEntrenadorIntercambio = 'Z';
 		estadoSiAtrapo(entrenadorMovido);
-		sem_post(&esperandoPasarAlgunoAExec);
+//		sem_post(&esperandoPasarAlgunoAExec);
 		estadoSiAtrapo(entrenadorBloqueado);
-
+		sem_post(&procesoDeIntercambioDePokes);
 
 	} else if(QUANTUM == distanciaHastaBloqueado) { //llega a moverse pero no a hacer los intercambios
 			entrenadorMovido->posicion = entrenadorBloqueado->posicion;
@@ -435,7 +443,6 @@ int terminarSiTodosExit() {
 
 	pthread_mutex_lock(&mutexEntrenadores);
 	int todosCumplen = list_all_satisfy(entrenadores, (erasedTypeFilter)estaEnExit);
-	log_info(LO, "Termine de consultar el estado");
 	pthread_mutex_unlock(&mutexEntrenadores);
 
 
@@ -451,7 +458,6 @@ int terminarSiTodosExit() {
 		return 1;
 	}
 
-	log_info(LO, "No todos estan en exit");
 	return 0;
 }
 

@@ -51,7 +51,7 @@ typedef struct {
 }Entrenador;
 
 Entrenador* newEntrenador();
-Entrenador* buscarPorNumero(int numero);
+Entrenador* buscarPorNumero(char nombre);
 void setPosicionA(Entrenador* entrenador, t_posicion* posicion);
 void setPokemonA(t_list* listaPokemones, PokemonEnElMapa* nuevoPokemon);
 t_posicion* newPosicion();
@@ -74,5 +74,6 @@ int puedeIntercambiar(Entrenador* entrenador, PokemonEnElMapa* pokemonInnecesari
 int esteComoIntercambioEntre(t_list* entrenadores, Entrenador* entrenador);
 int tieneEstadoNewODormido(Entrenador* entrenador);
 int entrenadorNoEstaEnListaReady(Entrenador* entrenador);
+int noEstuvoEnDeadlockAntes(Entrenador* entrenador);
 
 #endif /* SRC_MODEL_TRAINER_H_ */

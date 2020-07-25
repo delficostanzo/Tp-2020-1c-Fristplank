@@ -117,7 +117,6 @@ Entrenador* entrenadorExec(void) {
 
 int hayEntrenadoresEnNewODormido() {
 	pthread_mutex_lock(&mutexEntrenadores);
-	log_info(LO, "Aca si llega");
 	int cumple = list_any_satisfy(entrenadores, (erasedTypeFilter) tieneEstadoNewODormido);
 	pthread_mutex_unlock(&mutexEntrenadores);
 	return cumple;
@@ -132,7 +131,6 @@ int tieneEstadoNew(Entrenador* entrenador) {
 
 int hayEntrenadoresEnNew(){
 	pthread_mutex_lock(&mutexEntrenadores);
-	log_info(LO, "Aca si llega");
 	int cumple = list_any_satisfy(entrenadores, (erasedTypeFilter) tieneEstadoNew);
 	pthread_mutex_unlock(&mutexEntrenadores);
 	return cumple;

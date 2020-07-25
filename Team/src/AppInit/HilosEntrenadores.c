@@ -47,8 +47,7 @@ void funcionesDelEntrenador(void* unEntrenador) {
 		sem_wait(&entrenador->semaforoExecEntrenador);
 		cumplirObjetivo(entrenador);
 
-		//sleep(1);
-//		sem_post(&esperandoPasarAlgunoAExec);
+		sem_post(&esperandoPasarAlgunoAExec);
 
 		pthread_mutex_lock(&entrenador->mutexEstado);
 		cumple = entrenador->estado != 5;

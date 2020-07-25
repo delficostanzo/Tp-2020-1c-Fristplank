@@ -17,10 +17,10 @@ Entrenador* newEntrenador() {
 	return malloc(sizeof(Entrenador));
 }
 
-Entrenador* buscarPorNumero(int numero) {
+Entrenador* buscarPorNumero(char nombre) {
 
 	int tieneNumero(Entrenador* entrenador) {
-		return entrenador->numeroEntrenador == numero;
+		return entrenador->numeroEntrenador == nombre;
 	}
 
 	Entrenador* entrenadorBuscado;
@@ -131,7 +131,11 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 	}
 	else if(tienenLaMismaCantidad(entrenador->pokemonesObjetivos,entrenador->pokemonesAtrapados)){
 		asignarMovimientoPorDeadlock(entrenador);
+		if(noEstuvoEnDeadlockAntes(entrenador)){
+			cantidadDeadlocks ++;
+		}
 		pasarADeadlock(entrenador);
+
 		log_info(LO, "El entrenador %c paso a block por deadlock porque no puede atrapar mas y sus atrapados no son los mismos que los objetivos", entrenador->numeroEntrenador);
 //		pasarAReadyParaIntercambiar();
 	}
@@ -157,6 +161,10 @@ void estadoSiAtrapo(Entrenador* entrenador) {
 		log_info(logger, "$-Tiene %d pokemones atrapados y %d pokemones objetivos por atrapar", cantidadAtrapados, cantidadObjetivos);
 
 	}
+}
+
+int noEstuvoEnDeadlockAntes(Entrenador* entrenador){
+	return entrenador->motivo != 3;
 }
 
 int sonIguales(t_list* objetivos, t_list* atrapados) {
@@ -322,8 +330,6 @@ PokemonEnElMapa* buscarObjetivosQueFalta(Entrenador* entrenador){
 
 //siempre usar entre mutex de entrenadores
 int esteComoIntercambioEntre(t_list* entrenadores, Entrenador* entrenador) {
-
-	log_info(LO, "Fijate si llega");
 	int estaComoIntercambio(Entrenador* entrenadorMoviendose) {
 		return entrenadorMoviendose->movimientoEnExec->numeroDelEntrenadorIntercambio == entrenador->numeroEntrenador;
 	}
@@ -332,7 +338,6 @@ int esteComoIntercambioEntre(t_list* entrenadores, Entrenador* entrenador) {
 	int cumple  = list_any_satisfy(entrenadores, (erasedTypeFilter) estaComoIntercambio);
 	pthread_mutex_unlock(&mutexEntrenadores);
 
-	log_info(LO, "Aca llega tambien");
 	return cumple;
 }
 
