@@ -155,6 +155,7 @@ t_log* iniciar_logger(char* logFile) {
 void signal_dump(int signal) {
 	//Dump: 14/07/2012 10:11:12
 
+	log_info(logger, "<><> Se ejecuta DUMP de CACHE <><>");
    int archivoExiste = access("ArchivoDump.bin",F_OK);
    FILE* dumpFile;
    if (archivoExiste == -1) {
