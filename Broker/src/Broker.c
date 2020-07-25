@@ -10,9 +10,6 @@ int main(void) {
 	signal(SIGUSR1, &signal_dump);
 
 	pthread_join(threadClientes,NULL);
-
-//	terminar_programa(conexion, logger, config);
-
 }
 
 void iniciarBroker(void){
@@ -25,11 +22,12 @@ void iniciarBroker(void){
 	pthread_mutex_init(&mutexIdMensaje,NULL);
 	pthread_mutex_init(&mutexLRUcounter,NULL);
 	pthread_mutex_init(&mutexEnvio, NULL);
+	pthread_mutex_init(&mutexParticiones, NULL);
 }
 
 t_config* leer_config() {
-	t_config* config = config_create("../src/broker.config"); //CORRER POR CONSOLA
-//	t_config* config = config_create("./src/broker.config"); //CORRER CON ECLIPSE
+//	t_config* config = config_create("../src/broker.config"); //CORRER POR CONSOLA
+	t_config* config = config_create("./src/broker.config"); //CORRER CON ECLIPSE
 
 	if (config == NULL) {
 		printf("No pude leer la config \n");
@@ -145,7 +143,7 @@ void iniciarColas() {
 
 t_log* iniciar_logger(char* logFile) {
 	t_log * log = malloc(sizeof(t_log));
-	log = log_create(logFile, "BROKER", 1, LOG_LEVEL_INFO);
+	log = log_create(logFile, "BROKER", 1, LOG_LEVEL_DEBUG);
 	if (log == NULL) {
 		printf("No pude crear el logger \n");
 		exit(1);

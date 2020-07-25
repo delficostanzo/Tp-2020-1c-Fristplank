@@ -45,6 +45,7 @@ t_paquete* recibirLocalizedYGuardalos(int socketLocalized) {
 	 */
 
 	if(paqueteLocalized != NULL){
+		enviar_ACK(socketLocalized, -1, paqueteLocalized->ID);
 		t_localized_pokemon* localized = paqueteLocalized->buffer->stream;
 		if(puedeSeguirRecibiendo()) {
 			if(noRecibioDeEsaEspecie(localized->pokemon) && seNecesita(localized->pokemon)) {
@@ -153,6 +154,7 @@ t_paquete* recibirAppearedYGuardarlos(int socketAppeared) {
 
 	//quickLog("Recibe el appeared");
 	if (paqueteAppeared != NULL) {
+		enviar_ACK(socketAppeared, -1, paqueteAppeared->ID);
 		t_appeared_pokemon* appeared = paqueteAppeared->buffer->stream;
 
 		if(seNecesita(appeared->pokemon)) {
@@ -311,6 +313,8 @@ t_paquete* recibirCaught(int socketCaught){
 
 
 	if(paqueteCaught != NULL){
+		enviar_ACK(socketCaught, -1, paqueteCaught->ID);
+
 		t_caught_pokemon* caught = paqueteCaught->buffer->stream;
 		log_info(logger, "$-Se recibio un caught con id %d, la respuesta es %d", paqueteCaught->ID, caught->ok);
 

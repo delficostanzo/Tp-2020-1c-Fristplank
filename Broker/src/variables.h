@@ -88,6 +88,7 @@ pthread_mutex_t mutexColas;
 pthread_mutex_t mutexIdMensaje;
 pthread_mutex_t mutexLRUcounter;
 pthread_mutex_t mutexEnvio;
+pthread_mutex_t mutexParticiones;
 sem_t * colaNew;
 sem_t compactMemoria;
 

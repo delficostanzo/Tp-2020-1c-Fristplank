@@ -36,10 +36,12 @@ void cachearMensaje(t_metadata * meta, void * mensaje) {
 
 	log_debug(logger, "Antes de particion libre");
 
+	pthread_mutex_lock(&mutexParticiones);
 	while(meta->posicion == -1){
 		meta->posicion = particionLibre(meta->tamanioMensajeEnMemoria);
 	}
-	log_debug(logger, "Luego de particion libre");
+	log_debug(logger, "Luego de particion libre. Posición encontrada: %d", meta->posicion);
+	pthread_mutex_unlock(&mutexParticiones);
 
 	escribirMemoria(mensajeACachear, meta);
 	free(mensajeACachear);

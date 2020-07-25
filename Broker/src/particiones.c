@@ -82,9 +82,9 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 
 				log_debug(logger, "offset es %d", offset);
 				if (offset == auxParticion->posicion) {
-					log_debug(logger, "mensajeEncontrado en pos %d", auxParticion->posicion);
+//					log_debug(logger, "mensajeEncontrado en pos %d", auxParticion->posicion);
 					offset += tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria);
-					log_debug(logger, "tamanioMensaje %d", tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria));
+//					log_debug(logger, "tamanioMensaje %d", tamanioParticionMinima(auxParticion->tamanioMensajeEnMemoria));
 				}
 
 				else { //asumo que si no es offset, entonces es mas grande
@@ -136,12 +136,15 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 		sizeDato = tamanioParticionMinima(sizeDato);
 		posicionEncontrada = buddy_pedir_mem(sizeDato);
 
-		log_debug(logger, "Posición encontrada %d", posicionEncontrada);
+//		log_debug(logger, "cantidad particiones %d", cantParticionesActuales);
+//		log_debug(logger, "Posición encontrada %d", posicionEncontrada);
 
 		if (posicionEncontrada == -1){
 
 			if (string_equals_ignore_case(ALGORITMO_REEMPLAZO, "FIFO")) {
+//				log_debug(logger, "antes fifo");
 				list_sort(particiones, (void*) ordenarId);
+//				log_debug(logger, "despues fifo");
 			}
 
 			else if(string_equals_ignore_case(ALGORITMO_REEMPLAZO, "LRU")){
@@ -149,16 +152,20 @@ int particionLibre(int sizeDato) { //PARTICIONES OK | FALTA BUDDY SYSTEM
 			}
 
 			for(int i = 0; posicionEncontrada == -1; i++){
+//				log_debug(logger, "iteracion %d", i);
 				t_metadata* auxParticion = list_get(particiones, i);
 				buddy_liberar_mem(auxParticion->posicion);
 				eliminarParticion(auxParticion);
 				posicionEncontrada = buddy_pedir_mem(sizeDato);
+//				log_debug(logger, "despues %d", i);
 			}
 		}
 	}
 
 	list_destroy_and_destroy_elements(particionesLibres, (void*) liberarPuntero);
+//	log_debug(logger, "Despues de llist_Destroy_blabla");
 	list_destroy(particiones);
+//	log_debug(logger, "Despues de list_destroy2_blabla");
 	return posicionEncontrada;
 }
 
@@ -177,6 +184,7 @@ bool ordenarFlagLRU(t_metadata * unaParticion, t_metadata * otraParticion) {
 	return unaParticion->flagLRU < otraParticion->flagLRU;
 }
 bool ordenarId(t_metadata * unaParticion, t_metadata * otraParticion) {
+	log_debug(logger, "%d vs %d", unaParticion->ID, otraParticion->ID);
 	return unaParticion->ID < otraParticion->ID;
 }
 int tamanioParticionMinima(int unTamanio){ //LO UTILIZO EN EL OFFSET PARA MARCAR QUE HAY UN TAMAÑO DE PARTICION MINIMA
@@ -188,7 +196,7 @@ void eliminarParticion(t_metadata * particionAEliminar) { //OK
 
 	int posicion = particionAEliminar->posicion;
 	int colaABuscar = particionAEliminar->tipoMensaje - 1;
-	log_debug(logger, "%s", ID_COLA[colaABuscar]);
+	log_debug(logger, "%s", ID_COLA[colaABuscar + 1]);
 
 	int cantidadMensajes = list_size(cola[colaABuscar].mensajes);
 
@@ -205,8 +213,8 @@ void eliminarParticion(t_metadata * particionAEliminar) { //OK
 }
 
 void particion_destroy(t_metadata *self) { //OK
-	list_destroy_and_destroy_elements(self->ACKSuscriptores, (void*) puntero_destroy);
-	list_destroy_and_destroy_elements(self->enviadosSuscriptores, (void*) puntero_destroy);
+	list_destroy(self->ACKSuscriptores);
+	list_destroy(self->enviadosSuscriptores);
 	free(self);
 }
 

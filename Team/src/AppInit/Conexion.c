@@ -201,7 +201,6 @@ void* escucharColaAppearedPokemon(){
 		t_paquete* paqueteNuevo = recibirAppearedYGuardarlos(suscripcionAppeared);
 
 		if(paqueteNuevo != NULL){
-			enviar_ACK(suscripcionAppeared, -1, paqueteNuevo->ID);
 			free(paqueteNuevo);
 			quickLog("$-Pudo enviar el ACK de los appeared");
 		} else {
@@ -231,7 +230,6 @@ void* escucharColaCaughtPokemon(){
 		//el entrenador que estaba esperando esa respuesta es ejecutado y pasa al estado segun corresponda
 		t_paquete* paqueteNuevo = recibirCaught(suscripcionCaught);
 		if(paqueteNuevo != NULL){
-			enviar_ACK(suscripcionCaught, -1, paqueteNuevo->ID);
 			quickLog("$-Pudo enviar el ACK del caught");
 			free(paqueteNuevo->buffer->stream);
 			free(paqueteNuevo->buffer);
@@ -258,14 +256,13 @@ void* escucharColaLocalizedPokemon(){
 
 		//si es -10 es que no se corto la conexion con broker pero tiene que dejar de escuchar localized
 		if(paqueteNuevo->ID == -10) {
-			enviar_ACK(suscripcionLocalized, -1, paqueteNuevo->ID);
+
 			free(paqueteNuevo);
 			liberarConexion(suscripcionLocalized);
 			pthread_cancel(escucharLocalizedPokemon);
 		}
 		//si tiene que seguir recibiendo localized
 		else if(paqueteNuevo != NULL) {
-			enviar_ACK(suscripcionLocalized, -1, paqueteNuevo->ID);
 			quickLog("$-Pudo enviar el ACK del localized");
 			free(paqueteNuevo->buffer->stream);
 			free(paqueteNuevo->buffer);
